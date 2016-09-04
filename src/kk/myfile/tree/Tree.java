@@ -38,7 +38,7 @@ public class Tree {
 			@Override
 			public void run() {
 				long t0 = System.currentTimeMillis();
-				sRoot.loadChilren(true);
+				sRoot.loadChilrenRec();
 				long t1 = System.currentTimeMillis();
 				Logger.print(null, t1 - t0);
 			}

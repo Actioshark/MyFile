@@ -79,7 +79,7 @@ public class DirectActivity extends BaseActivity {
 			}
 		}
 		
-		mDirect.loadChilren(false);
+		mDirect.loadChilren();
 		
 		String path = mDirect.getPath();
 		final String[] nodes;

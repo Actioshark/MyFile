@@ -1,14 +1,12 @@
 package kk.myfile.leaf;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import kk.myfile.R;
 import kk.myfile.tree.Tree;
 
 public class Direct extends Leaf {
-	private Leaf[] mChildren;
+	private Leaf[] mChildren = new Leaf[] {};
 	
 	public Direct(String path) {
 		super(path);
@@ -23,11 +21,10 @@ public class Direct extends Leaf {
 				return;
 			}
 			
-			mChildren.clear();
-			for (File child : children) {
-				Leaf node = Tree.getLeaf(child);
-				
-				mChildren.add(node);
+			mChildren = new Leaf[children.length];
+			for (int i = 0; i < children.length; i++) {
+				Leaf leaf = Tree.getLeaf(children[i]);
+				mChildren[i] = leaf;
 			}
 		} catch (Exception e) {
 		}
@@ -37,39 +34,30 @@ public class Direct extends Leaf {
 		try {
 			File file = getFile();
 			
+			if (file.getCanonicalPath().equals(mPath) == false) {
+				return;
+			}
+			
 			File[] children = file.listFiles();
 			if (children == null) {
 				return;
 			}
 			
-			if (file.getCanonicalPath().equals(mPath) == false) {
-				return;
-			}
-			
-			mChildren.clear();
-			for (File child : children) {
-				Leaf node = Tree.getLeaf(child);
-				
-				if (node instanceof Direct) {
-					((Direct) node).loadChilrenRec();
-				}
-				
-				mChildren.add(node);
+			mChildren = new Leaf[children.length];
+			for (int i = 0; i < children.length; i++) {
+				Leaf leaf = Tree.getLeaf(children[i]);
+				mChildren[i] = leaf;
 			}
 		} catch (Exception e) {
 		}
 	}
 	
-	public List<Leaf> getChildren() {
+	public Leaf[] getChildren() {
 		return mChildren;
 	}
 	
-	public synchronized List<Leaf> getChildrenCopy(boolean copy) {
-		if (copy) {
-			return new ArrayList<Leaf>(mChildren);
-		} else {
-			return mChildren;
-		}
+	public synchronized Leaf[] getChildrenLocked() {
+		return mChildren;
 	}
 	
 	@Override

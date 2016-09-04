@@ -1,7 +1,5 @@
 package kk.myfile.adapter;
 
-import java.util.List;
-
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity;
 import kk.myfile.leaf.Direct;
@@ -28,7 +26,7 @@ public class DirectAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return mDirect.getChildren(false).size();
+		return mDirect.getChildren().length;
 	}
 
 	@Override
@@ -65,11 +63,11 @@ public class DirectAdapter extends BaseAdapter {
 			holder = (Holder) view.getTag();
 		}
 		
-		List<Leaf> children = mDirect.getChildren(false);
-		if (position < 0 || position >= children.size()) {
+		Leaf[] children = mDirect.getChildren();
+		if (position < 0 || position >= children.length) {
 			return view;
 		}
-		Leaf leaf = children.get(position);
+		Leaf leaf = children[position];
 		
 		holder.icon.setImageResource(leaf.getIcon());
 		holder.name.setText(leaf.getFile().getName());
