@@ -1,0 +1,12 @@
+<resources>
+
+	<dimen name="main_bar_height">52dp</dimen>
+	<dimen name="main_bar_large_height">100dp</dimen>
+	<dimen name="main_padding">5dp</dimen>
+	<dimen name="main_gap">2dp</dimen>
+	<dimen name="main_margin">15dp</dimen>
+	<dimen name="main_direct_text">16sp</dimen>
+	<dimen name="main_file_text">16sp</dimen>
+	<dimen name="main_direct_btn">32dp</dimen>
+
+</resources>

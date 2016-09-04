@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<color name="activity_bg">#eaeaea</color>
+	<color name="bar_bg">#ffffff</color>
+	<color name="bar_press_bg">#999999</color>
+
+	<color name="main_text">#666666</color>
+	<color name="main_text_pre">#bbbbbb</color>
+
+</resources>
