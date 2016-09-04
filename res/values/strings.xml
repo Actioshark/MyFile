@@ -3,6 +3,8 @@
 
 	<string name="app_name">MyFile</string>
 
+	<string name="hint_input_to_search">Input to search</string>
+
 	<string name="err_file_read_error">File reading error.</string>
 
 </resources>

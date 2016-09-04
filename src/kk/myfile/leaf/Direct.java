@@ -47,6 +47,10 @@ public class Direct extends Leaf {
 			for (int i = 0; i < children.length; i++) {
 				Leaf leaf = Tree.getLeaf(children[i]);
 				mChildren[i] = leaf;
+				
+				if (leaf instanceof Direct) {
+					((Direct) leaf).loadChilrenRec();
+				}
 			}
 		} catch (Exception e) {
 		}

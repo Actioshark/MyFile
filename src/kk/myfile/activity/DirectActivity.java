@@ -12,9 +12,13 @@ import kk.myfile.util.AppUtil;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLayoutChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -33,12 +37,14 @@ public class DirectActivity extends BaseActivity {
 	
 	private HorizontalScrollView mHsvPath;
 	private ViewGroup mVgPath;
+	private AutoCompleteTextView mActvSearch;
 	private GridView mGvList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		// 路径
 		String path = getIntent().getStringExtra(KEY_PATH);
 		mDirect = new Direct(path);
 		mAdapter = new DirectAdapter(this);
@@ -46,6 +52,7 @@ public class DirectActivity extends BaseActivity {
 		
 		setContentView(R.layout.activity_direct);
 		
+		// 路径栏
 		View llPath = findViewById(R.id.ll_path);
 		View ivHome = llPath.findViewById(R.id.iv_home);
 		ivHome.setOnClickListener(new OnClickListener() {
@@ -57,8 +64,40 @@ public class DirectActivity extends BaseActivity {
 		mHsvPath = (HorizontalScrollView) llPath.findViewById(R.id.hsv_text);
 		mVgPath = (ViewGroup) mHsvPath.findViewById(R.id.ll_text);
 		
+		// 搜索栏
+		View llSearch = findViewById(R.id.ll_search);
+		mActvSearch = (AutoCompleteTextView) llSearch.findViewById(R.id.et_input);
+		mActvSearch.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View view, MotionEvent event) {
+				mActvSearch.setFocusable(true);
+				mActvSearch.setFocusableInTouchMode(true);
+				
+				return false;
+			}
+		});
+		View ivDelete = llSearch.findViewById(R.id.iv_delete);
+		ivDelete.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mActvSearch.getText().clear();
+			}
+		});
+		
+		// 文件列表
 		mGvList = (GridView) findViewById(R.id.gv_grid);
 		mGvList.setAdapter(mAdapter);
+		mGvList.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+			@Override
+			public void onLayoutChange(View view, int left, int top, int right, int bottom,
+				int ol, int ot, int or, int ob) {
+				
+				if (ob != 0 && ob < bottom) {
+					mActvSearch.setFocusable(false);
+					mActvSearch.setFocusableInTouchMode(false);
+				}
+			}
+		});
 	}
 	
 	public void refresh() {
