@@ -11,8 +11,10 @@ import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.tree.Tree;
 import kk.myfile.util.AppUtil;
+
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -112,25 +114,41 @@ public class DirectActivity extends BaseActivity {
 								List<Leaf> list = Tree.getAll(mDirect.getPath());
 								final List<Leaf> rst = new ArrayList<Leaf>();
 								String input = editable.toString().toLowerCase(Locale.ENGLISH);
+								long time = SystemClock.uptimeMillis();
 								
 								for (Leaf leaf : list) {
-									synchronized (mEtSearch) {
-										if (mSearchRun != this) {
-											return;
-										}
+									if (leaf.getFile().getName().toLowerCase(Locale.ENGLISH)
+											.contains(input)) {
+										rst.add(leaf);
 									}
 									
-									if (leaf.getFile().getName().contains(input)) {
-										rst.add(leaf);
+									long now = SystemClock.uptimeMillis();
+									if (now > time + 200) {
+										time = now;
 										
 										synchronized (mEtSearch) {
-											AppUtil.runOnUiThread(new Runnable() {
-												public void run() {
-													mDirectAdapter.setData(rst.toArray(new Leaf[] {}));
-													mDirectAdapter.notifyDataSetChanged();
-												}
-											});
+											if (mSearchRun == this) {
+												AppUtil.runOnUiThread(new Runnable() {
+													public void run() {
+														mDirectAdapter.setData(rst.toArray(new Leaf[] {}));
+														mDirectAdapter.notifyDataSetChanged();
+													}
+												});
+											} else {
+												return;
+											}
 										}
+									}
+								}
+								
+								synchronized (mEtSearch) {
+									if (mSearchRun == this) {
+										AppUtil.runOnUiThread(new Runnable() {
+											public void run() {
+												mDirectAdapter.setData(rst.toArray(new Leaf[] {}));
+												mDirectAdapter.notifyDataSetChanged();
+											}
+										});
 									}
 								}
 							}
