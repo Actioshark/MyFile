@@ -7,6 +7,8 @@ public abstract class Leaf {
 	
 	protected String mType;
 	
+	private Object mTag;
+	
 	public Leaf(String path) {
 		if (path == null || path.startsWith("/") == false) {
 			mPath = "/";
@@ -31,6 +33,14 @@ public abstract class Leaf {
 	
 	public String getType() {
 		return mType;
+	}
+	
+	public void setTag(Object tag) {
+		mTag = tag;
+	}
+	
+	public Object getTag() {
+		return mTag;
 	}
 	
 	public abstract int getIcon();

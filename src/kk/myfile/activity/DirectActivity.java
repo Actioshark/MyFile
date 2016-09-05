@@ -3,14 +3,18 @@ package kk.myfile.activity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import kk.myfile.R;
 import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.leaf.Direct;
+import kk.myfile.leaf.Leaf;
+import kk.myfile.tree.Tree;
 import kk.myfile.util.AppUtil;
-
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +23,7 @@ import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -32,13 +37,16 @@ public class DirectActivity extends BaseActivity {
 		.getAbsolutePath();
 	
 	private Direct mDirect;
-	private DirectAdapter mAdapter;
 	private final List<Direct> mHistory = new ArrayList<Direct>();
 	
 	private HorizontalScrollView mHsvPath;
 	private ViewGroup mVgPath;
-	private AutoCompleteTextView mActvSearch;
+	
+	private EditText mEtSearch;
+	private Runnable mSearchRun;
+	
 	private GridView mGvList;
+	private DirectAdapter mDirectAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +55,6 @@ public class DirectActivity extends BaseActivity {
 		// 路径
 		String path = getIntent().getStringExtra(KEY_PATH);
 		mDirect = new Direct(path);
-		mAdapter = new DirectAdapter(this);
-		mAdapter.setData(mDirect);
 		
 		setContentView(R.layout.activity_direct);
 		
@@ -66,35 +72,98 @@ public class DirectActivity extends BaseActivity {
 		
 		// 搜索栏
 		View llSearch = findViewById(R.id.ll_search);
-		mActvSearch = (AutoCompleteTextView) llSearch.findViewById(R.id.et_input);
-		mActvSearch.setOnTouchListener(new OnTouchListener() {
+		mEtSearch = (EditText) llSearch.findViewById(R.id.et_input);
+		mEtSearch.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
-				mActvSearch.setFocusable(true);
-				mActvSearch.setFocusableInTouchMode(true);
-				
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					mEtSearch.setFocusable(true);
+					mEtSearch.setFocusableInTouchMode(true);
+				}
+					
 				return false;
 			}
 		});
-		View ivDelete = llSearch.findViewById(R.id.iv_delete);
+		
+		final View ivDelete = llSearch.findViewById(R.id.iv_delete);
 		ivDelete.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				mActvSearch.getText().clear();
+				mEtSearch.getText().clear();
+			}
+		});
+		mEtSearch.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence cs, int start, int count, int after) {
+			}
+			
+			@Override
+			public void onTextChanged(CharSequence cs, int start, int before, int count) {
+			}
+			
+			@Override
+			public void afterTextChanged(final Editable editable) {
+				if (editable.length() > 0) {
+					ivDelete.setVisibility(View.VISIBLE);
+					
+					synchronized (mEtSearch) {
+						mSearchRun = new Runnable() {
+							public void run() {
+								List<Leaf> list = Tree.getAll(mDirect.getPath());
+								final List<Leaf> rst = new ArrayList<Leaf>();
+								String input = editable.toString().toLowerCase(Locale.ENGLISH);
+								
+								for (Leaf leaf : list) {
+									synchronized (mEtSearch) {
+										if (mSearchRun != this) {
+											return;
+										}
+									}
+									
+									if (leaf.getFile().getName().contains(input)) {
+										rst.add(leaf);
+										
+										synchronized (mEtSearch) {
+											AppUtil.runOnUiThread(new Runnable() {
+												public void run() {
+													mDirectAdapter.setData(rst.toArray(new Leaf[] {}));
+													mDirectAdapter.notifyDataSetChanged();
+												}
+											});
+										}
+									}
+								}
+							}
+						};
+						AppUtil.runOnNewThread(mSearchRun);
+					}
+					
+				} else {
+					synchronized (mEtSearch) {
+						mSearchRun = null;
+					}
+					
+					ivDelete.setVisibility(View.GONE);
+					
+					mDirectAdapter.setData(mDirect.getChildren());
+					mDirectAdapter.notifyDataSetChanged();
+				}
 			}
 		});
 		
 		// 文件列表
+		mDirectAdapter = new DirectAdapter(this);
+		mDirectAdapter.setData(mDirect.getChildren());
 		mGvList = (GridView) findViewById(R.id.gv_grid);
-		mGvList.setAdapter(mAdapter);
+		mGvList.setAdapter(mDirectAdapter);
 		mGvList.addOnLayoutChangeListener(new OnLayoutChangeListener() {
 			@Override
 			public void onLayoutChange(View view, int left, int top, int right, int bottom,
 				int ol, int ot, int or, int ob) {
 				
 				if (ob != 0 && ob < bottom) {
-					mActvSearch.setFocusable(false);
-					mActvSearch.setFocusableInTouchMode(false);
+					mEtSearch.setFocusable(false);
+					mEtSearch.setFocusableInTouchMode(false);
 				}
 			}
 		});
@@ -163,8 +232,8 @@ public class DirectActivity extends BaseActivity {
 			}
 		});
 		
-		mAdapter.setData(mDirect);
-		mAdapter.notifyDataSetChanged();
+		mDirectAdapter.setData(mDirect.getChildren());
+		mDirectAdapter.notifyDataSetChanged();
 	}
 	
 	@Override

@@ -3,6 +3,8 @@ package kk.myfile.tree;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.json.JSONObject;
@@ -37,10 +39,7 @@ public class Tree {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				long t0 = System.currentTimeMillis();
 				sRoot.loadChilrenRec();
-				long t1 = System.currentTimeMillis();
-				Logger.print(null, t1 - t0);
 			}
 		});
 	}
@@ -83,5 +82,36 @@ public class Tree {
 		Leaf leaf = new Unknown(path);
 		leaf.setType(type);
 		return leaf;
+	}
+	
+	public static List<Leaf> getAll(String path) {
+		Direct dir = sRoot;
+		String[] nodes = path.split("/");
+		if (nodes != null) {
+			for (int i = 1; i < nodes.length; i++) {
+				String node = nodes[i];
+				
+				for (Leaf leaf : dir.getChildren()) {
+					if (leaf instanceof Direct && leaf.getFile().getName().equals(node)) {
+						dir = (Direct) leaf;
+						break;
+					}
+				}
+			}
+		}
+		
+		List<Leaf> list = new ArrayList<Leaf>();
+		getAllInter(dir, list);
+		return list;
+	}
+	
+	private static void getAllInter(Direct direct, List<Leaf> list) {
+		for (Leaf leaf : direct.getChildrenLocked()) {
+			list.add(leaf);
+			
+			if (leaf instanceof Direct) {
+				getAllInter((Direct) leaf, list);
+			}
+		}
 	}
 }

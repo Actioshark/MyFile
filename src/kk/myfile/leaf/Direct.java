@@ -30,7 +30,7 @@ public class Direct extends Leaf {
 		}
 	}
 	
-	public synchronized void loadChilrenRec() {
+	public void loadChilrenRec() {
 		try {
 			File file = getFile();
 			
@@ -43,11 +43,14 @@ public class Direct extends Leaf {
 				return;
 			}
 			
-			mChildren = new Leaf[children.length];
-			for (int i = 0; i < children.length; i++) {
-				Leaf leaf = Tree.getLeaf(children[i]);
-				mChildren[i] = leaf;
-				
+			synchronized (this) {
+				mChildren = new Leaf[children.length];
+				for (int i = 0; i < children.length; i++) {
+					mChildren[i] = Tree.getLeaf(children[i]);
+				}
+			}
+
+			for (Leaf leaf : mChildren) {
 				if (leaf instanceof Direct) {
 					((Direct) leaf).loadChilrenRec();
 				}

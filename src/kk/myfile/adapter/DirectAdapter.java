@@ -14,19 +14,19 @@ import android.widget.TextView;
 
 public class DirectAdapter extends BaseAdapter {
 	private final DirectActivity mActivity;
-	private Direct mDirect;
+	private Leaf[] mData;
 	
 	public DirectAdapter(DirectActivity activity) {
 		mActivity = activity;
 	}
 	
-	public void setData(Direct direct) {
-		mDirect = direct;
+	public void setData(Leaf[] data) {
+		mData = data;
 	}
 	
 	@Override
 	public int getCount() {
-		return mDirect.getChildren().length;
+		return mData == null ? 0 : mData.length;
 	}
 
 	@Override
@@ -63,11 +63,10 @@ public class DirectAdapter extends BaseAdapter {
 			holder = (Holder) view.getTag();
 		}
 		
-		Leaf[] children = mDirect.getChildren();
-		if (position < 0 || position >= children.length) {
+		if (position < 0 || position >= mData.length) {
 			return view;
 		}
-		Leaf leaf = children[position];
+		Leaf leaf = mData[position];
 		
 		holder.icon.setImageResource(leaf.getIcon());
 		holder.name.setText(leaf.getFile().getName());
