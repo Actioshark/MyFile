@@ -7,7 +7,6 @@ import java.util.List;
 import kk.myfile.R;
 import kk.myfile.adapter.SelectAdapter;
 import kk.myfile.leaf.Direct;
-import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
@@ -73,9 +72,7 @@ public class SelectActivity extends BaseActivity {
 			public void onClick(View view) {
 				Direct direct = mSelectAdapter.getSelected();
 				if (direct == null) {
-					Toast.makeText(getApplicationContext(), R.string.err_nothing_selected,
-							Toast.LENGTH_SHORT).show();
-					return;
+					direct = mDirect;
 				}
 				
 				Intent intent = getIntent();
@@ -103,6 +100,8 @@ public class SelectActivity extends BaseActivity {
 			
 			if (mHistory.size() > 0) {
 				direct = mHistory.remove(mHistory.size() - 1);
+				return;
+			} else if (mDirect != null) {
 				return;
 			} else {
 				direct = new Direct(Setting.DEFAULT_PATH);
@@ -187,6 +186,8 @@ public class SelectActivity extends BaseActivity {
 			if (mHistory.size() > 0) {
 				mDirect = mHistory.remove(mHistory.size() - 1);
 				return;
+			} else if (mDirect != null) {
+				return;
 			} else {
 				mDirect = new Direct(Setting.DEFAULT_PATH);
 			}
@@ -195,11 +196,6 @@ public class SelectActivity extends BaseActivity {
 		// 更新文件列表
 		mDirect.loadChilren();
 		mSelectAdapter.setData(mDirect.getChildren());
-		mSelectAdapter.notifyDataSetChanged();
-	}
-	
-	public void showSearchResult(Leaf[] list) {
-		mSelectAdapter.setData(list);
 		mSelectAdapter.notifyDataSetChanged();
 	}
 	

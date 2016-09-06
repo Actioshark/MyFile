@@ -1,10 +1,12 @@
 package kk.myfile.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kk.myfile.R;
 import kk.myfile.activity.SelectActivity;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -14,7 +16,7 @@ import android.widget.TextView;
 
 public class SelectAdapter extends BaseAdapter {
 	private final SelectActivity mActivity;
-	private Leaf[] mData;
+	private final List<Direct> mData = new ArrayList<Direct>();
 	private Direct mSelected;
 	
 	public SelectAdapter(SelectActivity activity) {
@@ -22,13 +24,19 @@ public class SelectAdapter extends BaseAdapter {
 	}
 	
 	public void setData(Leaf[] data) {
-		mData = data;
+		mData.clear();
+		for (Leaf leaf : data) {
+			if (leaf instanceof Direct) {
+				mData.add((Direct) leaf);
+			}
+		}
+		
 		mSelected = null;
 	}
 	
 	@Override
 	public int getCount() {
-		return mData == null ? 0 : mData.length;
+		return mData == null ? 0 : mData.size();
 	}
 
 	@Override
@@ -57,39 +65,36 @@ public class SelectAdapter extends BaseAdapter {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (holder.leaf instanceof Direct) {
-						mActivity.showDirect((Direct) holder.leaf, true);
-					}
+					mActivity.showDirect(holder.data, true);
 				}
 			});
 			
 			holder.select.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (holder.leaf instanceof Direct) {
-						if (mSelected == holder.leaf) {
-							mSelected = null;
-						} else {
-							mSelected = (Direct) holder.leaf;
-						}
-						
-						notifyDataSetChanged();
+					if (mSelected == holder.data) {
+						mSelected = null;
+					} else {
+						mSelected = holder.data;
 					}
+					
+					notifyDataSetChanged();
 				}
 			});
 		} else {
 			holder = (Holder) view.getTag();
 		}
 		
-		if (position < 0 || position >= mData.length) {
+		if (position < 0 || position >= mData.size()) {
 			return view;
 		}
-		Leaf leaf = mData[position];
+		Direct data = mData.get(position);
 		
-		holder.icon.setImageResource(leaf.getIcon());
-		holder.name.setText(leaf.getFile().getName());
-		holder.select.setImageResource(mSelected == leaf ? R.drawable.setting : R.drawable.close);
-		holder.leaf = leaf;
+		holder.icon.setImageResource(data.getIcon());
+		holder.name.setText(data.getFile().getName());
+		holder.select.setImageResource(mSelected == data ? R.drawable.select_pre
+			: R.drawable.select_nor);
+		holder.data = data;
 		
 		return view;
 	}
@@ -102,6 +107,6 @@ public class SelectAdapter extends BaseAdapter {
 		public ImageView icon;
 		public TextView name;
 		public ImageView select;
-		public Leaf leaf;
+		public Direct data;
 	}
 }

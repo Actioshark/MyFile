@@ -66,7 +66,7 @@
 			android:padding="10dp"
 			android:scaleType="centerCrop"
 			android:background="@drawable/btn_trans"
-			android:src="@drawable/close"
+			android:src="@drawable/cross"
 			android:visibility="gone" />
 	</LinearLayout>
 

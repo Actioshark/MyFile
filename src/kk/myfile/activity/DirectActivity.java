@@ -196,6 +196,8 @@ public class DirectActivity extends BaseActivity {
 			if (mHistory.size() > 0) {
 				direct = mHistory.remove(mHistory.size() - 1);
 				return;
+			} else if (mDirect != null) {
+				return;
 			} else {
 				direct = new Direct(Setting.DEFAULT_PATH);
 			}
@@ -282,6 +284,8 @@ public class DirectActivity extends BaseActivity {
 			
 			if (mHistory.size() > 0) {
 				mDirect = mHistory.remove(mHistory.size() - 1);
+				return;
+			} else if (mDirect != null) {
 				return;
 			} else {
 				mDirect = new Direct(Setting.DEFAULT_PATH);
