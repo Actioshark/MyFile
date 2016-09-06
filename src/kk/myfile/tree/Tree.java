@@ -2,21 +2,44 @@ package kk.myfile.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.Context;
-
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Broadcast;
 
 public class Tree {
+	public static final String BC_UPDATE = "tree_update";
+	public static final String BC_COMPLETED = "tree_completed";
+	
 	private static final Direct sRoot = new Direct("/");
 	
 	public static void init(Context context) {
+		final AtomicBoolean completed = new AtomicBoolean(false);
+		
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
 				sRoot.loadChilrenRec();
+				completed.set(true);
+			}
+		});
+		
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				while (completed.get() == false) {
+					Broadcast.send(BC_UPDATE, null);
+					
+					try {
+						Thread.sleep(1000);
+					} catch (Exception e) {
+					}
+				}
+				
+				Broadcast.send(BC_COMPLETED, null);
 			}
 		});
 	}
