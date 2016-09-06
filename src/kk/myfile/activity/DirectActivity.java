@@ -11,9 +11,9 @@ import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.tree.Tree;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Setting;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,7 +24,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
@@ -34,9 +33,6 @@ import android.widget.Toast;
 
 public class DirectActivity extends BaseActivity {
 	public static final String KEY_PATH = "direct_path";
-	
-	public static final String DEF_PATH = Environment.getExternalStorageDirectory()
-		.getAbsolutePath();
 	
 	private Direct mDirect;
 	private final List<Direct> mHistory = new ArrayList<Direct>();
@@ -169,7 +165,7 @@ public class DirectActivity extends BaseActivity {
 		
 		// 文件列表
 		mDirectAdapter = new DirectAdapter(this);
-		mGvList = (GridView) findViewById(R.id.gv_grid);
+		mGvList = (GridView) findViewById(R.id.gv_list);
 		mGvList.setAdapter(mDirectAdapter);
 		mGvList.addOnLayoutChangeListener(new OnLayoutChangeListener() {
 			@Override
@@ -201,7 +197,7 @@ public class DirectActivity extends BaseActivity {
 				direct = mHistory.remove(mHistory.size() - 1);
 				return;
 			} else {
-				direct = new Direct(DEF_PATH);
+				direct = new Direct(Setting.DEFAULT_PATH);
 			}
 		}
 		
@@ -288,7 +284,7 @@ public class DirectActivity extends BaseActivity {
 				mDirect = mHistory.remove(mHistory.size() - 1);
 				return;
 			} else {
-				mDirect = new Direct(DEF_PATH);
+				mDirect = new Direct(Setting.DEFAULT_PATH);
 			}
 		}
 		

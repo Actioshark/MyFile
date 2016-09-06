@@ -43,7 +43,7 @@
 	<LinearLayout
 		android:id="@+id/ll_search"
 		android:layout_width="match_parent"
-		android:layout_height="42dp"
+		android:layout_height="38dp"
 		android:background="@color/bar_bg"
 		android:orientation="horizontal">
 
@@ -66,12 +66,12 @@
 			android:padding="10dp"
 			android:scaleType="centerCrop"
 			android:background="@drawable/btn_black"
-			android:src="@drawable/delete"
+			android:src="@drawable/close"
 			android:visibility="gone" />
 	</LinearLayout>
 
 	<GridView
-		android:id="@+id/gv_grid"
+		android:id="@+id/gv_list"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"

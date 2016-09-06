@@ -11,6 +11,18 @@
 		android:orientation="vertical">
 
 		<TextView
+			android:id="@+id/tv_dir_0"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/main_bar_height"
+			android:paddingLeft="@dimen/main_padding"
+			android:paddingRight="@dimen/main_padding"
+			android:layout_marginTop="@dimen/main_gap"
+			android:gravity="left|center_vertical"
+			android:background="@drawable/btn_bar"
+			android:textSize="@dimen/main_direct_text"
+			android:textColor="@color/main_text" />
+
+		<TextView
 			android:id="@+id/tv_dir_1"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/main_bar_height"
@@ -70,35 +82,21 @@
 			android:textSize="@dimen/main_direct_text"
 			android:textColor="@color/main_text" />
 
-		<TextView
-			android:id="@+id/tv_dir_6"
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/main_bar_height"
-			android:paddingLeft="@dimen/main_padding"
-			android:paddingRight="@dimen/main_padding"
-			android:layout_marginTop="@dimen/main_gap"
-			android:gravity="left|center_vertical"
-			android:background="@drawable/btn_bar"
-			android:textSize="@dimen/main_direct_text"
-			android:textColor="@color/main_text" />
-
 		<LinearLayout
 			android:id="@+id/ll_add"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/main_bar_height"
 			android:layout_marginTop="@dimen/main_gap"
-			android:background="@color/bar_bg"
+			android:background="@drawable/btn_bar"
 			android:orientation="horizontal"
 			android:gravity="center">
 
 			<ImageView
-				android:id="@+id/iv_add"
 				android:layout_width="@dimen/main_bar_height"
 				android:layout_height="@dimen/main_bar_height"
 				android:padding="@dimen/main_padding"
 				android:scaleType="centerInside"
-				android:src="@drawable/add"
-				android:background="@drawable/btn_black" />
+				android:src="@drawable/add" />
 
 		</LinearLayout>
 

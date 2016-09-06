@@ -29,6 +29,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="kk.myfile.activity.DirectActivity" />
+		<activity android:name="kk.myfile.activity.SelectActivity" />
 	</application>
 
 </manifest>
