@@ -12,6 +12,7 @@ public class App extends Application {
 		
 		AppUtil.init(this);
 		Setting.init(this);
+		AppUtil.init(this);
 		Tree.init(this);
 	}
 }

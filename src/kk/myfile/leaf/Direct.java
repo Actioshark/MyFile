@@ -3,13 +3,22 @@ package kk.myfile.leaf;
 import java.io.File;
 
 import kk.myfile.R;
-import kk.myfile.tree.Tree;
+import kk.myfile.tree.FileUtil;
 
 public class Direct extends Leaf {
 	private Leaf[] mChildren = new Leaf[] {};
 	
 	public Direct(String path) {
 		super(path);
+	}
+	
+	@Override
+	public void setType(String type) {
+	}
+	
+	@Override
+	public int getIcon() {
+		return R.drawable.file_directory;
 	}
 	
 	public void loadChilren() {
@@ -23,8 +32,7 @@ public class Direct extends Leaf {
 			
 			mChildren = new Leaf[children.length];
 			for (int i = 0; i < children.length; i++) {
-				Leaf leaf = Tree.getLeaf(children[i]);
-				mChildren[i] = leaf;
+				mChildren[i] = FileUtil.createLeaf(children[i]);
 			}
 		} catch (Exception e) {
 		}
@@ -43,16 +51,17 @@ public class Direct extends Leaf {
 				return;
 			}
 			
-			synchronized (this) {
-				mChildren = new Leaf[children.length];
-				for (int i = 0; i < children.length; i++) {
-					mChildren[i] = Tree.getLeaf(children[i]);
-				}
+			Leaf[] temp = new Leaf[children.length];
+			for (int i = 0; i < children.length; i++) {
+				temp[i] = FileUtil.createLeaf(children[i]);
 			}
-
+			
+			mChildren = temp;
+			
 			for (Leaf leaf : mChildren) {
 				if (leaf instanceof Direct) {
-					((Direct) leaf).loadChilrenRec();
+					Direct direct = (Direct) leaf;
+					direct.loadChilrenRec();
 				}
 			}
 		} catch (Exception e) {
@@ -61,18 +70,5 @@ public class Direct extends Leaf {
 	
 	public Leaf[] getChildren() {
 		return mChildren;
-	}
-	
-	public synchronized Leaf[] getChildrenLocked() {
-		return mChildren;
-	}
-	
-	@Override
-	public void setType(String type) {
-	}
-	
-	@Override
-	public int getIcon() {
-		return R.drawable.file_directory;
 	}
 }

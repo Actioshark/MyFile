@@ -111,7 +111,7 @@ public class DirectActivity extends BaseActivity {
 					synchronized (mEtSearch) {
 						mSearchRun = new Runnable() {
 							public void run() {
-								List<Leaf> list = Tree.getAll(mDirect.getPath());
+								List<Leaf> list = Tree.getLeaves(Tree.findDirect(mDirect.getPath()), null);
 								final List<Leaf> rst = new ArrayList<Leaf>();
 								String input = editable.toString().toLowerCase(Locale.ENGLISH);
 								long time = SystemClock.uptimeMillis();
@@ -217,6 +217,10 @@ public class DirectActivity extends BaseActivity {
 			}
 		}
 		
+		// 关闭搜索
+		synchronized (mEtSearch) {
+			mSearchRun = null;
+		}
 		mDirect = direct;
 		
 		// 更新路径
