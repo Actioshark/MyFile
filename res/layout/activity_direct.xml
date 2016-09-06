@@ -3,7 +3,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/activity_bg"
+	android:background="@color/main_bg"
 	android:orientation="vertical">
 
 	<LinearLayout
@@ -20,7 +20,7 @@
 			android:layout_height="42dp"
 			android:padding="5dp"
 			android:layout_gravity="left|center_vertical"
-			android:background="@drawable/btn_black"
+			android:background="@drawable/btn_trans"
 			android:scaleType="centerCrop"
 			android:src="@drawable/home" />
 
@@ -65,7 +65,7 @@
 			android:layout_height="42dp"
 			android:padding="10dp"
 			android:scaleType="centerCrop"
-			android:background="@drawable/btn_black"
+			android:background="@drawable/btn_trans"
 			android:src="@drawable/close"
 			android:visibility="gone" />
 	</LinearLayout>

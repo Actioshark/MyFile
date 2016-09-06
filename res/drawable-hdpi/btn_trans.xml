@@ -3,12 +3,12 @@
 
 	<item
 		android:state_pressed="true"
-		android:drawable="@drawable/bg_black_pre" />
+		android:drawable="@drawable/bg_trans_pre" />
 
 	<item
 		android:state_focused="true"
-		android:drawable="@drawable/bg_black_pre" />
+		android:drawable="@drawable/bg_trans_pre" />
 
-	<item android:drawable="@drawable/bg_black_nor" />
+	<item android:drawable="@drawable/bg_trans_nor" />
 
 </selector>

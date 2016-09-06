@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kk.myfile.R;
+import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
@@ -65,10 +68,30 @@ public class MainActivity extends BaseActivity {
 			tv.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View view) {
-					Intent intent = new Intent(MainActivity.this, SelectActivity.class);
-					intent.putExtra(SelectActivity.KEY_PATH, mPaths.get(index));
-					intent.putExtra(KEY_INDEX, index);
-					startActivityForResult(intent, REQ_SELECT_PATH);
+					SimpleDialog dialog = new SimpleDialog(MainActivity.this);
+					dialog.setContent(R.string.hint_select_operation);
+					dialog.setButtons(new int[] {R.string.word_cancel, R.string.word_delete, R.string.word_edit});
+					dialog.setClickListener(new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int btn) {
+							if (btn == 1) {
+								if (index < mPaths.size()) {
+									mPaths.remove(index);
+									Setting.setDefPath(mPaths);
+									refreshPath();
+								}
+							} else if (btn == 2) {
+								Intent intent = new Intent(MainActivity.this, SelectActivity.class);
+								intent.putExtra(SelectActivity.KEY_PATH, mPaths.get(index));
+								intent.putExtra(KEY_INDEX, index);
+								startActivityForResult(intent, REQ_SELECT_PATH);
+							}
+							
+							dialog.dismiss();
+						}
+					});
+					dialog.show();
+					
 					return true;
 				}
 			});

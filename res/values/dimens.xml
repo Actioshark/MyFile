@@ -8,5 +8,8 @@
 	<dimen name="main_direct_text">16sp</dimen>
 	<dimen name="main_file_text">16sp</dimen>
 	<dimen name="main_direct_btn">32dp</dimen>
+	
+	<dimen name="dialog_width">800px</dimen>
+	<dimen name="dialog_height">600px</dimen>
 
 </resources>

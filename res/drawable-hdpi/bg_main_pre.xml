@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<!-- 填充 -->
-	<solid android:color="@color/bar_bg_pre" />
+	<solid android:color="@color/main_bg_pre" />
 
 </shape>
