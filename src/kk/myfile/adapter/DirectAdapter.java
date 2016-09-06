@@ -55,7 +55,7 @@ public class DirectAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View view) {
 					if (holder.leaf instanceof Direct) {
-						mActivity.setDirect((Direct) holder.leaf);
+						mActivity.showDirect((Direct) holder.leaf, true);
 					}
 				}
 			});

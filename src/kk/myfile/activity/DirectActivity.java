@@ -24,7 +24,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
+
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
@@ -54,9 +54,9 @@ public class DirectActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// 路径
+		// 数据
 		String path = getIntent().getStringExtra(KEY_PATH);
-		mDirect = new Direct(path);
+		Direct direct = new Direct(path);
 		
 		setContentView(R.layout.activity_direct);
 		
@@ -130,8 +130,7 @@ public class DirectActivity extends BaseActivity {
 											if (mSearchRun == this) {
 												AppUtil.runOnUiThread(new Runnable() {
 													public void run() {
-														mDirectAdapter.setData(rst.toArray(new Leaf[] {}));
-														mDirectAdapter.notifyDataSetChanged();
+														showSearchResult(rst.toArray(new Leaf[] {}));
 													}
 												});
 											} else {
@@ -145,8 +144,7 @@ public class DirectActivity extends BaseActivity {
 									if (mSearchRun == this) {
 										AppUtil.runOnUiThread(new Runnable() {
 											public void run() {
-												mDirectAdapter.setData(rst.toArray(new Leaf[] {}));
-												mDirectAdapter.notifyDataSetChanged();
+												showSearchResult(rst.toArray(new Leaf[] {}));
 											}
 										});
 									}
@@ -171,7 +169,6 @@ public class DirectActivity extends BaseActivity {
 		
 		// 文件列表
 		mDirectAdapter = new DirectAdapter(this);
-		mDirectAdapter.setData(mDirect.getChildren());
 		mGvList = (GridView) findViewById(R.id.gv_grid);
 		mGvList.setAdapter(mDirectAdapter);
 		mGvList.addOnLayoutChangeListener(new OnLayoutChangeListener() {
@@ -185,11 +182,14 @@ public class DirectActivity extends BaseActivity {
 				}
 			}
 		});
+		
+		showDirect(direct, false);
 	}
 	
-	public void refresh() {
+	public void showDirect(Direct direct, boolean lastToHistory) {
+		// 合法性
 		try {
-			File file = mDirect.getFile();
+			File file = direct.getFile();
 			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
 				throw new Exception();
 			}
@@ -198,15 +198,28 @@ public class DirectActivity extends BaseActivity {
 				Toast.LENGTH_SHORT).show();
 			
 			if (mHistory.size() > 0) {
-				mDirect = mHistory.remove(mHistory.size() - 1);
+				direct = mHistory.remove(mHistory.size() - 1);
 				return;
 			} else {
-				mDirect = new Direct(DEF_PATH);
+				direct = new Direct(DEF_PATH);
 			}
 		}
 		
-		mDirect.loadChilren();
+		// 加入历史
+		if (lastToHistory && mDirect != null) {
+			if (mHistory.size() > 0) {
+				Direct dir = mHistory.get(0);
+				if (dir.getPath().equals(mDirect.getPath()) == false) {
+					mHistory.add(mDirect);
+				}
+			} else {
+				mHistory.add(mDirect);
+			}
+		}
 		
+		mDirect = direct;
+		
+		// 更新路径
 		String path = mDirect.getPath();
 		final String[] nodes;
 		String[] temp = path.split("/");
@@ -233,7 +246,7 @@ public class DirectActivity extends BaseActivity {
 						sb.append('/').append(nodes[i]);
 					}
 					
-					setDirect(new Direct(sb.toString()));
+					showDirect(new Direct(sb.toString()), true);
 				}
 			});
 			
@@ -250,7 +263,39 @@ public class DirectActivity extends BaseActivity {
 			}
 		});
 		
+		// 更新文件列表
+		mDirect.loadChilren();
 		mDirectAdapter.setData(mDirect.getChildren());
+		mDirectAdapter.notifyDataSetChanged();
+	}
+	
+	public void refresh() {
+		// 合法性
+		try {
+			File file = mDirect.getFile();
+			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), R.string.err_file_read_error,
+				Toast.LENGTH_SHORT).show();
+			
+			if (mHistory.size() > 0) {
+				mDirect = mHistory.remove(mHistory.size() - 1);
+				return;
+			} else {
+				mDirect = new Direct(DEF_PATH);
+			}
+		}
+		
+		// 更新文件列表
+		mDirect.loadChilren();
+		mDirectAdapter.setData(mDirect.getChildren());
+		mDirectAdapter.notifyDataSetChanged();
+	}
+	
+	public void showSearchResult(Leaf[] list) {
+		mDirectAdapter.setData(list);
 		mDirectAdapter.notifyDataSetChanged();
 	}
 	
@@ -261,29 +306,12 @@ public class DirectActivity extends BaseActivity {
 		refresh();
 	}
 	
-	public void setDirect(Direct direct) {
-		if (mDirect != null) {
-			if (mHistory.size() > 0) {
-				Direct dir = mHistory.get(0);
-				if (dir.getPath().equals(mDirect.getPath()) == false) {
-					mHistory.add(mDirect);
-				}
-			} else {
-				mHistory.add(mDirect);
-			}
-		}
-		
-		mDirect = direct;
-		
-		refresh();
-	}
-	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (mHistory.size() > 0) {
-				mDirect = mHistory.remove(mHistory.size() - 1);
-				refresh();
+			int size = mHistory.size();
+			if (size > 0) {
+				showDirect(mHistory.remove(size - 1), false);
 				return true;
 			}
 		}
