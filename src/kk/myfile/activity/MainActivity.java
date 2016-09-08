@@ -34,6 +34,7 @@ public class MainActivity extends BaseActivity {
 		
 		setContentView(R.layout.activity_main);
 		
+		// 常用路径
 		for (int i = 0; ; i++) {
 			int id = AppUtil.getId("id", "tv_dir_" + i);
 			if (id == 0) {
@@ -103,6 +104,29 @@ public class MainActivity extends BaseActivity {
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, SelectActivity.class);
 				startActivityForResult(intent, REQ_SELECT_PATH);
+			}
+		});
+		
+		// 文件分类
+		// TODO
+		
+		// 功能按钮
+		View funRoot = findViewById(R.id.ll_fun);
+		
+		funRoot.findViewById(R.id.iv_exit)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				finish();
+			}
+		});
+		
+		funRoot.findViewById(R.id.iv_setting)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+				startActivity(intent);
 			}
 		});
 		

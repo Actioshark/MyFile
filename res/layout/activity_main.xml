@@ -446,32 +446,35 @@
 		</LinearLayout>
 
 		<LinearLayout
-			android:id="@+id/function"
+			android:id="@+id/ll_fun"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/main_bar_height"
 			android:layout_marginTop="@dimen/main_margin"
 			android:layout_marginBottom="@dimen/main_gap"
 			android:gravity="center"
-			android:background="@color/bar_bg"
+			android:background="@color/main_bg"
 			android:orientation="horizontal">
 
 			<ImageView
 				android:id="@+id/iv_exit"
 				android:layout_width="0dp"
-				android:layout_height="@dimen/main_direct_btn"
+				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:padding="7dp"
+				android:layout_marginRight="2dp"
 				android:scaleType="centerInside"
 				android:src="@drawable/arrow_left"
-				android:background="@drawable/btn_trans" />
+				android:background="@drawable/btn_bar" />
 
 			<ImageView
 				android:id="@+id/iv_setting"
 				android:layout_width="0dp"
-				android:layout_height="@dimen/main_direct_btn"
+				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:padding="7dp"
 				android:scaleType="centerInside"
 				android:src="@drawable/setting"
-				android:background="@drawable/btn_trans" />
+				android:background="@drawable/btn_bar" />
 
 		</LinearLayout>
 

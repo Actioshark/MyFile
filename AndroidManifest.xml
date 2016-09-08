@@ -30,6 +30,7 @@
 		</activity>
 		<activity android:name="kk.myfile.activity.DirectActivity" />
 		<activity android:name="kk.myfile.activity.SelectActivity" />
+		<activity android:name="kk.myfile.activity.SettingActivity" />
 	</application>
 
 </manifest>
