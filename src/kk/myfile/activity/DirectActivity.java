@@ -3,7 +3,6 @@ package kk.myfile.activity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import kk.myfile.R;
 import kk.myfile.adapter.DirectAdapter;
@@ -109,11 +108,11 @@ public class DirectActivity extends BaseActivity {
 							public void run() {
 								List<Leaf> list = Tree.getLeaves(Tree.findDirect(mDirect.getPath()), null);
 								final List<Leaf> rst = new ArrayList<Leaf>();
-								String input = editable.toString().toLowerCase(Locale.ENGLISH);
+								String input = editable.toString().toLowerCase(Setting.LOCALE);
 								long time = SystemClock.uptimeMillis();
 								
 								for (Leaf leaf : list) {
-									if (leaf.getFile().getName().toLowerCase(Locale.ENGLISH)
+									if (leaf.getFile().getName().toLowerCase(Setting.LOCALE)
 											.contains(input)) {
 										rst.add(leaf);
 									}

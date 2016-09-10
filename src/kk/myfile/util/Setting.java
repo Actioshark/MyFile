@@ -2,6 +2,7 @@ package kk.myfile.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 
@@ -13,7 +14,10 @@ import android.os.Environment;
 public class Setting {
 	public static final String DEFAULT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
 	
+	public static final Locale LOCALE = Locale.ENGLISH;
+	
 	static final String KEY_DEF_PATH = "def_path";
+	static final String KEY_SORT_FACTOR = "sort_factor";
 
 	private static SharedPreferences sPrefer;
 
@@ -59,6 +63,16 @@ public class Setting {
 		
 		Editor editor = sPrefer.edit();
 		editor.putString(KEY_DEF_PATH, ja.toString());
+		editor.commit();
+	}
+	
+	public static String getSortFactor() {
+		return sPrefer.getString(KEY_SORT_FACTOR, null);
+	}
+	
+	public static void setSortFactor(String str) {
+		Editor editor = sPrefer.edit();
+		editor.putString(KEY_SORT_FACTOR, str);
 		editor.commit();
 	}
 }

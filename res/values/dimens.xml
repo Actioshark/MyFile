@@ -7,9 +7,11 @@
 	<dimen name="main_margin">15dp</dimen>
 	<dimen name="main_direct_text">16sp</dimen>
 	<dimen name="main_file_text">16sp</dimen>
-	
-	<dimen name="setting_icon_padding">5dp</dimen>
-	
+
+	<dimen name="setting_icon_padding">10dp</dimen>
+
+	<dimen name="sort_grid_height">60dp</dimen>
+
 	<dimen name="dialog_width">800px</dimen>
 	<dimen name="dialog_height">600px</dimen>
 

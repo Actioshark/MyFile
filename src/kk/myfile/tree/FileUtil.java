@@ -6,16 +6,17 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
-import java.util.Locale;
 
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Unknown;
 import kk.myfile.util.Logger;
+import kk.myfile.util.Setting;
 
 public class FileUtil {
 	private static JSONObject sTypeMap;
@@ -47,7 +48,7 @@ public class FileUtil {
 		int pointIndex = name.lastIndexOf('.');
 		if (pointIndex != -1) {
 			String subfix = name.substring(pointIndex + 1, name.length())
-				.toLowerCase(Locale.ENGLISH);
+				.toLowerCase(Setting.LOCALE);
 			
 			try {
 				JSONObject map = sTypeMap.getJSONObject(subfix);

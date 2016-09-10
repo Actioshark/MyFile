@@ -1,6 +1,9 @@
 package kk.myfile.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import kk.myfile.R;
 
 public class SettingActivity extends BaseActivity {
@@ -11,6 +14,13 @@ public class SettingActivity extends BaseActivity {
 		setContentView(R.layout.activity_setting);
 		
 		// 排序
-		
+		findViewById(R.id.ll_sort)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SortActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 }

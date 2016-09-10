@@ -446,6 +446,97 @@
 		</LinearLayout>
 
 		<LinearLayout
+			android:id="@+id/ll_file_3"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/main_bar_large_height"
+			android:layout_marginTop="@dimen/main_margin"
+			android:gravity="center"
+			android:background="@color/bar_bg"
+			android:orientation="horizontal"
+			android:baselineAligned="false">
+
+			<LinearLayout
+				android:id="@+id/ll_text"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:background="@drawable/btn_trans">
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:layout_width="@dimen/main_bar_height"
+					android:layout_height="@dimen/main_bar_height"
+					android:scaleType="centerInside"
+					android:src="@drawable/file_text" />
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+				<TextView
+					android:id="@+id/tv_text"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:textSize="@dimen/main_file_text"
+					android:textColor="@color/main_text" />
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/ll_image"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:background="@drawable/btn_trans">
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:layout_width="@dimen/main_bar_height"
+					android:layout_height="@dimen/main_bar_height"
+					android:scaleType="centerInside"
+					android:src="@drawable/file_image" />
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+				<TextView
+					android:id="@+id/tv_text"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:textSize="@dimen/main_file_text"
+					android:textColor="@color/main_text" />
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+			</LinearLayout>
+		</LinearLayout>
+
+		<LinearLayout
 			android:id="@+id/ll_fun"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/main_bar_height"

@@ -51,12 +51,12 @@ public class SelectAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
-		final Holder holder;
+		final ViewHolder holder;
 		
 		if (view == null) {
 			view = mActivity.getLayoutInflater().inflate(R.layout.grid_select, null);
 			
-			holder = new Holder();
+			holder = new ViewHolder();
 			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
 			holder.name = (TextView) view.findViewById(R.id.tv_name);
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
@@ -82,7 +82,7 @@ public class SelectAdapter extends BaseAdapter {
 				}
 			});
 		} else {
-			holder = (Holder) view.getTag();
+			holder = (ViewHolder) view.getTag();
 		}
 		
 		if (position < 0 || position >= mData.size()) {
@@ -103,7 +103,7 @@ public class SelectAdapter extends BaseAdapter {
 		return mSelected;
 	}
 
-	class Holder {
+	class ViewHolder {
 		public ImageView icon;
 		public TextView name;
 		public ImageView select;

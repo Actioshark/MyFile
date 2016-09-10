@@ -2,16 +2,23 @@
 <resources>
 
 	<string name="app_name">MyFile</string>
-	
+
 	<string name="word_cancel">Cancel</string>
 	<string name="word_delete">Delete</string>
 	<string name="word_edit">Edit</string>
-	
+
 	<string name="setting_sort">Sort</string>
+
+	<string name="sort_Directory">Directory</string>
+	<string name="sort_ModifyTime">Modify Time</string>
+	<string name="sort_Name">Name</string>
+	<string name="sort_Path">Path</string>
+	<string name="sort_Size">Size</string>
+	<string name="sort_Subfix">Type</string>
 
 	<string name="hint_input_to_search">Input to search</string>
 	<string name="hint_select_operation">Please select an operation</string>
-	
+
 	<string name="err_path_not_valid">This is not a valid path</string>
 	<string name="err_nothing_selected">Noting selected</string>
 	<string name="err_file_read_error">File reading error</string>

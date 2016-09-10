@@ -3,6 +3,10 @@ package kk.myfile.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import kk.myfile.R;
+import kk.myfile.tree.Sorter;
+import kk.myfile.tree.Sorter.SortFactor;
+import kk.myfile.util.AppUtil;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -16,13 +20,7 @@ import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class SortActivity extends BaseActivity {
-	public static final int MODE_BRANCH = 1;
-	public static final int MODE_LEAF = 2;
-
-	private int mMode;
 	private List<SortFactor> mFactor;
-
-	private TextView mTvTitle;
 
 	private AbsoluteLayout mAlLayout;
 	private View[] mViewGrids;
@@ -32,34 +30,9 @@ public class SortActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mMode = getIntent().getIntExtra(KEY_MODE, MODE_BRANCH);
-		if (mMode == MODE_BRANCH) {
-			mFactor = Squi.getBranchFactors(false);
-		} else if (mMode == MODE_LEAF) {
-			mFactor = Squi.getLeafFactors();
-		} else {
-			finish();
-			return;
-		}
+		mFactor = Sorter.getFactors();
 
 		setContentView(R.layout.activity_sort);
-
-		View title = findViewById(R.id.rl_title);
-
-		ImageView back = (ImageView) title.findViewById(R.id.iv_back);
-		back.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				finish();
-			}
-		});
-
-		mTvTitle = (TextView) title.findViewById(R.id.tv_title);
-		if (mMode == MODE_BRANCH) {
-			mTvTitle.setText(R.string.sort_title_branch);
-		} else if (mMode == MODE_LEAF) {
-			mTvTitle.setText(R.string.sort_title_leaf);
-		}
 
 		mAlLayout = (AbsoluteLayout) findViewById(R.id.al_layout);
 		mViewGrids = new View[mFactor.size()];
@@ -177,13 +150,7 @@ public class SortActivity extends BaseActivity {
 					list.add(vh.sf);
 				}
 
-				if (mMode == MODE_BRANCH) {
-					Squi.setBranchFactors(list);
-					Ant.sortBranch();
-				} else if (mMode == MODE_LEAF) {
-					Squi.setLeafFactors(list);
-					Ant.sortLeaf();
-				}
+				Sorter.setFactors(list);
 			}
 		});
 
