@@ -551,8 +551,7 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
-				android:padding="7dp"
-				android:layout_marginRight="2dp"
+				android:padding="@dimen/main_padding"
 				android:scaleType="centerInside"
 				android:src="@drawable/arrow_left"
 				android:background="@drawable/btn_bar" />
@@ -562,14 +561,12 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
-				android:padding="7dp"
+				android:padding="@dimen/main_padding"
+				android:layout_marginLeft="@dimen/main_gap"
 				android:scaleType="centerInside"
 				android:src="@drawable/setting"
 				android:background="@drawable/btn_bar" />
 
 		</LinearLayout>
-
 	</LinearLayout>
-
-
 </ScrollView>

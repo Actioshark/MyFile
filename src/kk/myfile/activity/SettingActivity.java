@@ -13,6 +13,16 @@ public class SettingActivity extends BaseActivity {
 		
 		setContentView(R.layout.activity_setting);
 		
+		// 返回
+		View menu = findViewById(R.id.ll_menu);
+		menu.findViewById(R.id.iv_back)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				finish();
+			}
+		});
+		
 		// 排序
 		findViewById(R.id.ll_sort)
 		.setOnClickListener(new OnClickListener() {

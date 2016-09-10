@@ -27,7 +27,7 @@
 
 		<ImageView
 			android:id="@+id/iv_direct"
-			android:layout_width="30dp"
+			android:layout_width="40dp"
 			android:layout_height="match_parent"
 			android:padding="5dp"
 			android:background="@drawable/btn_trans"

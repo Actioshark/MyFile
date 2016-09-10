@@ -7,6 +7,7 @@ import kk.myfile.R;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.SortFactor;
 import kk.myfile.util.AppUtil;
+
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -30,10 +31,33 @@ public class SortActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// 数据
 		mFactor = Sorter.getFactors();
 
 		setContentView(R.layout.activity_sort);
+		
+		View menu = findViewById(R.id.ll_menu);
+		
+		// 取消
+		menu.findViewById(R.id.iv_cancel)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				finish();
+			}
+		});
+		
+		// 保存
+		menu.findViewById(R.id.iv_confirm)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				save();
+				finish();
+			}
+		});
 
+		// 格子
 		mAlLayout = (AbsoluteLayout) findViewById(R.id.al_layout);
 		mViewGrids = new View[mFactor.size()];
 		mGridHeight = AppUtil.getDimenInt(R.dimen.sort_grid_height);
@@ -123,8 +147,7 @@ public class SortActivity extends BaseActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 
-	@Override
-	public void finish() {
+	private void save() {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
@@ -153,8 +176,6 @@ public class SortActivity extends BaseActivity {
 				Sorter.setFactors(list);
 			}
 		});
-
-		super.finish();
 	}
 
 	static class ViewHolder {

@@ -6,11 +6,16 @@
 	android:background="@color/main_bg"
 	android:orientation="vertical">
 
+	<ListView
+		android:id="@+id/lv_list"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
 	<HorizontalScrollView
 		android:id="@+id/hsv_path"
 		android:layout_width="match_parent"
 		android:layout_height="42dp"
-		android:layout_marginBottom="3dp"
 		android:scrollbars="none"
 		android:background="@color/bar_bg">
 
@@ -23,16 +28,11 @@
 
 	</HorizontalScrollView>
 
-	<ListView
-		android:id="@+id/lv_list"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1" />
-
 	<LinearLayout
 		android:id="@+id/ll_menu"
 		android:layout_width="match_parent"
-		android:layout_height="40dp"
+		android:layout_height="@dimen/main_bar_height"
+		android:layout_marginTop="@dimen/main_gap"
 		android:orientation="horizontal">
 
 		<ImageView
@@ -40,8 +40,7 @@
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="1"
-			android:layout_marginRight="3dp"
-			android:padding="5dp"
+			android:padding="@dimen/main_padding"
 			android:gravity="center"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
@@ -52,7 +51,8 @@
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="1"
-			android:padding="5dp"
+			android:padding="@dimen/main_padding"
+			android:layout_marginLeft="@dimen/main_gap"
 			android:gravity="center"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
