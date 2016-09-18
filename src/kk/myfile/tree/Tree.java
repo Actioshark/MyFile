@@ -1,11 +1,22 @@
 package kk.myfile.tree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.content.Context;
+
+import kk.myfile.leaf.Apk;
+import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
+import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.leaf.Office;
+import kk.myfile.leaf.Text;
+import kk.myfile.leaf.Video;
+import kk.myfile.leaf.Zip;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Broadcast;
 
@@ -18,7 +29,20 @@ public class Tree {
 	private static boolean sIsRefreshing = false;
 	private static boolean sNeedRefresh = false;
 	
+	private static final Map<Class<?>, List<Leaf>> sTypedFile =
+			new HashMap<Class<?>, List<Leaf>>();
+	private static final List<Leaf> sBigFile = new ArrayList<Leaf>();
+	private static final List<Leaf> sRecentFile = new ArrayList<Leaf>();
+	
 	public static void init(Context context) {
+		sTypedFile.put(Text.class, new ArrayList<Leaf>());
+		sTypedFile.put(Image.class, new ArrayList<Leaf>());
+		sTypedFile.put(Audio.class, new ArrayList<Leaf>());
+		sTypedFile.put(Video.class, new ArrayList<Leaf>());
+		sTypedFile.put(Office.class, new ArrayList<Leaf>());
+		sTypedFile.put(Zip.class, new ArrayList<Leaf>());
+		sTypedFile.put(Apk.class, new ArrayList<Leaf>());
+		
 		refresh();
 	}
 	
@@ -37,7 +61,15 @@ public class Tree {
 			@Override
 			public void run() {
 				Broadcast.send(BC_START, null);
+				
+				for (List<Leaf> list : sTypedFile.values()) {
+					list.clear();
+				}
+				sBigFile.clear();
+				sRecentFile.clear();
+				
 				sRoot.loadChilrenRec();
+				
 				Broadcast.send(BC_COMPLETED, null);
 				
 				synchronized (sRoot) {
@@ -90,28 +122,10 @@ public class Tree {
 		return dir;
 	}
 	
-	public static List<Leaf> getLeaves(Direct direct, Class<?> cls) {
+	public static List<Leaf> getLeaves(Direct direct) {
 		List<Leaf> list = new ArrayList<Leaf>();
-		
-		if (cls == null) {
-			getLeavesInter(direct, list);
-		} else {
-			getLeavesInter(direct, cls, list);
-		}
-		
+		getLeavesInter(direct, list);
 		return list;
-	}
-	
-	private static void getLeavesInter(Direct direct, Class<?> cls, List<Leaf> list) {
-		for (Leaf leaf : direct.getChildren()) {
-			if (cls.isInstance(leaf)) {
-				list.add(leaf);
-			}
-			
-			if (leaf instanceof Direct) {
-				getLeavesInter((Direct) leaf, cls, list);
-			}
-		}
 	}
 	
 	private static void getLeavesInter(Direct direct, List<Leaf> list) {
@@ -122,5 +136,20 @@ public class Tree {
 				getLeavesInter((Direct) leaf, list);
 			}
 		}
+	}
+	
+	public static void addTypedLeaves(Leaf[] leaves) {
+		for (Leaf leaf : leaves) {
+			for (Entry<Class<?>, List<Leaf>> entry : sTypedFile.entrySet()) {
+				if (entry.getKey().isInstance(leaf)) {
+					entry.getValue().add(leaf);
+					break;
+				}
+			}
+		}
+	}
+	
+	public static List<Leaf> getTypedLeaves(Class<?> cls) {
+		return sTypedFile.get(cls);
 	}
 }

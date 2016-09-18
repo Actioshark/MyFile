@@ -59,6 +59,7 @@ public class FileUtil {
 					cls = String.format("%c%s", Character.toUpperCase(cls.charAt(0)),
 						cls.substring(1));
 					Class<?> clazz = Class.forName(String.format("kk.myfile.leaf.%s", cls));
+					
 					if (clazz != null) {
 						Constructor<?> ct = clazz.getConstructor(String.class);
 						Leaf leaf = (Leaf) ct.newInstance(path);

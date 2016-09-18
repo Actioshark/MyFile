@@ -106,7 +106,7 @@ public class DirectActivity extends BaseActivity {
 					synchronized (mEtSearch) {
 						mSearchRun = new Runnable() {
 							public void run() {
-								List<Leaf> list = Tree.getLeaves(Tree.findDirect(mDirect.getPath()), null);
+								List<Leaf> list = Tree.getLeaves(Tree.findDirect(mDirect.getPath()));
 								final List<Leaf> rst = new ArrayList<Leaf>();
 								String input = editable.toString().toLowerCase(Setting.LOCALE);
 								long time = SystemClock.uptimeMillis();

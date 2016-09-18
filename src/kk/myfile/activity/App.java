@@ -1,5 +1,6 @@
 package kk.myfile.activity;
 
+import kk.myfile.tree.FileUtil;
 import kk.myfile.tree.Tree;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
@@ -12,7 +13,7 @@ public class App extends Application {
 		
 		AppUtil.init(this);
 		Setting.init(this);
-		AppUtil.init(this);
+		FileUtil.init(this);
 		Tree.init(this);
 	}
 }

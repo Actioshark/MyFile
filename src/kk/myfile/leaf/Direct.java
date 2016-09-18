@@ -4,6 +4,7 @@ import java.io.File;
 
 import kk.myfile.R;
 import kk.myfile.tree.FileUtil;
+import kk.myfile.tree.Tree;
 
 public class Direct extends Leaf {
 	private Leaf[] mChildren = new Leaf[] {};
@@ -57,6 +58,7 @@ public class Direct extends Leaf {
 			}
 			
 			mChildren = temp;
+			Tree.addTypedLeaves(temp);
 			
 			for (Leaf leaf : mChildren) {
 				if (leaf instanceof Direct) {

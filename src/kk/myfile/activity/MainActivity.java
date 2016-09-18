@@ -3,7 +3,7 @@ package kk.myfile.activity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kk.myfile.R;
+import kk.myfile.leaf.Apk;
+import kk.myfile.leaf.Audio;
+import kk.myfile.leaf.Image;
+import kk.myfile.leaf.Office;
+import kk.myfile.leaf.Text;
+import kk.myfile.leaf.Video;
+import kk.myfile.leaf.Zip;
 import kk.myfile.tree.Tree;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
@@ -33,13 +40,23 @@ public class MainActivity extends BaseActivity implements IListener {
 	private final List<TextView> mTvDirects = new ArrayList<TextView>();
 	private View mLlAdd;
 	
+	private TextView mTvText;
+	private TextView mTvImage;
+	private TextView mTvAudio;
+	private TextView mTvVideo;
+	private TextView mTvOffice;
+	private TextView mTvZip;
+	private TextView mTvApk;
+	
 	private View mViewRefresh;
 	
+	@SuppressLint("CutPasteId")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_main);
+		View root, temp;
 		
 		// 常用路径
 		for (int i = 0; ; i++) {
@@ -115,12 +132,35 @@ public class MainActivity extends BaseActivity implements IListener {
 		});
 		
 		// 文件分类
-		// TODO
+		root = findViewById(R.id.ll_file_1);
+		
+		temp = root.findViewById(R.id.ll_text);
+		mTvText = (TextView) temp.findViewById(R.id.tv_text);
+		
+		temp = root.findViewById(R.id.ll_image);
+		mTvImage = (TextView) temp.findViewById(R.id.tv_text);
+		
+		temp = root.findViewById(R.id.ll_audio);
+		mTvAudio = (TextView) temp.findViewById(R.id.tv_text);
+		
+		temp = root.findViewById(R.id.ll_video);
+		mTvVideo = (TextView) temp.findViewById(R.id.tv_text);
+		
+		root = findViewById(R.id.ll_file_2);
+		
+		temp = root.findViewById(R.id.ll_office);
+		mTvOffice = (TextView) temp.findViewById(R.id.tv_text);
+		
+		temp = root.findViewById(R.id.ll_zip);
+		mTvZip = (TextView) temp.findViewById(R.id.tv_text);
+		
+		temp = root.findViewById(R.id.ll_apk);
+		mTvApk = (TextView) temp.findViewById(R.id.tv_text);
 		
 		// 功能按钮
-		View funRoot = findViewById(R.id.ll_fun);
+		root = findViewById(R.id.ll_fun);
 		
-		funRoot.findViewById(R.id.iv_exit)
+		root.findViewById(R.id.iv_exit)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -128,16 +168,16 @@ public class MainActivity extends BaseActivity implements IListener {
 			}
 		});
 		
-		View llRefresh = funRoot.findViewById(R.id.ll_refresh);
-		llRefresh.setOnClickListener(new OnClickListener() {
+		temp = root.findViewById(R.id.ll_refresh);
+		temp.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Tree.refresh();
 			}
 		});
-		mViewRefresh = llRefresh.findViewById(R.id.iv_refresh);
+		mViewRefresh = temp.findViewById(R.id.iv_refresh);
 		
-		funRoot.findViewById(R.id.iv_setting)
+		root.findViewById(R.id.iv_setting)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -171,6 +211,14 @@ public class MainActivity extends BaseActivity implements IListener {
 		if (Tree.BC_START.equals(name)) {
 			setRefreshAnim(true);
 		} else if (Tree.BC_UPDATE.equals(name)) {
+			mTvText.setText(String.format("%d", Tree.getTypedLeaves(Text.class).size()));
+			mTvImage.setText(String.format("%d", Tree.getTypedLeaves(Image.class).size()));
+			mTvAudio.setText(String.format("%d", Tree.getTypedLeaves(Audio.class).size()));
+			mTvVideo.setText(String.format("%d", Tree.getTypedLeaves(Video.class).size()));
+			mTvOffice.setText(String.format("%d", Tree.getTypedLeaves(Office.class).size()));
+			mTvZip.setText(String.format("%d", Tree.getTypedLeaves(Zip.class).size()));
+			mTvApk.setText(String.format("%d", Tree.getTypedLeaves(Apk.class).size()));
+			
 			setRefreshAnim(true);
 		} else if (Tree.BC_COMPLETED.equals(name)) {
 			setRefreshAnim(false);
