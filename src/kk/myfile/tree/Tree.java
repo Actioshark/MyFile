@@ -2,7 +2,6 @@ package kk.myfile.tree;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.Context;
 import kk.myfile.leaf.Direct;
@@ -11,35 +10,63 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.Broadcast;
 
 public class Tree {
+	public static final String BC_START = "tree_start";
 	public static final String BC_UPDATE = "tree_update";
 	public static final String BC_COMPLETED = "tree_completed";
 	
 	private static final Direct sRoot = new Direct("/");
+	private static boolean sIsRefreshing = false;
+	private static boolean sNeedRefresh = false;
 	
 	public static void init(Context context) {
-		final AtomicBoolean completed = new AtomicBoolean(false);
+		refresh();
+	}
+	
+	public static void refresh() {
+		synchronized (sRoot) {
+			if (sIsRefreshing) {
+				sNeedRefresh = true;
+				return;
+			}
+			
+			sIsRefreshing = true;
+			sNeedRefresh = false;
+		}
 		
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
+				Broadcast.send(BC_START, null);
 				sRoot.loadChilrenRec();
-				completed.set(true);
+				Broadcast.send(BC_COMPLETED, null);
+				
+				synchronized (sRoot) {
+					sIsRefreshing = false;
+					
+					if (sNeedRefresh) {
+						refresh();
+					}
+				}
 			}
 		});
 		
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				while (completed.get() == false) {
-					Broadcast.send(BC_UPDATE, null);
-					
+				while (true) {		
 					try {
 						Thread.sleep(1000);
 					} catch (Exception e) {
 					}
+					
+					synchronized (sRoot) {
+						if (sIsRefreshing) {
+							Broadcast.send(BC_UPDATE, null);
+						} else {
+							break;
+						}
+					}
 				}
-				
-				Broadcast.send(BC_COMPLETED, null);
 			}
 		});
 	}

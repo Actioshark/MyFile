@@ -36,15 +36,21 @@ public class Broadcast {
 
 	public static synchronized void removeLsitener(IListener listener,
 			String name) {
-		Map<IListener, Node> map = sMap.get(name);
-
-		if (map != null) {
-			map.remove(listener);
+		
+		if (name == null) {
+			for (Map<IListener, Node> map : sMap.values()) {
+				map.remove(listener);
+			}
+		} else {
+			Map<IListener, Node> map = sMap.get(name);
+	
+			if (map != null) {
+				map.remove(listener);
+			}
 		}
 	}
 
 	public static synchronized void send(final String name, final Object data) {
-
 		Map<IListener, Node> map = sMap.get(name);
 
 		if (map == null) {

@@ -10,16 +10,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import kk.myfile.R;
+import kk.myfile.tree.Tree;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Broadcast;
+import kk.myfile.util.Broadcast.IListener;
 import kk.myfile.util.Setting;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements IListener {
 	public static final int REQ_SELECT_PATH = 1;
 	
 	public static final String KEY_INDEX = "main_index";
@@ -27,6 +32,8 @@ public class MainActivity extends BaseActivity {
 	private List<String> mPaths;
 	private final List<TextView> mTvDirects = new ArrayList<TextView>();
 	private View mLlAdd;
+	
+	private View mViewRefresh;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +128,15 @@ public class MainActivity extends BaseActivity {
 			}
 		});
 		
+		View llRefresh = funRoot.findViewById(R.id.ll_refresh);
+		llRefresh.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Tree.refresh();
+			}
+		});
+		mViewRefresh = llRefresh.findViewById(R.id.iv_refresh);
+		
 		funRoot.findViewById(R.id.iv_setting)
 		.setOnClickListener(new OnClickListener() {
 			@Override
@@ -132,6 +148,49 @@ public class MainActivity extends BaseActivity {
 		
 		mPaths = Setting.getDefPath();
 		refreshPath();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		Broadcast.addListener(this, Tree.BC_START, true);
+		Broadcast.addListener(this, Tree.BC_UPDATE, true);
+		Broadcast.addListener(this, Tree.BC_COMPLETED, true);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		Broadcast.removeLsitener(this, null);
+	}
+	
+	@Override
+	public void onReceive(String name, Object data) {
+		if (Tree.BC_START.equals(name)) {
+			setRefreshAnim(true);
+		} else if (Tree.BC_UPDATE.equals(name)) {
+			setRefreshAnim(true);
+		} else if (Tree.BC_COMPLETED.equals(name)) {
+			setRefreshAnim(false);
+		}
+	}
+	
+	private void setRefreshAnim(boolean start) {
+		if (start && mViewRefresh.getTag() == null) {
+			Animation anim = new RotateAnimation(0f, -360f,
+					Animation.RELATIVE_TO_SELF, 0.5f,
+					Animation.RELATIVE_TO_SELF, 0.5f);
+			anim.setDuration(1000);
+			anim.setRepeatCount(-1);
+			
+			mViewRefresh.startAnimation(anim);
+			mViewRefresh.setTag(anim);
+		} else if (start == false && mViewRefresh.getTag() != null) {
+			mViewRefresh.clearAnimation();
+			mViewRefresh.setTag(null);
+		}
 	}
 	
 	private void refreshPath() {
