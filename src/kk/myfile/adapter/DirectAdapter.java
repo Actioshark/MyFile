@@ -6,6 +6,7 @@ import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.Classify;
+import kk.myfile.util.AppUtil;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,11 +23,23 @@ public class DirectAdapter extends BaseAdapter {
 		mActivity = activity;
 	}
 	
-	public void setData(Leaf[] data) {
+	public void setData(final Leaf[] data) {
 		mData = data;
 		
-		if (mData != null) {
-			Sorter.sort(Classify.Tree, mData);
+		if (data != null) {
+			AppUtil.runOnNewThread(new Runnable() {
+				@Override
+				public void run() {
+					Sorter.sort(Classify.Tree, data);
+					
+					AppUtil.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							notifyDataSetChanged();
+						}
+					});
+				}
+			});
 		}
 	}
 	
