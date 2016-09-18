@@ -7,14 +7,15 @@
 	<string name="word_delete">Delete</string>
 	<string name="word_edit">Edit</string>
 
-	<string name="setting_sort">Sort</string>
+	<string name="setting_sort_tree">Sort Files Of Directory</string>
+	<string name="setting_sort_type">Sort Files Of Type</string>
 
-	<string name="sort_Directory">Directory</string>
+	<string name="sort_Directory">Directory or File</string>
 	<string name="sort_ModifyTime">Modify Time</string>
 	<string name="sort_Name">Name</string>
 	<string name="sort_Path">Path</string>
 	<string name="sort_Size">Size</string>
-	<string name="sort_Subfix">Type</string>
+	<string name="sort_Subfix">Subfix</string>
 
 	<string name="hint_input_to_search">Input to search</string>
 	<string name="hint_select_operation">Please select an operation</string>

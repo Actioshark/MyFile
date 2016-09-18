@@ -4,6 +4,8 @@ import kk.myfile.R;
 import kk.myfile.activity.DirectActivity;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.tree.Sorter;
+import kk.myfile.tree.Sorter.Classify;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +24,10 @@ public class DirectAdapter extends BaseAdapter {
 	
 	public void setData(Leaf[] data) {
 		mData = data;
+		
+		if (mData != null) {
+			Sorter.sort(Classify.Tree, mData);
+		}
 	}
 	
 	@Override

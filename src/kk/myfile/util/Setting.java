@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kk.myfile.tree.Sorter.Classify;
+
 import org.json.JSONArray;
 
 import android.content.Context;
@@ -17,7 +19,7 @@ public class Setting {
 	public static final Locale LOCALE = Locale.ENGLISH;
 	
 	static final String KEY_DEF_PATH = "def_path";
-	static final String KEY_SORT_FACTOR = "sort_factor";
+	static final String KEY_SORT_FACTOR = "sort_factor_%s";
 
 	private static SharedPreferences sPrefer;
 
@@ -66,13 +68,13 @@ public class Setting {
 		editor.commit();
 	}
 	
-	public static String getSortFactor() {
-		return sPrefer.getString(KEY_SORT_FACTOR, null);
+	public static String getSortFactor(Classify classify) {
+		return sPrefer.getString(String.format(KEY_SORT_FACTOR, classify.name()), null);
 	}
 	
-	public static void setSortFactor(String str) {
+	public static void setSortFactor(Classify classify, String str) {
 		Editor editor = sPrefer.edit();
-		editor.putString(KEY_SORT_FACTOR, str);
+		editor.putString(String.format(KEY_SORT_FACTOR, classify.name()), str);
 		editor.commit();
 	}
 }

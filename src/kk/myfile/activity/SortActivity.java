@@ -5,9 +5,9 @@ import java.util.List;
 
 import kk.myfile.R;
 import kk.myfile.tree.Sorter;
+import kk.myfile.tree.Sorter.Classify;
 import kk.myfile.tree.Sorter.SortFactor;
 import kk.myfile.util.AppUtil;
-
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -21,6 +21,9 @@ import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class SortActivity extends BaseActivity {
+	public static final String KEY_CLASSIFY = "sort_classify";
+	
+	private Classify mClassify;
 	private List<SortFactor> mFactor;
 
 	private AbsoluteLayout mAlLayout;
@@ -32,7 +35,12 @@ public class SortActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		// 数据
-		mFactor = Sorter.getFactors();
+		try {
+			mClassify = Classify.valueOf(getIntent().getStringExtra(KEY_CLASSIFY));
+		} catch (Exception e) {
+			mClassify = Classify.Tree;
+		}
+		mFactor = Sorter.getFactors(mClassify);
 
 		setContentView(R.layout.activity_sort);
 		
@@ -173,7 +181,7 @@ public class SortActivity extends BaseActivity {
 					list.add(vh.sf);
 				}
 
-				Sorter.setFactors(list);
+				Sorter.setFactors(mClassify, list);
 			}
 		});
 	}

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import kk.myfile.R;
+import kk.myfile.tree.Sorter.Classify;
 
 public class SettingActivity extends BaseActivity {
 	@Override
@@ -23,12 +24,24 @@ public class SettingActivity extends BaseActivity {
 			}
 		});
 		
-		// 排序
-		findViewById(R.id.ll_sort)
+		// 文件夹排序
+		findViewById(R.id.ll_sort_tree)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SortActivity.class);
+				intent.putExtra(SortActivity.KEY_CLASSIFY, Classify.Tree.name());
+				startActivity(intent);
+			}
+		});
+		
+		// 分类文件排序
+		findViewById(R.id.ll_sort_type)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SortActivity.class);
+				intent.putExtra(SortActivity.KEY_CLASSIFY, Classify.Type.name());
 				startActivity(intent);
 			}
 		});
