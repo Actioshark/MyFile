@@ -42,7 +42,7 @@ public class SettingSortActivity extends BaseActivity {
 		}
 		mFactor = Sorter.getFactors(mClassify);
 
-		setContentView(R.layout.activity_sort);
+		setContentView(R.layout.activity_setting_sort);
 		
 		View menu = findViewById(R.id.ll_menu);
 		
