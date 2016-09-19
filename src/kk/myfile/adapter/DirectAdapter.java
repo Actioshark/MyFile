@@ -2,12 +2,12 @@ package kk.myfile.adapter;
 
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity;
+import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.Classify;
 import kk.myfile.util.AppUtil;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -74,7 +74,7 @@ public class DirectAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View view) {
 					if (holder.leaf instanceof Direct) {
-						mActivity.showDirect((Direct) holder.leaf, true);
+						mActivity.showDirect(new Node((Direct) holder.leaf), true);
 					}
 				}
 			});

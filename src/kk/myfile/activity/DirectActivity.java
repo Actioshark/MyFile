@@ -23,6 +23,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
@@ -33,8 +35,16 @@ import android.widget.Toast;
 public class DirectActivity extends BaseActivity {
 	public static final String KEY_PATH = "direct_path";
 	
-	private Direct mDirect;
-	private final List<Direct> mHistory = new ArrayList<Direct>();
+	public static class Node {
+		public Direct direct;
+		public int position = 0;
+		
+		public Node(Direct direct) {
+			this.direct = direct;
+		}
+	}
+	private Node mNode;
+	private final List<Node> mHistory = new ArrayList<Node>();
 	
 	private HorizontalScrollView mHsvPath;
 	private ViewGroup mVgPath;
@@ -106,7 +116,7 @@ public class DirectActivity extends BaseActivity {
 					synchronized (mEtSearch) {
 						mSearchRun = new Runnable() {
 							public void run() {
-								List<Leaf> list = Tree.getLeaves(Tree.findDirect(mDirect.getPath()));
+								List<Leaf> list = Tree.getLeaves(Tree.findDirect(mNode.direct.getPath()));
 								final List<Leaf> rst = new ArrayList<Leaf>();
 								String input = editable.toString().toLowerCase(Setting.LOCALE);
 								long time = SystemClock.uptimeMillis();
@@ -156,7 +166,7 @@ public class DirectActivity extends BaseActivity {
 					
 					ivDelete.setVisibility(View.GONE);
 					
-					mDirectAdapter.setData(mDirect.getChildren());
+					mDirectAdapter.setData(mNode.direct.getChildren());
 					mDirectAdapter.notifyDataSetChanged();
 				}
 			}
@@ -177,14 +187,26 @@ public class DirectActivity extends BaseActivity {
 				}
 			}
 		});
+		mGvList.setOnScrollListener(new OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int state) {
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int first, int visible, int total) {
+				if (mNode != null) {
+					mNode.position = first;
+				}
+			}
+		});
 		
-		showDirect(direct, false);
+		showDirect(new Node(direct), false);
 	}
 	
-	public void showDirect(Direct direct, boolean lastToHistory) {
+	public void showDirect(Node node, boolean lastToHistory) {
 		// 合法性
 		try {
-			File file = direct.getFile();
+			File file = node.direct.getFile();
 			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
 				throw new Exception();
 			}
@@ -192,25 +214,24 @@ public class DirectActivity extends BaseActivity {
 			Toast.makeText(getApplicationContext(), R.string.err_file_read_error,
 				Toast.LENGTH_SHORT).show();
 			
-			if (mHistory.size() > 0) {
-				direct = mHistory.remove(mHistory.size() - 1);
+			if (mNode != null) {
 				return;
-			} else if (mDirect != null) {
-				return;
+			} else if (mHistory.size() > 0) {
+				node = mHistory.remove(mHistory.size() - 1);
 			} else {
-				direct = new Direct(Setting.DEFAULT_PATH);
+				node = new Node(new Direct(Setting.DEFAULT_PATH));
 			}
 		}
 		
 		// 加入历史
-		if (lastToHistory && mDirect != null) {
+		if (lastToHistory && mNode != null) {
 			if (mHistory.size() > 0) {
-				Direct dir = mHistory.get(0);
-				if (dir.getPath().equals(mDirect.getPath()) == false) {
-					mHistory.add(mDirect);
+				Node n = mHistory.get(0);
+				if (n.direct.getPath().equals(mNode.direct.getPath()) == false) {
+					mHistory.add(mNode);
 				}
 			} else {
-				mHistory.add(mDirect);
+				mHistory.add(mNode);
 			}
 		}
 		
@@ -218,10 +239,11 @@ public class DirectActivity extends BaseActivity {
 		synchronized (mEtSearch) {
 			mSearchRun = null;
 		}
-		mDirect = direct;
 		
 		// 更新路径
-		String path = mDirect.getPath();
+		mNode = node;
+		
+		String path = node.direct.getPath();
 		final String[] nodes;
 		String[] temp = path.split("/");
 		if (temp.length > 0) {
@@ -247,7 +269,7 @@ public class DirectActivity extends BaseActivity {
 						sb.append('/').append(nodes[i]);
 					}
 					
-					showDirect(new Direct(sb.toString()), true);
+					showDirect(new Node(new Direct(sb.toString())), true);
 				}
 			});
 			
@@ -265,15 +287,23 @@ public class DirectActivity extends BaseActivity {
 		});
 		
 		// 更新文件列表
-		mDirect.loadChilren();
-		mDirectAdapter.setData(mDirect.getChildren());
+		node.direct.loadChilren();
+		mDirectAdapter.setData(node.direct.getChildren());
 		mDirectAdapter.notifyDataSetChanged();
+		
+		final int POSITION = node.position;
+		AppUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				mGvList.setSelection(POSITION);
+			}
+		});
 	}
 	
 	public void refresh() {
 		// 合法性
 		try {
-			File file = mDirect.getFile();
+			File file = mNode.direct.getFile();
 			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
 				throw new Exception();
 			}
@@ -282,18 +312,15 @@ public class DirectActivity extends BaseActivity {
 				Toast.LENGTH_SHORT).show();
 			
 			if (mHistory.size() > 0) {
-				mDirect = mHistory.remove(mHistory.size() - 1);
-				return;
-			} else if (mDirect != null) {
-				return;
+				mNode = mHistory.remove(mHistory.size() - 1);
 			} else {
-				mDirect = new Direct(Setting.DEFAULT_PATH);
+				mNode = new Node(new Direct(Setting.DEFAULT_PATH));
 			}
 		}
 		
 		// 更新文件列表
-		mDirect.loadChilren();
-		mDirectAdapter.setData(mDirect.getChildren());
+		mNode.direct.loadChilren();
+		mDirectAdapter.setData(mNode.direct.getChildren());
 		mDirectAdapter.notifyDataSetChanged();
 	}
 	
