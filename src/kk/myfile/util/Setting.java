@@ -20,6 +20,7 @@ public class Setting {
 	
 	static final String KEY_DEF_PATH = "def_path";
 	static final String KEY_SORT_FACTOR = "sort_factor_%s";
+	static final String KEY_LIST_STYLE = "list_style";
 
 	private static SharedPreferences sPrefer;
 
@@ -75,6 +76,16 @@ public class Setting {
 	public static void setSortFactor(Classify classify, String str) {
 		Editor editor = sPrefer.edit();
 		editor.putString(String.format(KEY_SORT_FACTOR, classify.name()), str);
+		editor.commit();
+	}
+	
+	public static String getListStyle() {
+		return sPrefer.getString(KEY_LIST_STYLE, null);
+	}
+	
+	public static void setListStyle(String value) {
+		Editor editor = sPrefer.edit();
+		editor.putString(KEY_SORT_FACTOR, value);
 		editor.commit();
 	}
 }

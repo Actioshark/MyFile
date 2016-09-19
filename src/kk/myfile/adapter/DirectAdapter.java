@@ -2,12 +2,15 @@ package kk.myfile.adapter;
 
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity;
+import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.DirectActivity.Node;
+import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.Classify;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Setting;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -63,7 +66,9 @@ public class DirectAdapter extends BaseAdapter {
 		final ViewHolder holder;
 		
 		if (view == null) {
-			view = mActivity.getLayoutInflater().inflate(R.layout.grid_direct, null);
+			String key = Setting.getListStyle();
+			ListStyle ls = SettingListStyleActivity.getListStyle(key);
+			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
 			
 			holder = new ViewHolder();
 			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);

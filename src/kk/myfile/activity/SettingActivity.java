@@ -29,8 +29,8 @@ public class SettingActivity extends BaseActivity {
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent intent = new Intent(SettingActivity.this, SortActivity.class);
-				intent.putExtra(SortActivity.KEY_CLASSIFY, Classify.Tree.name());
+				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
+				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Tree.name());
 				startActivity(intent);
 			}
 		});
@@ -40,8 +40,8 @@ public class SettingActivity extends BaseActivity {
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent intent = new Intent(SettingActivity.this, SortActivity.class);
-				intent.putExtra(SortActivity.KEY_CLASSIFY, Classify.Type.name());
+				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
+				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Type.name());
 				startActivity(intent);
 			}
 		});

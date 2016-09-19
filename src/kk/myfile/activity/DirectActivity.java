@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kk.myfile.R;
+import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -199,6 +200,10 @@ public class DirectActivity extends BaseActivity {
 				}
 			}
 		});
+
+		String key = Setting.getListStyle();
+		ListStyle ls = SettingListStyleActivity.getListStyle(key);
+		mGvList.setNumColumns(ls.column);
 		
 		showDirect(new Node(direct), false);
 	}

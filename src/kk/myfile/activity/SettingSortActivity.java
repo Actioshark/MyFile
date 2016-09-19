@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
-public class SortActivity extends BaseActivity {
+public class SettingSortActivity extends BaseActivity {
 	public static final String KEY_CLASSIFY = "sort_classify";
 	
 	private Classify mClassify;
