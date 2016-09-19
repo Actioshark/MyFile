@@ -9,6 +9,7 @@
 
 	<string name="setting_sort_tree">Sort Files Of Directory</string>
 	<string name="setting_sort_type">Sort Files Of Type</string>
+	<string name="setting_list_style">List Style</string>
 
 	<string name="sort_Directory">Directory or File</string>
 	<string name="sort_ModifyTime">Modify Time</string>
@@ -16,6 +17,13 @@
 	<string name="sort_Path">Path</string>
 	<string name="sort_Size">Size</string>
 	<string name="sort_Subfix">Subfix</string>
+	
+	<string name="list_style_1_1">Grid Small</string>
+	<string name="list_style_1_2">Grid Middle</string>
+	<string name="list_style_1_3">Grid Big</string>
+	<string name="list_style_2_1">List Small</string>
+	<string name="list_style_2_2">List Middle</string>
+	<string name="list_style_2_3">List Big</string>
 
 	<string name="hint_input_to_search">Input to search</string>
 	<string name="hint_select_operation">Please select an operation</string>

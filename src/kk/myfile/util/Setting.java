@@ -85,7 +85,7 @@ public class Setting {
 	
 	public static void setListStyle(String value) {
 		Editor editor = sPrefer.edit();
-		editor.putString(KEY_SORT_FACTOR, value);
+		editor.putString(KEY_LIST_STYLE, value);
 		editor.commit();
 	}
 }

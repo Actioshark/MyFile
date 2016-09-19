@@ -15,8 +15,8 @@ public class SettingActivity extends BaseActivity {
 		setContentView(R.layout.activity_setting);
 		
 		// 返回
-		View menu = findViewById(R.id.ll_menu);
-		menu.findViewById(R.id.iv_back)
+		findViewById(R.id.ll_menu)
+		.findViewById(R.id.iv_back)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -42,6 +42,16 @@ public class SettingActivity extends BaseActivity {
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
 				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Type.name());
+				startActivity(intent);
+			}
+		});
+		
+		// 列表视图
+		findViewById(R.id.ll_list_style)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
 				startActivity(intent);
 			}
 		});
