@@ -85,7 +85,7 @@
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
 					android:scaleType="centerInside"
-					android:src="@drawable/sort" />
+					android:src="@drawable/grid" />
 
 				<TextView
 					android:layout_width="match_parent"
