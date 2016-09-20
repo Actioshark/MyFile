@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import android.content.Context;
-
 import kk.myfile.leaf.Apk;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
@@ -19,6 +18,7 @@ import kk.myfile.leaf.Video;
 import kk.myfile.leaf.Zip;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Broadcast;
+import kk.myfile.util.Setting;
 
 public class Tree {
 	public static final String BC_START = "tree_start";
@@ -68,7 +68,11 @@ public class Tree {
 				sBigFile.clear();
 				sRecentFile.clear();
 				
-				sRoot.loadChilrenRec();
+				if (Setting.getShowHidden()) {
+					sRoot.loadChildrenRecAll();
+				} else {
+					sRoot.loadChildrenRecVisible();
+				}
 				
 				Broadcast.send(BC_COMPLETED, null);
 				

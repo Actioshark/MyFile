@@ -19,6 +19,8 @@ import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 public class FileUtil {
+	public static final String HIDDEN_FILE = ".nomedia";
+	
 	private static JSONObject sTypeMap;
 	
 	public static void init(Context context) {

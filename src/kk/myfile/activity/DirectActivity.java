@@ -293,7 +293,7 @@ public class DirectActivity extends BaseActivity {
 		});
 		
 		// 更新文件列表
-		node.direct.loadChilren();
+		node.direct.loadChildrenAll();
 		mDirectAdapter.setData(node.direct.getChildren());
 		mDirectAdapter.notifyDataSetChanged();
 		
@@ -325,7 +325,7 @@ public class DirectActivity extends BaseActivity {
 		}
 		
 		// 更新文件列表
-		mNode.direct.loadChilren();
+		mNode.direct.loadChildrenAll();
 		mDirectAdapter.setData(mNode.direct.getChildren());
 		mDirectAdapter.notifyDataSetChanged();
 	}

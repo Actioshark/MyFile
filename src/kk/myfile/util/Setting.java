@@ -21,6 +21,7 @@ public class Setting {
 	static final String KEY_DEF_PATH = "def_path";
 	static final String KEY_SORT_FACTOR = "sort_factor_%s";
 	static final String KEY_LIST_STYLE = "list_style";
+	static final String KEY_SHOW_HIDDEN = "show_hidden";
 
 	private static SharedPreferences sPrefer;
 
@@ -86,6 +87,16 @@ public class Setting {
 	public static void setListStyle(String value) {
 		Editor editor = sPrefer.edit();
 		editor.putString(KEY_LIST_STYLE, value);
+		editor.commit();
+	}
+	
+	public static boolean getShowHidden() {
+		return sPrefer.getBoolean(KEY_SHOW_HIDDEN, false);
+	}
+	
+	public static void setShowHidden(boolean visible) {
+		Editor editor = sPrefer.edit();
+		editor.putBoolean(KEY_SHOW_HIDDEN, visible);
 		editor.commit();
 	}
 }

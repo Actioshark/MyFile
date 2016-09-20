@@ -55,5 +55,15 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		
+		// 隐藏文件
+		findViewById(R.id.ll_hidden)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SettingHiddenActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 }
