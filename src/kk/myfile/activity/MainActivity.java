@@ -3,6 +3,7 @@ package kk.myfile.activity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,8 +11,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -168,14 +167,13 @@ public class MainActivity extends BaseActivity implements IListener {
 			}
 		});
 		
-		temp = root.findViewById(R.id.ll_refresh);
-		temp.setOnClickListener(new OnClickListener() {
+		mViewRefresh = root.findViewById(R.id.iv_refresh);
+		mViewRefresh.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Tree.refresh();
 			}
 		});
-		mViewRefresh = temp.findViewById(R.id.iv_refresh);
 		
 		root.findViewById(R.id.iv_setting)
 		.setOnClickListener(new OnClickListener() {
@@ -226,18 +224,10 @@ public class MainActivity extends BaseActivity implements IListener {
 	}
 	
 	private void setRefreshAnim(boolean start) {
-		if (start && mViewRefresh.getTag() == null) {
-			Animation anim = new RotateAnimation(0f, -360f,
-					Animation.RELATIVE_TO_SELF, 0.5f,
-					Animation.RELATIVE_TO_SELF, 0.5f);
-			anim.setDuration(1000);
-			anim.setRepeatCount(-1);
-			
-			mViewRefresh.startAnimation(anim);
-			mViewRefresh.setTag(anim);
-		} else if (start == false && mViewRefresh.getTag() != null) {
-			mViewRefresh.clearAnimation();
-			mViewRefresh.setTag(null);
+		if (start) {
+			mViewRefresh.setVisibility(View.GONE);
+		} else {
+			mViewRefresh.setVisibility(View.VISIBLE);
 		}
 	}
 	
