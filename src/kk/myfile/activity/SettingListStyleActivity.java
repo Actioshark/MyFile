@@ -18,23 +18,25 @@ public class SettingListStyleActivity extends BaseActivity {
 	public static class ListStyle {
 		public int layout;
 		public int column;
+		public int space;
 		
-		public ListStyle(int layout, int column) {
+		public ListStyle(int layout, int column, int space) {
 			this.layout = layout;
 			this.column = column;
+			this.space = space;
 		}
 	}
 	
 	private static final Map<String, ListStyle> sListMap = new HashMap<String, ListStyle>();
 	
 	static {
-		sListMap.put(getKey(1, 1), new ListStyle(R.layout.grid_direct_1_1, 6));
-		sListMap.put(getKey(1, 2), new ListStyle(R.layout.grid_direct_1_2, 4));
-		sListMap.put(getKey(1, 3), new ListStyle(R.layout.grid_direct_1_3, 2));
+		sListMap.put(getKey(1, 1), new ListStyle(R.layout.grid_direct_1_1, 7, 0));
+		sListMap.put(getKey(1, 2), new ListStyle(R.layout.grid_direct_1_2, 5, 0));
+		sListMap.put(getKey(1, 3), new ListStyle(R.layout.grid_direct_1_3, 3, 0));
 		
-		sListMap.put(getKey(2, 1), new ListStyle(R.layout.grid_direct_2_1, 1));
-		sListMap.put(getKey(2, 2), new ListStyle(R.layout.grid_direct_2_2, 1));
-		sListMap.put(getKey(2, 3), new ListStyle(R.layout.grid_direct_2_3, 1));
+		sListMap.put(getKey(2, 1), new ListStyle(R.layout.grid_direct_2_1, 1, 4));
+		sListMap.put(getKey(2, 2), new ListStyle(R.layout.grid_direct_2_2, 1, 4));
+		sListMap.put(getKey(2, 3), new ListStyle(R.layout.grid_direct_2_3, 1, 4));
 	}
 	
 	public static String getKey(int cls, int index) {

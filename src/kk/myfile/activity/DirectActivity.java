@@ -204,6 +204,7 @@ public class DirectActivity extends BaseActivity {
 		String key = Setting.getListStyle();
 		ListStyle ls = SettingListStyleActivity.getListStyle(key);
 		mGvList.setNumColumns(ls.column);
+		mGvList.setVerticalSpacing(ls.space);
 		
 		showDirect(new Node(direct), false);
 	}
