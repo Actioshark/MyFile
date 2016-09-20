@@ -4,6 +4,8 @@ import kk.myfile.R;
 import android.graphics.Bitmap;
 
 public class Image extends Leaf {
+	public static final String TYPE = "image/*";
+	
 	public Image(String path) {
 		super(path);
 	}

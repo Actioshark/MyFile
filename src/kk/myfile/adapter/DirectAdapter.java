@@ -10,6 +10,7 @@ import kk.myfile.leaf.Leaf;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.Classify;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
 
 import java.io.File;
@@ -88,6 +89,10 @@ public class DirectAdapter extends BaseAdapter {
 				public void onClick(View view) {
 					if (holder.leaf instanceof Direct) {
 						mActivity.showDirect(new Node((Direct) holder.leaf), true);
+					} else {
+						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
+							
+						}
 					}
 				}
 			});

@@ -3,6 +3,8 @@ package kk.myfile.leaf;
 import kk.myfile.R;
 
 public class Video extends Leaf {
+	public static final String TYPE = "video/*";
+	
 	public Video(String path) {
 		super(path);
 	}
