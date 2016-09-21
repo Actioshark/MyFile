@@ -9,6 +9,7 @@ import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.leaf.TempDirect;
 import kk.myfile.tree.Tree;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
@@ -159,7 +160,6 @@ public class DirectActivity extends BaseActivity {
 						};
 						AppUtil.runOnNewThread(mSearchRun);
 					}
-					
 				} else {
 					synchronized (mEtSearch) {
 						mSearchRun = null;
@@ -167,8 +167,12 @@ public class DirectActivity extends BaseActivity {
 					
 					ivDelete.setVisibility(View.GONE);
 					
-					mDirectAdapter.setData(mNode.direct.getChildren());
-					mDirectAdapter.notifyDataSetChanged();
+					if (mNode.direct instanceof TempDirect) {
+						backDirect();
+						showSearchResult(mNode.direct.getChildren());
+					} else {
+						refreshDirect();
+					}
 				}
 			}
 		});
@@ -182,9 +186,13 @@ public class DirectActivity extends BaseActivity {
 			public void onLayoutChange(View view, int left, int top, int right, int bottom,
 				int ol, int ot, int or, int ob) {
 				
-				if (ob != 0 && ob < bottom) {
-					mEtSearch.setFocusable(false);
-					mEtSearch.setFocusableInTouchMode(false);
+				if (ob != 0) {
+					if (ob < bottom) {
+						mEtSearch.setFocusable(false);
+						mEtSearch.setFocusableInTouchMode(false);
+					} else if (ob > bottom) {
+						showSearchResult(mNode.direct.getChildren());
+					}
 				}
 			}
 		});
@@ -231,10 +239,15 @@ public class DirectActivity extends BaseActivity {
 		
 		// 加入历史
 		if (lastToHistory && mNode != null) {
-			if (mHistory.size() > 0) {
-				Node n = mHistory.get(0);
+			int size = mHistory.size();
+			if (size > 0) {
+				Node n = mHistory.get(size - 1);
 				if (n.direct.getPath().equals(mNode.direct.getPath()) == false) {
 					mHistory.add(mNode);
+				} else if((mNode.direct instanceof TempDirect) != (n.direct instanceof TempDirect)) {
+					mHistory.add(mNode);
+				}  else if((mNode.direct instanceof TempDirect) && (n.direct instanceof TempDirect)) {
+					mHistory.set(size - 1, mNode);
 				}
 			} else {
 				mHistory.add(mNode);
@@ -242,8 +255,10 @@ public class DirectActivity extends BaseActivity {
 		}
 		
 		// 关闭搜索
-		synchronized (mEtSearch) {
-			mSearchRun = null;
+		if (node.direct instanceof TempDirect == false) {
+			synchronized (mEtSearch) {
+				mSearchRun = null;
+			}
 		}
 		
 		// 更新路径
@@ -295,7 +310,6 @@ public class DirectActivity extends BaseActivity {
 		// 更新文件列表
 		node.direct.loadChildrenAll();
 		mDirectAdapter.setData(node.direct.getChildren());
-		mDirectAdapter.notifyDataSetChanged();
 		
 		final int POSITION = node.position;
 		AppUtil.runOnUiThread(new Runnable() {
@@ -306,7 +320,7 @@ public class DirectActivity extends BaseActivity {
 		});
 	}
 	
-	public void refresh() {
+	public void refreshDirect() {
 		// 合法性
 		try {
 			File file = mNode.direct.getFile();
@@ -327,27 +341,37 @@ public class DirectActivity extends BaseActivity {
 		// 更新文件列表
 		mNode.direct.loadChildrenAll();
 		mDirectAdapter.setData(mNode.direct.getChildren());
-		mDirectAdapter.notifyDataSetChanged();
+	}
+	
+	public boolean backDirect() {
+		while (mHistory.size() > 0) {
+			Node node = mHistory.remove(mHistory.size() - 1);
+			if (node.direct instanceof TempDirect == false) {
+				showDirect(node, false);
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public void showSearchResult(Leaf[] list) {
-		mDirectAdapter.setData(list);
-		mDirectAdapter.notifyDataSetChanged();
+		TempDirect direct = new TempDirect(mNode.direct.getPath());
+		direct.setChildren(list);
+		showDirect(new Node(direct), true);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		refresh();
+		refreshDirect();
 	}
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			int size = mHistory.size();
-			if (size > 0) {
-				showDirect(mHistory.remove(size - 1), false);
+			if (backDirect()) {
 				return true;
 			}
 		}

@@ -7,7 +7,7 @@ import kk.myfile.tree.FileUtil;
 import kk.myfile.tree.Tree;
 
 public class Direct extends Leaf {
-	private Leaf[] mChildren = new Leaf[] {};
+	protected Leaf[] mChildren = new Leaf[] {};
 	
 	public Direct(String path) {
 		super(path);

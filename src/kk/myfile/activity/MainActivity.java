@@ -195,6 +195,8 @@ public class MainActivity extends BaseActivity implements IListener {
 		Broadcast.addListener(this, Tree.BC_START, true);
 		Broadcast.addListener(this, Tree.BC_UPDATE, true);
 		Broadcast.addListener(this, Tree.BC_COMPLETED, true);
+		
+		setRefreshAnim(Tree.isRefreshing());
 	}
 	
 	@Override

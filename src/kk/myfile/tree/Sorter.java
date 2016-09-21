@@ -1,6 +1,7 @@
 package kk.myfile.tree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -11,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import kk.myfile.leaf.Leaf;
-import kk.myfile.util.Alogrithm;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
@@ -324,7 +324,7 @@ public class Sorter {
 	public static void sort(Classify classify, Leaf[] list) {
 		final List<SortFactor> factors = getFactors(classify);
 		
-		Alogrithm.quickSort(list, 0, list.length, new Comparator<Leaf>() {
+		Arrays.sort(list, new Comparator<Leaf>() {
 			@Override
 			public int compare(Leaf a, Leaf b) {
 				return Sorter.compare(factors, a, b);

@@ -28,29 +28,31 @@ import android.widget.TextView;
 public class DirectAdapter extends BaseAdapter {
 	private final DirectActivity mActivity;
 	private Leaf[] mData;
+	private Object mMark;
 	
 	public DirectAdapter(DirectActivity activity) {
 		mActivity = activity;
 	}
 	
 	public void setData(final Leaf[] data) {
-		mData = data;
+		mMark = data;
 		
-		if (data != null) {
-			AppUtil.runOnNewThread(new Runnable() {
-				@Override
-				public void run() {
-					Sorter.sort(Classify.Tree, data);
-					
-					AppUtil.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				Sorter.sort(Classify.Tree, data);
+				
+				AppUtil.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (mMark == data) {
+							mData = data;
 							notifyDataSetChanged();
 						}
-					});
-				}
-			});
-		}
+					}
+				});
+			}
+		});
 	}
 	
 	@Override

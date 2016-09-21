@@ -107,6 +107,12 @@ public class Tree {
 		});
 	}
 	
+	public static boolean isRefreshing() {
+		synchronized (sRoot) {
+			return sIsRefreshing;
+		}
+	}
+	
 	public static Direct findDirect(String path) {
 		Direct dir = sRoot;
 		String[] nodes = path.split("/");
