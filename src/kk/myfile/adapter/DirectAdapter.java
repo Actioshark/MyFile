@@ -47,7 +47,9 @@ public class DirectAdapter extends BaseAdapter {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				Sorter.sort(Classify.Tree, data);
+				synchronized (data) {
+					Sorter.sort(Classify.Tree, data);
+				}
 				
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
