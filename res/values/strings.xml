@@ -27,6 +27,12 @@
 	<string name="list_style_2_3">List Big</string>
 
 	<string name="hidden_setting">Show Hidden Files When Searhing</string>
+	
+	<string name="hint_open_type_select">Do you want to open this file as which type?</string>
+	<string name="type_text">Text</string>
+	<string name="type_image">Image</string>
+	<string name="type_audio">Audio</string>
+	<string name="type_video">Video</string>
 
 	<string name="hint_input_to_search">Input to search</string>
 	<string name="hint_select_operation">Please select an operation</string>

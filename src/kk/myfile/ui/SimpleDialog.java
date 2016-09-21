@@ -11,7 +11,7 @@ import kk.myfile.util.AppUtil;
 
 public class SimpleDialog extends Dialog {
 	private TextView mTvContent;
-	private final TextView[] mTvButtons = new TextView[3];
+	private final TextView[] mTvButtons = new TextView[4];
 
 	private IDialogClickListener mClickListener;
 

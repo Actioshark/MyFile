@@ -5,10 +5,16 @@ import kk.myfile.activity.DirectActivity;
 import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
+import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
+import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.leaf.Text;
+import kk.myfile.leaf.Video;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.Classify;
+import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
@@ -18,6 +24,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import android.app.Dialog;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -93,7 +100,36 @@ public class DirectAdapter extends BaseAdapter {
 						mActivity.showDirect(new Node((Direct) holder.leaf), true);
 					} else {
 						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
-							
+							SimpleDialog dialog = new SimpleDialog(mActivity);
+							dialog.setCanceledOnTouchOutside(true);
+							dialog.setContent(R.string.hint_open_type_select);
+							dialog.setButtons(new int[] {R.string.type_text, R.string.type_image,
+									R.string.type_audio, R.string.type_video});
+							dialog.setClickListener(new IDialogClickListener() {
+								@Override
+								public void onClick(Dialog dialog, int index) {
+									switch (index) {
+									case 0:
+										IntentUtil.view(mActivity, holder.leaf, Text.TYPE);
+										break;
+										
+									case 1:
+										IntentUtil.view(mActivity, holder.leaf, Image.TYPE);
+										break;
+										
+									case 2:
+										IntentUtil.view(mActivity, holder.leaf, Audio.TYPE);
+										break;
+										
+									case 3:
+										IntentUtil.view(mActivity, holder.leaf, Video.TYPE);
+										break;
+									}
+									
+									dialog.dismiss();
+								}
+							});
+							dialog.show();
 						}
 					}
 				}
