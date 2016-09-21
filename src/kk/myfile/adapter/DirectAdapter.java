@@ -5,6 +5,7 @@ import kk.myfile.activity.DirectActivity;
 import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
+import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Image;
@@ -13,6 +14,7 @@ import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.Classify;
+import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
@@ -23,10 +25,13 @@ import java.io.File;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Dialog;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -134,6 +139,65 @@ public class DirectAdapter extends BaseAdapter {
 							dialog.show();
 						}
 					}
+				}
+			});
+			
+			view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View view) {
+					DownList dl = new DownList(mActivity);
+					List<DataItem> list = new ArrayList<DataItem>();
+					DownListAdapter dla = dl.getAdapter();
+					dla.setDataList(list);
+					
+					list.add(new DataItem(R.drawable.detail, R.string.word_detail,
+						new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index) {
+								// TODO
+							}
+						}
+					));
+					
+					list.add(new DataItem(R.drawable.share, R.string.word_share,
+						new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index) {
+								// TODO
+							}
+						}
+					));
+					
+					list.add(new DataItem(R.drawable.copy, R.string.word_copy,
+						new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index) {
+								// TODO
+							}
+						}
+					));
+					
+					list.add(new DataItem(R.drawable.cut, R.string.word_cut,
+						new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index) {
+								// TODO
+							}
+						}
+					));
+					
+					list.add(new DataItem(R.drawable.cross, R.string.word_delete,
+						new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index) {
+								// TODO
+							}
+						}
+					));
+					
+					dl.show();
+					
+					return true;
 				}
 			});
 		} else {

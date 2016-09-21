@@ -6,6 +6,10 @@
 	<string name="word_cancel">Cancel</string>
 	<string name="word_delete">Delete</string>
 	<string name="word_edit">Edit</string>
+	<string name="word_detail">Detail</string>
+	<string name="word_share">Share</string>
+	<string name="word_copy">Copy</string>
+	<string name="word_cut">Cut</string>
 
 	<string name="setting_sort_tree">Sort Files Of Directory</string>
 	<string name="setting_sort_type">Sort Files Of Type</string>
@@ -27,8 +31,9 @@
 	<string name="list_style_2_3">List Big</string>
 
 	<string name="hidden_setting">Show Hidden Files When Searhing</string>
-	
-	<string name="hint_open_type_select">Do you want to open this file as which type?</string>
+
+	<string name="hint_open_type_select">Do you want to open this file as which type?
+	</string>
 	<string name="type_text">Text</string>
 	<string name="type_image">Image</string>
 	<string name="type_audio">Audio</string>
