@@ -19,6 +19,7 @@ import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
+import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 import java.io.File;
@@ -29,9 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -99,6 +102,14 @@ public class DirectAdapter extends BaseAdapter {
 			holder.size = (TextView) view.findViewById(R.id.tv_size);
 			holder.time = (TextView) view.findViewById(R.id.tv_time);
 			view.setTag(holder);
+			
+			view.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View view, MotionEvent event) {
+					Logger.print(null, event.getAction());
+					return false;
+				}
+			});
 			
 			view.setOnClickListener(new OnClickListener() {
 				@Override

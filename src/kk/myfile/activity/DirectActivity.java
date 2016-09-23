@@ -57,6 +57,13 @@ public class DirectActivity extends BaseActivity {
 	private GridView mGvList;
 	private DirectAdapter mDirectAdapter;
 	
+	private View mViewInfoNormal;
+	private TextView mTvInfoCount;
+	private View mViewInfoSelect;
+	private TextView mTvInfoName;
+	private TextView mTvInfoTime;
+	private TextView mTvInfoSize;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -214,6 +221,22 @@ public class DirectActivity extends BaseActivity {
 		mGvList.setNumColumns(ls.column);
 		mGvList.setVerticalSpacing(ls.space);
 		
+		// 信息栏
+		View llInfo = findViewById(R.id.fl_info);
+		mViewInfoNormal = llInfo.findViewById(R.id.ll_normal);
+		mTvInfoCount = (TextView) mViewInfoNormal.findViewById(R.id.tv_count);
+		mViewInfoNormal.findViewById(R.id.iv_menu)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+			}
+		});
+		mViewInfoSelect = llInfo.findViewById(R.id.ll_select);
+		mTvInfoName = (TextView) mViewInfoSelect.findViewById(R.id.tv_name);
+		mTvInfoTime = (TextView) mViewInfoSelect.findViewById(R.id.tv_time);
+		mTvInfoSize = (TextView) mViewInfoSelect.findViewById(R.id.tv_size);
+		
+		// 开始
 		showDirect(new Node(direct), false);
 	}
 	
@@ -318,6 +341,11 @@ public class DirectActivity extends BaseActivity {
 				mGvList.setSelection(POSITION);
 			}
 		});
+		
+		// 信息栏
+		mTvInfoCount.setText(AppUtil.getString(R.string.hint_object_with_num, mNode.direct.getChildren().length));
+		mViewInfoNormal.setVisibility(View.VISIBLE);
+		mViewInfoSelect.setVisibility(View.GONE);
 	}
 	
 	public void refreshDirect() {
@@ -341,6 +369,11 @@ public class DirectActivity extends BaseActivity {
 		// 更新文件列表
 		mNode.direct.loadChildrenAll();
 		mDirectAdapter.setData(mNode.direct.getChildren());
+		
+		// 信息栏
+		mTvInfoCount.setText(AppUtil.getString(R.string.hint_object_with_num, mNode.direct.getChildren().length));
+		mViewInfoNormal.setVisibility(View.VISIBLE);
+		mViewInfoSelect.setVisibility(View.GONE);
 	}
 	
 	public boolean backDirect() {
