@@ -41,7 +41,7 @@
 
 	<string name="hint_input_to_search">Input to search</string>
 	<string name="hint_select_operation">Please select an operation</string>
-	<string name="hint_object_with_num">%d Objects</string>
+	<string name="hint_children_with_num">%d Children</string>
 
 	<string name="err_path_not_valid">This is not a valid path</string>
 	<string name="err_nothing_selected">Noting selected</string>

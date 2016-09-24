@@ -23,12 +23,12 @@ public class SettingHiddenActivity extends BaseActivity {
 				boolean visible = !Setting.getShowHidden();
 				Setting.setShowHidden(visible);
 				mIvSelect.setImageResource(visible ?
-					R.drawable.select_pre : R.drawable.select_nor);
+					R.drawable.single_select_pre : R.drawable.single_select_nor);
 			}
 		});
 		mIvSelect = (ImageView) view.findViewById(R.id.iv_select);
 		mIvSelect.setImageResource(Setting.getShowHidden() ?
-				R.drawable.select_pre : R.drawable.select_nor);
+				R.drawable.single_select_pre : R.drawable.single_select_nor);
 		
 		View menu = findViewById(R.id.ll_menu);
 		menu.findViewById(R.id.iv_back)

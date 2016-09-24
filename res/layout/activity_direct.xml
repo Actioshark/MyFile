@@ -77,12 +77,12 @@
 		android:layout_weight="1"
 		android:layout_marginTop="@dimen/main_gap"
 		android:background="@color/main_bg" />
-	
+
 	<FrameLayout
 		android:id="@+id/fl_info"
 		android:layout_width="match_parent"
 		android:layout_height="40dp"
-		android:layout_marginTop="@dimen/main_gap" >
+		android:layout_marginTop="@dimen/main_gap">
 
 		<LinearLayout
 			android:id="@+id/ll_normal"
@@ -90,29 +90,29 @@
 			android:layout_height="match_parent"
 			android:background="@color/bar_bg"
 			android:orientation="horizontal">
-			
-		    <TextView
+
+			<TextView
 				android:id="@+id/tv_count"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
-			    android:paddingLeft="5dp"
-			    android:paddingRight="5dp"
+				android:paddingLeft="5dp"
+				android:paddingRight="5dp"
 				android:gravity="left|center_vertical"
 				android:singleLine="true"
 				android:ellipsize="middle"
 				android:textSize="13sp"
 				android:textColor="@color/main_text_color" />
-		    
-		    <ImageView
+
+			<ImageView
 				android:id="@+id/iv_menu"
 				android:layout_width="40dp"
 				android:layout_height="40dp"
 				android:padding="10dp"
 				android:scaleType="centerCrop"
 				android:background="@drawable/btn_trans"
-				android:src="@drawable/grid" />
-			
+				android:src="@drawable/menu" />
+
 		</LinearLayout>
 
 		<LinearLayout
@@ -122,58 +122,58 @@
 			android:layout_marginTop="@dimen/main_gap"
 			android:background="@color/bar_bg"
 			android:orientation="vertical">
-			    
-		    <TextView
+
+			<TextView
 				android:id="@+id/tv_name"
 				android:layout_width="match_parent"
 				android:layout_height="0dp"
 				android:layout_weight="1"
-			    android:paddingLeft="5dp"
-			    android:paddingRight="5dp"
+				android:paddingLeft="5dp"
+				android:paddingRight="5dp"
 				android:gravity="left|center_vertical"
 				android:singleLine="true"
 				android:ellipsize="middle"
 				android:textSize="13sp"
 				android:textColor="@color/main_text_color" />
-		    
-		    <LinearLayout
-		        android:id="@+id/ll_bottom"
-			    android:layout_width="match_parent"
+
+			<LinearLayout
+				android:id="@+id/ll_bottom"
+				android:layout_width="match_parent"
 				android:layout_height="0dp"
 				android:layout_weight="1"
-			    android:orientation="horizontal">
-			    
-			    <TextView
+				android:orientation="horizontal">
+
+				<TextView
 					android:id="@+id/tv_time"
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
-				    android:paddingLeft="5dp"
-				    android:paddingRight="3dp"
+					android:paddingLeft="5dp"
+					android:paddingRight="3dp"
 					android:gravity="left|center_vertical"
 					android:singleLine="true"
 					android:ellipsize="middle"
 					android:textSize="13sp"
 					android:textColor="@color/main_text_color" />
-			    
-			    <View
-			        android:layout_width="0dp"
-			        android:layout_height="match_parent"
-			        android:layout_weight="1"/>
-			    
-			    <TextView
+
+				<View
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" />
+
+				<TextView
 					android:id="@+id/tv_size"
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
-				    android:paddingLeft="3dp"
-				    android:paddingRight="5dp"
+					android:paddingLeft="3dp"
+					android:paddingRight="5dp"
 					android:gravity="right|center_vertical"
 					android:singleLine="true"
 					android:ellipsize="middle"
 					android:textSize="13sp"
 					android:textColor="@color/main_text_color" />
-			    
+
 			</LinearLayout>
 		</LinearLayout>
-	    
+
 	</FrameLayout>
 </LinearLayout>

@@ -108,9 +108,9 @@ public class SettingListStyleActivity extends BaseActivity {
 		
 		for (ViewHolder vh : mList) {
 			if (vh.key.equals(sel)) {
-				vh.select.setImageResource(R.drawable.select_pre);
+				vh.select.setImageResource(R.drawable.single_select_pre);
 			} else {
-				vh.select.setImageResource(R.drawable.select_nor);
+				vh.select.setImageResource(R.drawable.single_select_nor);
 			}
 		}
 	}

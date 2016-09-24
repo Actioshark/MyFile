@@ -92,8 +92,8 @@ public class SelectAdapter extends BaseAdapter {
 		
 		holder.icon.setImageResource(data.getIcon());
 		holder.name.setText(data.getFile().getName());
-		holder.select.setImageResource(mSelected == data ? R.drawable.select_pre
-			: R.drawable.select_nor);
+		holder.select.setImageResource(mSelected == data ? R.drawable.single_select_pre
+			: R.drawable.single_select_nor);
 		holder.data = data;
 		
 		return view;

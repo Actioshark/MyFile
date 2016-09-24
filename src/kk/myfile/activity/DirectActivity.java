@@ -1,6 +1,9 @@
 package kk.myfile.activity;
 
 import java.io.File;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +16,6 @@ import kk.myfile.leaf.TempDirect;
 import kk.myfile.tree.Tree;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
-
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -223,6 +225,13 @@ public class DirectActivity extends BaseActivity {
 		
 		// 信息栏
 		View llInfo = findViewById(R.id.fl_info);
+		llInfo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				showInfo(null);
+			}
+		});
+		
 		mViewInfoNormal = llInfo.findViewById(R.id.ll_normal);
 		mTvInfoCount = (TextView) mViewInfoNormal.findViewById(R.id.tv_count);
 		mViewInfoNormal.findViewById(R.id.iv_menu)
@@ -241,6 +250,13 @@ public class DirectActivity extends BaseActivity {
 	}
 	
 	public void showDirect(Node node, boolean lastToHistory) {
+		if (node.direct instanceof TempDirect == false && mNode != null &&
+				node.direct.getPath().equals(mNode.direct.getPath())) {
+			
+			refreshDirect();
+			return;
+		}
+		
 		// 合法性
 		try {
 			File file = node.direct.getFile();
@@ -265,7 +281,7 @@ public class DirectActivity extends BaseActivity {
 			int size = mHistory.size();
 			if (size > 0) {
 				Node n = mHistory.get(size - 1);
-				if (n.direct.getPath().equals(mNode.direct.getPath()) == false) {
+				if (mNode.direct.getPath().equals(n.direct.getPath()) == false) {
 					mHistory.add(mNode);
 				} else if((mNode.direct instanceof TempDirect) != (n.direct instanceof TempDirect)) {
 					mHistory.add(mNode);
@@ -343,9 +359,7 @@ public class DirectActivity extends BaseActivity {
 		});
 		
 		// 信息栏
-		mTvInfoCount.setText(AppUtil.getString(R.string.hint_object_with_num, mNode.direct.getChildren().length));
-		mViewInfoNormal.setVisibility(View.VISIBLE);
-		mViewInfoSelect.setVisibility(View.GONE);
+		showInfo(null);
 	}
 	
 	public void refreshDirect() {
@@ -371,9 +385,7 @@ public class DirectActivity extends BaseActivity {
 		mDirectAdapter.setData(mNode.direct.getChildren());
 		
 		// 信息栏
-		mTvInfoCount.setText(AppUtil.getString(R.string.hint_object_with_num, mNode.direct.getChildren().length));
-		mViewInfoNormal.setVisibility(View.VISIBLE);
-		mViewInfoSelect.setVisibility(View.GONE);
+		showInfo(null);
 	}
 	
 	public boolean backDirect() {
@@ -392,6 +404,42 @@ public class DirectActivity extends BaseActivity {
 		TempDirect direct = new TempDirect(mNode.direct.getPath());
 		direct.setChildren(list);
 		showDirect(new Node(direct), true);
+	}
+	
+	public void showInfo(Leaf leaf) {
+		if (leaf == null) {
+			mTvInfoCount.setText(AppUtil.getString(R.string.hint_children_with_num, mNode.direct.getChildren().length));
+			mViewInfoNormal.setVisibility(View.VISIBLE);
+			mViewInfoSelect.setVisibility(View.GONE);
+		} else {
+			File file = leaf.getFile();
+			
+			mTvInfoName.setText(file.getName());
+			
+			Date date = new Date(file.lastModified());
+			DateFormat df = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss", Setting.LOCALE);
+			mTvInfoTime.setText(df.format(date));
+			
+			if (leaf instanceof Direct) {
+				mTvInfoSize.setText(AppUtil.getString(R.string.hint_children_with_num,
+						file.list().length));
+			} else {
+				String num = String.valueOf(file.length());
+				StringBuilder sb = new StringBuilder();
+				int len = num.length();
+				for (int i = 0; i < len; i++) {
+					sb.append(num.charAt(i));
+	
+					if (i + 1 != len && (len - i) % 3 == 1) {
+						sb.append(',');
+					}
+				}
+				mTvInfoSize.setText(String.format(Setting.LOCALE, "%s B", sb.toString()));
+			}
+			
+			mViewInfoNormal.setVisibility(View.GONE);
+			mViewInfoSelect.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	@Override
