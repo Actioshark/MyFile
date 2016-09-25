@@ -8,6 +8,9 @@
 	<dimen name="main_direct_text">16sp</dimen>
 	<dimen name="main_file_text">16sp</dimen>
 
+	<dimen name="direct_select_width">20dp</dimen>
+	<dimen name="direct_select_height">20dp</dimen>
+
 	<dimen name="setting_icon_padding">10dp</dimen>
 
 	<dimen name="sort_grid_height">60dp</dimen>

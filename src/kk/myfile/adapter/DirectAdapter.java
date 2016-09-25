@@ -2,10 +2,10 @@ package kk.myfile.adapter;
 
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity;
+import kk.myfile.activity.DirectActivity.Mode;
 import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
-import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Image;
@@ -14,7 +14,6 @@ import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
 import kk.myfile.tree.Sorter;
 import kk.myfile.tree.Sorter.Classify;
-import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
@@ -26,7 +25,9 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Dialog;
 import android.view.MotionEvent;
@@ -43,6 +44,7 @@ public class DirectAdapter extends BaseAdapter {
 	private final DirectActivity mActivity;
 	private Leaf[] mData;
 	private Object mMark;
+	private final Set<Integer> mSelected = new HashSet<Integer>();
 	
 	public DirectAdapter(DirectActivity activity) {
 		mActivity = activity;
@@ -85,6 +87,22 @@ public class DirectAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return 0;
 	}
+	
+	public List<Leaf> getSelected() {
+		List<Leaf> list = new ArrayList<Leaf>();
+		
+		for (Integer position : mSelected) {
+			if (position < mData.length) {
+				list.add(mData[position]);
+			}
+		}
+		
+		return list;
+	}
+	
+	public int getSelectedCount() {
+		return mSelected.size();
+	}
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
@@ -100,22 +118,34 @@ public class DirectAdapter extends BaseAdapter {
 			holder.name = (TextView) view.findViewById(R.id.tv_name);
 			holder.size = (TextView) view.findViewById(R.id.tv_size);
 			holder.time = (TextView) view.findViewById(R.id.tv_time);
+			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
 			
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View view, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) {
-						mActivity.showInfo(holder.leaf);
+						mActivity.showDetail(holder.leaf);
 					}
-					return false;
+					
+					view.onTouchEvent(event);
+					return true;
 				}
 			});
 			
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (holder.leaf instanceof Direct) {
+					if (mActivity.getMode() == Mode.Select) {
+						if (mSelected.contains(holder.position)) {
+							mSelected.remove(holder.position);
+						} else {
+							mSelected.add(holder.position);
+						}
+						
+						mActivity.showInfo();
+						notifyDataSetChanged();
+					} else if (holder.leaf instanceof Direct) {
 						mActivity.showDirect(new Node((Direct) holder.leaf), true);
 					} else {
 						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
@@ -157,57 +187,65 @@ public class DirectAdapter extends BaseAdapter {
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View view) {
-					DownList dl = new DownList(mActivity);
-					List<DataItem> list = new ArrayList<DataItem>();
-					DownListAdapter dla = dl.getAdapter();
-					dla.setDataList(list);
-					
-					list.add(new DataItem(R.drawable.detail, R.string.word_detail,
-						new IDialogClickListener() {
-							@Override
-							public void onClick(Dialog dialog, int index) {
-								// TODO
-							}
-						}
-					));
-					
-					list.add(new DataItem(R.drawable.share, R.string.word_share,
-						new IDialogClickListener() {
-							@Override
-							public void onClick(Dialog dialog, int index) {
-								// TODO
-							}
-						}
-					));
-					
-					list.add(new DataItem(R.drawable.copy, R.string.word_copy,
-						new IDialogClickListener() {
-							@Override
-							public void onClick(Dialog dialog, int index) {
-								// TODO
-							}
-						}
-					));
-					
-					list.add(new DataItem(R.drawable.cut, R.string.word_cut,
-						new IDialogClickListener() {
-							@Override
-							public void onClick(Dialog dialog, int index) {
-								// TODO
-							}
-						}
-					));
-					
-					list.add(new DataItem(R.drawable.cross, R.string.word_delete,
-						new IDialogClickListener() {
-							@Override
-							public void onClick(Dialog dialog, int index) {
-								// TODO
-							}
-						}
-					));
-					
-					dl.show();
+//					DownList dl = new DownList(mActivity);
+//					List<DataItem> list = new ArrayList<DataItem>();
+//					DownListAdapter dla = dl.getAdapter();
+//					dla.setDataList(list);
+//					
+//					list.add(new DataItem(R.drawable.detail, R.string.word_detail,
+//						new IDialogClickListener() {
+//							@Override
+//							public void onClick(Dialog dialog, int index) {
+//								// TODO
+//							}
+//						}
+//					));
+//					
+//					list.add(new DataItem(R.drawable.share, R.string.word_share,
+//						new IDialogClickListener() {
+//							@Override
+//							public void onClick(Dialog dialog, int index) {
+//								// TODO
+//							}
+//						}
+//					));
+//					
+//					list.add(new DataItem(R.drawable.copy, R.string.word_copy,
+//						new IDialogClickListener() {
+//							@Override
+//							public void onClick(Dialog dialog, int index) {
+//								// TODO
+//							}
+//						}
+//					));
+//					
+//					list.add(new DataItem(R.drawable.cut, R.string.word_cut,
+//						new IDialogClickListener() {
+//							@Override
+//							public void onClick(Dialog dialog, int index) {
+//								// TODO
+//							}
+//						}
+//					));
+//					
+//					list.add(new DataItem(R.drawable.cross, R.string.word_delete,
+//						new IDialogClickListener() {
+//							@Override
+//							public void onClick(Dialog dialog, int index) {
+//								// TODO
+//							}
+//						}
+//					));
+//					
+//					dl.show();
+//					
+					if (mActivity.getMode() == Mode.Select) {
+						mActivity.setMode(Mode.Normal);
+					} else {
+						mSelected.clear();
+						mSelected.add(holder.position);
+						mActivity.setMode(Mode.Select);
+					}
 					
 					return true;
 				}
@@ -223,6 +261,7 @@ public class DirectAdapter extends BaseAdapter {
 		
 		File file = leaf.getFile();
 		holder.leaf = leaf;
+		holder.position = position;
 		
 		holder.icon.setImageResource(leaf.getIcon());
 		holder.name.setText(file.getName());
@@ -251,14 +290,28 @@ public class DirectAdapter extends BaseAdapter {
 			}
 		}
 		
+		if (mActivity.getMode() == Mode.Select) {
+			if (mSelected.contains(position)) {
+				holder.select.setImageResource(R.drawable.multi_select_pre);
+				holder.select.setVisibility(View.VISIBLE);
+			} else {
+				holder.select.setVisibility(View.GONE);
+			}
+		} else {
+			holder.select.setVisibility(View.GONE);
+		}
+		
 		return view;
 	}
 
 	class ViewHolder {
 		public Leaf leaf;
+		public int position;
+		
 		public ImageView icon;
 		public TextView name;
 		public TextView time;
 		public TextView size;
+		public ImageView select;
 	}
 }

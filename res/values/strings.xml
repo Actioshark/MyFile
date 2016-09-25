@@ -42,6 +42,8 @@
 	<string name="hint_input_to_search">Input to search</string>
 	<string name="hint_select_operation">Please select an operation</string>
 	<string name="hint_children_with_num">%d Children</string>
+	<string name="hint_children_select_with_num">%1$d/%2$d Children</string>
+	<string name="hint_multi_select_mode">Multi Select Mode</string>
 
 	<string name="err_path_not_valid">This is not a valid path</string>
 	<string name="err_nothing_selected">Noting selected</string>
