@@ -1,12 +1,17 @@
 package kk.myfile.leaf;
 
+import java.util.List;
+
 public class TempDirect extends Direct {
 	public TempDirect(String path) {
 		super(path);
 	}
 	
-	public void setChildren(Leaf[] list) {
-		mChildren = list;
+	public void setChildren(List<Leaf> list) {
+		synchronized (mChildren) {
+			mChildren.clear();
+			mChildren.addAll(list);
+		}
 	}
 	
 	@Override

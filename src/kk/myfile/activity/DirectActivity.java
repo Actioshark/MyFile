@@ -154,7 +154,14 @@ public class DirectActivity extends BaseActivity {
 					synchronized (mEtSearch) {
 						mSearchRun = new Runnable() {
 							public void run() {
-								List<Leaf> list = Tree.getLeaves(Tree.findDirect(mNode.direct.getPath()));
+								Direct direct = Tree.findDirect(mNode.direct.getPath());
+								if (direct == null) {
+									Toast.makeText(getApplicationContext(), R.string.err_path_not_valid,
+											Toast.LENGTH_SHORT).show();
+									return;
+								}
+								
+								List<Leaf> list = Tree.getLeaves(direct);
 								final List<Leaf> rst = new ArrayList<Leaf>();
 								String input = editable.toString().toLowerCase(Setting.LOCALE);
 								long time = SystemClock.uptimeMillis();
@@ -173,7 +180,7 @@ public class DirectActivity extends BaseActivity {
 											if (mSearchRun == this) {
 												AppUtil.runOnUiThread(new Runnable() {
 													public void run() {
-														showSearchResult(rst.toArray(new Leaf[] {}));
+														showSearchResult(rst);
 													}
 												});
 											} else {
@@ -187,7 +194,7 @@ public class DirectActivity extends BaseActivity {
 									if (mSearchRun == this) {
 										AppUtil.runOnUiThread(new Runnable() {
 											public void run() {
-												showSearchResult(rst.toArray(new Leaf[] {}));
+												showSearchResult(rst);
 											}
 										});
 									}
@@ -446,7 +453,7 @@ public class DirectActivity extends BaseActivity {
 		return false;
 	}
 	
-	public void showSearchResult(Leaf[] list) {
+	public void showSearchResult(List<Leaf> list) {
 		TempDirect direct = new TempDirect(mNode.direct.getPath());
 		direct.setChildren(list);
 		showDirect(new Node(direct), true);
@@ -485,10 +492,10 @@ public class DirectActivity extends BaseActivity {
 	public void showInfo() {
 		if (mMode == Mode.Select) {
 			mTvInfoCount.setText(AppUtil.getString(R.string.hint_children_select_with_num,
-				mDirectAdapter.getSelectedCount(), mNode.direct.getChildren().length));
+				mDirectAdapter.getSelectedCount(), mNode.direct.getChildren().size()));
 		} else {
 			mTvInfoCount.setText(AppUtil.getString(R.string.hint_children_with_num,
-					mNode.direct.getChildren().length));
+					mNode.direct.getChildren().size()));
 		}
 	}
 	

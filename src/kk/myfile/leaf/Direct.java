@@ -1,13 +1,15 @@
 package kk.myfile.leaf;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import kk.myfile.R;
 import kk.myfile.tree.FileUtil;
 import kk.myfile.tree.Tree;
 
 public class Direct extends Leaf {
-	protected Leaf[] mChildren = new Leaf[] {};
+	protected final List<Leaf> mChildren = new ArrayList<Leaf>();
 	
 	public Direct(String path) {
 		super(path);
@@ -24,11 +26,12 @@ public class Direct extends Leaf {
 	
 	public void loadChildrenAll() {
 		try {
-			File[] list = getFile().listFiles();
-			mChildren = new Leaf[list.length];
-			
-			for (int i = 0; i < list.length; i++) {
-				mChildren[i] = FileUtil.createLeaf(list[i]);
+			synchronized (mChildren) {
+				mChildren.clear();
+				
+				for (File file : getFile().listFiles()) {
+					mChildren.add(FileUtil.createLeaf(file));
+				}
 			}
 		} catch (Exception e) {
 		}
@@ -36,30 +39,17 @@ public class Direct extends Leaf {
 	
 	public void loadChildrenVisible() {
 		try {
-			File[] list = getFile().listFiles();
-			Leaf[] children = new Leaf[list.length];
-			int count = 0;
+			synchronized (mChildren) {
+				mChildren.clear();
 			
-			for (int i = 0; i < list.length; i++) {
-				File file = list[i];
-				if (FileUtil.HIDDEN_FILE.equals(file.getName())) {
-					mChildren = new Leaf[0];
-					return;
-				}
-				
-				if (file.isHidden() == false) {
-					children[i] = FileUtil.createLeaf(file);
-					count++;
-				}
-			}
-			
-			mChildren = new Leaf[count];
-			int c = 0;
-			for (int i = 0; i < count && c < count; i++) {
-				Leaf leaf = children[i];
-				
-				if (leaf != null) {
-					mChildren[c++] = leaf;
+				for (File file : getFile().listFiles()) {
+					if (FileUtil.HIDDEN_FILE.equals(file.getName())) {
+						return;
+					}
+					
+					if (file.isHidden() == false) {
+						mChildren.add(FileUtil.createLeaf(file));
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -68,20 +58,22 @@ public class Direct extends Leaf {
 	
 	public void loadChildrenRecAll() {
 		try {
-			File file = getFile();
+			File dir = getFile();
 			
-			if (file.getCanonicalPath().equals(mPath) == false) {
+			if (dir.getCanonicalPath().equals(mPath) == false) {
 				return;
 			}
 			
-			File[] list = file.listFiles();
-			
-			Leaf[] children = new Leaf[list.length];
-			for (int i = 0; i < list.length; i++) {
-				children[i] = FileUtil.createLeaf(list[i]);
+			List<Leaf> children = new ArrayList<Leaf>();
+			for (File file : dir.listFiles()) {
+				children.add(FileUtil.createLeaf(file));
 			}
 			
-			mChildren = children;
+			synchronized (mChildren) {
+				mChildren.clear();
+				mChildren.addAll(children);
+			}
+			
 			Tree.addTypedLeaves(children);
 			
 			for (Leaf leaf : children) {
@@ -96,44 +88,34 @@ public class Direct extends Leaf {
 	
 	public void loadChildrenRecVisible() {
 		try {
-			File file = getFile();
+			File dir = getFile();
 			
-			if (file.getCanonicalPath().equals(mPath) == false) {
+			if (dir.getCanonicalPath().equals(mPath) == false) {
 				return;
 			}
 			
-			File[] list = file.listFiles();
-			Leaf[] children = new Leaf[list.length];
-			int count = 0;
-			
-			for (int i = 0; i < list.length; i++) {
-				File temp = list[i];
-				
-				if (FileUtil.HIDDEN_FILE.equals(temp.getName())) {
-					mChildren = new Leaf[0];
-					return;
+			List<Leaf> children = new ArrayList<Leaf>();
+			for (File file : dir.listFiles()) {
+				if (FileUtil.HIDDEN_FILE.equals(file.getName())) {
+					synchronized (mChildren) {
+						mChildren.clear();
+						return;
+					}
 				}
 				
-				if (temp.isHidden() == false) {
-					children[i] = FileUtil.createLeaf(temp);
-					count++;
+				if (file.isHidden() == false) {
+					children.add(FileUtil.createLeaf(file));
 				}
 			}
 			
-			Leaf[] temp = new Leaf[count];
-			int c = 0;
-			for (int i = 0; i < children.length && c < count; i++) {
-				Leaf leaf = children[i];
-				
-				if (leaf != null) {
-					temp[c++] = leaf;
-				}
+			synchronized (mChildren) {
+				mChildren.clear();
+				mChildren.addAll(children);
 			}
 			
-			mChildren = temp;
-			Tree.addTypedLeaves(temp);
+			Tree.addTypedLeaves(children);
 			
-			for (Leaf leaf : temp) {
+			for (Leaf leaf : children) {
 				if (leaf instanceof Direct) {
 					Direct direct = (Direct) leaf;
 					direct.loadChildrenRecVisible();
@@ -143,7 +125,7 @@ public class Direct extends Leaf {
 		}
 	}
 	
-	public Leaf[] getChildren() {
+	public List<Leaf> getChildren() {
 		return mChildren;
 	}
 }

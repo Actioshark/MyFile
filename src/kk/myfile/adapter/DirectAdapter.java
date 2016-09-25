@@ -42,7 +42,7 @@ import android.widget.TextView;
 
 public class DirectAdapter extends BaseAdapter {
 	private final DirectActivity mActivity;
-	private Leaf[] mData;
+	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
 	
@@ -50,7 +50,7 @@ public class DirectAdapter extends BaseAdapter {
 		mActivity = activity;
 	}
 	
-	public void setData(final Leaf[] data) {
+	public void setData(final List<Leaf> data) {
 		mMark = data;
 		
 		AppUtil.runOnNewThread(new Runnable() {
@@ -64,7 +64,11 @@ public class DirectAdapter extends BaseAdapter {
 					@Override
 					public void run() {
 						if (mMark == data) {
-							mData = data;
+							mData.clear();
+							synchronized (data) {
+								mData.addAll(data);
+							}
+							
 							notifyDataSetChanged();
 						}
 					}
@@ -75,7 +79,7 @@ public class DirectAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return mData == null ? 0 : mData.length;
+		return mData.size();
 	}
 
 	@Override
@@ -90,10 +94,11 @@ public class DirectAdapter extends BaseAdapter {
 	
 	public List<Leaf> getSelected() {
 		List<Leaf> list = new ArrayList<Leaf>();
+		int size = mData.size();
 		
 		for (Integer position : mSelected) {
-			if (position < mData.length) {
-				list.add(mData[position]);
+			if (position < size) {
+				list.add(mData.get(position));
 			}
 		}
 		
@@ -253,10 +258,7 @@ public class DirectAdapter extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		}
 		
-		if (position < 0 || position >= mData.length) {
-			return view;
-		}
-		Leaf leaf = mData[position];
+		Leaf leaf = mData.get(position);
 		
 		File file = leaf.getFile();
 		holder.leaf = leaf;

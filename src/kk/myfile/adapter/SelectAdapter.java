@@ -23,11 +23,14 @@ public class SelectAdapter extends BaseAdapter {
 		mActivity = activity;
 	}
 	
-	public void setData(Leaf[] data) {
+	public void setData(List<Leaf> data) {
 		mData.clear();
-		for (Leaf leaf : data) {
-			if (leaf instanceof Direct) {
-				mData.add((Direct) leaf);
+		
+		synchronized (data) {
+			for (Leaf leaf : data) {
+				if (leaf instanceof Direct) {
+					mData.add((Direct) leaf);
+				}
 			}
 		}
 		
@@ -85,9 +88,6 @@ public class SelectAdapter extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		}
 		
-		if (position < 0 || position >= mData.size()) {
-			return view;
-		}
 		Direct data = mData.get(position);
 		
 		holder.icon.setImageResource(data.getIcon());

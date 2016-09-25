@@ -148,7 +148,7 @@ public class Tree {
 		}
 	}
 	
-	public static void addTypedLeaves(Leaf[] leaves) {
+	public static void addTypedLeaves(List<Leaf> leaves) {
 		for (Leaf leaf : leaves) {
 			for (Entry<Class<?>, List<Leaf>> entry : sTypedFile.entrySet()) {
 				if (entry.getKey().isInstance(leaf)) {
