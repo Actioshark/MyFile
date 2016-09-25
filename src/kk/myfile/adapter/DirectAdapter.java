@@ -121,17 +121,19 @@ public class DirectAdapter extends BaseAdapter {
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
 			
-			view.setOnTouchListener(new OnTouchListener() {
-				@Override
-				public boolean onTouch(View view, MotionEvent event) {
-					if (event.getAction() == MotionEvent.ACTION_DOWN) {
-						mActivity.showDetail(holder.leaf);
+			if (ls.needDetail) {
+				view.setOnTouchListener(new OnTouchListener() {
+					@Override
+					public boolean onTouch(View view, MotionEvent event) {
+						if (event.getAction() == MotionEvent.ACTION_DOWN) {
+							mActivity.showDetail(holder.leaf);
+						}
+						
+						view.onTouchEvent(event);
+						return true;
 					}
-					
-					view.onTouchEvent(event);
-					return true;
-				}
-			});
+				});
+			}
 			
 			view.setOnClickListener(new OnClickListener() {
 				@Override
@@ -239,9 +241,7 @@ public class DirectAdapter extends BaseAdapter {
 //					
 //					dl.show();
 //					
-					if (mActivity.getMode() == Mode.Select) {
-						mActivity.setMode(Mode.Normal);
-					} else {
+					if (mActivity.getMode() == Mode.Normal) {
 						mSelected.clear();
 						mSelected.add(holder.position);
 						mActivity.setMode(Mode.Select);

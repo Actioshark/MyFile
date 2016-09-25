@@ -224,7 +224,7 @@ public class DirectActivity extends BaseActivity {
 		String key = Setting.getListStyle();
 		ListStyle ls = SettingListStyleActivity.getListStyle(key);
 		mGvList.setNumColumns(ls.column);
-		mGvList.setVerticalSpacing(ls.space);
+		mGvList.setVerticalSpacing(ls.vertSpace);
 		
 		// 详情
 		mViewDetail = findViewById(R.id.ll_detail);
