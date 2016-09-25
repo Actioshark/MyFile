@@ -73,7 +73,7 @@ public class SettingSortActivity extends BaseActivity {
 		for (int i = 0; i < mViewGrids.length; i++) {
 			final View grid = getLayoutInflater().inflate(R.layout.grid_sort,
 					null);
-			LayoutParams lp = new LayoutParams(AppUtil.getScreenWidth(true),
+			LayoutParams lp = new LayoutParams(AppUtil.getScreenWidth(),
 					mGridHeight, 0, mGridHeight * i);
 			mAlLayout.addView(grid, lp);
 			mViewGrids[i] = grid;

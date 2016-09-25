@@ -4,16 +4,17 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/bar_bg"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:background="@color/main_bg">
 
 	<TextView
-		android:id="@+id/tv_content"
+		android:id="@+id/tv_message"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
 		android:gravity="center"
-		android:padding="20dp"
+		android:layout_marginLeft="15dp"
+		android:layout_marginRight="15dp"
 		android:textSize="16sp"
 		android:textColor="@color/main_text" />
 
@@ -29,7 +30,7 @@
 			android:layout_height="match_parent"
 			android:layout_weight="1"
 			android:gravity="center"
-			android:background="@drawable/btn_main"
+			android:background="@drawable/btn_bar"
 			android:textSize="15sp"
 			android:textColor="@color/main_text" />
 
@@ -40,7 +41,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:layout_marginLeft="3dp"
-			android:background="@drawable/btn_main"
+			android:background="@drawable/btn_bar"
 			android:textSize="15sp"
 			android:textColor="@color/main_text" />
 
@@ -51,10 +52,10 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:layout_marginLeft="3dp"
-			android:background="@drawable/btn_main"
+			android:background="@drawable/btn_bar"
 			android:textSize="15sp"
 			android:textColor="@color/main_text" />
-		
+
 		<TextView
 			android:id="@+id/tv_btn_3"
 			android:layout_width="0dp"
@@ -62,7 +63,7 @@
 			android:layout_weight="1"
 			android:gravity="center"
 			android:layout_marginLeft="3dp"
-			android:background="@drawable/btn_main"
+			android:background="@drawable/btn_bar"
 			android:textSize="15sp"
 			android:textColor="@color/main_text" />
 

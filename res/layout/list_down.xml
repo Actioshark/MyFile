@@ -4,13 +4,15 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="#333333"
 	android:orientation="vertical">
 
 	<ListView
 		android:id="@+id/lv_list"
-		android:layout_width="@dimen/downlist_grid_width"
+		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:divider="#666666"
-		android:dividerHeight="2dp" />
+		android:layout_margin="@dimen/downlist_gap"
+		android:dividerHeight="@dimen/downlist_gap"
+		android:divider="#333333" />
 
 </LinearLayout>

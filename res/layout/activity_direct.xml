@@ -172,7 +172,7 @@
 	<LinearLayout
 		android:id="@+id/ll_info"
 		android:layout_width="match_parent"
-		android:layout_height="30dp"
+		android:layout_height="40dp"
 		android:layout_marginTop="@dimen/main_gap"
 		android:background="@color/bar_bg"
 		android:orientation="horizontal">
@@ -192,10 +192,10 @@
 
 		<ImageView
 			android:id="@+id/iv_menu"
-			android:layout_width="30dp"
-			android:layout_height="30dp"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
 			android:padding="5dp"
-			android:scaleType="centerCrop"
+			android:scaleType="centerInside"
 			android:background="@drawable/btn_trans"
 			android:src="@drawable/menu" />
 

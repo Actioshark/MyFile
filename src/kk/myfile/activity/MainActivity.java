@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity implements IListener {
 				@Override
 				public boolean onLongClick(View view) {
 					SimpleDialog dialog = new SimpleDialog(MainActivity.this);
-					dialog.setContent(R.string.hint_select_operation);
+					dialog.setMessage(R.string.hint_select_operation);
 					dialog.setButtons(new int[] {R.string.word_cancel, R.string.word_delete, R.string.word_edit});
 					dialog.setClickListener(new IDialogClickListener() {
 						@Override

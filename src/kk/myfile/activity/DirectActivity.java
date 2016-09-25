@@ -10,13 +10,18 @@ import java.util.List;
 import kk.myfile.R;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DirectAdapter;
+import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.TempDirect;
 import kk.myfile.tree.Tree;
+import kk.myfile.ui.DownList;
+import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -69,11 +74,12 @@ public class DirectActivity extends BaseActivity {
 	private GridView mGvList;
 	private DirectAdapter mDirectAdapter;
 	
-	private View mViewDetail;
+	private View mLlDetail;
 	private TextView mTvDetailName;
 	private TextView mTvDetailTime;
 	private TextView mTvDetailSize;
 	
+	private View mLlInfo;
 	private TextView mTvInfoCount;
 	
 	@Override
@@ -227,21 +233,22 @@ public class DirectActivity extends BaseActivity {
 		mGvList.setVerticalSpacing(ls.vertSpace);
 		
 		// 详情
-		mViewDetail = findViewById(R.id.ll_detail);
-		mTvDetailName = (TextView) mViewDetail.findViewById(R.id.tv_name);
-		mTvDetailTime = (TextView) mViewDetail.findViewById(R.id.tv_time);
-		mTvDetailSize = (TextView) mViewDetail.findViewById(R.id.tv_size);
+		mLlDetail = findViewById(R.id.ll_detail);
+		mTvDetailName = (TextView) mLlDetail.findViewById(R.id.tv_name);
+		mTvDetailTime = (TextView) mLlDetail.findViewById(R.id.tv_time);
+		mTvDetailSize = (TextView) mLlDetail.findViewById(R.id.tv_size);
 		
 		// 信息
-		View llInfo = findViewById(R.id.ll_info);
-		mTvInfoCount = (TextView) llInfo.findViewById(R.id.tv_count);
-		llInfo.findViewById(R.id.iv_menu)
+		mLlInfo = findViewById(R.id.ll_info);
+		mTvInfoCount = (TextView) mLlInfo.findViewById(R.id.tv_count);
+		mLlInfo.findViewById(R.id.iv_menu)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				showMenu();
 			}
 		});
-		llInfo.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+		mLlInfo.addOnLayoutChangeListener(new OnLayoutChangeListener() {
 			@Override
 			public void onLayoutChange(View view, int left, int top, int right, int bottom,
 				int ol, int ot, int or, int ob) {
@@ -397,7 +404,7 @@ public class DirectActivity extends BaseActivity {
 		});
 		
 		// 详情
-		mViewDetail.setVisibility(View.GONE);
+		mLlDetail.setVisibility(View.GONE);
 		
 		// 信息
 		showInfo();
@@ -472,7 +479,7 @@ public class DirectActivity extends BaseActivity {
 			mTvDetailSize.setText(String.format(Setting.LOCALE, "%s B", sb.toString()));
 		}
 		
-		mViewDetail.setVisibility(View.VISIBLE);
+		mLlDetail.setVisibility(View.VISIBLE);
 	}
 	
 	public void showInfo() {
@@ -482,6 +489,33 @@ public class DirectActivity extends BaseActivity {
 		} else {
 			mTvInfoCount.setText(AppUtil.getString(R.string.hint_children_with_num,
 					mNode.direct.getChildren().length));
+		}
+	}
+	
+	public void showMenu() {
+		if (mMode == Mode.Select) {
+			
+		} else {
+			DownList dl = new DownList(this);
+			List<DataItem> list = new ArrayList<DataItem>();
+			dl.getAdapter().setDataList(list);
+			
+			list.add(new DataItem(R.drawable.add, R.string.word_add_direct, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					InputDialog id = new InputDialog(DirectActivity.this);
+					id.setMessage(R.string.hint_input_direct_name);
+					id.show();
+				}
+			}));
+			
+			list.add(new DataItem(R.drawable.add, R.string.word_add_file, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+				}
+			}));
+			
+			dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
 		}
 	}
 	
@@ -501,6 +535,9 @@ public class DirectActivity extends BaseActivity {
 			} else if (backDirect()) {
 				return true;
 			}
+		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
+			showMenu();
+			return true;
 		}
 		
 		return super.onKeyUp(keyCode, event);

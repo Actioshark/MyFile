@@ -9,13 +9,15 @@ import android.view.WindowManager;
 public class AppUtil {
 	private static Resources sRes;
 	
-	private static Handler sHandler;
+	private static String sPackageName;
 	
-	private static String PACKAGE_NAME;
+	private static Handler sHandler;
 
-	private static int SCREEN_WIDTH;
-	private static int SCREEN_HEIGHT;
-	private static int sStatusBarHeight = 0;
+	private static float sDensity;
+	
+	private static int sScreenWidth;
+	private static int sScreenHeight;
+	public static int sStatusBarHeight = 0;
 
 	public static void init(Context context) {
 		if (sRes != null) {
@@ -26,13 +28,16 @@ public class AppUtil {
 		
 		sHandler = new Handler(context.getMainLooper());
 		
-		PACKAGE_NAME = context.getPackageName();
+		sPackageName = context.getPackageName();
 
 		WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics metrics = new DisplayMetrics();
 		manager.getDefaultDisplay().getMetrics(metrics);
-		SCREEN_WIDTH = metrics.widthPixels;
-		SCREEN_HEIGHT = metrics.heightPixels;
+		
+		sDensity = metrics.density;
+		
+		sScreenWidth = metrics.widthPixels;
+		sScreenHeight = metrics.heightPixels;
 
 		int id = sRes.getIdentifier("status_bar_height", "dimen", "android");
 		if (id > 0) {
@@ -40,16 +45,16 @@ public class AppUtil {
 		}
 	}
 
-	public static String getPackageName() {
-		return PACKAGE_NAME;
-	}
-
 	public static Resources getRes() {
 		return sRes;
 	}
 
+	public static String getPackageName() {
+		return sPackageName;
+	}
+
 	public static int getId(String type, String name) {
-		return sRes.getIdentifier(name, type, PACKAGE_NAME);
+		return sRes.getIdentifier(name, type, sPackageName);
 	}
 
 	public static String getString(int id, Object... args) {
@@ -83,13 +88,17 @@ public class AppUtil {
 	public static int getColor(String name) {
 		return getColor(getId("color", name));
 	}
-
-	public static int getScreenWidth(boolean full) {
-		return SCREEN_WIDTH;
+	
+	public static int getPixcel(float dp) {
+		return (int) (dp * sDensity);
 	}
 
-	public static int getScreenHeight(boolean full) {
-		return full ? SCREEN_HEIGHT : SCREEN_HEIGHT - sStatusBarHeight;
+	public static int getScreenWidth() {
+		return sScreenWidth;
+	}
+
+	public static int getScreenHeight() {
+		return sScreenHeight - sStatusBarHeight;
 	}
 
 	public static int getStatusBarHeight() {

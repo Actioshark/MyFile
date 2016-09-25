@@ -104,4 +104,12 @@ public class FileUtil {
 		os.flush();
 		os.close();
 	}
+	
+	public static boolean createDirect(String path) {
+		return false;
+	}
+	
+	public static boolean createFile(String path) {
+		return false;
+	}
 }

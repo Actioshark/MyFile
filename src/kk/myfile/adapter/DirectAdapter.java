@@ -153,7 +153,7 @@ public class DirectAdapter extends BaseAdapter {
 						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
 							SimpleDialog dialog = new SimpleDialog(mActivity);
 							dialog.setCanceledOnTouchOutside(true);
-							dialog.setContent(R.string.hint_open_as);
+							dialog.setMessage(R.string.hint_open_as);
 							dialog.setButtons(new int[] {R.string.type_text, R.string.type_image,
 									R.string.type_audio, R.string.type_video});
 							dialog.setClickListener(new IDialogClickListener() {
@@ -191,8 +191,7 @@ public class DirectAdapter extends BaseAdapter {
 				public boolean onLongClick(View view) {
 //					DownList dl = new DownList(mActivity);
 //					List<DataItem> list = new ArrayList<DataItem>();
-//					DownListAdapter dla = dl.getAdapter();
-//					dla.setDataList(list);
+//					dl.getAdapter().setDataList(list);
 //					
 //					list.add(new DataItem(R.drawable.detail, R.string.word_detail,
 //						new IDialogClickListener() {

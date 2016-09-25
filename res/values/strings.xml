@@ -10,6 +10,8 @@
 	<string name="word_share">Share</string>
 	<string name="word_copy">Copy</string>
 	<string name="word_cut">Cut</string>
+	<string name="word_add_direct">Add Directory</string>
+	<string name="word_add_file">Add File</string>
 
 	<string name="type_text">Text</string>
 	<string name="type_image">Image</string>
@@ -43,6 +45,8 @@
 	<string name="hint_children_with_num">%d Children</string>
 	<string name="hint_children_select_with_num">%1$d/%2$d Children</string>
 	<string name="hint_multi_select_mode">Multi Select Mode</string>
+	<string name="hint_input_direct_name">Input Directory Name</string>
+	<string name="hint_input_file_name">Input File Name</string>
 
 	<string name="err_path_not_valid">This is not a valid path</string>
 	<string name="err_nothing_selected">Noting selected</string>

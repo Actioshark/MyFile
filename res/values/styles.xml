@@ -4,25 +4,13 @@
 		<item name="android:fitsSystemWindows">true</item>
 	</style>
 
-	<style
-		name="simple_dialog"
-		parent="@android:style/Theme.Dialog">
-		<item name="android:windowFrame">@null</item>
-		<item name="android:windowIsFloating">true</item>
-		<item name="android:windowIsTranslucent">true</item>
+	<style name="simple_dialog">
 		<item name="android:windowNoTitle">true</item>
-		<item name="android:background">@color/bar_bg</item>
 		<item name="android:backgroundDimEnabled">true</item>
 	</style>
 
-	<style
-		name="down_list"
-		parent="@android:style/Theme.Dialog">
-		<item name="android:windowFrame">@null</item>
-		<item name="android:windowIsFloating">true</item>
-		<item name="android:windowIsTranslucent">true</item>
+	<style name="down_list">
 		<item name="android:windowNoTitle">true</item>
-		<item name="android:background">@null</item>
 		<item name="android:backgroundDimEnabled">false</item>
 	</style>
 </resources>
