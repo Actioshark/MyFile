@@ -1,26 +1,22 @@
 package kk.myfile.tree;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-
+import kk.myfile.R;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Unknown;
+import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 public class FileUtil {
-	public static final String HIDDEN_FILE = ".nomedia";
-	
 	private static JSONObject sTypeMap;
 	
 	public static void init(Context context) {
@@ -90,23 +86,21 @@ public class FileUtil {
 		return new String(buf, 0, off);
 	}
 	
-	public static void write(String from, String to) throws Exception {
-		InputStream is = new FileInputStream(from);
-		OutputStream os = new FileOutputStream(to);
-		byte[] buf = new byte[1024 * 1024];
-		int len;
-		
-		while ((len = is.read(buf)) != -1) {
-			os.write(buf, 0, len);
-		}
-		
-		is.close();
-		os.flush();
-		os.close();
+	public static String checkNewName(File parent, String name) {
+		// TODO
+		return null;
 	}
 	
-	public static boolean createDirect(String path) {
-		return false;
+	public static String createDirect(String path) {
+		try {
+			if (new File(path).mkdirs()) {
+				return null;
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+		
+		return AppUtil.getString(R.string.err_create_direct_failed);
 	}
 	
 	public static boolean createFile(String path) {

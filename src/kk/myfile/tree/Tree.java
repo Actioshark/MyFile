@@ -9,6 +9,8 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
 public class Tree {
+	public static final String HIDDEN_FILE = ".nomedia";
+	
 	public static Direct load(String path) {
 		final Direct direct = new Direct(path);
 		direct.setTag(direct);

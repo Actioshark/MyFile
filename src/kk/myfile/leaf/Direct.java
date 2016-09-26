@@ -6,6 +6,7 @@ import java.util.List;
 
 import kk.myfile.R;
 import kk.myfile.tree.FileUtil;
+import kk.myfile.tree.Tree;
 
 public class Direct extends Leaf {
 	protected final List<Leaf> mChildren = new ArrayList<Leaf>();
@@ -42,7 +43,7 @@ public class Direct extends Leaf {
 				mChildren.clear();
 			
 				for (File file : getFile().listFiles()) {
-					if (FileUtil.HIDDEN_FILE.equals(file.getName())) {
+					if (Tree.HIDDEN_FILE.equals(file.getName())) {
 						mChildren.clear();
 						return;
 					}
@@ -82,7 +83,7 @@ public class Direct extends Leaf {
 		try {
 			List<Leaf> children = new ArrayList<Leaf>();
 			for (File file : getFile().listFiles()) {
-				if (FileUtil.HIDDEN_FILE.equals(file.getName())) {
+				if (Tree.HIDDEN_FILE.equals(file.getName())) {
 					synchronized (mChildren) {
 						mChildren.clear();
 						return;

@@ -55,4 +55,10 @@
 	<string name="err_nothing_selected">Noting selected</string>
 	<string name="err_file_read_error">File reading error</string>
 
+	<string name="err_has_illegal_char">The Name contains illegal characters!</string>
+	<string name="err_name_exist">The name already exist!</string>
+	<string name="err_create_direct_success">Create directory success!</string>
+	<string name="err_create_direct_failed">Create directory failed!</string>
+	<string name="err_create_file_failed">Create File Failed!</string>
+
 </resources>

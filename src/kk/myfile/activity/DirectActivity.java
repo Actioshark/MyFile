@@ -14,6 +14,7 @@ import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.TempDirect;
+import kk.myfile.tree.FileUtil;
 import kk.myfile.tree.Tree;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
@@ -240,11 +241,11 @@ public class DirectActivity extends BaseActivity {
 			public void onLayoutChange(View view, int left, int top, int right, int bottom,
 				int ol, int ot, int or, int ob) {
 				
-				if (ob != 0) {
-					if (ob < bottom) {
-						mEtSearch.setFocusable(false);
-						mEtSearch.setFocusableInTouchMode(false);
-					} else if (ob > bottom) {
+				if (ob < bottom) {
+					mEtSearch.setFocusable(false);
+					mEtSearch.setFocusableInTouchMode(false);
+				} else if (ob > bottom) {
+					if (mEtSearch.hasFocus()) {
 						showSearchResult(mNode.direct.getChildren());
 					}
 				}
@@ -490,8 +491,25 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.add, R.string.word_add_direct, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					InputDialog id = new InputDialog(DirectActivity.this);
+					final InputDialog id = new InputDialog(DirectActivity.this);
 					id.setMessage(R.string.hint_input_direct_name);
+					id.setClickListener(new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							if (index == 1) {
+								File file = new File(mNode.direct.getPath(), id.getInput());
+								String err = FileUtil.createDirect(file.getPath());
+								if (err == null) {
+									err = AppUtil.getString(R.string.err_create_direct_success);
+								}
+									
+								Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+							}
+							
+							dialog.dismiss();
+							refreshDirect();
+						}
+					});
 					id.show();
 				}
 			}));
