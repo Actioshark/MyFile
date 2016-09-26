@@ -17,6 +17,9 @@
 	<string name="type_image">Image</string>
 	<string name="type_audio">Audio</string>
 	<string name="type_video">Video</string>
+	<string name="type_office">Office</string>
+	<string name="type_zip">Zip</string>
+	<string name="type_apk">Apk</string>
 
 	<string name="setting_sort_tree">Sort Files Of Directory</string>
 	<string name="setting_sort_type">Sort Files Of Type</string>

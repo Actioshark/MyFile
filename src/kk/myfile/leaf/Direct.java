@@ -6,7 +6,6 @@ import java.util.List;
 
 import kk.myfile.R;
 import kk.myfile.tree.FileUtil;
-import kk.myfile.tree.Tree;
 
 public class Direct extends Leaf {
 	protected final List<Leaf> mChildren = new ArrayList<Leaf>();
@@ -37,13 +36,14 @@ public class Direct extends Leaf {
 		}
 	}
 	
-	public void loadChildrenVisible() {
+	public void loadChildrenVis() {
 		try {
 			synchronized (mChildren) {
 				mChildren.clear();
 			
 				for (File file : getFile().listFiles()) {
 					if (FileUtil.HIDDEN_FILE.equals(file.getName())) {
+						mChildren.clear();
 						return;
 					}
 					
@@ -58,14 +58,8 @@ public class Direct extends Leaf {
 	
 	public void loadChildrenRecAll() {
 		try {
-			File dir = getFile();
-			
-			if (dir.getCanonicalPath().equals(mPath) == false) {
-				return;
-			}
-			
 			List<Leaf> children = new ArrayList<Leaf>();
-			for (File file : dir.listFiles()) {
+			for (File file : getFile().listFiles()) {
 				children.add(FileUtil.createLeaf(file));
 			}
 			
@@ -73,8 +67,6 @@ public class Direct extends Leaf {
 				mChildren.clear();
 				mChildren.addAll(children);
 			}
-			
-			Tree.addTypedLeaves(children);
 			
 			for (Leaf leaf : children) {
 				if (leaf instanceof Direct) {
@@ -86,16 +78,10 @@ public class Direct extends Leaf {
 		}
 	}
 	
-	public void loadChildrenRecVisible() {
+	public void loadChildrenRecVis() {
 		try {
-			File dir = getFile();
-			
-			if (dir.getCanonicalPath().equals(mPath) == false) {
-				return;
-			}
-			
 			List<Leaf> children = new ArrayList<Leaf>();
-			for (File file : dir.listFiles()) {
+			for (File file : getFile().listFiles()) {
 				if (FileUtil.HIDDEN_FILE.equals(file.getName())) {
 					synchronized (mChildren) {
 						mChildren.clear();
@@ -113,12 +99,10 @@ public class Direct extends Leaf {
 				mChildren.addAll(children);
 			}
 			
-			Tree.addTypedLeaves(children);
-			
 			for (Leaf leaf : children) {
 				if (leaf instanceof Direct) {
 					Direct direct = (Direct) leaf;
-					direct.loadChildrenRecVisible();
+					direct.loadChildrenRecVis();
 				}
 			}
 		} catch (Exception e) {

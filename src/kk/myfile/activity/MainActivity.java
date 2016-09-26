@@ -15,22 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kk.myfile.R;
-import kk.myfile.leaf.Apk;
-import kk.myfile.leaf.Audio;
-import kk.myfile.leaf.Image;
-import kk.myfile.leaf.Office;
-import kk.myfile.leaf.Text;
-import kk.myfile.leaf.Video;
-import kk.myfile.leaf.Zip;
-import kk.myfile.tree.Tree;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
-import kk.myfile.util.Broadcast;
-import kk.myfile.util.Broadcast.IListener;
 import kk.myfile.util.Setting;
 
-public class MainActivity extends BaseActivity implements IListener {
+public class MainActivity extends BaseActivity {
 	public static final int REQ_SELECT_PATH = 1;
 	
 	public static final String KEY_INDEX = "main_index";
@@ -39,23 +29,13 @@ public class MainActivity extends BaseActivity implements IListener {
 	private final List<TextView> mTvDirects = new ArrayList<TextView>();
 	private View mLlAdd;
 	
-	private TextView mTvText;
-	private TextView mTvImage;
-	private TextView mTvAudio;
-	private TextView mTvVideo;
-	private TextView mTvOffice;
-	private TextView mTvZip;
-	private TextView mTvApk;
-	
-	private View mViewRefresh;
-	
 	@SuppressLint("CutPasteId")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_main);
-		View root, temp;
+		View root;
 		
 		// 常用路径
 		for (int i = 0; ; i++) {
@@ -133,28 +113,63 @@ public class MainActivity extends BaseActivity implements IListener {
 		// 文件分类
 		root = findViewById(R.id.ll_file_1);
 		
-		temp = root.findViewById(R.id.ll_text);
-		mTvText = (TextView) temp.findViewById(R.id.tv_text);
+		root.findViewById(R.id.ll_text).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
+			}
+		});
 		
-		temp = root.findViewById(R.id.ll_image);
-		mTvImage = (TextView) temp.findViewById(R.id.tv_text);
+		root.findViewById(R.id.ll_image).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
+			}
+		});
 		
-		temp = root.findViewById(R.id.ll_audio);
-		mTvAudio = (TextView) temp.findViewById(R.id.tv_text);
+		root.findViewById(R.id.ll_audio).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
+			}
+		});
 		
-		temp = root.findViewById(R.id.ll_video);
-		mTvVideo = (TextView) temp.findViewById(R.id.tv_text);
+		root.findViewById(R.id.ll_video).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
+			}
+		});
 		
 		root = findViewById(R.id.ll_file_2);
 		
-		temp = root.findViewById(R.id.ll_office);
-		mTvOffice = (TextView) temp.findViewById(R.id.tv_text);
+		root.findViewById(R.id.ll_office).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
+			}
+		});
 		
-		temp = root.findViewById(R.id.ll_zip);
-		mTvZip = (TextView) temp.findViewById(R.id.tv_text);
+		root.findViewById(R.id.ll_zip).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
+			}
+		});
 		
-		temp = root.findViewById(R.id.ll_apk);
-		mTvApk = (TextView) temp.findViewById(R.id.tv_text);
+		root.findViewById(R.id.ll_apk).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
+			}
+		});
 		
 		// 功能按钮
 		root = findViewById(R.id.ll_fun);
@@ -164,14 +179,6 @@ public class MainActivity extends BaseActivity implements IListener {
 			@Override
 			public void onClick(View view) {
 				finish();
-			}
-		});
-		
-		mViewRefresh = root.findViewById(R.id.iv_refresh);
-		mViewRefresh.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Tree.refresh();
 			}
 		});
 		
@@ -186,51 +193,6 @@ public class MainActivity extends BaseActivity implements IListener {
 		
 		mPaths = Setting.getDefPath();
 		refreshPath();
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		Broadcast.addListener(this, Tree.BC_START, true);
-		Broadcast.addListener(this, Tree.BC_UPDATE, true);
-		Broadcast.addListener(this, Tree.BC_COMPLETED, true);
-		
-		setRefreshAnim(Tree.isRefreshing());
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		Broadcast.removeLsitener(this, null);
-	}
-	
-	@Override
-	public void onReceive(String name, Object data) {
-		if (Tree.BC_START.equals(name)) {
-			setRefreshAnim(true);
-		} else if (Tree.BC_UPDATE.equals(name)) {
-			mTvText.setText(String.format("%d", Tree.getTypedLeaves(Text.class).size()));
-			mTvImage.setText(String.format("%d", Tree.getTypedLeaves(Image.class).size()));
-			mTvAudio.setText(String.format("%d", Tree.getTypedLeaves(Audio.class).size()));
-			mTvVideo.setText(String.format("%d", Tree.getTypedLeaves(Video.class).size()));
-			mTvOffice.setText(String.format("%d", Tree.getTypedLeaves(Office.class).size()));
-			mTvZip.setText(String.format("%d", Tree.getTypedLeaves(Zip.class).size()));
-			mTvApk.setText(String.format("%d", Tree.getTypedLeaves(Apk.class).size()));
-			
-			setRefreshAnim(true);
-		} else if (Tree.BC_COMPLETED.equals(name)) {
-			setRefreshAnim(false);
-		}
-	}
-	
-	private void setRefreshAnim(boolean start) {
-		if (start) {
-			mViewRefresh.setVisibility(View.GONE);
-		} else {
-			mViewRefresh.setVisibility(View.VISIBLE);
-		}
 	}
 	
 	private void refreshPath() {

@@ -154,50 +154,30 @@ public class DirectActivity extends BaseActivity {
 					synchronized (mEtSearch) {
 						mSearchRun = new Runnable() {
 							public void run() {
-								Direct direct = Tree.findDirect(mNode.direct.getPath());
-								if (direct == null) {
-									Toast.makeText(getApplicationContext(), R.string.err_path_not_valid,
-											Toast.LENGTH_SHORT).show();
-									return;
-								}
+								Direct direct = Tree.load(mNode.direct.getPath());
+								String input = mEtSearch.getText().toString();
 								
-								List<Leaf> list = Tree.getLeaves(direct);
-								final List<Leaf> rst = new ArrayList<Leaf>();
-								String input = editable.toString().toLowerCase(Setting.LOCALE);
-								long time = SystemClock.uptimeMillis();
-								
-								for (Leaf leaf : list) {
-									if (leaf.getFile().getName().toLowerCase(Setting.LOCALE)
-											.contains(input)) {
-										rst.add(leaf);
-									}
+								while (true) {
+									boolean finished = direct.getTag() == null;
+									final List<Leaf> ret = Tree.search(direct, input);
 									
-									long now = SystemClock.uptimeMillis();
-									if (now > time + 200) {
-										time = now;
-										
-										synchronized (mEtSearch) {
-											if (mSearchRun == this) {
-												AppUtil.runOnUiThread(new Runnable() {
-													public void run() {
-														showSearchResult(rst);
-													}
-												});
-											} else {
-												return;
-											}
+									synchronized (mEtSearch) {
+										if (mSearchRun == this) {
+											AppUtil.runOnUiThread(new Runnable() {
+												public void run() {
+													showSearchResult(ret);
+												}
+											});
+										} else {
+											return;
 										}
 									}
-								}
-								
-								synchronized (mEtSearch) {
-									if (mSearchRun == this) {
-										AppUtil.runOnUiThread(new Runnable() {
-											public void run() {
-												showSearchResult(rst);
-											}
-										});
+									
+									if (finished) {
+										return;
 									}
+									
+									SystemClock.sleep(1000);
 								}
 							}
 						};

@@ -19,7 +19,7 @@ public class TempDirect extends Direct {
 	}
 	
 	@Override
-	public void loadChildrenVisible() {
+	public void loadChildrenVis() {
 	}
 	
 	@Override
@@ -27,6 +27,6 @@ public class TempDirect extends Direct {
 	}
 	
 	@Override
-	public void loadChildrenRecVisible() {
+	public void loadChildrenRecVis() {
 	}
 }

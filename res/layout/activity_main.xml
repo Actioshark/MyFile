@@ -136,12 +136,12 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/tv_text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/type_text" />
 
 				<View
 					android:layout_width="match_parent"
@@ -176,12 +176,12 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/tv_text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/type_image" />
 
 				<View
 					android:layout_width="match_parent"
@@ -216,12 +216,12 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/tv_text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/type_audio" />
 
 				<View
 					android:layout_width="match_parent"
@@ -256,12 +256,12 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/tv_text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/type_video" />
 
 				<View
 					android:layout_width="match_parent"
@@ -308,12 +308,12 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/tv_text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/type_office" />
 
 				<View
 					android:layout_width="match_parent"
@@ -348,12 +348,12 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/tv_text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/type_zip" />
 
 				<View
 					android:layout_width="match_parent"
@@ -388,12 +388,12 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/tv_text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/type_apk" />
 
 				<View
 					android:layout_width="match_parent"
@@ -555,18 +555,6 @@
 				android:scaleType="centerInside"
 				android:src="@drawable/arrow_left"
 				android:background="@drawable/btn_bar" />
-
-			<ImageView
-				android:id="@+id/iv_refresh"
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:padding="@dimen/main_padding"
-				android:layout_marginLeft="@dimen/main_gap"
-				android:scaleType="centerInside"
-				android:src="@drawable/refresh"
-				android:background="@drawable/btn_bar"
-				android:visibility="gone" />
 
 			<ImageView
 				android:id="@+id/iv_setting"

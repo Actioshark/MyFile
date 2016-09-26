@@ -1,9 +1,9 @@
 package kk.myfile.activity;
 
 import kk.myfile.tree.FileUtil;
-import kk.myfile.tree.Tree;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Application;
 
 public class App extends Application {
@@ -14,6 +14,5 @@ public class App extends Application {
 		AppUtil.init(this);
 		Setting.init(this);
 		FileUtil.init(this);
-		Tree.init(this);
 	}
 }
