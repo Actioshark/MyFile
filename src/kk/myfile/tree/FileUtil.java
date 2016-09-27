@@ -90,7 +90,7 @@ public class FileUtil {
 		return new String(buf, 0, off);
 	}
 	
-	public static String checkNewName(File file, String name) {
+	public static String checkNewName(String parent, String name) {
 		if (name == null || name.length() < 1 || name.length() > 255) {
 			return AppUtil.getString(R.string.err_illegal_file_name_length);
 		}
@@ -101,7 +101,7 @@ public class FileUtil {
 			}
 		}
 		
-		if (file.exists()) {
+		if (new File(parent, name).exists()) {
 			return AppUtil.getString(R.string.err_file_exist);
 		}
 		

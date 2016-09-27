@@ -582,20 +582,31 @@ public class DirectActivity extends BaseActivity {
 				public void onClick(Dialog dialog, int index) {
 					final InputDialog id = new InputDialog(DirectActivity.this);
 					id.setMessage(R.string.msg_input_direct_name);
+					
+					String name = "";
+					for (int i = 1; i < 1000; i++) {
+						String tmp = AppUtil.getString(R.string.def_direct_name, i);
+						String err = FileUtil.checkNewName(mNode.direct.getPath(), tmp);
+						if (err == null) {
+							name = tmp;
+							break;
+						}
+					}
+					id.setInput(name);
+					id.setSelection(name.length());
+					
 					id.setClickListener(new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index) {
 							if (index == 1) {
 								String input = id.getInput();
-								File file = new File(mNode.direct.getPath(), input);
-								
-								String err = FileUtil.checkNewName(file, input);
+								String err = FileUtil.checkNewName(mNode.direct.getPath(), input);
 								if (err != null) {
 									App.showToast(err);
 									return;
 								}
 								
-								err = FileUtil.createDirect(file);
+								err = FileUtil.createDirect(new File(mNode.direct.getPath(), input));
 								if (err == null) {
 									err = AppUtil.getString(R.string.err_create_direct_success);
 								}
@@ -616,20 +627,31 @@ public class DirectActivity extends BaseActivity {
 				public void onClick(Dialog dialog, int index) {
 					final InputDialog id = new InputDialog(DirectActivity.this);
 					id.setMessage(R.string.msg_input_file_name);
+					
+					String name = "";
+					for (int i = 1; i < 1000; i++) {
+						String tmp = AppUtil.getString(R.string.def_file_name, i);
+						String err = FileUtil.checkNewName(mNode.direct.getPath(), tmp);
+						if (err == null) {
+							name = tmp;
+							break;
+						}
+					}
+					id.setInput(name);
+					id.setSelection(name.length());
+					
 					id.setClickListener(new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index) {
 							if (index == 1) {
 								String input = id.getInput();
-								File file = new File(mNode.direct.getPath(), input);
-								
-								String err = FileUtil.checkNewName(file, input);
+								String err = FileUtil.checkNewName(mNode.direct.getPath(), input);
 								if (err != null) {
 									App.showToast(err);
 									return;
 								}
 								
-								err = FileUtil.createFile(file);
+								err = FileUtil.createDirect(new File(mNode.direct.getPath(), input));
 								if (err == null) {
 									err = AppUtil.getString(R.string.err_create_file_success);
 								}

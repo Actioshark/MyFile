@@ -68,4 +68,7 @@
 	<string name="list_style_2_2">List Middle</string>
 	<string name="list_style_2_3">List Big</string>
 
+	<string name="def_file_name">File%03d</string>
+	<string name="def_direct_name">Directory%03d</string>
+
 </resources>

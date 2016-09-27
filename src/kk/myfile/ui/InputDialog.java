@@ -78,6 +78,14 @@ public class InputDialog extends Dialog {
 	public String getInput() {
 		return mEtInput.getText().toString();
 	}
+	
+	public void setSelection(int index) {
+		mEtInput.setSelection(index);
+	}
+	
+	public void setSelection(int start, int stop) {
+		mEtInput.setSelection(start, stop);
+	}
 
 	public void setClickListener(IDialogClickListener listener) {
 		mClickListener = listener;
