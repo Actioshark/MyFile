@@ -19,7 +19,7 @@ import kk.myfile.util.Setting;
 public class FileUtil {
 	private static JSONObject sTypeMap;
 	
-	private static final char[] ILLEGAL_FILE_NAME_CHAR = new char[] {
+	private static final char[] ILLEGAL_FILE_NAME_CHAR = {
 		'/', '\0',
 	};
 	

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ public class MainActivity extends BaseActivity {
 	private final List<TextView> mTvDirects = new ArrayList<TextView>();
 	private View mLlAdd;
 	
-	@SuppressLint("CutPasteId")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
