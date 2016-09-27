@@ -4,23 +4,29 @@
 	<string name="app_name">MyFile</string>
 
 	<string name="word_cancel">Cancel</string>
+	<string name="word_confirm">Confirm</string>
 	<string name="word_delete">Delete</string>
 	<string name="word_edit">Edit</string>
 	<string name="word_detail">Detail</string>
 	<string name="word_share">Share</string>
 	<string name="word_copy">Copy</string>
 	<string name="word_cut">Cut</string>
+	<string name="word_refresh">Refresh</string>
 	<string name="word_new_direct">New Directory</string>
 	<string name="word_new_file">New File</string>
 
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_open_as">Open As</string>
 	<string name="msg_input_to_search">Input to search</string>
-	<string name="msg_children_with_num">%d Children</string>
-	<string name="msg_children_select_with_num">%1$d/%2$d Children</string>
+	<string name="msg_children_with_num">%d children</string>
+	<string name="msg_children_select_with_num">%1$d/%2$d children</string>
 	<string name="msg_multi_select_mode">Multi Select Mode</string>
-	<string name="msg_input_direct_name">Input Directory Name</string>
-	<string name="msg_input_file_name">Input File Name</string>
+	<string name="msg_input_direct_name">Input directory name</string>
+	<string name="msg_input_file_name">Input file name</string>
+	<string name="msg_delete_file_confirm">Delete these %d files?</string>
+	<string name="msg_delete_file_progress">Deleting %1$d/%2$d files\n\n%3$d success\n%4$d
+		failed
+	</string>
 
 	<string name="err_illegal_file_name_char">Illegal characters!</string>
 	<string name="err_illegal_file_name_length">Length must be 1 to 255</string>
@@ -29,9 +35,10 @@
 	<string name="err_create_direct_success">Success</string>
 	<string name="err_create_file_failed">Create File Failed!</string>
 	<string name="err_create_file_success">Success</string>
+	<string name="err_nothing_selected">Noting selected</string>
+	<string name="err_delete_file_failed">%s delete failed!</string>
 
 	<string name="err_path_not_valid">This is not a valid path</string>
-	<string name="err_nothing_selected">Noting selected</string>
 	<string name="err_file_read_error">File reading error</string>
 
 	<string name="type_text">Text</string>
@@ -60,7 +67,5 @@
 	<string name="list_style_2_1">List Small</string>
 	<string name="list_style_2_2">List Middle</string>
 	<string name="list_style_2_3">List Big</string>
-
-	<string name="hidden_setting">Show Hidden Files When Searhing</string>
 
 </resources>

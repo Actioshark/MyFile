@@ -20,7 +20,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SelectActivity extends BaseActivity {
 	public static final String KEY_PATH = "select_path";
@@ -94,8 +93,7 @@ public class SelectActivity extends BaseActivity {
 			}
 		} catch (Exception e) {
 			if (lastToHistory) {
-				Toast.makeText(getApplicationContext(), R.string.err_file_read_error,
-					Toast.LENGTH_SHORT).show();
+				App.showToast(R.string.err_file_read_error);
 			}
 			
 			if (mHistory.size() > 0) {
@@ -180,8 +178,7 @@ public class SelectActivity extends BaseActivity {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), R.string.err_file_read_error,
-				Toast.LENGTH_SHORT).show();
+			App.showToast(R.string.err_file_read_error);
 			
 			if (mHistory.size() > 0) {
 				mDirect = mHistory.remove(mHistory.size() - 1);

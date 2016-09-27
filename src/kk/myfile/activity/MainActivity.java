@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import kk.myfile.R;
 import kk.myfile.ui.IDialogClickListener;
@@ -56,8 +55,7 @@ public class MainActivity extends BaseActivity {
 							throw new Exception();
 						}
 					} catch (Exception e) {
-						Toast.makeText(getApplicationContext(), R.string.err_path_not_valid,
-								Toast.LENGTH_SHORT).show();;
+						App.showToast(R.string.err_path_not_valid);
 						return;
 					}
 					
@@ -226,8 +224,7 @@ public class MainActivity extends BaseActivity {
 						throw new Exception();
 					}
 				} catch (Exception e) {
-					Toast.makeText(getApplicationContext(), R.string.err_path_not_valid,
-							Toast.LENGTH_SHORT).show();
+					App.showToast(R.string.err_path_not_valid);
 					return;
 				}
 				

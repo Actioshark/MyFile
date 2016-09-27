@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kk.myfile.R;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
@@ -19,10 +20,9 @@ import kk.myfile.tree.Tree;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
+import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
-import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -40,9 +40,9 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DirectActivity extends BaseActivity {
 	public static final String KEY_PATH = "direct_path";
@@ -69,6 +69,7 @@ public class DirectActivity extends BaseActivity {
 	
 	private View mRlTitle;
 	private TextView mTvTitle;
+	private ImageView mIvSelect;
 	
 	private EditText mEtSearch;
 	private Runnable mSearchRun;
@@ -114,6 +115,13 @@ public class DirectActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				setMode(Mode.Normal);
+			}
+		});
+		mIvSelect = (ImageView) mRlTitle.findViewById(R.id.iv_select);
+		mIvSelect.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mDirectAdapter.selectAll(mDirectAdapter.getSelectedCount() < mDirectAdapter.getCount());
 			}
 		});
 		
@@ -265,18 +273,8 @@ public class DirectActivity extends BaseActivity {
 		if (mMode != mode) {
 			mMode = mode;
 			
-			// 标题
-			if (mMode == Mode.Select) {
-				mTvTitle.setText(R.string.msg_multi_select_mode);
-				mLlPath.setVisibility(View.GONE);
-				mRlTitle.setVisibility(View.VISIBLE);
-			} else {
-				mLlPath.setVisibility(View.VISIBLE);
-				mRlTitle.setVisibility(View.GONE);
-			}
-			
+			showTitle();
 			showInfo();
-			
 			mDirectAdapter.notifyDataSetChanged();
 		}
 	}
@@ -297,8 +295,7 @@ public class DirectActivity extends BaseActivity {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), R.string.err_file_read_error,
-				Toast.LENGTH_SHORT).show();
+			App.showToast(R.string.err_file_read_error);
 			
 			if (mNode != null) {
 				return;
@@ -399,8 +396,7 @@ public class DirectActivity extends BaseActivity {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), R.string.err_file_read_error,
-				Toast.LENGTH_SHORT).show();
+			App.showToast(R.string.err_file_read_error);
 			
 			if (mHistory.size() > 0) {
 				mNode = mHistory.remove(mHistory.size() - 1);
@@ -425,6 +421,19 @@ public class DirectActivity extends BaseActivity {
 		}
 		
 		return false;
+	}
+	
+	public void showTitle() {
+		if (mMode == Mode.Select) {
+			mTvTitle.setText(R.string.msg_multi_select_mode);
+			mIvSelect.setImageResource(mDirectAdapter.getSelectedCount() < mDirectAdapter.getCount()
+					? R.drawable.multi_select_pre : R.drawable.multi_select_nor);
+			mLlPath.setVisibility(View.GONE);
+			mRlTitle.setVisibility(View.VISIBLE);
+		} else {
+			mLlPath.setVisibility(View.VISIBLE);
+			mRlTitle.setVisibility(View.GONE);
+		}
 	}
 	
 	public void showSearchResult(List<Leaf> list) {
@@ -474,12 +483,99 @@ public class DirectActivity extends BaseActivity {
 	}
 	
 	public void showMenu() {
+		DownList dl = new DownList(this);
+		List<DataItem> list = new ArrayList<DataItem>();
+		dl.getAdapter().setDataList(list);
+		
 		if (mMode == Mode.Select) {
+			final List<Leaf> selected = mDirectAdapter.getSelected();
+			if (selected.size() < 1) {
+				App.showToast(R.string.err_nothing_selected);
+				return;
+			}
 			
+			list.add(new DataItem(R.drawable.cross, R.string.word_delete, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					SimpleDialog sd = new SimpleDialog(DirectActivity.this);
+					sd.setMessage(AppUtil.getString(R.string.msg_delete_file_confirm,
+							selected.size()));
+					sd.setButtons(new int[] {R.string.word_cancel, R.string.word_confirm});
+					sd.setClickListener(new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							if (index == 1) {
+								final SimpleDialog sd = new SimpleDialog(DirectActivity.this);
+								sd.setMessage(AppUtil.getString(R.string.msg_delete_file_progress,
+										0, selected.size(), 0, 0));
+								sd.setButtons(new int[] {R.string.word_cancel});
+								sd.setClickListener(new IDialogClickListener() {
+									@Override
+									public void onClick(Dialog dialog, int index) {
+										dialog.dismiss();
+									}
+								});
+								sd.setCanceledOnTouchOutside(false);
+								sd.show();
+					
+								AppUtil.runOnNewThread(new Runnable() {
+									public void run() {
+										final AtomicInteger success = new AtomicInteger(0);
+										final AtomicInteger failed = new AtomicInteger(0);
+										
+										for (Leaf leaf : selected) {
+											String err = FileUtil.delete(leaf.getFile());
+											if (err == null) {
+												success.addAndGet(1);
+											} else {
+												failed.addAndGet(1);
+											}
+											
+											if (sd.isShowing() == false) {
+												return;
+											}
+												
+											AppUtil.runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													if (sd.isShowing()) {
+														int s = success.get();
+														int f = failed.get();
+														int t = selected.size();
+														
+														sd.setMessage(AppUtil.getString(
+															R.string.msg_delete_file_progress,
+															s + f, t, s, f));
+														
+														if (s + f >= t) {
+															sd.setButtons(new int[] {R.string.word_confirm});
+														}
+													}
+													
+													refreshDirect();
+												}
+											});
+										}
+									}
+								});
+							}
+							
+							dialog.dismiss();
+							setMode(Mode.Normal);
+						}
+					});
+					sd.show();
+				}
+			}));
+			
+			dl.show();
 		} else {
-			DownList dl = new DownList(this);
-			List<DataItem> list = new ArrayList<DataItem>();
-			dl.getAdapter().setDataList(list);
+			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					refreshDirect();
+				}
+			}));
 			
 			list.add(new DataItem(R.drawable.add, R.string.word_new_direct, new IDialogClickListener() {
 				@Override
@@ -495,7 +591,7 @@ public class DirectActivity extends BaseActivity {
 								
 								String err = FileUtil.checkNewName(file, input);
 								if (err != null) {
-									Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+									App.showToast(err);
 									return;
 								}
 								
@@ -504,7 +600,7 @@ public class DirectActivity extends BaseActivity {
 									err = AppUtil.getString(R.string.err_create_direct_success);
 								}
 									
-								Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+								App.showToast(err);
 							}
 							
 							dialog.dismiss();
@@ -529,7 +625,7 @@ public class DirectActivity extends BaseActivity {
 								
 								String err = FileUtil.checkNewName(file, input);
 								if (err != null) {
-									Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+									App.showToast(err);
 									return;
 								}
 								
@@ -537,8 +633,8 @@ public class DirectActivity extends BaseActivity {
 								if (err == null) {
 									err = AppUtil.getString(R.string.err_create_file_success);
 								}
-									
-								Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+
+								App.showToast(err);
 							}
 							
 							dialog.dismiss();
@@ -548,14 +644,12 @@ public class DirectActivity extends BaseActivity {
 					id.show();
 				}
 			}));
-			
-			dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
 		}
+			
+		dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
 	}
 	
 	public void setSelection(int position) {
-		Logger.print(null, position);
-		
 		if (position >= 0 && position < mNode.direct.getChildren().size()) {
 			mGvList.setSelection(position);
 		}

@@ -131,4 +131,41 @@ public class FileUtil {
 		
 		return AppUtil.getString(R.string.err_create_file_failed);
 	}
+	
+	public static String delete(File file) {
+		try {
+			if (deleteRec(file)) {
+				return null;
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+		
+		String name;
+		try {
+			name = file.getName();
+		} catch (Exception e) {
+			name = "";
+		}
+		
+		return AppUtil.getString(R.string.err_create_file_failed, name);
+	}
+	
+	private static boolean deleteRec(File file) {
+		try {
+			boolean suc = true;
+			
+			if (file.isDirectory()) {
+				for (File temp : file.listFiles()) {
+					suc = deleteRec(temp) && suc;
+				}
+			}
+			
+			return file.delete() && suc;
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+		
+		return false;
+	}
 }

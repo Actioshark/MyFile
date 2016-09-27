@@ -114,6 +114,22 @@ public class DirectAdapter extends BaseAdapter {
 	public int getSelectedCount() {
 		return mSelected.size();
 	}
+	
+	public void selectAll(boolean select) {
+		if (select) {
+			mSelected.clear();
+			
+			int len = mData.size();
+			for (int i = 0 ; i < len; i++) {
+				mSelected.add(i);
+			}
+		} else {
+			mSelected.clear();
+		}
+		
+		mActivity.showTitle();
+		notifyDataSetChanged();
+	}
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
@@ -156,6 +172,7 @@ public class DirectAdapter extends BaseAdapter {
 							mSelected.add(holder.position);
 						}
 						
+						mActivity.showTitle();
 						mActivity.showInfo();
 						notifyDataSetChanged();
 					} else if (holder.leaf instanceof Direct) {
@@ -200,57 +217,6 @@ public class DirectAdapter extends BaseAdapter {
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View view) {
-//					DownList dl = new DownList(mActivity);
-//					List<DataItem> list = new ArrayList<DataItem>();
-//					dl.getAdapter().setDataList(list);
-//					
-//					list.add(new DataItem(R.drawable.detail, R.string.word_detail,
-//						new IDialogClickListener() {
-//							@Override
-//							public void onClick(Dialog dialog, int index) {
-//								// TODO
-//							}
-//						}
-//					));
-//					
-//					list.add(new DataItem(R.drawable.share, R.string.word_share,
-//						new IDialogClickListener() {
-//							@Override
-//							public void onClick(Dialog dialog, int index) {
-//								// TODO
-//							}
-//						}
-//					));
-//					
-//					list.add(new DataItem(R.drawable.copy, R.string.word_copy,
-//						new IDialogClickListener() {
-//							@Override
-//							public void onClick(Dialog dialog, int index) {
-//								// TODO
-//							}
-//						}
-//					));
-//					
-//					list.add(new DataItem(R.drawable.cut, R.string.word_cut,
-//						new IDialogClickListener() {
-//							@Override
-//							public void onClick(Dialog dialog, int index) {
-//								// TODO
-//							}
-//						}
-//					));
-//					
-//					list.add(new DataItem(R.drawable.cross, R.string.word_delete,
-//						new IDialogClickListener() {
-//							@Override
-//							public void onClick(Dialog dialog, int index) {
-//								// TODO
-//							}
-//						}
-//					));
-//					
-//					dl.show();
-//					
 					if (mActivity.getMode() == Mode.Normal) {
 						mSelected.clear();
 						mSelected.add(holder.position);

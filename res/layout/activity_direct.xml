@@ -47,6 +47,17 @@
 		android:background="@color/bar_bg"
 		android:visibility="gone">
 
+		<ImageView
+			android:id="@+id/iv_back"
+			android:layout_width="42dp"
+			android:layout_height="42dp"
+			android:padding="10dp"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:scaleType="centerCrop"
+			android:background="@drawable/btn_trans"
+			android:src="@drawable/arrow_left" />
+
 		<TextView
 			android:id="@+id/tv_title"
 			android:layout_width="match_parent"
@@ -56,15 +67,14 @@
 			android:textColor="@color/main_text" />
 
 		<ImageView
-			android:id="@+id/iv_back"
+			android:id="@+id/iv_select"
 			android:layout_width="42dp"
 			android:layout_height="42dp"
 			android:padding="10dp"
 			android:layout_alignParentRight="true"
 			android:layout_centerVertical="true"
 			android:scaleType="centerCrop"
-			android:background="@drawable/btn_trans"
-			android:src="@drawable/arrow_left" />
+			android:background="@drawable/btn_trans" />
 	</RelativeLayout>
 
 	<LinearLayout
