@@ -20,6 +20,7 @@ import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 import android.app.Dialog;
@@ -266,7 +267,7 @@ public class DirectActivity extends BaseActivity {
 			
 			// 标题
 			if (mMode == Mode.Select) {
-				mTvTitle.setText(R.string.hint_multi_select_mode);
+				mTvTitle.setText(R.string.msg_multi_select_mode);
 				mLlPath.setVisibility(View.GONE);
 				mRlTitle.setVisibility(View.VISIBLE);
 			} else {
@@ -381,15 +382,7 @@ public class DirectActivity extends BaseActivity {
 		
 		// 更新文件列表
 		node.direct.loadChildrenAll();
-		mDirectAdapter.setData(node.direct.getChildren());
-		
-		final int POSITION = node.position;
-		AppUtil.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				mGvList.setSelection(POSITION);
-			}
-		});
+		mDirectAdapter.setData(node.direct.getChildren(), node.position);
 		
 		// 详情
 		mLlDetail.setVisibility(View.GONE);
@@ -418,7 +411,7 @@ public class DirectActivity extends BaseActivity {
 		
 		// 更新文件列表
 		mNode.direct.loadChildrenAll();
-		mDirectAdapter.setData(mNode.direct.getChildren());
+		mDirectAdapter.setData(mNode.direct.getChildren(), -1);
 		
 		// 信息
 		showInfo();
@@ -451,7 +444,7 @@ public class DirectActivity extends BaseActivity {
 		
 		if (leaf instanceof Direct) {
 			String[] children = file.list();
-			mTvDetailSize.setText(AppUtil.getString(R.string.hint_children_with_num,
+			mTvDetailSize.setText(AppUtil.getString(R.string.msg_children_with_num,
 					children == null ? 0 : children.length));
 		} else {
 			String num = String.valueOf(file.length());
@@ -472,10 +465,10 @@ public class DirectActivity extends BaseActivity {
 	
 	public void showInfo() {
 		if (mMode == Mode.Select) {
-			mTvInfoCount.setText(AppUtil.getString(R.string.hint_children_select_with_num,
+			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_select_with_num,
 				mDirectAdapter.getSelectedCount(), mNode.direct.getChildren().size()));
 		} else {
-			mTvInfoCount.setText(AppUtil.getString(R.string.hint_children_with_num,
+			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_with_num,
 					mNode.direct.getChildren().size()));
 		}
 	}
@@ -488,17 +481,25 @@ public class DirectActivity extends BaseActivity {
 			List<DataItem> list = new ArrayList<DataItem>();
 			dl.getAdapter().setDataList(list);
 			
-			list.add(new DataItem(R.drawable.add, R.string.word_add_direct, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.add, R.string.word_new_direct, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
 					final InputDialog id = new InputDialog(DirectActivity.this);
-					id.setMessage(R.string.hint_input_direct_name);
+					id.setMessage(R.string.msg_input_direct_name);
 					id.setClickListener(new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index) {
 							if (index == 1) {
-								File file = new File(mNode.direct.getPath(), id.getInput());
-								String err = FileUtil.createDirect(file.getPath());
+								String input = id.getInput();
+								File file = new File(mNode.direct.getPath(), input);
+								
+								String err = FileUtil.checkNewName(file, input);
+								if (err != null) {
+									Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+									return;
+								}
+								
+								err = FileUtil.createDirect(file);
 								if (err == null) {
 									err = AppUtil.getString(R.string.err_create_direct_success);
 								}
@@ -514,13 +515,49 @@ public class DirectActivity extends BaseActivity {
 				}
 			}));
 			
-			list.add(new DataItem(R.drawable.add, R.string.word_add_file, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.add, R.string.word_new_file, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
+					final InputDialog id = new InputDialog(DirectActivity.this);
+					id.setMessage(R.string.msg_input_file_name);
+					id.setClickListener(new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							if (index == 1) {
+								String input = id.getInput();
+								File file = new File(mNode.direct.getPath(), input);
+								
+								String err = FileUtil.checkNewName(file, input);
+								if (err != null) {
+									Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+									return;
+								}
+								
+								err = FileUtil.createFile(file);
+								if (err == null) {
+									err = AppUtil.getString(R.string.err_create_file_success);
+								}
+									
+								Toast.makeText(getApplicationContext(), err, Toast.LENGTH_SHORT).show();
+							}
+							
+							dialog.dismiss();
+							refreshDirect();
+						}
+					});
+					id.show();
 				}
 			}));
 			
 			dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
+		}
+	}
+	
+	public void setSelection(int position) {
+		Logger.print(null, position);
+		
+		if (position >= 0 && position < mNode.direct.getChildren().size()) {
+			mGvList.setSelection(position);
 		}
 	}
 	

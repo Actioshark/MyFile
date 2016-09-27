@@ -50,7 +50,7 @@ public class DirectAdapter extends BaseAdapter {
 		mActivity = activity;
 	}
 	
-	public void setData(final List<Leaf> data) {
+	public void setData(final List<Leaf> data, final int position) {
 		mMark = data;
 		
 		AppUtil.runOnNewThread(new Runnable() {
@@ -70,6 +70,12 @@ public class DirectAdapter extends BaseAdapter {
 							}
 							
 							notifyDataSetChanged();
+							
+							AppUtil.runOnUiThread(new Runnable() {
+								public void run() {
+									mActivity.setSelection(position);
+								}
+							});
 						}
 					}
 				});
@@ -158,7 +164,7 @@ public class DirectAdapter extends BaseAdapter {
 						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
 							SimpleDialog dialog = new SimpleDialog(mActivity);
 							dialog.setCanceledOnTouchOutside(true);
-							dialog.setMessage(R.string.hint_open_as);
+							dialog.setMessage(R.string.msg_open_as);
 							dialog.setButtons(new int[] {R.string.type_text, R.string.type_image,
 									R.string.type_audio, R.string.type_video});
 							dialog.setClickListener(new IDialogClickListener() {

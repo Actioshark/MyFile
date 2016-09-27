@@ -19,6 +19,10 @@ import kk.myfile.util.Setting;
 public class FileUtil {
 	private static JSONObject sTypeMap;
 	
+	private static final char[] ILLEGAL_FILE_NAME_CHAR = new char[] {
+		'/', '\0',
+	};
+	
 	public static void init(Context context) {
 		if (sTypeMap != null) {
 			return;
@@ -86,14 +90,27 @@ public class FileUtil {
 		return new String(buf, 0, off);
 	}
 	
-	public static String checkNewName(File parent, String name) {
-		// TODO
+	public static String checkNewName(File file, String name) {
+		if (name == null || name.length() < 1 || name.length() > 255) {
+			return AppUtil.getString(R.string.err_illegal_file_name_length);
+		}
+		
+		for (char ch : ILLEGAL_FILE_NAME_CHAR) {
+			if (name.contains(String.valueOf(ch))) {
+				return AppUtil.getString(R.string.err_illegal_file_name_char);
+			}
+		}
+		
+		if (file.exists()) {
+			return AppUtil.getString(R.string.err_file_exist);
+		}
+		
 		return null;
 	}
 	
-	public static String createDirect(String path) {
+	public static String createDirect(File file) {
 		try {
-			if (new File(path).mkdirs()) {
+			if (file.mkdirs()) {
 				return null;
 			}
 		} catch (Exception e) {
@@ -103,7 +120,15 @@ public class FileUtil {
 		return AppUtil.getString(R.string.err_create_direct_failed);
 	}
 	
-	public static boolean createFile(String path) {
-		return false;
+	public static String createFile(File file) {
+		try {
+			if (file.createNewFile()) {
+				return null;
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+		
+		return AppUtil.getString(R.string.err_create_file_failed);
 	}
 }
