@@ -7,6 +7,7 @@ import java.util.List;
 import kk.myfile.R;
 import kk.myfile.adapter.SelectAdapter;
 import kk.myfile.leaf.Direct;
+import kk.myfile.leaf.TempDirect;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
@@ -16,16 +17,26 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AbsListView.OnScrollListener;
 
 public class SelectActivity extends BaseActivity {
 	public static final String KEY_PATH = "select_path";
 	
-	private Direct mDirect;
-	private final List<Direct> mHistory = new ArrayList<Direct>();
+	public static class Node {
+		public Direct direct;
+		public int position = 0;
+		
+		public Node(Direct direct) {
+			this.direct = direct;
+		}
+	}
+	private Node mNode;
+	private final List<Node> mHistory = new ArrayList<Node>();
 	
 	private HorizontalScrollView mHsvPath;
 	private ViewGroup mVgPath;
@@ -51,6 +62,18 @@ public class SelectActivity extends BaseActivity {
 		mSelectAdapter = new SelectAdapter(this);
 		mLvList = (ListView) findViewById(R.id.lv_list);
 		mLvList.setAdapter(mSelectAdapter);
+		mLvList.setOnScrollListener(new OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int state) {
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int first, int visible, int total) {
+				if (mNode != null) {
+					mNode.position = first;
+				}
+			}
+		});
 		
 		View menu = findViewById(R.id.ll_menu);
 		
@@ -71,7 +94,7 @@ public class SelectActivity extends BaseActivity {
 			public void onClick(View view) {
 				Direct direct = mSelectAdapter.getSelected();
 				if (direct == null) {
-					direct = mDirect;
+					direct = mNode.direct;
 				}
 				
 				Intent intent = getIntent();
@@ -81,47 +104,53 @@ public class SelectActivity extends BaseActivity {
 			}
 		});
 		
-		showDirect(direct, false);
+		showDirect(new Node(direct), false);
 	}
 	
-	public void showDirect(Direct direct, boolean lastToHistory) {
+	public void showDirect(Node node, boolean lastToHistory) {
+		if (mNode != null && node.direct.getPath().equals(mNode.direct.getPath())) {
+			mNode = node;
+			refreshDirect();
+			return;
+		}
+		
 		// 合法性
 		try {
-			File file = direct.getFile();
+			File file = node.direct.getFile();
 			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			if (lastToHistory) {
+			if (mNode != null) {
 				App.showToast(R.string.err_file_read_error);
 			}
 			
-			if (mHistory.size() > 0) {
-				direct = mHistory.remove(mHistory.size() - 1);
+			if (mNode != null) {
 				return;
-			} else if (mDirect != null) {
-				return;
+			} else if (mHistory.size() > 0) {
+				node = mHistory.remove(mHistory.size() - 1);
 			} else {
-				direct = new Direct(Setting.DEFAULT_PATH);
+				node = new Node(new Direct(Setting.DEFAULT_PATH));
 			}
 		}
 		
 		// 加入历史
-		if (lastToHistory && mDirect != null) {
-			if (mHistory.size() > 0) {
-				Direct dir = mHistory.get(0);
-				if (dir.getPath().equals(mDirect.getPath()) == false) {
-					mHistory.add(mDirect);
+		if (lastToHistory && mNode != null && mNode.direct instanceof TempDirect == false) {
+			int size = mHistory.size();
+			if (size > 0) {
+				Node n = mHistory.get(size - 1);
+				if (mNode.direct.getPath().equals(n.direct.getPath()) == false) {
+					mHistory.add(mNode);
 				}
 			} else {
-				mHistory.add(mDirect);
+				mHistory.add(mNode);
 			}
 		}
 		
-		mDirect = direct;
-		
 		// 更新路径
-		String path = mDirect.getPath();
+		mNode = node;
+		
+		String path = node.direct.getPath();
 		final String[] nodes;
 		String[] temp = path.split("/");
 		if (temp.length > 0) {
@@ -147,7 +176,7 @@ public class SelectActivity extends BaseActivity {
 						sb.append('/').append(nodes[i]);
 					}
 					
-					showDirect(new Direct(sb.toString()), true);
+					showDirect(new Node(new Direct(sb.toString())), true);
 				}
 			});
 			
@@ -165,15 +194,14 @@ public class SelectActivity extends BaseActivity {
 		});
 		
 		// 更新文件列表
-		mDirect.loadChildrenAll();
-		mSelectAdapter.setData(mDirect.getChildren());
-		mSelectAdapter.notifyDataSetChanged();
+		node.direct.loadChildrenAll();
+		mSelectAdapter.setData(node.direct.getChildren(), node.position);
 	}
 	
-	public void refresh() {
+	public void refreshDirect() {
 		// 合法性
 		try {
-			File file = mDirect.getFile();
+			File file = mNode.direct.getFile();
 			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
 				throw new Exception();
 			}
@@ -181,34 +209,44 @@ public class SelectActivity extends BaseActivity {
 			App.showToast(R.string.err_file_read_error);
 			
 			if (mHistory.size() > 0) {
-				mDirect = mHistory.remove(mHistory.size() - 1);
-				return;
-			} else if (mDirect != null) {
-				return;
+				mNode = mHistory.remove(mHistory.size() - 1);
 			} else {
-				mDirect = new Direct(Setting.DEFAULT_PATH);
+				mNode = new Node(new Direct(Setting.DEFAULT_PATH));
 			}
 		}
 		
 		// 更新文件列表
-		mDirect.loadChildrenAll();
-		mSelectAdapter.setData(mDirect.getChildren());
-		mSelectAdapter.notifyDataSetChanged();
+		mNode.direct.loadChildrenAll();
+		mSelectAdapter.setData(mNode.direct.getChildren(), -1);
+	}
+	
+	public boolean backDirect() {
+		if (mHistory.size() > 0) {
+			Node node = mHistory.remove(mHistory.size() - 1);
+			showDirect(node, false);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void setSelection(int position) {
+		if (position >= 0 && position < mSelectAdapter.getCount()) {
+			mLvList.setSelection(position);
+		}
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		refresh();
+		refreshDirect();
 	}
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			int size = mHistory.size();
-			if (size > 0) {
-				showDirect(mHistory.remove(size - 1), false);
+			if (backDirect()) {
 				return true;
 			}
 		}

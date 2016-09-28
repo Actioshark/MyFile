@@ -23,6 +23,7 @@ import kk.myfile.ui.InputDialog;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -672,7 +673,7 @@ public class DirectActivity extends BaseActivity {
 	}
 	
 	public void setSelection(int position) {
-		if (position >= 0 && position < mNode.direct.getChildren().size()) {
+		if (position >= 0 && position < mDirectAdapter.getCount()) {
 			mGvList.setSelection(position);
 		}
 	}
