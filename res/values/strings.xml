@@ -10,7 +10,9 @@
 	<string name="word_detail">Detail</string>
 	<string name="word_share">Share</string>
 	<string name="word_copy">Copy</string>
+	<string name="word_copy_to">Copy To</string>
 	<string name="word_cut">Cut</string>
+	<string name="word_cut_to">Cut To</string>
 	<string name="word_refresh">Refresh</string>
 	<string name="word_new_direct">New Directory</string>
 	<string name="word_new_file">New File</string>
