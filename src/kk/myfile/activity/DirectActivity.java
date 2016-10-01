@@ -6,25 +6,23 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import kk.myfile.R;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.adapter.DownListAdapter.DataItem;
+import kk.myfile.file.Tree;
+import kk.myfile.file.Tree.ProgressCallback;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.TempDirect;
-import kk.myfile.tree.FileUtil;
-import kk.myfile.tree.Tree;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
-import kk.myfile.ui.InputDialog;
-import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -47,6 +45,9 @@ import android.widget.TextView;
 
 public class DirectActivity extends BaseActivity {
 	public static final String KEY_PATH = "direct_path";
+	
+	public static final int REQ_COPY_TO = 1;
+	public static final int REQ_CUT_TO = 1;
 	
 	public static class Node {
 		public Direct direct;
@@ -498,74 +499,46 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.cross, R.string.word_delete, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					SimpleDialog sd = new SimpleDialog(DirectActivity.this);
-					sd.setMessage(AppUtil.getString(R.string.msg_delete_file_confirm,
-							selected.size()));
-					sd.setButtons(new int[] {R.string.word_cancel, R.string.word_confirm});
-					sd.setClickListener(new IDialogClickListener() {
+					Tree.delete(DirectActivity.this, selected, new ProgressCallback() {
 						@Override
-						public void onClick(Dialog dialog, int index) {
-							if (index == 1) {
-								final SimpleDialog sd = new SimpleDialog(DirectActivity.this);
-								sd.setMessage(AppUtil.getString(R.string.msg_delete_file_progress,
-										0, selected.size(), 0, 0));
-								sd.setButtons(new int[] {R.string.word_cancel});
-								sd.setClickListener(new IDialogClickListener() {
-									@Override
-									public void onClick(Dialog dialog, int index) {
-										dialog.dismiss();
-									}
-								});
-								sd.setCanceledOnTouchOutside(false);
-								sd.show();
-					
-								AppUtil.runOnNewThread(new Runnable() {
-									public void run() {
-										final AtomicInteger success = new AtomicInteger(0);
-										final AtomicInteger failed = new AtomicInteger(0);
-										
-										for (Leaf leaf : selected) {
-											String err = FileUtil.delete(leaf.getFile());
-											if (err == null) {
-												success.addAndGet(1);
-											} else {
-												failed.addAndGet(1);
-											}
-											
-											if (sd.isShowing() == false) {
-												return;
-											}
-												
-											AppUtil.runOnUiThread(new Runnable() {
-												@Override
-												public void run() {
-													if (sd.isShowing()) {
-														int s = success.get();
-														int f = failed.get();
-														int t = selected.size();
-														
-														sd.setMessage(AppUtil.getString(
-															R.string.msg_delete_file_progress,
-															s + f, t, s, f));
-														
-														if (s + f >= t) {
-															sd.setButtons(new int[] {R.string.word_confirm});
-														}
-													}
-													
-													refreshDirect();
-												}
-											});
-										}
-									}
-								});
-							}
-							
-							dialog.dismiss();
+						public void onConfirm() {
 							setMode(Mode.Normal);
 						}
+						
+						@Override
+						public void onFinish() {
+							refreshDirect();
+						}
 					});
-					sd.show();
+				}
+			}));
+			
+			list.add(new DataItem(R.drawable.copy, R.string.word_copy_to, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
+					startActivityForResult(intent, REQ_COPY_TO);
+				}
+			}));
+			
+			list.add(new DataItem(R.drawable.copy, R.string.word_copy, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					
+				}
+			}));
+			
+			list.add(new DataItem(R.drawable.cut, R.string.word_cut_to, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					
+				}
+			}));
+			
+			list.add(new DataItem(R.drawable.cut, R.string.word_cut, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					
 				}
 			}));
 			
@@ -581,90 +554,24 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.add, R.string.word_new_direct, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					final InputDialog id = new InputDialog(DirectActivity.this);
-					id.setMessage(R.string.msg_input_direct_name);
-					
-					String name = "";
-					for (int i = 1; i < 1000; i++) {
-						String tmp = AppUtil.getString(R.string.def_direct_name, i);
-						String err = FileUtil.checkNewName(mNode.direct.getPath(), tmp);
-						if (err == null) {
-							name = tmp;
-							break;
-						}
-					}
-					id.setInput(name);
-					id.setSelection(name.length());
-					
-					id.setClickListener(new IDialogClickListener() {
+					Tree.createDirect(DirectActivity.this, mNode.direct.getPath(), new ProgressCallback() {
 						@Override
-						public void onClick(Dialog dialog, int index) {
-							if (index == 1) {
-								String input = id.getInput();
-								String err = FileUtil.checkNewName(mNode.direct.getPath(), input);
-								if (err != null) {
-									App.showToast(err);
-									return;
-								}
-								
-								err = FileUtil.createDirect(new File(mNode.direct.getPath(), input));
-								if (err == null) {
-									err = AppUtil.getString(R.string.err_create_direct_success);
-								}
-									
-								App.showToast(err);
-							}
-							
-							dialog.dismiss();
+						public void onFinish() {
 							refreshDirect();
 						}
 					});
-					id.show();
 				}
 			}));
 			
 			list.add(new DataItem(R.drawable.add, R.string.word_new_file, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					final InputDialog id = new InputDialog(DirectActivity.this);
-					id.setMessage(R.string.msg_input_file_name);
-					
-					String name = "";
-					for (int i = 1; i < 1000; i++) {
-						String tmp = AppUtil.getString(R.string.def_file_name, i);
-						String err = FileUtil.checkNewName(mNode.direct.getPath(), tmp);
-						if (err == null) {
-							name = tmp;
-							break;
-						}
-					}
-					id.setInput(name);
-					id.setSelection(name.length());
-					
-					id.setClickListener(new IDialogClickListener() {
+					Tree.createFile(DirectActivity.this, mNode.direct.getPath(), new ProgressCallback() {
 						@Override
-						public void onClick(Dialog dialog, int index) {
-							if (index == 1) {
-								String input = id.getInput();
-								String err = FileUtil.checkNewName(mNode.direct.getPath(), input);
-								if (err != null) {
-									App.showToast(err);
-									return;
-								}
-								
-								err = FileUtil.createDirect(new File(mNode.direct.getPath(), input));
-								if (err == null) {
-									err = AppUtil.getString(R.string.err_create_file_success);
-								}
-
-								App.showToast(err);
-							}
-							
-							dialog.dismiss();
+						public void onFinish() {
 							refreshDirect();
 						}
 					});
-					id.show();
 				}
 			}));
 		}
@@ -700,5 +607,30 @@ public class DirectActivity extends BaseActivity {
 		}
 		
 		return super.onKeyUp(keyCode, event);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if (resultCode != RESULT_OK) {
+			return;
+		}
+		
+		String path = data.getStringExtra(SelectActivity.KEY_PATH);
+		
+		if (requestCode == REQ_COPY_TO) {
+			Tree.copy(this, mDirectAdapter.getSelected(), path,
+				new ProgressCallback() {
+					@Override
+					public void onFinish() {
+						setMode(Mode.Normal);
+						refreshDirect();
+					}
+				}
+			);
+		} else if (requestCode == REQ_CUT_TO) {
+			
+		}
 	}
 }

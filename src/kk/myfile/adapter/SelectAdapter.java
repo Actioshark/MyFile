@@ -6,12 +6,11 @@ import java.util.List;
 import kk.myfile.R;
 import kk.myfile.activity.SelectActivity;
 import kk.myfile.activity.SelectActivity.Node;
+import kk.myfile.file.Sorter;
+import kk.myfile.file.Sorter.Classify;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
-import kk.myfile.tree.Sorter;
-import kk.myfile.tree.Sorter.Classify;
 import kk.myfile.util.AppUtil;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;

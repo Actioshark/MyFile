@@ -29,6 +29,9 @@
 	<string name="msg_delete_file_progress">Deleting %1$d/%2$d files\n\n%3$d success\n%4$d
 		failed
 	</string>
+	<string name="msg_copy_file_progress">Copying %1$d/%2$d files\n\n%3$d success\n%4$d
+		failed
+	</string>
 
 	<string name="err_illegal_file_name_char">Illegal characters!</string>
 	<string name="err_illegal_file_name_length">Length must be 1 to 255</string>
@@ -70,7 +73,7 @@
 	<string name="list_style_2_2">List Middle</string>
 	<string name="list_style_2_3">List Big</string>
 
-	<string name="def_file_name">File%03d</string>
-	<string name="def_direct_name">Directory%03d</string>
+	<string name="def_file_name">File_%03d</string>
+	<string name="def_direct_name">Directory_%03d</string>
 
 </resources>

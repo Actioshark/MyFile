@@ -1,4 +1,4 @@
-package kk.myfile.tree;
+package kk.myfile.file;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +54,10 @@ public class Sorter {
 		@Override
 		public SortFactor clone() {
 			SortFactor temp = createFactor(type.name());
+			if (temp == null) {
+				temp = new SortFactorDirectory();
+			}
+			
 			temp.up = up;
 
 			return temp;
@@ -193,13 +197,9 @@ public class Sorter {
 
 		try {
 			factor = (SortFactor) Class.forName(
-					"kk.myfile.tree.Sorter$SortFactor" + type).newInstance();
+					"kk.myfile.file.Sorter$SortFactor" + type).newInstance();
 		} catch (Exception e) {
 			Logger.print(null, e, type);
-		}
-
-		if (factor == null) {
-			factor = new SortFactorPath();
 		}
 
 		return factor;
@@ -274,12 +274,14 @@ public class Sorter {
 					boolean up = jo.getBoolean("up");
 
 					SortFactor factor = createFactor(type);
-					factor.up = up;
-
-					for (int j = 0; j < array.length; j++) {
-						if (array[j] != null && array[j].type == factor.type) {
-							list.add(factor);
-							array[j] = null;
+					if (factor != null) {
+						factor.up = up;
+	
+						for (int j = 0; j < array.length; j++) {
+							if (array[j] != null && array[j].type == factor.type) {
+								list.add(factor);
+								array[j] = null;
+							}
 						}
 					}
 				}

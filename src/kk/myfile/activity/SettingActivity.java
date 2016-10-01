@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import kk.myfile.R;
-import kk.myfile.tree.Sorter.Classify;
+import kk.myfile.file.Sorter.Classify;
 
 public class SettingActivity extends BaseActivity {
 	@Override

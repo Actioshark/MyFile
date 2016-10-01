@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kk.myfile.R;
-import kk.myfile.tree.Sorter;
-import kk.myfile.tree.Sorter.Classify;
-import kk.myfile.tree.Sorter.SortFactor;
+import kk.myfile.file.Sorter;
+import kk.myfile.file.Sorter.Classify;
+import kk.myfile.file.Sorter.SortFactor;
 import kk.myfile.util.AppUtil;
 import android.os.Bundle;
 import android.view.KeyEvent;

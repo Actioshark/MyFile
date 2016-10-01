@@ -1,7 +1,10 @@
-package kk.myfile.tree;
+package kk.myfile.file;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 
 import org.json.JSONObject;
@@ -162,6 +165,28 @@ public class FileUtil {
 			}
 			
 			return file.delete() && suc;
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+		
+		return false;
+	}
+	
+	public static boolean write(File from, File to) {
+		try {
+			InputStream is = new FileInputStream(from);
+			OutputStream os = new FileOutputStream(to);
+			byte[] buf = new byte[1024 * 1024];
+			int len = 0;
+			
+			while ((len = is.read(buf)) != -1) {
+				os.write(buf, 0, len);
+			}
+			
+			is.close();
+			os.close();
+			
+			return true;
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}

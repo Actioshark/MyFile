@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kk.myfile.R;
-import kk.myfile.tree.FileUtil;
-import kk.myfile.tree.Tree;
+import kk.myfile.file.FileUtil;
+import kk.myfile.file.Tree;
 
 public class Direct extends Leaf {
 	protected final List<Leaf> mChildren = new ArrayList<Leaf>();

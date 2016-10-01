@@ -215,28 +215,26 @@ public class MainActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if (requestCode == REQ_SELECT_PATH) {
-			if (data != null) {
-				int index = data.getIntExtra(KEY_INDEX, -1);
-				String path = data.getStringExtra(SelectActivity.KEY_PATH);
-				try {
-					File file = new File(path);
-					if (file.exists() == false || file.isDirectory() == false) {
-						throw new Exception();
-					}
-				} catch (Exception e) {
-					App.showToast(R.string.err_path_not_valid);
-					return;
+			int index = data.getIntExtra(KEY_INDEX, -1);
+			String path = data.getStringExtra(SelectActivity.KEY_PATH);
+			try {
+				File file = new File(path);
+				if (file.exists() == false || file.isDirectory() == false) {
+					throw new Exception();
 				}
-				
-				if (index >= 0 && index < mPaths.size()) {
-					mPaths.set(index, path);
-				} else {
-					mPaths.add(path);
-				}
-				
-				Setting.setDefPath(mPaths);
-				refreshPath();
+			} catch (Exception e) {
+				App.showToast(R.string.err_path_not_valid);
+				return;
 			}
+			
+			if (index >= 0 && index < mPaths.size()) {
+				mPaths.set(index, path);
+			} else {
+				mPaths.add(path);
+			}
+			
+			Setting.setDefPath(mPaths);
+			refreshPath();
 		}
 	}
 }
