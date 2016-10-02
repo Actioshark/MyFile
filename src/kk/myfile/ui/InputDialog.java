@@ -2,6 +2,8 @@ package kk.myfile.ui;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -58,6 +60,14 @@ public class InputDialog extends Dialog {
 		});
 		
 		setCanceledOnTouchOutside(true);
+		setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface di) {
+				if (mClickListener != null) {
+					mClickListener.onClick(InputDialog.this, -1);
+				}
+			}
+		});
 		
 		window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
             WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

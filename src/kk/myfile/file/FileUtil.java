@@ -138,6 +138,18 @@ public class FileUtil {
 		return AppUtil.getString(R.string.err_create_file_failed);
 	}
 	
+	public static String rename(File o, File n) {
+		try {
+			if (o.renameTo(n)) {
+				return null;
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+		
+		return AppUtil.getString(R.string.err_rename_file_failed);
+	}
+	
 	public static String delete(File file) {
 		try {
 			List<File> list = new ArrayList<File>();

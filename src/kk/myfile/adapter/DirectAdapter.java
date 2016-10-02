@@ -128,6 +128,7 @@ public class DirectAdapter extends BaseAdapter {
 		}
 		
 		mActivity.showTitle();
+		mActivity.showInfo();
 		notifyDataSetChanged();
 	}
 

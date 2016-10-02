@@ -117,13 +117,17 @@ public class Tree {
 					}
 						
 					App.showToast(err);
+					
+					if (cb != null) {
+						cb.onFinish();
+					}
+				} else {
+					if (cb != null) {
+						cb.onCancel();
+					}
 				}
 				
 				dialog.dismiss();
-				
-				if (cb != null) {
-					cb.onFinish();
-				}
 			}
 		});
 		id.show();
@@ -162,16 +166,67 @@ public class Tree {
 					}
 
 					App.showToast(err);
+					
+					if (cb != null) {
+						cb.onFinish();
+					}
+				} else {
+					if (cb != null) {
+						cb.onCancel();
+					}
 				}
 				
 				dialog.dismiss();
-				
-				if (cb != null) {
-					cb.onFinish();
-				}
 			}
 		});
 		id.show();
+	}
+	
+	public static void rename(Context context, final File file, final ProgressCallback cb) {
+		try {
+			final InputDialog id = new InputDialog(context);
+			id.setMessage(file.isDirectory() ? R.string.msg_input_direct_name
+					: R.string.msg_input_file_name);
+			
+			final String parent = file.getParent();
+			String name = file.getName();
+			id.setInput(name);
+			id.setSelection(name.length());
+			
+			id.setClickListener(new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					if (index == 1) {
+						String input = id.getInput();
+						String err = FileUtil.checkNewName(parent, input);
+						if (err != null) {
+							App.showToast(err);
+							return;
+						}
+						
+						err = FileUtil.rename(file, new File(parent, input));
+						if (err == null) {
+							err = AppUtil.getString(R.string.err_rename_file_success);
+						}
+	
+						App.showToast(err);
+						
+						if (cb != null) {
+							cb.onFinish();
+						}
+					} else {
+						if (cb != null) {
+							cb.onCancel();
+						}
+					}
+					
+					dialog.dismiss();
+				}
+			});
+			id.show();
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
 	}
 	
 	public static void delete(final Context context, final List<Leaf> list, final ProgressCallback cb) {
@@ -269,21 +324,20 @@ public class Tree {
 			final AtomicInteger suc, final AtomicInteger fai, final ProgressCallback cb,
 			final boolean delete) {
 		
-		try {
-			final int size = fps.size();
-			for (int i = fpi; i < size; i++) {
-				if (stop.get()) {
-					return;
-				}
-				
-				final FilePair fp = fps.get(i);
-				
-				int ext = exist.get();
-				
-				if (ext != 1 && ext != 3) {
-					exist.set(-1);
-				}
-				
+		final int size = fps.size();
+		for (int i = fpi; i < size; i++) {
+			if (stop.get()) {
+				return;
+			}
+			
+			final FilePair fp = fps.get(i);
+			
+			int ext = exist.get();
+			if (ext != 1 && ext != 3) {
+				exist.set(-1);
+			}
+			
+			try {
 				if (fp.to.exists()) {
 					switch (ext) {
 					case 0:
@@ -416,30 +470,30 @@ public class Tree {
 						}
 					}
 				});
+			} catch (Exception e) {
+				Logger.print(null, e);
 			}
+		}
 			
-			if (delete) {
-				for (int i = fps.size() - 1; i >= 0; i--) {
-					FilePair fp = fps.get(i);
-					
-					try {
-						if (fp.delete) {
-							if (fp.from.isDirectory()) {
-								String[] children = fp.from.list();
-								if (children == null || children.length < 1) {
-									FileUtil.delete(fp.from);
-								}
-							} else {
+		if (delete) {
+			for (int i = fps.size() - 1; i >= 0; i--) {
+				FilePair fp = fps.get(i);
+				
+				try {
+					if (fp.delete) {
+						if (fp.from.isDirectory()) {
+							String[] children = fp.from.list();
+							if (children == null || children.length < 1) {
 								FileUtil.delete(fp.from);
 							}
+						} else {
+							FileUtil.delete(fp.from);
 						}
-					} catch (Exception e) {
-						Logger.print(null, e);
 					}
+				} catch (Exception e) {
+					Logger.print(null, e);
 				}
 			}
-		} catch (Exception e) {
-			Logger.print(null, e);
 		}
 	}
 	

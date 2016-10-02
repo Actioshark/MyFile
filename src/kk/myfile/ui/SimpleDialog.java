@@ -2,6 +2,7 @@ package kk.myfile.ui;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
@@ -49,6 +50,14 @@ public class SimpleDialog extends Dialog {
 		}
 		
 		setCanceledOnTouchOutside(true);
+		setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface di) {
+				if (mClickListener != null) {
+					mClickListener.onClick(SimpleDialog.this, -1);
+				}
+			}
+		});
 	}
 
 	public void setMessage(int resId) {

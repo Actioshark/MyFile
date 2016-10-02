@@ -513,6 +513,23 @@ public class DirectActivity extends BaseActivity {
 				return;
 			}
 			
+			if (mDirectAdapter.getSelectedCount() == 1) {
+				list.add(new DataItem(R.drawable.edit, R.string.word_rename, new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						Tree.rename(DirectActivity.this, mDirectAdapter.getSelected().get(0).getFile(),
+							new ProgressCallback() {
+								@Override
+								public void onFinish() {
+									setMode(Mode.Normal);
+									refreshDirect();
+								}
+							}
+						);
+					}
+				}));
+			}
+			
 			list.add(new DataItem(R.drawable.cross, R.string.word_delete, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
