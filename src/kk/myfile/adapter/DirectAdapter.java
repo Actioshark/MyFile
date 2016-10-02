@@ -220,6 +220,16 @@ public class DirectAdapter extends BaseAdapter {
 						mSelected.clear();
 						mSelected.add(holder.position);
 						mActivity.setMode(Mode.Select);
+					} else {
+						if (mSelected.contains(holder.position)) {
+							mSelected.remove(holder.position);
+						} else {
+							mSelected.add(holder.position);
+						}
+						
+						mActivity.showTitle();
+						mActivity.showInfo();
+						notifyDataSetChanged();
 					}
 					
 					return true;

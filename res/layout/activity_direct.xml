@@ -120,7 +120,8 @@
 			android:layout_height="match_parent"
 			android:horizontalSpacing="1dp"
 			android:verticalSpacing="1dp"
-			android:background="@color/main_bg" />
+			android:background="@color/main_bg"
+			android:listSelector="@null" />
 
 		<LinearLayout
 			android:id="@+id/ll_detail"
