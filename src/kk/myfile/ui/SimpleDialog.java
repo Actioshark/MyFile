@@ -12,7 +12,7 @@ import kk.myfile.util.AppUtil;
 
 public class SimpleDialog extends Dialog {
 	private TextView mTvMessage;
-	private final TextView[] mTvButtons = new TextView[4];
+	private final TextView[] mTvButtons = new TextView[5];
 
 	private IDialogClickListener mClickListener;
 

@@ -183,7 +183,7 @@ public class DirectAdapter extends BaseAdapter {
 							dialog.setCanceledOnTouchOutside(true);
 							dialog.setMessage(R.string.msg_open_as);
 							dialog.setButtons(new int[] {R.string.type_text, R.string.type_image,
-									R.string.type_audio, R.string.type_video});
+									R.string.type_audio, R.string.type_video, R.string.word_any});
 							dialog.setClickListener(new IDialogClickListener() {
 								@Override
 								public void onClick(Dialog dialog, int index) {
@@ -202,6 +202,10 @@ public class DirectAdapter extends BaseAdapter {
 										
 									case 3:
 										IntentUtil.view(mActivity, holder.leaf, Video.TYPE);
+										break;
+									
+									case 4:
+										IntentUtil.view(mActivity, holder.leaf, "*/*");
 										break;
 									}
 									

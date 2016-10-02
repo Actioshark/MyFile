@@ -67,6 +67,17 @@
 			android:textSize="15sp"
 			android:textColor="@color/main_text" />
 
+		<TextView
+			android:id="@+id/tv_btn_4"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:layout_marginLeft="3dp"
+			android:background="@drawable/btn_bar"
+			android:textSize="15sp"
+			android:textColor="@color/main_text" />
+
 	</LinearLayout>
 
 </LinearLayout>
