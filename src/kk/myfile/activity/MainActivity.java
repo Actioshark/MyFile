@@ -215,6 +215,10 @@ public class MainActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if (requestCode == REQ_SELECT_PATH) {
+			if (data == null) {
+				return;
+			}
+			
 			int index = data.getIntExtra(KEY_INDEX, -1);
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			try {
