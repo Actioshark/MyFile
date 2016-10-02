@@ -22,6 +22,7 @@ import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -555,6 +556,8 @@ public class DirectActivity extends BaseActivity {
 				@Override
 				public void onClick(Dialog dialog, int index) {
 					ClipPad.setClip(ClipPad.Mode.Copy, mDirectAdapter.getSelected());
+					App.showToast(R.string.msg_enter_target_direct_and_paste);
+					setMode(Mode.Normal);
 				}
 			}));
 			
@@ -570,11 +573,36 @@ public class DirectActivity extends BaseActivity {
 				@Override
 				public void onClick(Dialog dialog, int index) {
 					ClipPad.setClip(ClipPad.Mode.Cut, mDirectAdapter.getSelected());
+					App.showToast(R.string.msg_enter_target_direct_and_paste);
+					setMode(Mode.Normal);
 				}
 			}));
 			
 			dl.show();
 		} else {
+			if (ClipPad.size() > 0) {
+				list.add(new DataItem(R.drawable.paste, R.string.word_paste, new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						if (ClipPad.size() > 0) {
+							Tree.carry(DirectActivity.this, ClipPad.getClip(),
+								mNode.direct.getPath(), ClipPad.getMode() == ClipPad.Mode.Cut,
+								new IProgressCallback() {
+									@Override
+									public void onProgress(ProgressType type) {
+										refreshDirect();
+										
+										if (type == Tree.ProgressType.Finish) {
+											ClipPad.clear();
+										}
+									}
+								}
+							);
+						}
+					}
+				}));
+			}
+			
 			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {

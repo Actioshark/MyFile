@@ -16,6 +16,7 @@
 	<string name="word_copy_to">Copy To</string>
 	<string name="word_cut">Cut</string>
 	<string name="word_cut_to">Cut To</string>
+	<string name="word_paste">Paste</string>
 	<string name="word_refresh">Refresh</string>
 	<string name="word_skip">Skip</string>
 	<string name="word_skip_all">Skip All</string>
@@ -35,6 +36,7 @@
 	<string name="msg_delete_file_progress">Deleting %1$d/%2$d files\n\n%3$d success\n%4$d
 		failed
 	</string>
+	<string name="msg_enter_target_direct_and_paste">Enter target directory and PASTE</string>
 	<string name="msg_copy_file_progress">Copying %1$d/%2$d files\n\n%3$d success\n%4$d
 		failed
 	</string>

@@ -445,15 +445,16 @@ public class Tree {
 						
 						int msg = delete ? R.string.msg_cut_file_progress :
 								R.string.msg_copy_file_progress;
+						int s = suc.get();
+						int f = fai.get();
 						
-						pg.setMessage(AppUtil.getString(msg, suc.get() + fai.get(),
-								size, suc.get(), fai.get()));
+						pg.setMessage(AppUtil.getString(msg, s + f, size, s, f));
 						
 						if (cb != null) {
 							cb.onProgress(ProgressType.Progress);
 						}
 						
-						if (suc.get() + fai.get() >= size) {
+						if (s + f >= size) {
 							stop.set(true);
 							
 							pg.setButtons(new int[] {R.string.word_confirm});

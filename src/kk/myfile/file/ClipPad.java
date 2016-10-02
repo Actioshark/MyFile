@@ -38,4 +38,9 @@ public class ClipPad {
 	public static synchronized int size() {
 		return sList.size();
 	}
+	
+	public static synchronized void clear() {
+		sMode = null;
+		sList.clear();
+	}
 }
