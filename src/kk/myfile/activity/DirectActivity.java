@@ -643,13 +643,13 @@ public class DirectActivity extends BaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		
-		if (resultCode != RESULT_OK) {
-			return;
-		}
-		
-		String path = data.getStringExtra(SelectActivity.KEY_PATH);
-		
 		if (requestCode == REQ_COPY_TO) {
+			if (resultCode != RESULT_OK || data == null) {
+				return;
+			}
+			
+			String path = data.getStringExtra(SelectActivity.KEY_PATH);
+			
 			Tree.copy(this, mDirectAdapter.getSelected(), path,
 				new ProgressCallback() {
 					@Override
