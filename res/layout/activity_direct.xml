@@ -108,26 +108,57 @@
 			android:visibility="gone" />
 	</LinearLayout>
 
-	<FrameLayout
+	<GridView
+		android:id="@+id/gv_list"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
+		android:layout_marginTop="@dimen/main_gap"
+		android:horizontalSpacing="1dp"
+		android:verticalSpacing="1dp"
+		android:background="@color/main_bg"
+		android:listSelector="@null" />
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
 		android:layout_marginTop="@dimen/main_gap">
 
-		<GridView
-			android:id="@+id/gv_list"
+		<LinearLayout
+			android:id="@+id/ll_info"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:horizontalSpacing="1dp"
-			android:verticalSpacing="1dp"
-			android:background="@color/main_bg"
-			android:listSelector="@null" />
+			android:background="@color/bar_bg"
+			android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/tv_count"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:paddingLeft="5dp"
+				android:paddingRight="5dp"
+				android:gravity="left|center_vertical"
+				android:singleLine="true"
+				android:ellipsize="middle"
+				android:textSize="13sp"
+				android:textColor="@color/main_text_color" />
+
+			<ImageView
+				android:id="@+id/iv_menu"
+				android:layout_width="40dp"
+				android:layout_height="40dp"
+				android:padding="5dp"
+				android:scaleType="centerInside"
+				android:background="@drawable/btn_trans"
+				android:src="@drawable/menu" />
+
+		</LinearLayout>
 
 		<LinearLayout
 			android:id="@+id/ll_detail"
 			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_gravity="center_vertical|bottom"
+			android:layout_height="match_parent"
 			android:background="@color/bar_bg"
 			android:orientation="horizontal"
 			android:alpha="0">
@@ -197,38 +228,5 @@
 				</LinearLayout>
 			</LinearLayout>
 		</LinearLayout>
-
 	</FrameLayout>
-
-	<LinearLayout
-		android:id="@+id/ll_info"
-		android:layout_width="match_parent"
-		android:layout_height="40dp"
-		android:layout_marginTop="@dimen/main_gap"
-		android:background="@color/bar_bg"
-		android:orientation="horizontal">
-
-		<TextView
-			android:id="@+id/tv_count"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:paddingLeft="5dp"
-			android:paddingRight="5dp"
-			android:gravity="left|center_vertical"
-			android:singleLine="true"
-			android:ellipsize="middle"
-			android:textSize="13sp"
-			android:textColor="@color/main_text_color" />
-
-		<ImageView
-			android:id="@+id/iv_menu"
-			android:layout_width="40dp"
-			android:layout_height="40dp"
-			android:padding="5dp"
-			android:scaleType="centerInside"
-			android:background="@drawable/btn_trans"
-			android:src="@drawable/menu" />
-
-	</LinearLayout>
 </LinearLayout>
