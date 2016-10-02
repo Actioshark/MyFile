@@ -80,9 +80,25 @@ public class DirectActivity extends BaseActivity {
 	private DirectAdapter mDirectAdapter;
 	
 	private View mLlDetail;
+	private ImageView mIvDetailIcon;
 	private TextView mTvDetailName;
 	private TextView mTvDetailTime;
 	private TextView mTvDetailSize;
+	private long mDetailShowPoint = 0;
+	private Runnable mDetailRun = new Runnable() {
+		@Override
+		public void run() {
+			long duration = SystemClock.elapsedRealtime() - mDetailShowPoint - 2000;
+			
+			if (duration > 1000) {
+				mLlDetail.setAlpha(0);
+			} else if (duration < 0) {
+				mLlDetail.setAlpha(1);
+			} else {
+				mLlDetail.setAlpha(1 - duration / 1000f);
+			}
+		}
+	};
 	
 	private View mLlInfo;
 	private TextView mTvInfoCount;
@@ -233,6 +249,7 @@ public class DirectActivity extends BaseActivity {
 		
 		// 详情
 		mLlDetail = findViewById(R.id.ll_detail);
+		mIvDetailIcon = (ImageView) mLlDetail.findViewById(R.id.iv_icon);
 		mTvDetailName = (TextView) mLlDetail.findViewById(R.id.tv_name);
 		mTvDetailTime = (TextView) mLlDetail.findViewById(R.id.tv_time);
 		mTvDetailSize = (TextView) mLlDetail.findViewById(R.id.tv_size);
@@ -383,9 +400,6 @@ public class DirectActivity extends BaseActivity {
 		node.direct.loadChildrenAll();
 		mDirectAdapter.setData(node.direct.getChildren(), node.position);
 		
-		// 详情
-		mLlDetail.setVisibility(View.GONE);
-		
 		// 信息
 		showInfo();
 	}
@@ -447,6 +461,8 @@ public class DirectActivity extends BaseActivity {
 	public void showDetail(Leaf leaf) {
 		File file = leaf.getFile();
 		
+		mIvDetailIcon.setImageResource(leaf.getIcon());
+		
 		mTvDetailName.setText(file.getName());
 		
 		Date date = new Date(file.lastModified());
@@ -471,7 +487,7 @@ public class DirectActivity extends BaseActivity {
 			mTvDetailSize.setText(String.format(Setting.LOCALE, "%s B", sb.toString()));
 		}
 		
-		mLlDetail.setVisibility(View.VISIBLE);
+		mDetailShowPoint = SystemClock.elapsedRealtime();
 	}
 	
 	public void showInfo() {
@@ -590,6 +606,15 @@ public class DirectActivity extends BaseActivity {
 		super.onResume();
 		
 		refreshDirect();
+		
+		AppUtil.runOnUiThread(mDetailRun, 20, 20);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		AppUtil.removeUiThread(mDetailRun);
 	}
 	
 	@Override

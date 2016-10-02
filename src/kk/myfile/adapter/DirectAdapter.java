@@ -156,8 +156,7 @@ public class DirectAdapter extends BaseAdapter {
 							mActivity.showDetail(holder.leaf);
 						}
 						
-						view.onTouchEvent(event);
-						return true;
+						return view.onTouchEvent(event);
 					}
 				});
 			}
