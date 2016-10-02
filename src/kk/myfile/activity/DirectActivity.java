@@ -21,8 +21,8 @@ import kk.myfile.leaf.TempDirect;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -513,6 +513,17 @@ public class DirectActivity extends BaseActivity {
 				App.showToast(R.string.err_nothing_selected);
 				return;
 			}
+			
+			list.add(new DataItem(R.drawable.share, R.string.word_share, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					if (IntentUtil.share(DirectActivity.this, mDirectAdapter.getSelected(), null)) {
+						setMode(Mode.Normal);
+					} else {
+						App.showToast(R.string.err_share_failed);
+					}
+				}
+			}));
 			
 			if (mDirectAdapter.getSelectedCount() == 1) {
 				list.add(new DataItem(R.drawable.edit, R.string.word_rename, new IDialogClickListener() {

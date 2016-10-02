@@ -56,6 +56,7 @@
 	<string name="err_rename_file_success">Success</string>
 	<string name="err_rename_file_failed">Rename failed!</string>
 	<string name="err_delete_file_failed">%s delete failed!</string>
+	<string name="err_share_failed">Share failed!</string>
 
 	<string name="err_path_not_valid">This is not a valid path</string>
 	<string name="err_file_read_error">File reading error</string>
