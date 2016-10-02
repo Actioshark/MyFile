@@ -13,7 +13,8 @@ import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.file.ClipPad;
 import kk.myfile.file.Tree;
-import kk.myfile.file.Tree.ProgressCallback;
+import kk.myfile.file.Tree.IProgressCallback;
+import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.TempDirect;
@@ -21,7 +22,6 @@ import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -518,9 +518,9 @@ public class DirectActivity extends BaseActivity {
 					@Override
 					public void onClick(Dialog dialog, int index) {
 						Tree.rename(DirectActivity.this, mDirectAdapter.getSelected().get(0).getFile(),
-							new ProgressCallback() {
+							new IProgressCallback() {
 								@Override
-								public void onFinish() {
+								public void onProgress(ProgressType type) {
 									setMode(Mode.Normal);
 									refreshDirect();
 								}
@@ -533,19 +533,10 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.cross, R.string.word_delete, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					Tree.delete(DirectActivity.this, selected, new ProgressCallback() {
+					Tree.delete(DirectActivity.this, selected, new IProgressCallback() {
 						@Override
-						public void onConfirm() {
+						public void onProgress(ProgressType type) {
 							setMode(Mode.Normal);
-						}
-						
-						@Override
-						public void onProgress() {
-							refreshDirect();
-						}
-						
-						@Override
-						public void onFinish() {
 							refreshDirect();
 						}
 					});
@@ -594,9 +585,9 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.add, R.string.word_new_direct, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					Tree.createDirect(DirectActivity.this, mNode.direct.getPath(), new ProgressCallback() {
+					Tree.createDirect(DirectActivity.this, mNode.direct.getPath(), new IProgressCallback() {
 						@Override
-						public void onFinish() {
+						public void onProgress(ProgressType type) {
 							refreshDirect();
 						}
 					});
@@ -606,9 +597,9 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.add, R.string.word_new_file, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					Tree.createFile(DirectActivity.this, mNode.direct.getPath(), new ProgressCallback() {
+					Tree.createFile(DirectActivity.this, mNode.direct.getPath(), new IProgressCallback() {
 						@Override
-						public void onFinish() {
+						public void onProgress(ProgressType type) {
 							refreshDirect();
 						}
 					});
@@ -670,9 +661,9 @@ public class DirectActivity extends BaseActivity {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
 			Tree.carry(this, mDirectAdapter.getSelected(), path, false,
-				new ProgressCallback() {
+				new IProgressCallback() {
 					@Override
-					public void onProgress() {
+					public void onProgress(ProgressType type) {
 						setMode(Mode.Normal);
 						refreshDirect();
 					}
@@ -686,9 +677,9 @@ public class DirectActivity extends BaseActivity {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
 			Tree.carry(this, mDirectAdapter.getSelected(), path, true,
-				new ProgressCallback() {
+				new IProgressCallback() {
 					@Override
-					public void onProgress() {
+					public void onProgress(ProgressType type) {
 						setMode(Mode.Normal);
 						refreshDirect();
 					}

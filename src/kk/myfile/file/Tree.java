@@ -23,18 +23,12 @@ import kk.myfile.util.Setting;
 public class Tree {
 	public static final String HIDDEN_FILE = ".nomedia";
 	
-	public static abstract class ProgressCallback {
-		public void onConfirm() {
-		}
-		
-		public void onCancel() {
-		}
-		
-		public void onProgress() {
-		}
-		
-		public void onFinish() {
-		}
+	public static enum ProgressType {
+		Confirm, Cancel, Progress, Finish,
+	}
+	
+	public static interface IProgressCallback {
+		public void onProgress(ProgressType type);
 	}
 	
 	public static Direct load(String path) {
@@ -84,7 +78,7 @@ public class Tree {
 		}
 	}
 	
-	public static void createDirect(Context context, final String parent, final ProgressCallback cb) {
+	public static void createDirect(Context context, final String parent, final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_direct_name);
 		
@@ -119,11 +113,11 @@ public class Tree {
 					App.showToast(err);
 					
 					if (cb != null) {
-						cb.onFinish();
+						cb.onProgress(ProgressType.Finish);
 					}
 				} else {
 					if (cb != null) {
-						cb.onCancel();
+						cb.onProgress(ProgressType.Cancel);
 					}
 				}
 				
@@ -133,7 +127,7 @@ public class Tree {
 		id.show();
 	}
 	
-	public static void createFile(Context context, final String parent, final ProgressCallback cb) {
+	public static void createFile(Context context, final String parent, final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_file_name);
 		
@@ -168,11 +162,11 @@ public class Tree {
 					App.showToast(err);
 					
 					if (cb != null) {
-						cb.onFinish();
+						cb.onProgress(ProgressType.Finish);
 					}
 				} else {
 					if (cb != null) {
-						cb.onCancel();
+						cb.onProgress(ProgressType.Cancel);
 					}
 				}
 				
@@ -182,7 +176,7 @@ public class Tree {
 		id.show();
 	}
 	
-	public static void rename(Context context, final File file, final ProgressCallback cb) {
+	public static void rename(Context context, final File file, final IProgressCallback cb) {
 		try {
 			final InputDialog id = new InputDialog(context);
 			id.setMessage(file.isDirectory() ? R.string.msg_input_direct_name
@@ -212,11 +206,11 @@ public class Tree {
 						App.showToast(err);
 						
 						if (cb != null) {
-							cb.onFinish();
+							cb.onProgress(ProgressType.Finish);
 						}
 					} else {
 						if (cb != null) {
-							cb.onCancel();
+							cb.onProgress(ProgressType.Cancel);
 						}
 					}
 					
@@ -229,7 +223,7 @@ public class Tree {
 		}
 	}
 	
-	public static void delete(final Context context, final List<Leaf> list, final ProgressCallback cb) {
+	public static void delete(final Context context, final List<Leaf> list, final IProgressCallback cb) {
 		SimpleDialog sd = new SimpleDialog(context);
 		sd.setMessage(AppUtil.getString(R.string.msg_delete_file_confirm,
 				list.size()));
@@ -281,14 +275,14 @@ public class Tree {
 												s + f, t, s, f));
 											
 											if (cb != null) {
-												cb.onProgress();
+												cb.onProgress(ProgressType.Progress);
 											}
 											
 											if (s + f >= t) {
 												sd.setButtons(new int[] {R.string.word_confirm});
 												
 												if (cb != null) {
-													cb.onFinish();
+													cb.onProgress(ProgressType.Finish);
 												}
 											}
 										}
@@ -299,11 +293,11 @@ public class Tree {
 					});
 					
 					if (cb != null) {
-						cb.onConfirm();
+						cb.onProgress(ProgressType.Confirm);
 					}
 				} else {
 					if (cb != null) {
-						cb.onCancel();
+						cb.onProgress(ProgressType.Cancel);
 					}
 				}
 				
@@ -321,7 +315,7 @@ public class Tree {
 	
 	private static void carry(final List<FilePair> fps, int fpi, final AtomicBoolean stop,
 			final AtomicInteger exist, final SimpleDialog pg,
-			final AtomicInteger suc, final AtomicInteger fai, final ProgressCallback cb,
+			final AtomicInteger suc, final AtomicInteger fai, final IProgressCallback cb,
 			final boolean delete) {
 		
 		final int size = fps.size();
@@ -456,7 +450,7 @@ public class Tree {
 								size, suc.get(), fai.get()));
 						
 						if (cb != null) {
-							cb.onProgress();
+							cb.onProgress(ProgressType.Progress);
 						}
 						
 						if (suc.get() + fai.get() >= size) {
@@ -465,7 +459,7 @@ public class Tree {
 							pg.setButtons(new int[] {R.string.word_confirm});
 							
 							if (cb != null) {
-								cb.onFinish();
+								cb.onProgress(ProgressType.Finish);
 							}
 						}
 					}
@@ -498,7 +492,7 @@ public class Tree {
 	}
 	
 	public static void carry(final Context context, final List<Leaf> list,
-			final String direct, final boolean delete, final ProgressCallback cb) {
+			final String direct, final boolean delete, final IProgressCallback cb) {
 		
 		final AtomicBoolean stop = new AtomicBoolean(false);
 		
@@ -510,13 +504,13 @@ public class Tree {
 			public void onClick(Dialog dialog, int index) {
 				if (stop.get()) {
 					if (cb != null) {
-						cb.onConfirm();
+						cb.onProgress(ProgressType.Confirm);
 					}
 				} else {
 					stop.set(true);
 					
 					if (cb != null) {
-						cb.onCancel();
+						cb.onProgress(ProgressType.Cancel);
 					}
 				}
 				
