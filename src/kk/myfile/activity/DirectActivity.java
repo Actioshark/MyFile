@@ -16,13 +16,17 @@ import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
+import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.TempDirect;
+import kk.myfile.leaf.Text;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -514,6 +518,8 @@ public class DirectActivity extends BaseActivity {
 				return;
 			}
 			
+			final Leaf first = selected.get(0);
+			
 			list.add(new DataItem(R.drawable.share, R.string.word_share, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
@@ -529,7 +535,7 @@ public class DirectActivity extends BaseActivity {
 				list.add(new DataItem(R.drawable.edit, R.string.word_rename, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index) {
-						Tree.rename(DirectActivity.this, mDirectAdapter.getSelected().get(0).getFile(),
+						Tree.rename(DirectActivity.this, first.getFile(),
 							new IProgressCallback() {
 								@Override
 								public void onProgress(ProgressType type) {
@@ -538,6 +544,44 @@ public class DirectActivity extends BaseActivity {
 								}
 							}
 						);
+					}
+				}));
+			}
+			
+			if (mDirectAdapter.getSelectedCount() == 1) {
+				list.add(new DataItem(R.drawable.edit, R.string.word_edit, new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						if (IntentUtil.edit(DirectActivity.this, first, null)) {
+							setMode(Mode.Normal);
+						} else {
+							SimpleDialog st = new SimpleDialog(DirectActivity.this);
+							st.setCanceledOnTouchOutside(true);
+							st.setMessage(R.string.msg_edit_as);
+							st.setButtons(new int[] {R.string.type_text, R.string.type_image,
+									R.string.word_any});
+							st.setClickListener(new IDialogClickListener() {
+								@Override
+								public void onClick(Dialog dialog, int index) {
+									switch (index) {
+									case 0:
+										IntentUtil.edit(DirectActivity.this, first, Text.TYPE);
+										break;
+										
+									case 1:
+										IntentUtil.edit(DirectActivity.this, first, Image.TYPE);
+										break;
+										
+									case 2:
+										IntentUtil.edit(DirectActivity.this, first, "*/*");
+										break;
+									}
+									
+									dialog.dismiss();
+								}
+							});
+							st.show();
+						}
 					}
 				}));
 			}

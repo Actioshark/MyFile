@@ -88,4 +88,25 @@ public class IntentUtil {
 			return false;
 		}
 	}
+	
+	public static boolean edit(Context context, Leaf leaf, String type) {
+		try {
+			if (type == null) {
+				type = leaf.getType();
+			}
+			
+			if (type == null) {
+				return false;
+			}
+			
+			Intent intent = new Intent(Intent.ACTION_EDIT);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.setDataAndType(Uri.fromFile(leaf.getFile()), type);
+	
+			context.startActivity(intent);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

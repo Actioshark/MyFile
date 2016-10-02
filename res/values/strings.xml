@@ -22,9 +22,11 @@
 	<string name="word_skip_all">Skip All</string>
 	<string name="word_cover">Cover</string>
 	<string name="word_cover_all">Cover All</string>
+	<string name="word_any">Any</string>
 
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_open_as">Open As</string>
+	<string name="msg_edit_as">Edit As</string>
 	<string name="msg_input_to_search">Input to search</string>
 	<string name="msg_children_with_num">%d children</string>
 	<string name="msg_children_select_with_num">%1$d/%2$d children</string>
