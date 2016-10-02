@@ -261,148 +261,190 @@ public class Tree {
 	private static class FilePair {
 		public File from;
 		public File to;
+		public boolean delete = false;
 	}
 	
-	private static void copy(final List<FilePair> fps, int fpi, final AtomicBoolean stop,
+	private static void carry(final List<FilePair> fps, int fpi, final AtomicBoolean stop,
 			final AtomicInteger exist, final SimpleDialog pg,
-			final AtomicInteger suc, final AtomicInteger fai, final ProgressCallback cb) {
+			final AtomicInteger suc, final AtomicInteger fai, final ProgressCallback cb,
+			final boolean delete) {
 		
-		final int size = fps.size();
-		for (int i = fpi; i < size; i++) {
-			if (stop.get()) {
-				return;
-			}
-			
-			final FilePair fp = fps.get(i);
-			
-			int ext = exist.get();
-			
-			if (ext != 1 && ext != 3) {
-				exist.set(-1);
-			}
-			
-			if (fp.to.exists()) {
-				switch (ext) {
-				case 0:
-				case 1:
-					suc.addAndGet(1);
-					break;
-					
-				case 2:
-				case 3:
-					if (fp.from.isDirectory()) {
-						if (fp.to.isDirectory()) {
-							suc.addAndGet(1);
-						} else {
-							if (FileUtil.delete(fp.to) == null &&
-									FileUtil.createDirect(fp.to) == null) {
-								
-								suc.addAndGet(1);
-							} else {
-								fai.addAndGet(1);
-							}
-						}
-					} else {
-						if (fp.to.isDirectory()) {
-							if (FileUtil.delete(fp.to) == null &&
-									FileUtil.createFile(fp.to) == null &&
-									FileUtil.write(fp.from, fp.to)) {
-								
-								suc.addAndGet(1);
-							} else {
-								fai.addAndGet(1);
-							}
-						} else {
-							if (FileUtil.write(fp.from, fp.to)) {
-								suc.addAndGet(1);
-							} else {
-								fai.addAndGet(1);
-							}
-						}
-					}
-					break;
-
-				default:
-					final int idx = i;
-					AppUtil.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if (stop.get()) {
-								return;
-							}
-							
-							final SimpleDialog ec = new SimpleDialog(pg.getContext());
-							ec.setMessage(AppUtil.getString(R.string.msg_file_exist,
-									fp.to.getAbsolutePath()));
-							ec.setButtons(new int[] {R.string.word_skip, R.string.word_skip_all,
-									R.string.word_cover, R.string.word_cover_all});
-							ec.setClickListener(new IDialogClickListener() {
-								@Override
-								public void onClick(Dialog dialog, int index) {
-									exist.set(index);
-									
-									AppUtil.runOnNewThread(new Runnable() {
-										@Override
-										public void run() {
-											copy(fps, idx, stop, exist, pg, suc, fai, cb);
-										}
-									});
-									
-									ec.dismiss();
-								}
-							});
-							ec.setCanceledOnTouchOutside(false);
-							ec.show();
-						}
-					});
+		try {
+			final int size = fps.size();
+			for (int i = fpi; i < size; i++) {
+				if (stop.get()) {
 					return;
 				}
-			} else if (fp.from.isDirectory()) {
-				if (FileUtil.createDirect(fp.to) == null) {
-					suc.addAndGet(1);
-				} else {
-					fai.addAndGet(1);
+				
+				final FilePair fp = fps.get(i);
+				
+				int ext = exist.get();
+				
+				if (ext != 1 && ext != 3) {
+					exist.set(-1);
 				}
-			} else {
-				if (FileUtil.createFile(fp.to) == null
-						&& FileUtil.write(fp.from, fp.to)) {
-					
-					suc.addAndGet(1);
-				} else {
-					fai.addAndGet(1);
-				}
-			}
-			
-			AppUtil.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (stop.get()) {
+				
+				if (fp.to.exists()) {
+					switch (ext) {
+					case 0:
+					case 1:
+						suc.addAndGet(1);
+						fp.delete = false;
+						break;
+						
+					case 2:
+					case 3:
+						if (fp.from.isDirectory()) {
+							if (fp.to.isDirectory()) {
+								suc.addAndGet(1);
+								fp.delete = true;
+							} else {
+								if (FileUtil.delete(fp.to) == null &&
+										FileUtil.createDirect(fp.to) == null) {
+									
+									suc.addAndGet(1);
+									fp.delete = true;
+								} else {
+									fai.addAndGet(1);
+									fp.delete = false;
+								}
+							}
+						} else {
+							if (fp.to.isDirectory()) {
+								if (FileUtil.delete(fp.to) == null &&
+										FileUtil.createFile(fp.to) == null &&
+										FileUtil.write(fp.from, fp.to)) {
+									
+									suc.addAndGet(1);
+									fp.delete = true;
+								} else {
+									fai.addAndGet(1);
+									fp.delete = false;
+								}
+							} else {
+								if (FileUtil.write(fp.from, fp.to)) {
+									suc.addAndGet(1);
+									fp.delete = true;
+								} else {
+									fai.addAndGet(1);
+									fp.delete = false;
+								}
+							}
+						}
+						break;
+	
+					default:
+						final int idx = i;
+						AppUtil.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								if (stop.get()) {
+									return;
+								}
+								
+								final SimpleDialog ec = new SimpleDialog(pg.getContext());
+								ec.setMessage(AppUtil.getString(R.string.msg_file_exist,
+										fp.to.getAbsolutePath()));
+								ec.setButtons(new int[] {R.string.word_skip, R.string.word_skip_all,
+										R.string.word_cover, R.string.word_cover_all});
+								ec.setClickListener(new IDialogClickListener() {
+									@Override
+									public void onClick(Dialog dialog, int index) {
+										exist.set(index);
+										
+										AppUtil.runOnNewThread(new Runnable() {
+											@Override
+											public void run() {
+												carry(fps, idx, stop, exist, pg, suc, fai, cb, delete);
+											}
+										});
+										
+										ec.dismiss();
+									}
+								});
+								ec.setCanceledOnTouchOutside(false);
+								ec.show();
+							}
+						});
 						return;
 					}
-					
-					pg.setMessage(AppUtil.getString(R.string.msg_copy_file_progress,
-						suc.get() + fai.get(), size, suc.get(), fai.get()));
-					
-					if (cb != null) {
-						cb.onProgress();
+				} else if (fp.from.isDirectory()) {
+					if (FileUtil.createDirect(fp.to) == null) {
+						suc.addAndGet(1);
+						fp.delete = true;
+					} else {
+						fai.addAndGet(1);
+						fp.delete = false;
 					}
-					
-					if (suc.get() + fai.get() >= size) {
-						stop.set(true);
+				} else {
+					if (FileUtil.createFile(fp.to) == null
+							&& FileUtil.write(fp.from, fp.to)) {
 						
-						pg.setButtons(new int[] {R.string.word_confirm});
-						
-						if (cb != null) {
-							cb.onFinish();
-						}
+						suc.addAndGet(1);
+						fp.delete = true;
+					} else {
+						fai.addAndGet(1);
+						fp.delete = false;
 					}
 				}
-			});
+				
+				AppUtil.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (stop.get()) {
+							return;
+						}
+						
+						int msg = delete ? R.string.msg_cut_file_progress :
+								R.string.msg_copy_file_progress;
+						
+						pg.setMessage(AppUtil.getString(msg, suc.get() + fai.get(),
+								size, suc.get(), fai.get()));
+						
+						if (cb != null) {
+							cb.onProgress();
+						}
+						
+						if (suc.get() + fai.get() >= size) {
+							stop.set(true);
+							
+							pg.setButtons(new int[] {R.string.word_confirm});
+							
+							if (cb != null) {
+								cb.onFinish();
+							}
+						}
+					}
+				});
+			}
+			
+			if (delete) {
+				for (int i = fps.size() - 1; i >= 0; i--) {
+					FilePair fp = fps.get(i);
+					
+					try {
+						if (fp.delete) {
+							if (fp.from.isDirectory()) {
+								String[] children = fp.from.list();
+								if (children == null || children.length < 1) {
+									FileUtil.delete(fp.from);
+								}
+							} else {
+								FileUtil.delete(fp.from);
+							}
+						}
+					} catch (Exception e) {
+						Logger.print(null, e);
+					}
+				}
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
 		}
 	}
 	
-	public static void copy(final Context context, final List<Leaf> list,
-			final String direct, final ProgressCallback cb) {
+	public static void carry(final Context context, final List<Leaf> list,
+			final String direct, final boolean delete, final ProgressCallback cb) {
 		
 		final AtomicBoolean stop = new AtomicBoolean(false);
 		
@@ -463,8 +505,8 @@ public class Tree {
 						}
 					}
 					
-					copy(fps, 0, stop, new AtomicInteger(-1), pg,
-							new AtomicInteger(0), new AtomicInteger(0), cb);
+					carry(fps, 0, stop, new AtomicInteger(-1), pg,
+							new AtomicInteger(0), new AtomicInteger(0), cb, delete);
 				} catch (Exception e) {
 					Logger.print(null, e);
 				}

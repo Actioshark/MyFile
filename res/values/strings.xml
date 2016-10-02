@@ -37,6 +37,9 @@
 	<string name="msg_copy_file_progress">Copying %1$d/%2$d files\n\n%3$d success\n%4$d
 		failed
 	</string>
+	<string name="msg_cut_file_progress">Cuting %1$d/%2$d files\n\n%3$d success\n%4$d
+		failed
+	</string>
 	<string name="msg_file_exist">The following file already exists:\n\n%s</string>
 
 	<string name="err_illegal_file_name_char">Illegal characters!</string>

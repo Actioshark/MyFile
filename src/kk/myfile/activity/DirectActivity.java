@@ -11,6 +11,7 @@ import kk.myfile.R;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.adapter.DownListAdapter.DataItem;
+import kk.myfile.file.ClipPad;
 import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.ProgressCallback;
 import kk.myfile.leaf.Direct;
@@ -47,7 +48,7 @@ public class DirectActivity extends BaseActivity {
 	public static final String KEY_PATH = "direct_path";
 	
 	public static final int REQ_COPY_TO = 1;
-	public static final int REQ_CUT_TO = 1;
+	public static final int REQ_CUT_TO = 2;
 	
 	public static class Node {
 		public Direct direct;
@@ -545,21 +546,22 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.copy, R.string.word_copy, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					
+					ClipPad.setClip(ClipPad.Mode.Copy, mDirectAdapter.getSelected());
 				}
 			}));
 			
 			list.add(new DataItem(R.drawable.cut, R.string.word_cut_to, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					
+					Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
+					startActivityForResult(intent, REQ_CUT_TO);
 				}
 			}));
 			
 			list.add(new DataItem(R.drawable.cut, R.string.word_cut, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					
+					ClipPad.setClip(ClipPad.Mode.Cut, mDirectAdapter.getSelected());
 				}
 			}));
 			
@@ -650,17 +652,31 @@ public class DirectActivity extends BaseActivity {
 			
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.copy(this, mDirectAdapter.getSelected(), path,
+			Tree.carry(this, mDirectAdapter.getSelected(), path, false,
 				new ProgressCallback() {
 					@Override
-					public void onFinish() {
+					public void onProgress() {
 						setMode(Mode.Normal);
 						refreshDirect();
 					}
 				}
 			);
 		} else if (requestCode == REQ_CUT_TO) {
+			if (resultCode != RESULT_OK || data == null) {
+				return;
+			}
 			
+			String path = data.getStringExtra(SelectActivity.KEY_PATH);
+			
+			Tree.carry(this, mDirectAdapter.getSelected(), path, true,
+				new ProgressCallback() {
+					@Override
+					public void onProgress() {
+						setMode(Mode.Normal);
+						refreshDirect();
+					}
+				}
+			);
 		}
 	}
 }
