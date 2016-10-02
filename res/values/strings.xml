@@ -30,6 +30,7 @@
 	<string name="msg_input_direct_name">Input directory name</string>
 	<string name="msg_input_file_name">Input file name</string>
 	<string name="msg_delete_file_confirm">Delete these %d files?</string>
+	<string name="msg_wait">Wait a monent</string>
 	<string name="msg_delete_file_progress">Deleting %1$d/%2$d files\n\n%3$d success\n%4$d
 		failed
 	</string>

@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.Dialog;
 import android.content.Context;
+
 import kk.myfile.R;
 import kk.myfile.activity.App;
 import kk.myfile.leaf.Direct;
@@ -257,150 +258,147 @@ public class Tree {
 		sd.show();
 	}
 	
-	private static interface ICopyCutCallback {
-		public void onFinish(boolean success, AtomicInteger exist);
+	private static class FilePair {
+		public File from;
+		public File to;
 	}
 	
-	private static void copy(final Context context, final File from,
-			final File dir, final AtomicInteger exist, final ICopyCutCallback callback,
-			final AtomicBoolean stop) {
+	private static void copy(final List<FilePair> fps, int fpi, final AtomicBoolean stop,
+			final AtomicInteger exist, final SimpleDialog pg,
+			final AtomicInteger suc, final AtomicInteger fai, final ProgressCallback cb) {
 		
-		AppUtil.runOnNewThread(new Runnable() {
-			@Override
-			public void run() {
-				try {
+		final int size = fps.size();
+		for (int i = fpi; i < size; i++) {
+			if (stop.get()) {
+				return;
+			}
+			
+			final FilePair fp = fps.get(i);
+			
+			int ext = exist.get();
+			
+			if (ext != 1 && ext != 3) {
+				exist.set(-1);
+			}
+			
+			if (fp.to.exists()) {
+				switch (ext) {
+				case 0:
+				case 1:
+					suc.addAndGet(1);
+					break;
+					
+				case 2:
+				case 3:
+					if (fp.from.isDirectory()) {
+						if (fp.to.isDirectory()) {
+							suc.addAndGet(1);
+						} else {
+							if (FileUtil.delete(fp.to) == null &&
+									FileUtil.createDirect(fp.to) == null) {
+								
+								suc.addAndGet(1);
+							} else {
+								fai.addAndGet(1);
+							}
+						}
+					} else {
+						if (fp.to.isDirectory()) {
+							if (FileUtil.delete(fp.to) == null &&
+									FileUtil.createFile(fp.to) == null &&
+									FileUtil.write(fp.from, fp.to)) {
+								
+								suc.addAndGet(1);
+							} else {
+								fai.addAndGet(1);
+							}
+						} else {
+							if (FileUtil.write(fp.from, fp.to)) {
+								suc.addAndGet(1);
+							} else {
+								fai.addAndGet(1);
+							}
+						}
+					}
+					break;
+
+				default:
+					final int idx = i;
+					AppUtil.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if (stop.get()) {
+								return;
+							}
+							
+							final SimpleDialog ec = new SimpleDialog(pg.getContext());
+							ec.setMessage(AppUtil.getString(R.string.msg_file_exist,
+									fp.to.getAbsolutePath()));
+							ec.setButtons(new int[] {R.string.word_skip, R.string.word_skip_all,
+									R.string.word_cover, R.string.word_cover_all});
+							ec.setClickListener(new IDialogClickListener() {
+								@Override
+								public void onClick(Dialog dialog, int index) {
+									exist.set(index);
+									
+									AppUtil.runOnNewThread(new Runnable() {
+										@Override
+										public void run() {
+											copy(fps, idx, stop, exist, pg, suc, fai, cb);
+										}
+									});
+									
+									ec.dismiss();
+								}
+							});
+							ec.setCanceledOnTouchOutside(false);
+							ec.show();
+						}
+					});
+					return;
+				}
+			} else if (fp.from.isDirectory()) {
+				if (FileUtil.createDirect(fp.to) == null) {
+					suc.addAndGet(1);
+				} else {
+					fai.addAndGet(1);
+				}
+			} else {
+				if (FileUtil.createFile(fp.to) == null
+						&& FileUtil.write(fp.from, fp.to)) {
+					
+					suc.addAndGet(1);
+				} else {
+					fai.addAndGet(1);
+				}
+			}
+			
+			AppUtil.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
 					if (stop.get()) {
 						return;
 					}
 					
-					final File to = new File(dir, from.getName());
-					boolean success;
+					pg.setMessage(AppUtil.getString(R.string.msg_copy_file_progress,
+						suc.get() + fai.get(), size, suc.get(), fai.get()));
 					
-					int ext = exist.get();
-					if (ext != 1 && ext != 3) {
-						exist.set(-1);
+					if (cb != null) {
+						cb.onProgress();
 					}
 					
-					if (to.exists()) {
-						switch (ext) {
-						case 0:
-						case 1:
-							success = true;
-							break;
-							
-						case 2:
-						case 3:
-							if (from.isDirectory()) {
-								if (to.isDirectory()) {
-									success = true;
-								} else {
-									success = FileUtil.delete(to) == null && FileUtil.createDirect(to) == null;
-								}
-								
-								final File[] children = from.listFiles();
-								if (success && children.length > 0) {
-									final AtomicInteger idx = new AtomicInteger(-1);
-									final AtomicBoolean suc = new AtomicBoolean(true);
-									
-									final ICopyCutCallback cb = new ICopyCutCallback() {
-										@Override
-										public void onFinish(boolean success, AtomicInteger exist) {
-											int next = idx.addAndGet(1);
-											suc.set(suc.get() && success);
-											
-											if (next < children.length) {
-												File child = children[next];
-												
-												copy(context, child, to, exist, this, stop);
-											} else if(callback != null) {
-												callback.onFinish(suc.get(), exist);
-											}
-										}
-									};
-									
-									cb.onFinish(true, exist);
-									return;
-								}
-							} else {
-								if (to.isDirectory()) {
-									success = FileUtil.delete(to) == null
-										&& FileUtil.createFile(to) == null
-										&& FileUtil.write(from, to);
-								} else {
-									success = FileUtil.write(from, to);
-								}
-							}
-							break;
-
-						default:
-							AppUtil.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									if (stop.get()) {
-										return;
-									}
-									
-									SimpleDialog existDialog = new SimpleDialog(context);
-									existDialog.setMessage(AppUtil.getString(R.string.msg_file_exist,
-											to.getAbsolutePath()));
-									existDialog.setButtons(new int[] {
-										R.string.word_skip, R.string.word_skip_all,
-										R.string.word_cover, R.string.word_cover_all,
-									});
-									existDialog.setClickListener(new IDialogClickListener() {
-										@Override
-										public void onClick(Dialog dialog, int index) {
-											exist.set(index);
-											copy(context, from, dir, exist, callback, stop);
-											dialog.dismiss();
-										}
-									});
-									existDialog.setCanceledOnTouchOutside(false);
-									existDialog.show();
-								}
-							});
-							
-							return;
-						}
-					} else if (from.isDirectory()) {
-						success = FileUtil.createDirect(to) == null;
+					if (suc.get() + fai.get() >= size) {
+						stop.set(true);
 						
-						final File[] children = from.listFiles();
-						if (success && children.length > 0) {
-							final AtomicInteger idx = new AtomicInteger(-1);
-							final AtomicBoolean suc = new AtomicBoolean(true);
-							
-							final ICopyCutCallback cb = new ICopyCutCallback() {
-								@Override
-								public void onFinish(boolean success, AtomicInteger exist) {
-									int next = idx.addAndGet(1);
-									suc.set(suc.get() && success);
-									
-									if (next < children.length) {
-										File child = children[next];
-										
-										copy(context, child, to, exist, this, stop);
-									} else if(callback != null) {
-										callback.onFinish(suc.get(), exist);
-									}
-								}
-							};
-							
-							cb.onFinish(true, exist);
-							return;
+						pg.setButtons(new int[] {R.string.word_confirm});
+						
+						if (cb != null) {
+							cb.onFinish();
 						}
-					} else {
-						success = FileUtil.createFile(to) == null && FileUtil.write(from, to);
 					}
-					
-					if (callback != null) {
-						callback.onFinish(success, exist);
-					}
-				} catch (Exception e) {
-					Logger.print(null, e);
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	public static void copy(final Context context, final List<Leaf> list,
@@ -409,68 +407,68 @@ public class Tree {
 		final AtomicBoolean stop = new AtomicBoolean(false);
 		
 		final SimpleDialog pg = new SimpleDialog(context);
+		pg.setMessage(R.string.msg_wait);
 		pg.setButtons(new int[] {R.string.word_cancel});
 		pg.setClickListener(new IDialogClickListener() {
 			@Override
 			public void onClick(Dialog dialog, int index) {
-				stop.set(true);
-				dialog.dismiss();
-				
-				if (cb != null) {
-					cb.onFinish();
+				if (stop.get()) {
+					if (cb != null) {
+						cb.onConfirm();
+					}
+				} else {
+					stop.set(true);
+					
+					if (cb != null) {
+						cb.onCancel();
+					}
 				}
+				
+				dialog.dismiss();
 			}
 		});
 		pg.setCanceledOnTouchOutside(false);
 		pg.show();
 		
-		final File dir = new File(direct);
-		final AtomicInteger idx = new AtomicInteger(-1);
-		final AtomicInteger suc = new AtomicInteger(0);
-		
-		ICopyCutCallback callback = new ICopyCutCallback() {
+		AppUtil.runOnNewThread(new Runnable() {
 			@Override
-			public void onFinish(boolean success, AtomicInteger exist) {
-				final int next = idx.addAndGet(1);
-				if (success) {
-					suc.addAndGet(1);
-				}
-				
-				if (next < list.size()) {
-					copy(context, list.get(next).getFile(), dir, exist, this, stop);
+			public void run() {
+				try {
+					List<FilePair> fps = new ArrayList<FilePair>();
+					for (Leaf leaf : list) {
+						if (stop.get()) {
+							return;
+						}
+						
+						FilePair fp = new FilePair();
+						fp.from = leaf.getFile();
+						fp.to = new File(direct, fp.from.getName());
+						fps.add(fp);
+					}
 					
-					AppUtil.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if (stop.get()) {
-								return;
-							}
-							
-							pg.setMessage(AppUtil.getString(R.string.msg_copy_file_progress,
-								next, list.size(), suc.get(), next - suc.get()));
+					for (int i = 0; i < fps.size(); i++) {
+						if (stop.get()) {
+							return;
 						}
-					});
-				} else {
-					AppUtil.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if (stop.get()) {
-								return;
-							}
-							
-							pg.setMessage(AppUtil.getString(R.string.msg_copy_file_progress,
-								next, list.size(), suc.get(), next - suc.get()));
-							pg.setButtons(new int[] {R.string.word_confirm});
-							
-							if (cb != null) {
-								cb.onFinish();
+						
+						FilePair fp = fps.get(i);
+						
+						if (fp.from.isDirectory()) {
+							for (File child : fp.from.listFiles()) {
+								FilePair pair = new FilePair();
+								pair.from = child;
+								pair.to = new File(fp.to, child.getName());
+								fps.add(pair);
 							}
 						}
-					});
+					}
+					
+					copy(fps, 0, stop, new AtomicInteger(-1), pg,
+							new AtomicInteger(0), new AtomicInteger(0), cb);
+				} catch (Exception e) {
+					Logger.print(null, e);
 				}
 			}
-		};
-		
-		callback.onFinish(false, new AtomicInteger(-1));
+		});
 	}
 }
