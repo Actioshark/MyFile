@@ -6,11 +6,14 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+
 import kk.myfile.R;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -137,7 +140,26 @@ public class FileUtil {
 	
 	public static String delete(File file) {
 		try {
-			if (deleteRec(file)) {
+			List<File> list = new ArrayList<File>();
+			list.add(file);
+			
+			for (int i = 0; i < list.size(); i++) {
+				File temp = list.get(i);
+				
+				if (temp.isDirectory()) {
+					for (File child : temp.listFiles()) {
+						list.add(child);
+					}
+				}
+			}
+			
+			boolean success = true;
+			
+			for (int i = list.size() - 1; i >= 0; i--) {
+				success = list.get(i).delete() && success;
+			}
+			
+			if (success) {
 				return null;
 			}
 		} catch (Exception e) {
@@ -152,24 +174,6 @@ public class FileUtil {
 		}
 		
 		return AppUtil.getString(R.string.err_create_file_failed, name);
-	}
-	
-	private static boolean deleteRec(File file) {
-		try {
-			boolean suc = true;
-			
-			if (file.isDirectory()) {
-				for (File temp : file.listFiles()) {
-					suc = deleteRec(temp) && suc;
-				}
-			}
-			
-			return file.delete() && suc;
-		} catch (Exception e) {
-			Logger.print(null, e);
-		}
-		
-		return false;
 	}
 	
 	public static boolean write(File from, File to) {

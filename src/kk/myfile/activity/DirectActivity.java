@@ -522,6 +522,11 @@ public class DirectActivity extends BaseActivity {
 						}
 						
 						@Override
+						public void onProgress() {
+							refreshDirect();
+						}
+						
+						@Override
 						public void onFinish() {
 							refreshDirect();
 						}

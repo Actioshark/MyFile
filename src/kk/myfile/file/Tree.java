@@ -29,6 +29,9 @@ public class Tree {
 		public void onCancel() {
 		}
 		
+		public void onProgress() {
+		}
+		
 		public void onFinish() {
 		}
 	}
@@ -221,26 +224,34 @@ public class Tree {
 												R.string.msg_delete_file_progress,
 												s + f, t, s, f));
 											
+											if (cb != null) {
+												cb.onProgress();
+											}
+											
 											if (s + f >= t) {
 												sd.setButtons(new int[] {R.string.word_confirm});
+												
+												if (cb != null) {
+													cb.onFinish();
+												}
 											}
-										}
-										
-										if (cb != null) {
-											cb.onFinish();
 										}
 									}
 								});
 							}
 						}
 					});
+					
+					if (cb != null) {
+						cb.onConfirm();
+					}
+				} else {
+					if (cb != null) {
+						cb.onCancel();
+					}
 				}
 				
 				dialog.dismiss();
-				
-				if (cb != null) {
-					cb.onConfirm();
-				}
 			}
 		});
 		sd.show();
