@@ -1,10 +1,10 @@
 package kk.myfile.activity;
 
 import java.io.File;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import kk.myfile.R;
@@ -520,18 +520,28 @@ public class DirectActivity extends BaseActivity {
 			
 			final Leaf first = selected.get(0);
 			
-			list.add(new DataItem(R.drawable.share, R.string.word_share, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					if (IntentUtil.share(DirectActivity.this, mDirectAdapter.getSelected(), null)) {
-						setMode(Mode.Normal);
-					} else {
-						App.showToast(R.string.err_share_failed);
-					}
+			boolean hasDirect = false;
+			for (Leaf leaf : selected) {
+				if (leaf instanceof Direct) {
+					hasDirect = true;
+					break;
 				}
-			}));
+			}
 			
-			if (mDirectAdapter.getSelectedCount() == 1) {
+			if (hasDirect == false) {
+				list.add(new DataItem(R.drawable.share, R.string.word_share, new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						if (IntentUtil.share(DirectActivity.this, mDirectAdapter.getSelected(), null)) {
+							setMode(Mode.Normal);
+						} else {
+							App.showToast(R.string.err_share_failed);
+						}
+					}
+				}));
+			}
+			
+			if (selected.size() == 1) {
 				list.add(new DataItem(R.drawable.edit, R.string.word_rename, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index) {
@@ -548,7 +558,7 @@ public class DirectActivity extends BaseActivity {
 				}));
 			}
 			
-			if (mDirectAdapter.getSelectedCount() == 1) {
+			if (hasDirect == false && selected.size() == 1) {
 				list.add(new DataItem(R.drawable.edit, R.string.word_edit, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index) {
