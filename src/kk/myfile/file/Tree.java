@@ -44,7 +44,9 @@ public class Tree {
 					direct.loadChildrenRecVis();
 				}
 				
-				direct.setTag(null);
+				synchronized (direct) {
+					direct.setTag(null);
+				}
 			}
 		});
 		

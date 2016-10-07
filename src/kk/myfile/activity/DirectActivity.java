@@ -93,8 +93,6 @@ public class DirectActivity extends BaseActivity {
 			if (duration > 1000) {
 				mLlDetail.setAlpha(0);
 				AppUtil.removeUiThread(mDetailMark);
-			} else if (duration < 0) {
-				mLlDetail.setAlpha(1f);
 			} else {
 				mLlDetail.setAlpha(1f - duration / 1000f);
 			}
@@ -186,28 +184,33 @@ public class DirectActivity extends BaseActivity {
 							public void run() {
 								Direct direct = Tree.load(mNode.direct.getPath());
 								String input = mEtSearch.getText().toString();
+								final Runnable mark = this;
 								
 								while (true) {
 									boolean finished = direct.getTag() == null;
 									final List<Leaf> ret = Tree.search(direct, input);
 									
 									synchronized (mEtSearch) {
-										if (mSearchRun == this) {
-											AppUtil.runOnUiThread(new Runnable() {
-												public void run() {
-													showSearchResult(ret);
-												}
-											});
-										} else {
+										if (mSearchRun != mark) {
 											return;
 										}
+										
+										AppUtil.runOnUiThread(new Runnable() {
+											public void run() {
+												synchronized (mEtSearch) {
+													if (mSearchRun == mark) {
+														showSearchResult(ret);
+													}
+												}
+											}
+										});
 									}
 									
 									if (finished) {
 										return;
 									}
 									
-									SystemClock.sleep(1000);
+									SystemClock.sleep(300);
 								}
 							}
 						};
@@ -492,7 +495,8 @@ public class DirectActivity extends BaseActivity {
 		mDetailShowPoint = SystemClock.elapsedRealtime();
 		
 		AppUtil.removeUiThread(mDetailMark);
-		mDetailMark = AppUtil.runOnUiThread(mDetailRun, 20, 20);
+		mLlDetail.setAlpha(1f);
+		mDetailMark = AppUtil.runOnUiThread(mDetailRun, 2000, 20);
 	}
 	
 	public void showInfo() {

@@ -74,8 +74,6 @@ public class TypeActivity extends BaseActivity {
 			if (duration > 1000) {
 				mLlDetail.setAlpha(0);
 				AppUtil.removeUiThread(mDetailMark);
-			} else if (duration < 0) {
-				mLlDetail.setAlpha(1);
 			} else {
 				mLlDetail.setAlpha(1 - duration / 1000f);
 			}
@@ -164,15 +162,21 @@ public class TypeActivity extends BaseActivity {
 					ivDelete.setVisibility(View.GONE);
 				}
 
-				if (mDirect.getTag() == null) {
+				synchronized (mGvList) {
+					synchronized (mDirect) {
+						if (mDirect.getTag() != null) {
+							return;
+						}
+					}
+					
 					final Direct mark = mDirect;
 					
 					AppUtil.runOnNewThread(new Runnable() {
 						public void run() {
-							List<Leaf> list = Tree.search(mDirect, mClass,
+							List<Leaf> list = Tree.search(mark, mClass,
 									mEtSearch.getText().toString());
 							
-							synchronized (this) {
+							synchronized (mGvList) {
 								if (mDirect == mark) {
 									mTypeAdapter.setData(list);
 								}
@@ -246,7 +250,7 @@ public class TypeActivity extends BaseActivity {
 			@Override
 			public void run() {
 				Direct direct = Tree.load(Setting.DEFAULT_PATH);
-				synchronized (this) {
+				synchronized (mGvList) {
 					mDirect = direct;
 				}
 				
@@ -259,13 +263,21 @@ public class TypeActivity extends BaseActivity {
 						list = Tree.search(direct, mClass);
 					}
 
-					synchronized (this) {
-						if (mDirect != direct || direct.getTag() == null) {
+					synchronized (mGvList) {
+						if (mDirect != direct) {
 							return;
-						} else {
+						}
+						
+						synchronized (direct) {
 							mTypeAdapter.setData(list);
+							
+							if (direct.getTag() == null) {
+								return;
+							}
 						}
 					}
+					
+					SystemClock.sleep(300);
 				}
 			}
 		});
@@ -315,7 +327,8 @@ public class TypeActivity extends BaseActivity {
 		mDetailShowPoint = SystemClock.elapsedRealtime();
 		
 		AppUtil.removeUiThread(mDetailMark);
-		AppUtil.runOnUiThread(mDetailRun, 20, 20);
+		mLlDetail.setAlpha(1f);
+		mDetailMark = AppUtil.runOnUiThread(mDetailRun, 2000, 20);
 	}
 	
 	public void showInfo() {
