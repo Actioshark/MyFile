@@ -11,8 +11,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
-
 import kk.myfile.R;
+import kk.myfile.leaf.Apk;
+import kk.myfile.leaf.Audio;
+import kk.myfile.leaf.Image;
+import kk.myfile.leaf.Office;
+import kk.myfile.leaf.Text;
+import kk.myfile.leaf.Video;
+import kk.myfile.leaf.Zip;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
@@ -113,7 +119,9 @@ public class MainActivity extends BaseActivity {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, Text.class.getName());
+				startActivity(intent);
 			}
 		});
 		
@@ -121,7 +129,9 @@ public class MainActivity extends BaseActivity {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, Image.class.getName());
+				startActivity(intent);
 			}
 		});
 		
@@ -129,7 +139,9 @@ public class MainActivity extends BaseActivity {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, Audio.class.getName());
+				startActivity(intent);
 			}
 		});
 		
@@ -137,7 +149,9 @@ public class MainActivity extends BaseActivity {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, Video.class.getName());
+				startActivity(intent);
 			}
 		});
 		
@@ -147,7 +161,9 @@ public class MainActivity extends BaseActivity {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, Office.class.getName());
+				startActivity(intent);
 			}
 		});
 		
@@ -155,7 +171,9 @@ public class MainActivity extends BaseActivity {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, Zip.class.getName());
+				startActivity(intent);
 			}
 		});
 		
@@ -163,7 +181,9 @@ public class MainActivity extends BaseActivity {
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, Apk.class.getName());
+				startActivity(intent);
 			}
 		});
 		

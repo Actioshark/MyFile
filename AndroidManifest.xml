@@ -30,6 +30,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="kk.myfile.activity.DirectActivity" />
+		<activity android:name="kk.myfile.activity.TypeActivity" />
 		<activity android:name="kk.myfile.activity.SelectActivity" />
 		<activity android:name="kk.myfile.activity.SettingActivity" />
 		<activity android:name="kk.myfile.activity.SettingSortActivity" />

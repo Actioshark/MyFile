@@ -117,18 +117,27 @@ public class AppUtil {
 		sHandler.postDelayed(runnable, delay);
 	}
 	
-	public static void runOnUiThread(final Runnable runnable, long delay, final long repeat) {
-		sHandler.postDelayed(new Runnable() {
+	public static Runnable runOnUiThread(final Runnable runnable, long delay, final long repeat) {
+		Runnable repeater = new Runnable() {
 			@Override
 			public void run() {
 				sHandler.postDelayed(this, repeat);
 				runnable.run();
 			}
-		}, delay);
+		};
+		
+		sHandler.postDelayed(repeater, delay);
+		
+		return repeater;
 	}
 	
-	public static void removeUiThread(Runnable runnable) {
-		sHandler.removeCallbacks(runnable);
+	public static void removeUiThread(final Runnable runnable) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				sHandler.removeCallbacks(runnable);
+			}
+		});
 	}
 
 	public static void runOnNewThread(Runnable runnable) {

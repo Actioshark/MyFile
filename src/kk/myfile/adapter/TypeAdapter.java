@@ -2,10 +2,9 @@ package kk.myfile.adapter;
 
 import kk.myfile.R;
 import kk.myfile.activity.BaseActivity.Mode;
-import kk.myfile.activity.DirectActivity;
 import kk.myfile.activity.SettingListStyleActivity;
-import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
+import kk.myfile.activity.TypeActivity;
 import kk.myfile.file.Sorter;
 import kk.myfile.file.Sorter.Classify;
 import kk.myfile.leaf.Audio;
@@ -40,17 +39,17 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class DirectAdapter extends BaseAdapter {
-	private final DirectActivity mActivity;
+public class TypeAdapter extends BaseAdapter {
+	private final TypeActivity mActivity;
 	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
 	
-	public DirectAdapter(DirectActivity activity) {
+	public TypeAdapter(TypeActivity activity) {
 		mActivity = activity;
 	}
 	
-	public void setData(final List<Leaf> data, final int position) {
+	public void setData(final List<Leaf> data) {
 		mMark = data;
 		
 		AppUtil.runOnNewThread(new Runnable() {
@@ -71,12 +70,6 @@ public class DirectAdapter extends BaseAdapter {
 							
 							notifyDataSetChanged();
 							mActivity.showInfo();
-							
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									mActivity.setSelection(position);
-								}
-							});
 						}
 					}
 				});
@@ -176,8 +169,6 @@ public class DirectAdapter extends BaseAdapter {
 						mActivity.showTitle();
 						mActivity.showInfo();
 						notifyDataSetChanged();
-					} else if (holder.leaf instanceof Direct) {
-						mActivity.showDirect(new Node((Direct) holder.leaf), true);
 					} else {
 						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
 							SimpleDialog dialog = new SimpleDialog(mActivity);

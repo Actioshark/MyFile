@@ -14,6 +14,13 @@ import kk.myfile.R;
 import kk.myfile.util.AppUtil;
 
 public abstract class BaseActivity extends Activity {
+	public static final int REQ_COPY_TO = 1;
+	public static final int REQ_CUT_TO = 2;
+	
+	public static enum Mode {
+		Normal, Select,
+	}
+	
 	protected View mStatusBar;
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)

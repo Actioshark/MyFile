@@ -51,6 +51,64 @@ public class Tree {
 		return direct;
 	}
 	
+	public static List<Leaf> search(Direct direct, Class<?> cls, String input) {
+		List<Leaf> ret = new ArrayList<Leaf>();
+		
+		search(direct, cls, input.toLowerCase(Setting.LOCALE), ret);
+		
+		return ret;
+	}
+	
+	private static void search(Direct direct, Class<?> cls, String input, List<Leaf> ret) {
+		try {
+			List<Leaf> children = direct.getChildren();
+			
+			synchronized (children) {
+				for (Leaf leaf : children) {
+					if ((cls == null || cls.isInstance(leaf)) && (input == null ||
+							input.length() < 1 || leaf.getFile().getName().
+							toLowerCase(Setting.LOCALE).contains(input))) {
+						
+						ret.add(leaf);
+					}
+					
+					if (leaf instanceof Direct) {
+						search((Direct) leaf, cls, input, ret);
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+	}
+	
+	public static List<Leaf> search(Direct direct, Class<?> cls) {
+		List<Leaf> ret = new ArrayList<Leaf>();
+		
+		search(direct, cls, ret);
+		
+		return ret;
+	}
+	
+	private static void search(Direct direct, Class<?> cls, List<Leaf> ret) {
+		try {
+			List<Leaf> children = direct.getChildren();
+			
+			synchronized (children) {
+				for (Leaf leaf : children) {
+					if (cls.isInstance(leaf)) {
+						
+						ret.add(leaf);
+					}
+					
+					if (leaf instanceof Direct) {
+						search((Direct) leaf, cls, ret);
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+	}
+	
 	public static List<Leaf> search(Direct direct, String input) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		
