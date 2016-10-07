@@ -21,7 +21,7 @@
 			android:paddingLeft="@dimen/main_padding"
 			android:paddingRight="@dimen/main_padding"
 			android:gravity="left|center_vertical"
-			android:textSize="14sp"
+			android:textSize="16sp"
 			android:textColor="@color/main_text_color"
 			android:text="@string/setting_big_file_limit" />
 
@@ -34,7 +34,7 @@
 			android:singleLine="true"
 			android:numeric="integer"
 			android:maxLength="4"
-			android:textSize="14sp"
+			android:textSize="16sp"
 			android:textColor="@color/main_text"
 			android:hint="" />
 
@@ -55,7 +55,7 @@
 			android:paddingLeft="@dimen/main_padding"
 			android:paddingRight="@dimen/main_padding"
 			android:gravity="left|center_vertical"
-			android:textSize="14sp"
+			android:textSize="16sp"
 			android:textColor="@color/main_text_color"
 			android:text="@string/setting_recent_file_limit" />
 
@@ -68,7 +68,7 @@
 			android:singleLine="true"
 			android:numeric="integer"
 			android:maxLength="4"
-			android:textSize="14sp"
+			android:textSize="16sp"
 			android:textColor="@color/main_text"
 			android:hint="" />
 

@@ -78,8 +78,8 @@
 	<string name="setting_list_style">List Style</string>
 	<string name="setting_hidden">Show Hidden Files When Searching</string>
 	<string name="setting_num_limit">Number Of Files Limit</string>
-	<string name="setting_big_file_limit">Number Of Big Files</string>
-	<string name="setting_recent_file_limit">Number Of Recent Files</string>
+	<string name="setting_big_file_limit">Number Of Big</string>
+	<string name="setting_recent_file_limit">Number Of Recent</string>
 
 	<string name="sort_Directory">Directory or File</string>
 	<string name="sort_ModifyTime">Modify Time</string>
