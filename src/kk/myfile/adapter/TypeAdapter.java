@@ -2,7 +2,6 @@ package kk.myfile.adapter;
 
 import kk.myfile.R;
 import kk.myfile.activity.BaseActivity.Mode;
-import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.activity.TypeActivity;
 import kk.myfile.file.Sorter;
@@ -41,16 +40,21 @@ import android.widget.TextView;
 
 public class TypeAdapter extends BaseAdapter {
 	private final TypeActivity mActivity;
+	private final int mType;
+	private final ListStyle mListStyle;
+	
 	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
 	
-	public TypeAdapter(TypeActivity activity) {
+	public TypeAdapter(TypeActivity activity, int type, ListStyle ls) {
 		mActivity = activity;
+		mType = type;
+		mListStyle = ls;
 	}
 	
-	public void setData(final List<Leaf> data, boolean sort) {
-		if (sort == false) {
+	public void setData(final List<Leaf> data) {
+		if (mType != TypeActivity.TYPE_CLASS) {
 			synchronized (mData) {
 				mData.clear();
 				synchronized (data) {
@@ -157,9 +161,7 @@ public class TypeAdapter extends BaseAdapter {
 		final ViewHolder holder;
 		
 		if (view == null) {
-			String key = Setting.getListStyle();
-			ListStyle ls = SettingListStyleActivity.getListStyle(key);
-			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
+			view = mActivity.getLayoutInflater().inflate(mListStyle.layout, null);
 			
 			holder = new ViewHolder();
 			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
@@ -169,7 +171,7 @@ public class TypeAdapter extends BaseAdapter {
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
 			
-			if (ls.needDetail) {
+			if (mListStyle.needDetail) {
 				view.setOnTouchListener(new OnTouchListener() {
 					@Override
 					public boolean onTouch(View view, MotionEvent event) {

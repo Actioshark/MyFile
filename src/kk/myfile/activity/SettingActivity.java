@@ -65,5 +65,15 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		
+		// 数量限制
+		findViewById(R.id.ll_num_limit)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SettingNumLimitActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 }

@@ -45,6 +45,20 @@ public class SettingListStyleActivity extends BaseActivity {
 		return String.format(Setting.LOCALE, "ls_%d_%d", cls, index);
 	}
 	
+	public static String changeKey(String key, int cls, int index) {
+		int c = key.charAt(3) - '0';
+		if (cls >= 1 && cls <= 2) {
+			c = cls;
+		}
+		
+		int i = key.charAt(5) - '0';
+		if (index >= 1 && index <= 3) {
+			i = index;
+		}
+		
+		return getKey(c, i);
+	}
+	
 	public static ListStyle getListStyle(String key) {
 		if (sListMap.containsKey(key)) {
 			return sListMap.get(key);

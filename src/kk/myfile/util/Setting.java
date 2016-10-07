@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kk.myfile.activity.SettingNumLimitActivity;
 import kk.myfile.file.Sorter.Classify;
 
 import org.json.JSONArray;
@@ -22,6 +23,8 @@ public class Setting {
 	static final String KEY_SORT_FACTOR = "sort_factor_%s";
 	static final String KEY_LIST_STYLE = "list_style";
 	static final String KEY_SHOW_HIDDEN = "show_hidden";
+	static final String KEY_BIG_FILE_NUM = "big_file_num";
+	static final String KEY_RECENT_FILE_NUM = "recent_file_num";
 
 	private static SharedPreferences sPrefer;
 
@@ -97,6 +100,46 @@ public class Setting {
 	public static void setShowHidden(boolean visible) {
 		Editor editor = sPrefer.edit();
 		editor.putBoolean(KEY_SHOW_HIDDEN, visible);
+		editor.commit();
+	}
+	
+	public static int getBigFileNum() {
+		int num = sPrefer.getInt(KEY_BIG_FILE_NUM, SettingNumLimitActivity.DEF_NUM);
+		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
+			num = SettingNumLimitActivity.DEF_NUM;
+			setBigFileNum(num);
+		}
+		
+		return num;
+	}
+	
+	public static void setBigFileNum(int num) {
+		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
+			num = SettingNumLimitActivity.DEF_NUM;
+		}
+		
+		Editor editor = sPrefer.edit();
+		editor.putInt(KEY_BIG_FILE_NUM, num);
+		editor.commit();
+	}
+	
+	public static int getRecentFileNum() {
+		int num = sPrefer.getInt(KEY_RECENT_FILE_NUM, SettingNumLimitActivity.DEF_NUM);
+		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
+			num = SettingNumLimitActivity.DEF_NUM;
+			setRecentFileNum(num);
+		}
+		
+		return num;
+	}
+	
+	public static void setRecentFileNum(int num) {
+		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
+			num = SettingNumLimitActivity.DEF_NUM;
+		}
+		
+		Editor editor = sPrefer.edit();
+		editor.putInt(KEY_RECENT_FILE_NUM, num);
 		editor.commit();
 	}
 }

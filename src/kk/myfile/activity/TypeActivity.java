@@ -25,7 +25,6 @@ import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -184,9 +183,9 @@ public class TypeActivity extends BaseActivity {
 						public void run() {
 							List<Leaf> list;
 							if (mType == TYPE_BIG) {
-								list = Tree.loadBig(mark, 100);
+								list = Tree.loadBig(mark, Setting.getBigFileNum());
 							} else if (mType == TYPE_RECENT) {
-								list = Tree.loadRecent(mark, 100);
+								list = Tree.loadRecent(mark, Setting.getRecentFileNum());
 							} else {
 								list = Tree.loadType(mark, mClass);
 							}
@@ -195,7 +194,7 @@ public class TypeActivity extends BaseActivity {
 							
 							synchronized (mGvList) {
 								if (mDirect == mark) {
-									mTypeAdapter.setData(ret, mType == TYPE_CLASS);
+									mTypeAdapter.setData(ret);
 								}
 							}
 						}
@@ -205,12 +204,15 @@ public class TypeActivity extends BaseActivity {
 		});
 		
 		// 文件列表
-		mTypeAdapter = new TypeAdapter(this);
+		String key = Setting.getListStyle();
+		if (mType != TypeActivity.TYPE_CLASS) {
+			key = SettingListStyleActivity.changeKey(key, 2, -1);
+		}
+		ListStyle ls = SettingListStyleActivity.getListStyle(key);
+		
+		mTypeAdapter = new TypeAdapter(this, mType, ls);
 		mGvList = (GridView) findViewById(R.id.gv_list);
 		mGvList.setAdapter(mTypeAdapter);
-
-		String key = Setting.getListStyle();
-		ListStyle ls = SettingListStyleActivity.getListStyle(key);
 		mGvList.setNumColumns(ls.column);
 		mGvList.setVerticalSpacing(ls.vertSpace);
 		
@@ -274,9 +276,9 @@ public class TypeActivity extends BaseActivity {
 				while (isFinishing() == false) {
 					List<Leaf> list;
 					if (mType == TYPE_BIG) {
-						list = Tree.loadBig(direct, 100);
+						list = Tree.loadBig(direct, Setting.getBigFileNum());
 					} else if (mType == TYPE_RECENT) {
-						list = Tree.loadRecent(direct, 100);
+						list = Tree.loadRecent(direct, Setting.getRecentFileNum());
 					} else {
 						list = Tree.loadType(direct, mClass);
 					}
@@ -289,7 +291,7 @@ public class TypeActivity extends BaseActivity {
 						}
 						
 						synchronized (direct) {
-							mTypeAdapter.setData(ret, mType == TYPE_CLASS);
+							mTypeAdapter.setData(ret);
 							
 							if (direct.getTag() == null) {
 								return;

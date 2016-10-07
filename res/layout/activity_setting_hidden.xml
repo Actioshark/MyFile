@@ -26,7 +26,6 @@
 			android:layout_height="match_parent"
 			android:paddingLeft="@dimen/main_padding"
 			android:paddingRight="@dimen/main_padding"
-			android:layout_marginTop="@dimen/main_gap"
 			android:gravity="left|center_vertical"
 			android:textSize="@dimen/main_direct_text"
 			android:textColor="@color/main_text_color"

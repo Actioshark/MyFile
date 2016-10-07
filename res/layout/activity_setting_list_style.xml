@@ -25,7 +25,7 @@
 				android:orientation="horizontal">
 
 				<ImageView
-				    android:id="@+id/iv_select"
+					android:id="@+id/iv_select"
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
@@ -36,14 +36,13 @@
 					android:layout_height="match_parent"
 					android:paddingLeft="@dimen/main_padding"
 					android:paddingRight="@dimen/main_padding"
-					android:layout_marginTop="@dimen/main_gap"
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_1_1" />
 
 			</LinearLayout>
-			
+
 			<LinearLayout
 				android:id="@+id/ll_1_2"
 				android:layout_width="match_parent"
@@ -53,7 +52,7 @@
 				android:orientation="horizontal">
 
 				<ImageView
-				    android:id="@+id/iv_select"
+					android:id="@+id/iv_select"
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
@@ -64,14 +63,13 @@
 					android:layout_height="match_parent"
 					android:paddingLeft="@dimen/main_padding"
 					android:paddingRight="@dimen/main_padding"
-					android:layout_marginTop="@dimen/main_gap"
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_1_2" />
 
 			</LinearLayout>
-			
+
 			<LinearLayout
 				android:id="@+id/ll_1_3"
 				android:layout_width="match_parent"
@@ -81,7 +79,7 @@
 				android:orientation="horizontal">
 
 				<ImageView
-				    android:id="@+id/iv_select"
+					android:id="@+id/iv_select"
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
@@ -92,14 +90,13 @@
 					android:layout_height="match_parent"
 					android:paddingLeft="@dimen/main_padding"
 					android:paddingRight="@dimen/main_padding"
-					android:layout_marginTop="@dimen/main_gap"
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_1_3" />
 
 			</LinearLayout>
-			
+
 			<LinearLayout
 				android:id="@+id/ll_2_1"
 				android:layout_width="match_parent"
@@ -109,7 +106,7 @@
 				android:orientation="horizontal">
 
 				<ImageView
-				    android:id="@+id/iv_select"
+					android:id="@+id/iv_select"
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
@@ -120,14 +117,13 @@
 					android:layout_height="match_parent"
 					android:paddingLeft="@dimen/main_padding"
 					android:paddingRight="@dimen/main_padding"
-					android:layout_marginTop="@dimen/main_gap"
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_2_1" />
 
 			</LinearLayout>
-			
+
 			<LinearLayout
 				android:id="@+id/ll_2_2"
 				android:layout_width="match_parent"
@@ -137,7 +133,7 @@
 				android:orientation="horizontal">
 
 				<ImageView
-				    android:id="@+id/iv_select"
+					android:id="@+id/iv_select"
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
@@ -148,14 +144,13 @@
 					android:layout_height="match_parent"
 					android:paddingLeft="@dimen/main_padding"
 					android:paddingRight="@dimen/main_padding"
-					android:layout_marginTop="@dimen/main_gap"
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_2_2" />
 
 			</LinearLayout>
-			
+
 			<LinearLayout
 				android:id="@+id/ll_2_3"
 				android:layout_width="match_parent"
@@ -165,7 +160,7 @@
 				android:orientation="horizontal">
 
 				<ImageView
-				    android:id="@+id/iv_select"
+					android:id="@+id/iv_select"
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
@@ -176,7 +171,6 @@
 					android:layout_height="match_parent"
 					android:paddingLeft="@dimen/main_padding"
 					android:paddingRight="@dimen/main_padding"
-					android:layout_marginTop="@dimen/main_gap"
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
