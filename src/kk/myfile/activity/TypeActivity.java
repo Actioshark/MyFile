@@ -45,7 +45,13 @@ import android.widget.TextView;
 
 public class TypeActivity extends BaseActivity {
 	public static final String KEY_TYPE = "type_type";
+	public static final String KEY_CLASS = "type_class";
 
+	public static final int TYPE_BIG = 1;
+	public static final int TYPE_RECENT = 2;
+	public static final int TYPE_CLASS = 3;
+	
+	private int mType;
 	private Class<?> mClass;
 	private String mName;
 	private Direct mDirect;
@@ -88,15 +94,18 @@ public class TypeActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		String type = getIntent().getStringExtra(KEY_TYPE);
-		try {
-			mClass = Class.forName(type);
-			int index = type.lastIndexOf('.');
-			mName = AppUtil.getString(String.format("type_%s", type.substring(index + 1)
-					.toLowerCase(Setting.LOCALE)));
-		} catch (Exception e) {
-			finish();
-			return;
+		mType = getIntent().getIntExtra(KEY_TYPE, TYPE_CLASS);
+		if (mType == TYPE_CLASS) {
+			try {
+				String cls = getIntent().getStringExtra(KEY_CLASS);
+				mClass = Class.forName(cls);
+				int index = cls.lastIndexOf('.');
+				mName = AppUtil.getString(String.format("type_%s", cls.substring(index + 1)
+						.toLowerCase(Setting.LOCALE)));
+			} catch (Exception e) {
+				finish();
+				return;
+			}
 		}
 		
 		setContentView(R.layout.activity_type);
@@ -173,12 +182,20 @@ public class TypeActivity extends BaseActivity {
 					
 					AppUtil.runOnNewThread(new Runnable() {
 						public void run() {
-							List<Leaf> list = Tree.search(mark, mClass,
-									mEtSearch.getText().toString());
+							List<Leaf> list;
+							if (mType == TYPE_BIG) {
+								list = Tree.loadBig(mark, 100);
+							} else if (mType == TYPE_RECENT) {
+								list = Tree.loadRecent(mark, 100);
+							} else {
+								list = Tree.loadType(mark, mClass);
+							}
+							
+							List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 							
 							synchronized (mGvList) {
 								if (mDirect == mark) {
-									mTypeAdapter.setData(list);
+									mTypeAdapter.setData(ret, mType == TYPE_CLASS);
 								}
 							}
 						}
@@ -256,12 +273,15 @@ public class TypeActivity extends BaseActivity {
 				
 				while (isFinishing() == false) {
 					List<Leaf> list;
-					String input = mEtSearch.getText().toString();
-					if (input.length() > 0) {
-						list = Tree.search(direct, mClass, input);
+					if (mType == TYPE_BIG) {
+						list = Tree.loadBig(direct, 100);
+					} else if (mType == TYPE_RECENT) {
+						list = Tree.loadRecent(direct, 100);
 					} else {
-						list = Tree.search(direct, mClass);
+						list = Tree.loadType(direct, mClass);
 					}
+					
+					List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 
 					synchronized (mGvList) {
 						if (mDirect != direct) {
@@ -269,7 +289,7 @@ public class TypeActivity extends BaseActivity {
 						}
 						
 						synchronized (direct) {
-							mTypeAdapter.setData(list);
+							mTypeAdapter.setData(ret, mType == TYPE_CLASS);
 							
 							if (direct.getTag() == null) {
 								return;

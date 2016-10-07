@@ -120,7 +120,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, Text.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
+				intent.putExtra(TypeActivity.KEY_CLASS, Text.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -130,7 +131,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, Image.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
+				intent.putExtra(TypeActivity.KEY_CLASS, Image.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -140,7 +142,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, Audio.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
+				intent.putExtra(TypeActivity.KEY_CLASS, Audio.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -150,7 +153,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, Video.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
+				intent.putExtra(TypeActivity.KEY_CLASS, Video.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -162,7 +166,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, Office.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
+				intent.putExtra(TypeActivity.KEY_CLASS, Office.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -172,7 +177,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, Zip.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
+				intent.putExtra(TypeActivity.KEY_CLASS, Zip.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -182,7 +188,31 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, Apk.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
+				intent.putExtra(TypeActivity.KEY_CLASS, Apk.class.getName());
+				startActivity(intent);
+			}
+		});
+		
+		// 文件分类
+		root = findViewById(R.id.ll_file_3);
+		
+		root.findViewById(R.id.ll_big).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_BIG);
+				startActivity(intent);
+			}
+		});
+		
+		root.findViewById(R.id.ll_recent).
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
+				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_RECENT);
 				startActivity(intent);
 			}
 		});

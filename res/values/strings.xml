@@ -23,6 +23,8 @@
 	<string name="word_cover">Cover</string>
 	<string name="word_cover_all">Cover All</string>
 	<string name="word_any">Any</string>
+	<string name="word_big_file">Big File</string>
+	<string name="word_recent_file">Recent File</string>
 
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_open_as">Open As</string>

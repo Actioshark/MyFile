@@ -2,7 +2,9 @@ package kk.myfile.file;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -53,89 +55,172 @@ public class Tree {
 		return direct;
 	}
 	
-	public static List<Leaf> search(Direct direct, Class<?> cls, String input) {
+	public static List<Leaf> loadAll(Direct direct) {
 		List<Leaf> ret = new ArrayList<Leaf>();
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.offer(direct);
 		
-		search(direct, cls, input.toLowerCase(Setting.LOCALE), ret);
+		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			List<Leaf> children;
+			try {
+				children = dir.getChildren();
+			} catch (Exception e) {
+				continue;
+			}
+			
+			synchronized (children) {
+				for (Leaf leaf : children) {
+					ret.add(leaf);
+					
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+					}
+				}
+			}
+		}
 		
 		return ret;
 	}
 	
-	private static void search(Direct direct, Class<?> cls, String input, List<Leaf> ret) {
-		try {
-			List<Leaf> children = direct.getChildren();
+	public static List<Leaf> loadType(Direct direct, Class<?> cls) {
+		List<Leaf> ret = new ArrayList<Leaf>();
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.offer(direct);
+		
+		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			List<Leaf> children;
+			try {
+				children = dir.getChildren();
+			} catch (Exception e) {
+				continue;
+			}
 			
 			synchronized (children) {
 				for (Leaf leaf : children) {
-					if ((cls == null || cls.isInstance(leaf)) && (input == null ||
-							input.length() < 1 || leaf.getFile().getName().
-							toLowerCase(Setting.LOCALE).contains(input))) {
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+					} else if (cls.isInstance(leaf)) {
+						ret.add(leaf);
+					}
+				}
+			}
+		}
+		
+		return ret;
+	}
+	
+	public static List<Leaf> loadBig(Direct direct, int limit) {
+		List<Leaf> ret = new ArrayList<Leaf>();
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.offer(direct);
+		
+		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			List<Leaf> children;
+			try {
+				children = dir.getChildren();
+			} catch (Exception e) {
+				continue;
+			}
+			
+			synchronized (children) {
+				for (Leaf leaf : children) {
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+						continue;
+					}
+					
+					long length = leaf.getFile().length();
+					leaf.setTag(length);
+					
+					int index = -1;
+					int size = ret.size();
+					
+					for (int i = size - 1; i >= 0; i--) {
+						long len = (Long) ret.get(i).getTag();
 						
-						ret.add(leaf);
+						if (len >= length) {
+							index = i;
+							break;
+						}
 					}
 					
-					if (leaf instanceof Direct) {
-						search((Direct) leaf, cls, input, ret);
-					}
-				}
-			}
-		} catch (Exception e) {
-		}
-	}
-	
-	public static List<Leaf> search(Direct direct, Class<?> cls) {
-		List<Leaf> ret = new ArrayList<Leaf>();
-		
-		search(direct, cls, ret);
-		
-		return ret;
-	}
-	
-	private static void search(Direct direct, Class<?> cls, List<Leaf> ret) {
-		try {
-			List<Leaf> children = direct.getChildren();
-			
-			synchronized (children) {
-				for (Leaf leaf : children) {
-					if (cls.isInstance(leaf)) {
+					if (++index < limit) {
+						ret.add(index, leaf);
 						
-						ret.add(leaf);
-					}
-					
-					if (leaf instanceof Direct) {
-						search((Direct) leaf, cls, ret);
+						if (size + 1 > limit) {
+							ret.remove(size);
+						}
 					}
 				}
 			}
-		} catch (Exception e) {
 		}
-	}
-	
-	public static List<Leaf> search(Direct direct, String input) {
-		List<Leaf> ret = new ArrayList<Leaf>();
-		
-		search(direct, input.toLowerCase(Setting.LOCALE), ret);
 		
 		return ret;
 	}
 	
-	private static void search(Direct direct, String input, List<Leaf> ret) {
-		try {
-			List<Leaf> children = direct.getChildren();
+	public static List<Leaf> loadRecent(Direct direct, int limit) {
+		List<Leaf> ret = new ArrayList<Leaf>();
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.offer(direct);
+		
+		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			List<Leaf> children;
+			try {
+				children = dir.getChildren();
+			} catch (Exception e) {
+				continue;
+			}
 			
 			synchronized (children) {
 				for (Leaf leaf : children) {
-					if (leaf.getFile().getName().toLowerCase(Setting.LOCALE).contains(input)) {
-						ret.add(leaf);
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+						continue;
 					}
 					
-					if (leaf instanceof Direct) {
-						search((Direct) leaf, input, ret);
+					long time = leaf.getFile().lastModified();
+					leaf.setTag(time);
+					
+					int index = -1;
+					int size = ret.size();
+					
+					for (int i = size - 1; i >= 0; i--) {
+						long tm = (Long) ret.get(i).getTag();
+						
+						if (tm >= time) {
+							index = i;
+							break;
+						}
+					}
+					
+					if (++index < limit) {
+						ret.add(index, leaf);
+						
+						if (size + 1 > limit) {
+							ret.remove(size);
+						}
 					}
 				}
 			}
-		} catch (Exception e) {
 		}
+		
+		return ret;
+	}
+	
+	public static List<Leaf> search(List<Leaf> list, String key) {
+		List<Leaf> ret = new ArrayList<Leaf>();
+		key = key.toLowerCase(Setting.LOCALE);
+		
+		for (Leaf leaf : list) {
+			try {
+				if (leaf.getFile().getName().toLowerCase(Setting.LOCALE).contains(key)) {
+					ret.add(leaf);
+				}
+			} catch (Exception e) {
+			}
+		}
+		
+		return ret;
 	}
 	
 	public static void createDirect(Context context, final String parent, final IProgressCallback cb) {

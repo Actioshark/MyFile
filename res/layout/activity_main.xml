@@ -456,7 +456,7 @@
 			android:baselineAligned="false">
 
 			<LinearLayout
-				android:id="@+id/ll_text"
+				android:id="@+id/ll_big"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
@@ -473,7 +473,7 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:scaleType="centerInside"
-					android:src="@drawable/file_text" />
+					android:src="@drawable/big_data" />
 
 				<View
 					android:layout_width="match_parent"
@@ -486,7 +486,8 @@
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/word_big_file" />
 
 				<View
 					android:layout_width="match_parent"
@@ -496,7 +497,7 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:id="@+id/ll_image"
+				android:id="@+id/ll_recent"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
@@ -513,7 +514,7 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:scaleType="centerInside"
-					android:src="@drawable/file_image" />
+					android:src="@drawable/clock" />
 
 				<View
 					android:layout_width="match_parent"
@@ -526,7 +527,8 @@
 					android:layout_height="wrap_content"
 					android:gravity="center"
 					android:textSize="@dimen/main_file_text"
-					android:textColor="@color/main_text" />
+					android:textColor="@color/main_text"
+					android:text="@string/word_recent_file" />
 
 				<View
 					android:layout_width="match_parent"

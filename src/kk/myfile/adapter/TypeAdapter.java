@@ -49,7 +49,26 @@ public class TypeAdapter extends BaseAdapter {
 		mActivity = activity;
 	}
 	
-	public void setData(final List<Leaf> data) {
+	public void setData(final List<Leaf> data, boolean sort) {
+		if (sort == false) {
+			synchronized (mData) {
+				mData.clear();
+				synchronized (data) {
+					mData.addAll(data);
+				}
+			}
+			
+			AppUtil.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					notifyDataSetChanged();
+					mActivity.showInfo();
+				}
+			});
+			
+			return;
+		}
+		
 		mMark = data;
 		
 		AppUtil.runOnNewThread(new Runnable() {
@@ -63,9 +82,11 @@ public class TypeAdapter extends BaseAdapter {
 					@Override
 					public void run() {
 						if (mMark == data) {
-							mData.clear();
-							synchronized (data) {
-								mData.addAll(data);
+							synchronized (mData) {
+								mData.clear();
+								synchronized (data) {
+									mData.addAll(data);
+								}
 							}
 							
 							notifyDataSetChanged();
@@ -79,7 +100,9 @@ public class TypeAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return mData.size();
+		synchronized (mData) {
+			return mData.size();
+		}
 	}
 
 	@Override
@@ -94,11 +117,14 @@ public class TypeAdapter extends BaseAdapter {
 	
 	public List<Leaf> getSelected() {
 		List<Leaf> list = new ArrayList<Leaf>();
-		int size = mData.size();
 		
-		for (Integer position : mSelected) {
-			if (position < size) {
-				list.add(mData.get(position));
+		synchronized (mData) {
+			int size = mData.size();
+			
+			for (Integer position : mSelected) {
+				if (position < size) {
+					list.add(mData.get(position));
+				}
 			}
 		}
 		
@@ -113,7 +139,7 @@ public class TypeAdapter extends BaseAdapter {
 		if (select) {
 			mSelected.clear();
 			
-			int len = mData.size();
+			int len = getCount();
 			for (int i = 0 ; i < len; i++) {
 				mSelected.add(i);
 			}
