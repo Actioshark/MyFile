@@ -81,7 +81,7 @@ public class Setting {
 				jo.put("name", dp.name);
 				jo.put("path", dp.path);
 				
-				ja.put(i, dp);
+				ja.put(i, jo);
 			} catch (Exception e){
 			}
 		}
