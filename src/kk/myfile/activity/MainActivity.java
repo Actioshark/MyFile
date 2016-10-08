@@ -21,6 +21,7 @@ import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
 import kk.myfile.leaf.Zip;
 import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.InputDialog;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
@@ -29,8 +30,14 @@ public class MainActivity extends BaseActivity {
 	public static final int REQ_SELECT_PATH = 1;
 	
 	public static final String KEY_INDEX = "main_index";
+	public static final String KEY_NAME = "main_name";
 	
-	private List<String> mPaths;
+	public static class DefPath {
+		public String name;
+		public String path;
+	}
+	private List<DefPath> mPaths;
+	
 	private final List<TextView> mTvDirects = new ArrayList<TextView>();
 	private View mLlAdd;
 	
@@ -55,9 +62,9 @@ public class MainActivity extends BaseActivity {
 			tv.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					String path = mPaths.get(index);
+					DefPath dp = mPaths.get(index);
 					try {
-						File file = new File(path);
+						File file = new File(dp.path);
 						if (file.exists() == false || file.isDirectory() == false) {
 							throw new Exception();
 						}
@@ -67,7 +74,7 @@ public class MainActivity extends BaseActivity {
 					}
 					
 					Intent intent = new Intent(MainActivity.this, DirectActivity.class);
-					intent.putExtra(DirectActivity.KEY_PATH, path);
+					intent.putExtra(DirectActivity.KEY_PATH, dp.path);
 					startActivity(intent);
 				}
 			});
@@ -89,8 +96,9 @@ public class MainActivity extends BaseActivity {
 								}
 							} else if (btn == 2) {
 								Intent intent = new Intent(MainActivity.this, SelectActivity.class);
-								intent.putExtra(SelectActivity.KEY_PATH, mPaths.get(index));
+								intent.putExtra(SelectActivity.KEY_PATH, mPaths.get(index).path);
 								intent.putExtra(KEY_INDEX, index);
+								intent.putExtra(KEY_NAME, mPaths.get(index).name);
 								startActivityForResult(intent, REQ_SELECT_PATH);
 							}
 							
@@ -247,7 +255,7 @@ public class MainActivity extends BaseActivity {
 			TextView tv = mTvDirects.get(i);
 			
 			if (i < mPaths.size()) {
-				tv.setText(mPaths.get(i));
+				tv.setText(mPaths.get(i).name);
 				tv.setVisibility(View.VISIBLE);
 			} else {
 				tv.setVisibility(View.GONE);
@@ -270,10 +278,10 @@ public class MainActivity extends BaseActivity {
 				return;
 			}
 			
-			int index = data.getIntExtra(KEY_INDEX, -1);
-			String path = data.getStringExtra(SelectActivity.KEY_PATH);
+			final String path = data.getStringExtra(SelectActivity.KEY_PATH);
+			File file;
 			try {
-				File file = new File(path);
+				file = new File(path);
 				if (file.exists() == false || file.isDirectory() == false) {
 					throw new Exception();
 				}
@@ -282,14 +290,43 @@ public class MainActivity extends BaseActivity {
 				return;
 			}
 			
-			if (index >= 0 && index < mPaths.size()) {
-				mPaths.set(index, path);
-			} else {
-				mPaths.add(path);
+			final int idx = data.getIntExtra(KEY_INDEX, -1);
+			String name = data.getStringExtra(KEY_NAME);
+			if (name == null) {
+				name = file.getName();
 			}
 			
-			Setting.setDefPath(mPaths);
-			refreshPath();
+			final InputDialog id = new InputDialog(this);
+			id.setMessage(R.string.msg_input_path_name);
+			id.setInput(name);
+			id.setClickListener(new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					if (index == 1) {
+						String name = id.getInput();
+						if (name.length() < 1 || name.length() > 20) {
+							App.showToast(R.string.err_name_length_valid, 1, 20);
+							return;
+						}
+						
+						DefPath dp = new DefPath();
+						dp.name = name;
+						dp.path = path;
+						
+						if (idx >= 0 && idx < mPaths.size()) {
+							mPaths.set(idx, dp);
+						} else {
+							mPaths.add(dp);
+						}
+						
+						Setting.setDefPath(mPaths);
+						refreshPath();
+					}
+					
+					id.dismiss();
+				}
+			});
+			id.show();
 		}
 	}
 }

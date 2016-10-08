@@ -27,6 +27,7 @@
 	<string name="word_recent_file">Recent File</string>
 
 	<string name="msg_select_operation">Please select an operation</string>
+	<string name="msg_input_path_name">Input name for path</string>
 	<string name="msg_open_as">Open As</string>
 	<string name="msg_edit_as">Edit As</string>
 	<string name="msg_input_to_search">Input to search</string>
@@ -63,6 +64,7 @@
 	<string name="err_share_failed">Share failed!</string>
 
 	<string name="err_path_not_valid">This is not a valid path</string>
+	<string name="err_name_length_valid">Length must be %1$d ot %2$d!</string>
 	<string name="err_file_read_error">File reading error</string>
 
 	<string name="type_text">Text</string>
@@ -97,5 +99,6 @@
 
 	<string name="def_file_name">File_%03d</string>
 	<string name="def_direct_name">Directory_%03d</string>
+	<string name="def_path_name">SD Card</string>
 
 </resources>

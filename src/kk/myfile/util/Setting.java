@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kk.myfile.R;
+import kk.myfile.activity.MainActivity.DefPath;
 import kk.myfile.activity.SettingNumLimitActivity;
 import kk.myfile.file.Sorter.Classify;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -37,33 +40,48 @@ public class Setting {
 				Context.MODE_PRIVATE);
 	}
 	
-	public static List<String> getDefPath() {
+	public static List<DefPath> getDefPath() {
 		String value = sPrefer.getString(KEY_DEF_PATH, null);
-		List<String> result = new ArrayList<String>();
+		List<DefPath> result = new ArrayList<DefPath>();
 		
 		try {
 			JSONArray ja = new JSONArray(value);
 			int len = ja.length();
 			
 			for (int i = 0; i < len; i++) {
-				result.add(ja.getString(i));
+				JSONObject jo = ja.getJSONObject(i);
+				
+				DefPath dp = new DefPath();
+				dp.name = jo.getString("name");
+				dp.path = jo.getString("path");
+				
+				result.add(dp);
 			}
 		} catch (Exception e) {
 		}
 		
 		if (result.size() < 1) {
-			result.add(DEFAULT_PATH);
+			DefPath dp = new DefPath();
+			dp.name = AppUtil.getString(R.string.def_path_name);
+			dp.path = DEFAULT_PATH;
+			
+			result.add(dp);
 			setDefPath(result);
 		}
 		
 		return result;
 	}
 	
-	public static void setDefPath(List<String> paths) {
+	public static void setDefPath(List<DefPath> paths) {
 		JSONArray ja = new JSONArray();
 		for (int i = 0; i < paths.size(); i++) {
 			try {
-				ja.put(i, paths.get(i));
+				DefPath dp = paths.get(i);
+				JSONObject jo = new JSONObject();
+				jo.put("name", dp.name);
+				jo.put("path", dp.path);
+				
+				ja.put(i, dp);
 			} catch (Exception e){
 			}
 		}
