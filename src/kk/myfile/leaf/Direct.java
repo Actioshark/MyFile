@@ -2,7 +2,9 @@ package kk.myfile.leaf;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import kk.myfile.R;
 import kk.myfile.file.FileUtil;
@@ -58,55 +60,61 @@ public class Direct extends Leaf {
 	}
 	
 	public void loadChildrenRecAll() {
-		try {
-			List<Leaf> children = new ArrayList<Leaf>();
-			for (File file : getFile().listFiles()) {
-				children.add(FileUtil.createLeaf(file));
-			}
-			
-			synchronized (mChildren) {
-				mChildren.clear();
-				mChildren.addAll(children);
-			}
-			
-			for (Leaf leaf : children) {
-				if (leaf instanceof Direct) {
-					Direct direct = (Direct) leaf;
-					direct.loadChildrenRecAll();
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.add(this);
+		
+		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			try {
+				List<Leaf> children = new ArrayList<Leaf>();
+				for (File file : new File(dir.mPath).listFiles()) {
+					children.add(FileUtil.createLeaf(file));
 				}
+				
+				synchronized (dir.mChildren) {
+					dir.mChildren.clear();
+					dir.mChildren.addAll(children);
+				}
+				
+				for (Leaf leaf : children) {
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+					}
+				}
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
 		}
 	}
 	
 	public void loadChildrenRecVis() {
-		try {
-			List<Leaf> children = new ArrayList<Leaf>();
-			for (File file : getFile().listFiles()) {
-				if (Tree.HIDDEN_FILE.equals(file.getName())) {
-					synchronized (mChildren) {
-						mChildren.clear();
-						return;
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.add(this);
+
+loop:	for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			try {
+				List<Leaf> children = new ArrayList<Leaf>();
+				
+				for (File file : new File(dir.mPath).listFiles()) {
+					if (Tree.HIDDEN_FILE.equals(file.getName())) {
+						continue loop;
+					}
+					
+					if (file.isHidden() == false) {
+						children.add(FileUtil.createLeaf(file));
 					}
 				}
 				
-				if (file.isHidden() == false) {
-					children.add(FileUtil.createLeaf(file));
+				synchronized (dir.mChildren) {
+					dir.mChildren.clear();
+					dir.mChildren.addAll(children);
 				}
-			}
-			
-			synchronized (mChildren) {
-				mChildren.clear();
-				mChildren.addAll(children);
-			}
-			
-			for (Leaf leaf : children) {
-				if (leaf instanceof Direct) {
-					Direct direct = (Direct) leaf;
-					direct.loadChildrenRecVis();
+				
+				for (Leaf leaf : children) {
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+					}
 				}
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
 		}
 	}
 	
