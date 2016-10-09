@@ -288,7 +288,7 @@ public class DirectActivity extends BaseActivity {
 		});
 		
 		// 开始
-		showDirect(new Node(direct), false);
+		changeDirect(new Node(direct), false);
 	}
 	
 	public Mode getMode() {
@@ -299,13 +299,13 @@ public class DirectActivity extends BaseActivity {
 		if (mMode != mode) {
 			mMode = mode;
 			
-			showTitle();
-			showInfo();
+			updateTitle();
+			updateInfo();
 			mDirectAdapter.notifyDataSetChanged();
 		}
 	}
 	
-	public void showDirect(Node node, boolean lastToHistory) {
+	public void changeDirect(Node node, boolean lastToHistory) {
 		if (node.direct instanceof TempDirect == false && mNode != null &&
 				node.direct.getPath().equals(mNode.direct.getPath())) {
 			
@@ -374,7 +374,7 @@ public class DirectActivity extends BaseActivity {
 						sb.append('/').append(nodes[i]);
 					}
 					
-					showDirect(new Node(new Direct(sb.toString())), true);
+					changeDirect(new Node(new Direct(sb.toString())), true);
 				}
 			});
 			
@@ -408,7 +408,7 @@ public class DirectActivity extends BaseActivity {
 		mDirectAdapter.setData(node.direct.getChildren(), node.position);
 		
 		// 信息
-		showInfo();
+		updateInfo();
 	}
 	
 	public void refreshDirect() {
@@ -433,20 +433,20 @@ public class DirectActivity extends BaseActivity {
 		mDirectAdapter.setData(mNode.direct.getChildren(), -1);
 		
 		// 信息
-		showInfo();
+		updateInfo();
 	}
 	
 	public boolean backDirect() {
 		if (mHistory.size() > 0) {
 			Node node = mHistory.remove(mHistory.size() - 1);
-			showDirect(node, false);
+			changeDirect(node, false);
 			return true;
 		}
 		
 		return false;
 	}
 	
-	public void showTitle() {
+	public void updateTitle() {
 		if (mMode == Mode.Select) {
 			mTvTitle.setText(R.string.msg_multi_select_mode);
 			mIvSelect.setImageResource(mDirectAdapter.getSelectedCount() < mDirectAdapter.getCount()
@@ -462,7 +462,7 @@ public class DirectActivity extends BaseActivity {
 	public void showSearchResult(List<Leaf> list) {
 		TempDirect direct = new TempDirect(mNode.direct.getPath());
 		direct.setChildren(list);
-		showDirect(new Node(direct), true);
+		changeDirect(new Node(direct), true);
 	}
 	
 	public void showDetail(Leaf leaf) {
@@ -501,7 +501,7 @@ public class DirectActivity extends BaseActivity {
 		mDetailMark = AppUtil.runOnUiThread(mDetailRun, 2000, 20);
 	}
 	
-	public void showInfo() {
+	public void updateInfo() {
 		if (mMode == Mode.Select) {
 			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_select_with_num,
 				mDirectAdapter.getSelectedCount(), mNode.direct.getChildren().size()));

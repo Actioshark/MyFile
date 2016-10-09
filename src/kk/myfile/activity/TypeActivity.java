@@ -260,8 +260,8 @@ public class TypeActivity extends BaseActivity {
 		if (mMode != mode) {
 			mMode = mode;
 			
-			showTitle();
-			showInfo();
+			updateTitle();
+			updateInfo();
 			mTypeAdapter.notifyDataSetChanged();
 		}
 	}
@@ -307,7 +307,7 @@ public class TypeActivity extends BaseActivity {
 		});
 	}
 	
-	public void showTitle() {
+	public void updateTitle() {
 		if (mMode == Mode.Select) {
 			mTvTitle.setText(R.string.msg_multi_select_mode);
 			mIvSelect.setImageResource(mTypeAdapter.getSelectedCount() < mTypeAdapter.getCount()
@@ -355,7 +355,7 @@ public class TypeActivity extends BaseActivity {
 		mDetailMark = AppUtil.runOnUiThread(mDetailRun, 2000, 20);
 	}
 	
-	public void showInfo() {
+	public void updateInfo() {
 		if (mMode == Mode.Select) {
 			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_select_with_num,
 				mTypeAdapter.getSelectedCount(), mTypeAdapter.getCount()));

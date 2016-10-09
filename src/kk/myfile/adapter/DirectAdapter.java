@@ -71,7 +71,7 @@ public class DirectAdapter extends BaseAdapter {
 							}
 							
 							notifyDataSetChanged();
-							mActivity.showInfo();
+							mActivity.updateInfo();
 							
 							AppUtil.runOnUiThread(new Runnable() {
 								public void run() {
@@ -129,8 +129,8 @@ public class DirectAdapter extends BaseAdapter {
 			mSelected.clear();
 		}
 		
-		mActivity.showTitle();
-		mActivity.showInfo();
+		mActivity.updateTitle();
+		mActivity.updateInfo();
 		notifyDataSetChanged();
 	}
 
@@ -174,11 +174,11 @@ public class DirectAdapter extends BaseAdapter {
 							mSelected.add(holder.position);
 						}
 						
-						mActivity.showTitle();
-						mActivity.showInfo();
+						mActivity.updateTitle();
+						mActivity.updateInfo();
 						notifyDataSetChanged();
 					} else if (holder.leaf instanceof Direct) {
-						mActivity.showDirect(new Node((Direct) holder.leaf), true);
+						mActivity.changeDirect(new Node((Direct) holder.leaf), true);
 					} else {
 						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
 							SimpleDialog dialog = new SimpleDialog(mActivity);
@@ -234,8 +234,8 @@ public class DirectAdapter extends BaseAdapter {
 							mSelected.add(holder.position);
 						}
 						
-						mActivity.showTitle();
-						mActivity.showInfo();
+						mActivity.updateTitle();
+						mActivity.updateInfo();
 						notifyDataSetChanged();
 					}
 					

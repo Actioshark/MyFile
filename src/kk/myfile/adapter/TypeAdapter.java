@@ -67,7 +67,7 @@ public class TypeAdapter extends BaseAdapter {
 				@Override
 				public void run() {
 					notifyDataSetChanged();
-					mActivity.showInfo();
+					mActivity.updateInfo();
 				}
 			});
 			
@@ -95,7 +95,7 @@ public class TypeAdapter extends BaseAdapter {
 							}
 							
 							notifyDataSetChanged();
-							mActivity.showInfo();
+							mActivity.updateInfo();
 						}
 					}
 				});
@@ -152,8 +152,8 @@ public class TypeAdapter extends BaseAdapter {
 			mSelected.clear();
 		}
 		
-		mActivity.showTitle();
-		mActivity.showInfo();
+		mActivity.updateTitle();
+		mActivity.updateInfo();
 		notifyDataSetChanged();
 	}
 
@@ -195,8 +195,8 @@ public class TypeAdapter extends BaseAdapter {
 							mSelected.add(holder.position);
 						}
 						
-						mActivity.showTitle();
-						mActivity.showInfo();
+						mActivity.updateTitle();
+						mActivity.updateInfo();
 						notifyDataSetChanged();
 					} else {
 						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
@@ -253,8 +253,8 @@ public class TypeAdapter extends BaseAdapter {
 							mSelected.add(holder.position);
 						}
 						
-						mActivity.showTitle();
-						mActivity.showInfo();
+						mActivity.updateTitle();
+						mActivity.updateInfo();
 						notifyDataSetChanged();
 					}
 					
