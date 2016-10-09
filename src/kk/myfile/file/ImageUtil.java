@@ -1,39 +1,49 @@
 package kk.myfile.file;
 
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.os.SystemClock;
 
+import kk.myfile.R;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Broadcast;
 import kk.myfile.util.Logger;
 
 public class ImageUtil {
 	public static final String BRO_THUM_GOT = "image_util_thum_got";
-
+	
 	private static class BitmapNode {
-		public Bitmap bitmap;
+		public int width;
+		public int height;
 		public long token;
-
-		public BitmapNode(Bitmap bitmap, long token) {
-			this.bitmap = bitmap;
-			this.token = token;
-		}
+		public Bitmap bitmap;
 	}
 
 	private static final int THUM_CACHE_SIZE = 60;
-	@SuppressWarnings("serial")
 	private static final LinkedHashMap<String, BitmapNode> THUM_CACHE =
 			new LinkedHashMap<String, BitmapNode>(THUM_CACHE_SIZE, 0.75f, true) {
+
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected boolean removeEldestEntry(Entry<String, BitmapNode> eldest) {
 			return size() > THUM_CACHE_SIZE;
 		}
 	};
+	
+	private static boolean sIsRunning = false;
+	
+	private static Bitmap sDefBitmap;
+	
+	public static void init(Context context) {
+		sDefBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.file_image);
+	}
 
 	public static Options getSize(String path) {
 		Options options = new Options();
@@ -44,83 +54,101 @@ public class ImageUtil {
 		return options;
 	}
 
-	public static Bitmap getThum(final String path, final int pw, final int ph) {
+	public static Bitmap getThum(String path, int width, int height) {
 		synchronized (THUM_CACHE) {
-			BitmapNode bitmapNode = THUM_CACHE.get(path);
-			Bitmap bitmap = bitmapNode == null ? null : bitmapNode.bitmap;
+			BitmapNode bn = THUM_CACHE.get(path);
 			
-			if (bitmap == null) {
-				final BitmapNode bn = new BitmapNode(null, System.currentTimeMillis());
+			if (bn == null) {
+				bn = new BitmapNode();
 				THUM_CACHE.put(path, bn);
-
-				AppUtil.runOnNewThread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							while (true) {
-								boolean selected = true;
-								
-								synchronized (THUM_CACHE) {
-									if (THUM_CACHE.containsKey(path) == false) {
-										return;
-									}
-									
-									for (BitmapNode bitmapNode : THUM_CACHE.values()) {
-										if (bitmapNode.bitmap == null && bn.token < bitmapNode.token) {
-											selected = false;
-											break;
-										}
-									}
-								}
-									
-								if (selected) {
-									Options size = getSize(path);
-									int sw = (size.outWidth + pw - 1) / pw;
-									int sh = (size.outHeight + ph - 1) / ph;
-									
-									Options op = new Options();
-									op.inSampleSize = Math.min(sw, sh);
-									op.inScaled = true;
-									
-									Bitmap bmp = BitmapFactory.decodeFile(path, op);
-									int bw = bmp.getWidth();
-									int bh = bmp.getHeight();
-									int rw = Math.min(bw, pw);
-									int rh = Math.min(bh, ph);
-									int x = (bw - rw) / 2;
-									int y = (bh - rh) / 2;
-									
-									int[] pixels = new int[rw * rh];
-									bmp.getPixels(pixels, 0, rw, x, y, rw, rh);
-									
-									Config config = bmp.getConfig();
-									if (config == null) {
-										config = Config.ARGB_8888;
-									}
-									bmp = Bitmap.createBitmap(pixels, rw, rh, config);
-									
-									synchronized (THUM_CACHE) {
-										bn.bitmap = bmp;
-									}
-	
-									Broadcast.send(BRO_THUM_GOT, bmp);
-									return;
-								}
-								
-								Thread.sleep(200);
-							}
-						} catch (Exception e) {
-							Logger.print(null, e, path);
-							
-							synchronized (THUM_CACHE) {
-								THUM_CACHE.remove(path);
-							}
-						}
-					}
-				});
+			} else if (bn.bitmap != null) {
+				return bn.bitmap;
 			}
 			
-			return bitmap;
+			bn.width = width;
+			bn.height = height;
+			bn.token = SystemClock.elapsedRealtime();
+			
+			if (sIsRunning) {
+				return null;
+			}
+			
+			sIsRunning = true;
 		}
+
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while (true) {
+						String path = null;
+						BitmapNode bn = null;
+						
+						synchronized (THUM_CACHE) {
+							for (Entry<String, BitmapNode> entry : THUM_CACHE.entrySet()) {
+								BitmapNode node = entry.getValue();
+								if (node.bitmap == null) {
+									if (bn == null || node.token > bn.token) {
+										path = entry.getKey();
+										bn = node;
+									}
+								}
+							}
+						}
+						
+						if (bn == null) {
+							return;
+						}
+						
+						Bitmap bmp;
+						
+						try {
+							Options size = getSize(path);
+							int sw = (size.outWidth + bn.width - 1) / bn.width;
+							int sh = (size.outHeight + bn.height - 1) / bn.height;
+							
+							Options op = new Options();
+							op.inSampleSize = Math.min(sw, sh);
+							op.inScaled = true;
+							
+							bmp = BitmapFactory.decodeFile(path, op);
+							int bw = bmp.getWidth();
+							int bh = bmp.getHeight();
+							int rw = Math.min(bw, bn.width);
+							int rh = Math.min(bh, bn.height);
+							int x = (bw - rw) / 2;
+							int y = (bh - rh) / 2;
+							
+							int[] pixels = new int[rw * rh];
+							bmp.getPixels(pixels, 0, rw, x, y, rw, rh);
+							
+							Config config = bmp.getConfig();
+							if (config == null) {
+								config = Config.ARGB_8888;
+							}
+							bmp = Bitmap.createBitmap(pixels, rw, rh, config);
+						} catch (Exception e) {
+							Logger.print(null, e);
+							
+							bmp = sDefBitmap;
+						}
+						
+						synchronized (THUM_CACHE) {
+							bn.bitmap = bmp;
+						}
+		
+						Broadcast.send(BRO_THUM_GOT, bmp);
+					}
+				} catch (Exception e) {
+					Logger.print(null, e);
+				} finally {
+					synchronized (THUM_CACHE) {
+						sIsRunning = false;
+					}
+				}
+			}
+		});
+		
+		return null;
 	}
 }
