@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 public class AppUtil {
+	private static Context sContext;
 	private static Resources sRes;
 	
 	private static String sPackageName;
@@ -24,6 +25,7 @@ public class AppUtil {
 			return;
 		}
 		
+		sContext = context;
 		sRes = context.getResources();
 		
 		sHandler = new Handler(context.getMainLooper());
@@ -43,6 +45,11 @@ public class AppUtil {
 		if (id > 0) {
 			sStatusBarHeight = sRes.getDimensionPixelSize(id);
 		}
+	}
+	
+	@Deprecated
+	public static Context getContext() {
+		return sContext;
 	}
 
 	public static Resources getRes() {

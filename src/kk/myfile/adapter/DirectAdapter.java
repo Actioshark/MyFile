@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -251,13 +251,13 @@ public class DirectAdapter extends BaseAdapter {
 		
 		holder.name.setText(file.getName());
 		
-		if (leaf.equals(holder.leaf) == false || holder.hasBitmap == false) {
-			Bitmap bmp = leaf.getThum(holder.icon.getWidth(), holder.icon.getHeight());
-			if (bmp != null) {
-				holder.hasBitmap = true;
-				holder.icon.setImageBitmap(bmp);
+		if (leaf.equals(holder.leaf) == false || holder.hasThum == false) {
+			Drawable drawable = leaf.getThum(holder.icon.getWidth(), holder.icon.getHeight());
+			if (drawable != null) {
+				holder.hasThum = true;
+				holder.icon.setImageDrawable(drawable);
 			} else {
-				holder.hasBitmap = false;
+				holder.hasThum = false;
 				holder.icon.setImageResource(leaf.getIcon());
 			}
 		}
@@ -306,7 +306,7 @@ public class DirectAdapter extends BaseAdapter {
 	class ViewHolder {
 		public Leaf leaf;
 		public int position = -1;
-		public boolean hasBitmap = false;
+		public boolean hasThum = false;
 		
 		public ImageView icon;
 		public TextView name;

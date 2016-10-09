@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
-
+import kk.myfile.R;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Broadcast;
 import kk.myfile.util.Logger;
@@ -19,9 +21,8 @@ public class ImageUtil {
 	private static class BitmapNode {
 		public int width;
 		public int height;
-		public int defResId;
 		public long token;
-		public Bitmap bitmap;
+		public Drawable drawable;
 	}
 
 	private static final int THUM_CACHE_SIZE = 60;
@@ -47,7 +48,7 @@ public class ImageUtil {
 		return options;
 	}
 
-	public static Bitmap getThum(String path, int width, int height, int defResId) {
+	public static Drawable getThum(String path, int width, int height) {
 		if (width <= 0 || width > 40960) {
 			width = 128;
 		}
@@ -62,13 +63,12 @@ public class ImageUtil {
 			if (bn == null) {
 				bn = new BitmapNode();
 				THUM_CACHE.put(path, bn);
-			} else if (bn.bitmap != null) {
-				return bn.bitmap;
+			} else if (bn.drawable != null) {
+				return bn.drawable;
 			}
 			
 			bn.width = width;
 			bn.height = height;
-			bn.defResId = defResId;
 			bn.token = SystemClock.elapsedRealtime();
 			
 			if (sIsRunning) {
@@ -89,7 +89,7 @@ public class ImageUtil {
 						synchronized (THUM_CACHE) {
 							for (Entry<String, BitmapNode> entry : THUM_CACHE.entrySet()) {
 								BitmapNode node = entry.getValue();
-								if (node.bitmap == null) {
+								if (node.drawable == null) {
 									if (bn == null || node.token > bn.token) {
 										path = entry.getKey();
 										bn = node;
@@ -129,17 +129,19 @@ public class ImageUtil {
 								config = Config.ARGB_8888;
 							}
 							bmp = Bitmap.createBitmap(pixels, rw, rh, config);
+						
+							synchronized (THUM_CACHE) {
+								bn.drawable = new BitmapDrawable(AppUtil.getRes(), bmp);
+							}
 						} catch (Exception e) {
 							Logger.print(null, e);
 							
-							bmp = BitmapFactory.decodeResource(AppUtil.getRes(), bn.defResId);
-						}
-						
-						synchronized (THUM_CACHE) {
-							bn.bitmap = bmp;
+							synchronized (THUM_CACHE) {
+								bn.drawable = AppUtil.getRes().getDrawable(R.drawable.file_image);
+							}
 						}
 		
-						Broadcast.send(BRO_THUM_GOT, bmp);
+						Broadcast.send(BRO_THUM_GOT, bn.drawable);
 					}
 				} catch (Exception e) {
 					Logger.print(null, e);

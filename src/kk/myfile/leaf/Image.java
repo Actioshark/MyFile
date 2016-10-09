@@ -3,7 +3,7 @@ package kk.myfile.leaf;
 import kk.myfile.R;
 import kk.myfile.file.ImageUtil;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 public class Image extends Leaf {
 	public static final String TYPE = "image/*";
@@ -18,7 +18,7 @@ public class Image extends Leaf {
 	}
 	
 	@Override
-	public Bitmap getThum(int width, int height) {
-		return ImageUtil.getThum(mPath, width, height, getIcon());
+	public Drawable getThum(int width, int height) {
+		return ImageUtil.getThum(mPath, width, height);
 	}
 }

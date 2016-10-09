@@ -2,7 +2,7 @@ package kk.myfile.leaf;
 
 import java.io.File;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 public abstract class Leaf {
 	protected final String mPath;
@@ -47,7 +47,7 @@ public abstract class Leaf {
 	
 	public abstract int getIcon();
 	
-	public Bitmap getThum(int width, int height) {
+	public Drawable getThum(int width, int height) {
 		return null;
 	}
 	
