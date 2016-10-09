@@ -12,6 +12,7 @@ import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.file.ClipPad;
+import kk.myfile.file.ImageUtil;
 import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
@@ -24,6 +25,7 @@ import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Broadcast;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
 
@@ -712,12 +714,30 @@ public class DirectActivity extends BaseActivity {
 		}
 	}
 	
+	private Broadcast.IListener mBroListener = new Broadcast.IListener() {
+		@Override
+		public void onReceive(String name, Object data) {
+			if (ImageUtil.BRO_THUM_GOT.equals(name)) {
+				mDirectAdapter.notifyDataSetChanged();
+			}
+		}
+	};
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
+		Broadcast.addListener(mBroListener, ImageUtil.BRO_THUM_GOT, true);
+		
 		refreshDirect();
 	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		Broadcast.removeLsitener(mBroListener, null);
+	};
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {

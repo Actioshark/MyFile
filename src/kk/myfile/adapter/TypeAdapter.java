@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.app.Dialog;
+import android.graphics.Bitmap;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -265,13 +266,20 @@ public class TypeAdapter extends BaseAdapter {
 		}
 		
 		Leaf leaf = mData.get(position);
-		
 		File file = leaf.getFile();
-		holder.leaf = leaf;
-		holder.position = position;
 		
-		holder.icon.setImageResource(leaf.getIcon());
 		holder.name.setText(file.getName());
+		
+		if (leaf.equals(holder.leaf) == false || holder.hasBitmap == false) {
+			Bitmap bmp = leaf.getThum();
+			if (bmp != null) {
+				holder.hasBitmap = true;
+				holder.icon.setImageBitmap(bmp);
+			} else {
+				holder.hasBitmap = false;
+				holder.icon.setImageResource(leaf.getIcon());
+			}
+		}
 		
 		if (holder.time != null) {
 			Date date = new Date(file.lastModified());
@@ -308,12 +316,16 @@ public class TypeAdapter extends BaseAdapter {
 			holder.select.setVisibility(View.GONE);
 		}
 		
+		holder.leaf = leaf;
+		holder.position = position;
+		
 		return view;
 	}
 
 	class ViewHolder {
 		public Leaf leaf;
 		public int position;
+		public boolean hasBitmap;
 		
 		public ImageView icon;
 		public TextView name;

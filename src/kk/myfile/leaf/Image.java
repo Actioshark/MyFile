@@ -1,6 +1,7 @@
 package kk.myfile.leaf;
 
 import kk.myfile.R;
+import kk.myfile.file.ImageUtil;
 import android.graphics.Bitmap;
 
 public class Image extends Leaf {
@@ -10,18 +11,13 @@ public class Image extends Leaf {
 		super(path);
 	}
 	
-	public Bitmap getThum() {
-		// TODO
-		return null;
-	}
-	
-	public Bitmap getImage() {
-		// TODO
-		return null;
-	}
-	
 	@Override
 	public int getIcon() {
 		return R.drawable.file_image;
+	}
+	
+	@Override
+	public Bitmap getThum() {
+		return ImageUtil.getThum(mPath);
 	}
 }

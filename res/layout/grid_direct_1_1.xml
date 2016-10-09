@@ -16,7 +16,7 @@
 			android:layout_height="50dp"
 			android:layout_marginTop="6dp"
 			android:gravity="center"
-			android:scaleType="centerInside" />
+			android:scaleType="centerCrop" />
 
 		<TextView
 			android:id="@+id/tv_name"

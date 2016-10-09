@@ -2,6 +2,8 @@ package kk.myfile.leaf;
 
 import java.io.File;
 
+import android.graphics.Bitmap;
+
 public abstract class Leaf {
 	protected final String mPath;
 	
@@ -44,4 +46,18 @@ public abstract class Leaf {
 	}
 	
 	public abstract int getIcon();
+	
+	public Bitmap getThum() {
+		return null;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Leaf == false) {
+			return false;
+		}
+		
+		Leaf other = (Leaf) obj;
+		return mPath.equals(other.mPath);
+	}
 }
