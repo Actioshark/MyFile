@@ -41,7 +41,7 @@
 			android:scaleType="centerCrop"
 			android:background="@drawable/btn_trans" />
 	</RelativeLayout>
-	
+
 	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="38dp"
@@ -53,7 +53,7 @@
 			android:layout_height="match_parent"
 			android:background="@color/bar_bg"
 			android:orientation="horizontal">
-	
+
 			<EditText
 				android:id="@+id/et_input"
 				android:layout_width="0dp"
@@ -65,7 +65,7 @@
 				android:focusable="false"
 				android:focusableInTouchMode="false"
 				android:hint="@string/msg_input_to_search" />
-	
+
 			<ImageView
 				android:id="@+id/iv_delete"
 				android:layout_width="42dp"

@@ -75,11 +75,11 @@
 			android:scaleType="centerCrop"
 			android:background="@drawable/btn_trans" />
 	</RelativeLayout>
-	
+
 	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="38dp"
-		android:layout_marginTop="@dimen/main_gap" >
+		android:layout_marginTop="@dimen/main_gap">
 
 		<LinearLayout
 			android:id="@+id/ll_search"
@@ -87,7 +87,7 @@
 			android:layout_height="match_parent"
 			android:background="@color/bar_bg"
 			android:orientation="horizontal">
-	
+
 			<EditText
 				android:id="@+id/et_input"
 				android:layout_width="0dp"
@@ -99,7 +99,7 @@
 				android:focusable="false"
 				android:focusableInTouchMode="false"
 				android:hint="@string/msg_input_to_search" />
-	
+
 			<ImageView
 				android:id="@+id/iv_delete"
 				android:layout_width="42dp"
@@ -110,7 +110,7 @@
 				android:src="@drawable/cross"
 				android:visibility="gone" />
 		</LinearLayout>
-		
+
 		<LinearLayout
 			android:id="@+id/ll_detail"
 			android:layout_width="match_parent"
@@ -118,7 +118,7 @@
 			android:background="@color/bar_bg"
 			android:orientation="horizontal"
 			android:alpha="0">
-	
+
 			<ImageView
 				android:id="@+id/iv_icon"
 				android:layout_width="40dp"
@@ -126,12 +126,12 @@
 				android:padding="3dp"
 				android:gravity="center"
 				android:scaleType="centerInside" />
-	
+
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:orientation="vertical">
-	
+
 				<TextView
 					android:id="@+id/tv_name"
 					android:layout_width="match_parent"
@@ -144,14 +144,14 @@
 					android:ellipsize="middle"
 					android:textSize="13sp"
 					android:textColor="@color/main_text_color" />
-	
+
 				<LinearLayout
 					android:id="@+id/ll_bottom"
 					android:layout_width="match_parent"
 					android:layout_height="0dp"
 					android:layout_weight="1"
 					android:orientation="horizontal">
-	
+
 					<TextView
 						android:id="@+id/tv_time"
 						android:layout_width="wrap_content"
@@ -163,12 +163,12 @@
 						android:ellipsize="middle"
 						android:textSize="13sp"
 						android:textColor="@color/main_text_color" />
-	
+
 					<View
 						android:layout_width="0dp"
 						android:layout_height="match_parent"
 						android:layout_weight="1" />
-	
+
 					<TextView
 						android:id="@+id/tv_size"
 						android:layout_width="wrap_content"
@@ -183,7 +183,7 @@
 				</LinearLayout>
 			</LinearLayout>
 		</LinearLayout>
-	
+
 	</FrameLayout>
 
 	<GridView
