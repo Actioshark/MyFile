@@ -1,7 +1,6 @@
 package kk.myfile.activity;
 
 import kk.myfile.file.FileUtil;
-import kk.myfile.file.ImageUtil;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
@@ -25,7 +24,6 @@ public class App extends Application {
 		AppUtil.init(this);
 		Setting.init(this);
 		FileUtil.init(this);
-		ImageUtil.init(this);
 	}
 	
 	public static void showToast(int resId, Object... args) {

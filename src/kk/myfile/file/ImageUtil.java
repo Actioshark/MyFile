@@ -3,14 +3,12 @@ package kk.myfile.file;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.os.SystemClock;
 
-import kk.myfile.R;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Broadcast;
 import kk.myfile.util.Logger;
@@ -21,6 +19,7 @@ public class ImageUtil {
 	private static class BitmapNode {
 		public int width;
 		public int height;
+		public int defResId;
 		public long token;
 		public Bitmap bitmap;
 	}
@@ -38,12 +37,6 @@ public class ImageUtil {
 	};
 	
 	private static boolean sIsRunning = false;
-	
-	private static Bitmap sDefBitmap;
-	
-	public static void init(Context context) {
-		sDefBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.file_image);
-	}
 
 	public static Options getSize(String path) {
 		Options options = new Options();
@@ -54,7 +47,7 @@ public class ImageUtil {
 		return options;
 	}
 
-	public static Bitmap getThum(String path, int width, int height) {
+	public static Bitmap getThum(String path, int width, int height, int defResId) {
 		if (width <= 0 || width > 40960) {
 			width = 128;
 		}
@@ -75,6 +68,7 @@ public class ImageUtil {
 			
 			bn.width = width;
 			bn.height = height;
+			bn.defResId = defResId;
 			bn.token = SystemClock.elapsedRealtime();
 			
 			if (sIsRunning) {
@@ -138,7 +132,7 @@ public class ImageUtil {
 						} catch (Exception e) {
 							Logger.print(null, e);
 							
-							bmp = sDefBitmap;
+							bmp = BitmapFactory.decodeResource(AppUtil.getRes(), bn.defResId);
 						}
 						
 						synchronized (THUM_CACHE) {
