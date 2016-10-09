@@ -18,6 +18,6 @@ public class Image extends Leaf {
 	
 	@Override
 	public Bitmap getThum() {
-		return ImageUtil.getThum(mPath);
+		return ImageUtil.getThum(mPath, 128, 128);
 	}
 }
