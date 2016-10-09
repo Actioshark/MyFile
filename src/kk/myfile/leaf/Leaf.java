@@ -47,7 +47,7 @@ public abstract class Leaf {
 	
 	public abstract int getIcon();
 	
-	public Bitmap getThum() {
+	public Bitmap getThum(int width, int height) {
 		return null;
 	}
 	

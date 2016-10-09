@@ -4,6 +4,7 @@ import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
+
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.widget.Toast;

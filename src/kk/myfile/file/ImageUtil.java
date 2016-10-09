@@ -55,6 +55,14 @@ public class ImageUtil {
 	}
 
 	public static Bitmap getThum(String path, int width, int height) {
+		if (width <= 0 || width > 40960) {
+			width = 128;
+		}
+		
+		if (height <= 0 || height > 40960) {
+			height = 128;
+		}
+		
 		synchronized (THUM_CACHE) {
 			BitmapNode bn = THUM_CACHE.get(path);
 			

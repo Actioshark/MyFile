@@ -271,7 +271,7 @@ public class TypeAdapter extends BaseAdapter {
 		holder.name.setText(file.getName());
 		
 		if (leaf.equals(holder.leaf) == false || holder.hasBitmap == false) {
-			Bitmap bmp = leaf.getThum();
+			Bitmap bmp = leaf.getThum(holder.icon.getWidth(), holder.icon.getHeight());
 			if (bmp != null) {
 				holder.hasBitmap = true;
 				holder.icon.setImageBitmap(bmp);
