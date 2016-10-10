@@ -62,6 +62,7 @@ public class TypeActivity extends BaseActivity {
 	private ImageView mIvSelect;
 	
 	private EditText mEtSearch;
+	private Object mSearchMark;
 	
 	private GridView mGvList;
 	private TypeAdapter mTypeAdapter;
@@ -178,26 +179,34 @@ public class TypeActivity extends BaseActivity {
 						}
 					}
 					
-					final Direct mark = mDirect;
+					final Direct direct = mDirect;
+					final Object mark = new Object();
+					synchronized (mEtSearch) {
+						mSearchMark = mark;
+					}
 					
 					AppUtil.runOnNewThread(new Runnable() {
 						public void run() {
 							List<Leaf> list;
 							if (mType == TYPE_BIG) {
-								list = Tree.loadBig(mark, Setting.getBigFileNum());
+								list = Tree.loadBig(direct, Setting.getBigFileNum());
 							} else if (mType == TYPE_RECENT) {
-								list = Tree.loadRecent(mark, Setting.getRecentFileNum());
+								list = Tree.loadRecent(direct, Setting.getRecentFileNum());
 							} else {
-								list = Tree.loadType(mark, mClass);
+								list = Tree.loadType(direct, mClass);
 							}
 							
-							List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
+							final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 							
-							synchronized (mGvList) {
-								if (mDirect == mark) {
-									mTypeAdapter.setData(ret);
+							AppUtil.runOnUiThread(new Runnable() {
+								public void run() {
+									synchronized (mEtSearch) {
+										if (mSearchMark == mark) {
+											mTypeAdapter.setData(ret);
+										}
+									}
 								}
-							}
+							});
 						}
 					});
 				}
@@ -269,7 +278,7 @@ public class TypeActivity extends BaseActivity {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				Direct direct = Tree.load(Setting.DEFAULT_PATH);
+				final Direct direct = Tree.load(Setting.DEFAULT_PATH);
 				synchronized (mGvList) {
 					mDirect = direct;
 				}
@@ -284,19 +293,27 @@ public class TypeActivity extends BaseActivity {
 						list = Tree.loadType(direct, mClass);
 					}
 					
-					List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
+					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 
 					synchronized (mGvList) {
 						if (mDirect != direct) {
 							return;
 						}
+					}
 						
-						synchronized (direct) {
-							mTypeAdapter.setData(ret);
-							
-							if (direct.getTag() == null) {
-								return;
+					AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							synchronized (mGvList) {
+								if (mDirect == direct) {
+									mTypeAdapter.setData(ret);
+								}
 							}
+						}
+					});
+					
+					synchronized (direct) {
+						if (direct.getTag() == null) {
+							return;
 						}
 					}
 					

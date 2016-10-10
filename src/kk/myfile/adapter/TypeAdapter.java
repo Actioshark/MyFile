@@ -57,20 +57,13 @@ public class TypeAdapter extends BaseAdapter {
 	
 	public void setData(final List<Leaf> data) {
 		if (mType != TypeActivity.TYPE_CLASS) {
-			synchronized (mData) {
-				mData.clear();
-				synchronized (data) {
-					mData.addAll(data);
-				}
+			mData.clear();
+			synchronized (data) {
+				mData.addAll(data);
 			}
 			
-			AppUtil.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					notifyDataSetChanged();
-					mActivity.updateInfo();
-				}
-			});
+			mActivity.updateInfo();
+			notifyDataSetChanged();
 			
 			return;
 		}
@@ -88,15 +81,13 @@ public class TypeAdapter extends BaseAdapter {
 					@Override
 					public void run() {
 						if (mMark == data) {
-							synchronized (mData) {
-								mData.clear();
-								synchronized (data) {
-									mData.addAll(data);
-								}
+							mData.clear();
+							synchronized (data) {
+								mData.addAll(data);
 							}
 							
-							notifyDataSetChanged();
 							mActivity.updateInfo();
+							notifyDataSetChanged();
 						}
 					}
 				});
@@ -106,9 +97,7 @@ public class TypeAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		synchronized (mData) {
-			return mData.size();
-		}
+		return mData.size();
 	}
 
 	@Override
@@ -124,13 +113,11 @@ public class TypeAdapter extends BaseAdapter {
 	public List<Leaf> getSelected() {
 		List<Leaf> list = new ArrayList<Leaf>();
 		
-		synchronized (mData) {
-			int size = mData.size();
-			
-			for (Integer position : mSelected) {
-				if (position < size) {
-					list.add(mData.get(position));
-				}
+		int size = mData.size();
+		
+		for (Integer position : mSelected) {
+			if (position < size) {
+				list.add(mData.get(position));
 			}
 		}
 		
