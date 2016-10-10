@@ -31,8 +31,12 @@ public class Apk extends Leaf {
 					appInfo.sourceDir = mPath;
 					appInfo.publicSourceDir = mPath;
 					
-					Drawable drawable = appInfo.loadIcon(pm);
-					listenner.onThumGot(drawable);
+					final Drawable drawable = appInfo.loadIcon(pm);
+					AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							listenner.onThumGot(drawable);
+						}
+					});
 				} catch (Exception e) {
 					Logger.print(null, e, mPath);
 				}

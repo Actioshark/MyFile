@@ -62,6 +62,7 @@ public class TypeAdapter extends BaseAdapter {
 				mData.addAll(data);
 			}
 			
+			mActivity.updateTitle();
 			mActivity.updateInfo();
 			notifyDataSetChanged();
 			
@@ -86,6 +87,7 @@ public class TypeAdapter extends BaseAdapter {
 								mData.addAll(data);
 							}
 							
+							mActivity.updateTitle();
 							mActivity.updateInfo();
 							notifyDataSetChanged();
 						}
