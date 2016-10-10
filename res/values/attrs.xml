@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="myfile">
+        <attr name="size_type">
+        	<enum name="fitWidth" value="1" />
+        	<enum name="fitHeight" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

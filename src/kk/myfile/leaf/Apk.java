@@ -31,7 +31,7 @@ public class Apk extends Leaf {
 			
 			return appInfo.loadIcon(pm);
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(null, e, mPath);
 		}
 		
 		return null;
