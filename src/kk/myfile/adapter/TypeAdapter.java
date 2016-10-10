@@ -12,6 +12,7 @@ import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
+import kk.myfile.leaf.Leaf.IThumListenner;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
@@ -265,20 +266,24 @@ public class TypeAdapter extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		}
 		
-		Leaf leaf = mData.get(position);
-		File file = leaf.getFile();
+		final Leaf leaf = mData.get(position);
+		final File file = leaf.getFile();
 		
 		holder.name.setText(file.getName());
 		
 		if (leaf.equals(holder.leaf) == false || holder.hasThum == false) {
-			Drawable drawable = leaf.getThum(holder.icon.getWidth(), holder.icon.getHeight());
-			if (drawable != null) {
-				holder.hasThum = true;
-				holder.icon.setImageDrawable(drawable);
-			} else {
-				holder.hasThum = false;
-				holder.icon.setImageResource(leaf.getIcon());
-			}
+			holder.hasThum = false;
+			holder.icon.setImageResource(leaf.getIcon());
+			
+			leaf.getThum(holder.icon.getWidth(), holder.icon.getHeight(), new IThumListenner() {
+				@Override
+				public void onThumGot(Drawable drawable) {
+					if (leaf.equals(holder.leaf)) {
+						holder.hasThum = true;
+						holder.icon.setImageDrawable(drawable);
+					}
+				}
+			});
 		}
 		
 		if (holder.time != null) {

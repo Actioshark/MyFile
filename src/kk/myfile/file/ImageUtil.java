@@ -10,19 +10,19 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+
 import kk.myfile.R;
+import kk.myfile.leaf.Leaf.IThumListenner;
 import kk.myfile.util.AppUtil;
-import kk.myfile.util.Broadcast;
 import kk.myfile.util.Logger;
 
 public class ImageUtil {
-	public static final String BRO_THUM_GOT = "image_util_thum_got";
-	
 	private static class BitmapNode {
 		public int width;
 		public int height;
 		public long token;
 		public Drawable drawable;
+		public IThumListenner listenner;
 	}
 
 	private static final int THUM_CACHE_SIZE = 60;
@@ -48,39 +48,40 @@ public class ImageUtil {
 		return options;
 	}
 
-	public static Drawable getThum(String path, int width, int height) {
-		if (width <= 0 || width > 40960) {
-			width = 128;
-		}
-		
-		if (height <= 0 || height > 40960) {
-			height = 128;
-		}
-		
-		synchronized (THUM_CACHE) {
-			BitmapNode bn = THUM_CACHE.get(path);
-			
-			if (bn == null) {
-				bn = new BitmapNode();
-				THUM_CACHE.put(path, bn);
-			} else if (bn.drawable != null) {
-				return bn.drawable;
-			}
-			
-			bn.width = width;
-			bn.height = height;
-			bn.token = SystemClock.elapsedRealtime();
-			
-			if (sIsRunning) {
-				return null;
-			}
-			
-			sIsRunning = true;
-		}
-
+	public static void getThum(final String path, final int width, final int height, final IThumListenner listenner) {
 		AppUtil.runOnNewThread(new Runnable() {
-			@Override
 			public void run() {
+				synchronized (THUM_CACHE) {
+					BitmapNode bn = THUM_CACHE.get(path);
+					
+					if (bn == null) {
+						bn = new BitmapNode();
+						THUM_CACHE.put(path, bn);
+					} else if (bn.drawable != null) {
+						if (listenner != null) {
+							final Drawable drawable = bn.drawable;
+							
+							AppUtil.runOnUiThread(new Runnable() {
+								public void run() {
+									listenner.onThumGot(drawable);
+								}
+							});
+						}
+						
+						return;
+					}
+					
+					bn.width = (width > 0 && width < 40960) ? width : 128;
+					bn.height = (height > 0 && height < 40960) ? height : 128;
+					bn.token = SystemClock.elapsedRealtime();
+					bn.listenner = listenner;
+					
+					if (sIsRunning) {
+						return;
+					}
+					sIsRunning = true;
+				}
+				
 				try {
 					while (true) {
 						String path = null;
@@ -140,8 +141,17 @@ public class ImageUtil {
 								bn.drawable = AppUtil.getRes().getDrawable(R.drawable.file_image);
 							}
 						}
-		
-						Broadcast.send(BRO_THUM_GOT, bn.drawable);
+						
+						if (bn.listenner != null) {
+							final BitmapNode BN = bn;
+							
+							AppUtil.runOnUiThread(new Runnable() {
+								public void run() {
+									BN.listenner.onThumGot(BN.drawable);
+									BN.listenner = null;
+								}
+							});
+						}
 					}
 				} catch (Exception e) {
 					Logger.print(null, e);
@@ -152,7 +162,5 @@ public class ImageUtil {
 				}
 			}
 		});
-		
-		return null;
 	}
 }

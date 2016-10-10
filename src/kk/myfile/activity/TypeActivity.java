@@ -12,7 +12,6 @@ import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.adapter.TypeAdapter;
 import kk.myfile.file.ClipPad;
-import kk.myfile.file.ImageUtil;
 import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
@@ -24,9 +23,9 @@ import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
-import kk.myfile.util.Broadcast;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -514,29 +513,6 @@ public class TypeActivity extends BaseActivity {
 			
 		dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
 	}
-	
-	private Broadcast.IListener mBroListener = new Broadcast.IListener() {
-		@Override
-		public void onReceive(String name, Object data) {
-			if (ImageUtil.BRO_THUM_GOT.equals(name)) {
-				mTypeAdapter.notifyDataSetChanged();
-			}
-		}
-	};
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		Broadcast.addListener(mBroListener, ImageUtil.BRO_THUM_GOT, true);
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		Broadcast.removeLsitener(mBroListener, null);
-	};
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
