@@ -71,8 +71,9 @@ public class DirectAdapter extends BaseAdapter {
 								mData.addAll(data);
 							}
 							
-							notifyDataSetChanged();
+							mActivity.updateTitle();
 							mActivity.updateInfo();
+							notifyDataSetChanged();
 							
 							AppUtil.runOnUiThread(new Runnable() {
 								public void run() {
