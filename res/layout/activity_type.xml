@@ -97,11 +97,11 @@
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:orientation="vertical">
-				
-			    <View
-			        android:layout_width="match_parent"
-			        android:layout_height="0dp"
-			        android:layout_weight="1" />
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
 
 				<TextView
 					android:id="@+id/tv_name"
@@ -114,11 +114,11 @@
 					android:ellipsize="middle"
 					android:textSize="13sp"
 					android:textColor="@color/main_text_color" />
-				
-			    <View
-			        android:layout_width="match_parent"
-			        android:layout_height="0dp"
-			        android:layout_weight="1" />
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
 
 				<LinearLayout
 					android:id="@+id/ll_bottom"
@@ -155,11 +155,11 @@
 						android:textSize="13sp"
 						android:textColor="@color/main_text_color" />
 				</LinearLayout>
-				
-			    <View
-			        android:layout_width="match_parent"
-			        android:layout_height="0dp"
-			        android:layout_weight="1" />
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
 			</LinearLayout>
 		</LinearLayout>
 	</FrameLayout>
@@ -170,10 +170,11 @@
 		android:layout_height="0dp"
 		android:layout_weight="1"
 		android:layout_marginTop="@dimen/main_gap"
+		android:background="@color/main_bg"
 		android:horizontalSpacing="1dp"
 		android:verticalSpacing="1dp"
-		android:background="@color/main_bg"
-		android:listSelector="@null" />
+		android:listSelector="@null"
+		android:fastScrollEnabled="true" />
 
 	<LinearLayout
 		android:id="@+id/ll_info"
