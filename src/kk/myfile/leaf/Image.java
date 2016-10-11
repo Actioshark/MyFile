@@ -8,9 +8,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import kk.myfile.R;
+import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.util.AppUtil;
 
-public class Image extends Leaf {
+public class Image extends Leaf implements IThumable {
 	public static final String TYPE = "image/*";
 	
 	public Image(String path) {

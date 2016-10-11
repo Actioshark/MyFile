@@ -1,17 +1,23 @@
 package kk.myfile.file;
 
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
 
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 
 import kk.myfile.leaf.Leaf;
-import kk.myfile.leaf.Leaf.IThumListenner;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 
 public class ImageUtil {
+	public static interface IThumable {
+		public Drawable getThum(int width, int height);
+	}
+	
+	public static interface IThumListenner {
+		public void onThumGot(Drawable drawable);
+	}
+	
 	private static class DrawableNode {
 		public Leaf leaf;
 		public int width;
@@ -19,6 +25,19 @@ public class ImageUtil {
 		public long token;
 		public Drawable drawable;
 		public IThumListenner listenner;
+		
+		public DrawableNode clone() {
+			DrawableNode node = new DrawableNode();
+			
+			node.leaf = leaf;
+			node.width = width;
+			node.height = height;
+			node.token = token;
+			node.drawable = drawable;
+			node.listenner = listenner;
+			
+			return node;
+		}
 	}
 
 	private static final int THUM_CACHE_SIZE = 60;
@@ -77,8 +96,7 @@ public class ImageUtil {
 						DrawableNode node = null;
 						
 						synchronized (THUM_CACHE) {
-							for (Entry<String, DrawableNode> entry : THUM_CACHE.entrySet()) {
-								DrawableNode n = entry.getValue();
+							for (DrawableNode n : THUM_CACHE.values()) {
 								if (n.drawable == null) {
 									if (node == null || n.token > node.token) {
 										node = n;
@@ -91,28 +109,29 @@ public class ImageUtil {
 							return;
 						}
 						
-						try {
-							Drawable drawable = node.leaf.getThum(node.width, node.height);
+						final DrawableNode nd;
+						synchronized (THUM_CACHE) {
+							nd = node.clone();
+						}
 						
+						try {
+							nd.drawable = ((IThumable) nd.leaf).getThum(nd.width, nd.height);
 							synchronized (THUM_CACHE) {
-								node.drawable = drawable;
+								node.drawable = nd.drawable;
 							}
 						} catch (Exception e) {
 							Logger.print(null, e);
 							
+							nd.drawable = AppUtil.getRes().getDrawable(nd.leaf.getIcon());
 							synchronized (THUM_CACHE) {
-								node.drawable = AppUtil.getRes().getDrawable(leaf.getIcon());
+								node.drawable = nd.drawable;
 							}
 						}
 						
-						if (node.listenner != null) {
-							final DrawableNode BN = node;
-							
+						if (nd.listenner != null) {
 							AppUtil.runOnUiThread(new Runnable() {
 								public void run() {
-									BN.listenner.onThumGot(BN.drawable);
-									BN.leaf = null;
-									BN.listenner = null;
+									nd.listenner.onThumGot(nd.drawable);
 								}
 							});
 						}

@@ -2,13 +2,7 @@ package kk.myfile.leaf;
 
 import java.io.File;
 
-import android.graphics.drawable.Drawable;
-
 public abstract class Leaf {
-	public static interface IThumListenner {
-		public void onThumGot(Drawable drawable);
-	}
-	
 	protected final String mPath;
 	
 	protected String mType;
@@ -50,10 +44,6 @@ public abstract class Leaf {
 	}
 	
 	public abstract int getIcon();
-	
-	public Drawable getThum(int width, int height) {
-		return null;
-	}
 	
 	@Override
 	public boolean equals(Object obj) {

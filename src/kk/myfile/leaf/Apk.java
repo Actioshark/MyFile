@@ -6,9 +6,10 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
 import kk.myfile.R;
+import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.util.AppUtil;
 
-public class Apk extends Leaf {
+public class Apk extends Leaf implements IThumable {
 	public Apk(String path) {
 		super(path);
 	}

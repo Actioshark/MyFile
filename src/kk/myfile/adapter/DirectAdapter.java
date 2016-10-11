@@ -7,13 +7,14 @@ import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.file.ImageUtil;
+import kk.myfile.file.ImageUtil.IThumListenner;
+import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.file.Sorter;
 import kk.myfile.file.Sorter.Classify;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
-import kk.myfile.leaf.Leaf.IThumListenner;
 import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
 import kk.myfile.ui.IDialogClickListener;
@@ -258,15 +259,17 @@ public class DirectAdapter extends BaseAdapter {
 			holder.hasThum = false;
 			holder.icon.setImageResource(leaf.getIcon());
 			
-			ImageUtil.getThum(leaf, holder.icon.getWidth(), holder.icon.getHeight(), new IThumListenner() {
-				@Override
-				public void onThumGot(Drawable drawable) {
-					if (leaf.equals(holder.leaf)) {
-						holder.hasThum = true;
-						holder.icon.setImageDrawable(drawable);
+			if (leaf instanceof IThumable) {
+				ImageUtil.getThum(leaf, holder.icon.getWidth(), holder.icon.getHeight(), new IThumListenner() {
+					@Override
+					public void onThumGot(Drawable drawable) {
+						if (leaf.equals(holder.leaf)) {
+							holder.hasThum = true;
+							holder.icon.setImageDrawable(drawable);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 		
 		if (holder.time != null) {
