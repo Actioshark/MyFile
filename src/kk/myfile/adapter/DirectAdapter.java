@@ -6,6 +6,7 @@ import kk.myfile.activity.DirectActivity;
 import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
+import kk.myfile.file.ImageUtil;
 import kk.myfile.file.Sorter;
 import kk.myfile.file.Sorter.Classify;
 import kk.myfile.leaf.Audio;
@@ -257,7 +258,7 @@ public class DirectAdapter extends BaseAdapter {
 			holder.hasThum = false;
 			holder.icon.setImageResource(leaf.getIcon());
 			
-			leaf.getThum(holder.icon.getWidth(), holder.icon.getHeight(), new IThumListenner() {
+			ImageUtil.getThum(leaf, holder.icon.getWidth(), holder.icon.getHeight(), new IThumListenner() {
 				@Override
 				public void onThumGot(Drawable drawable) {
 					if (leaf.equals(holder.leaf)) {

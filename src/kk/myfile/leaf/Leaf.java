@@ -51,7 +51,8 @@ public abstract class Leaf {
 	
 	public abstract int getIcon();
 	
-	public void getThum(int width, int height, IThumListenner listenner) {
+	public Drawable getThum(int width, int height) {
+		return null;
 	}
 	
 	@Override
