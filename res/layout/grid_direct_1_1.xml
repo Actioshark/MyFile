@@ -37,5 +37,6 @@
 		android:layout_height="@dimen/direct_select_height"
 		android:layout_gravity="right|top"
 		android:scaleType="centerCrop"
+		android:background="@drawable/btn_bar"
 		android:src="@drawable/multi_select_pre" />
 </FrameLayout>

@@ -18,6 +18,7 @@
 	<string name="word_cut_to">Cut To</string>
 	<string name="word_paste">Paste</string>
 	<string name="word_refresh">Refresh</string>
+	<string name="word_multi_select">Multi Select</string>
 	<string name="word_skip">Skip</string>
 	<string name="word_skip_all">Skip All</string>
 	<string name="word_cover">Cover</string>

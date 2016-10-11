@@ -701,6 +701,13 @@ public class DirectActivity extends BaseActivity {
 					});
 				}
 			}));
+			
+			list.add(new DataItem(R.drawable.multi_select_pre, R.string.word_multi_select, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					setMode(Mode.Select);
+				}
+			}));
 		}
 			
 		dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
