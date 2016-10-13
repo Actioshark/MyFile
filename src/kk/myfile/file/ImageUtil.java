@@ -55,6 +55,10 @@ public class ImageUtil {
 	private static boolean sIsRunning = false;
 
 	public static void getThum(final Leaf leaf, final int width, final int height, final IThumListenner listenner) {
+		if (leaf instanceof IThumable == false) {
+			return;
+		}
+		
 		AppUtil.runOnNewThread(new Runnable() {
 			public void run() {
 				synchronized (THUM_CACHE) {
