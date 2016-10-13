@@ -84,8 +84,8 @@ public class ImageUtil {
 					}
 					
 					node.leaf = leaf;
-					node.width = (width > 0 && width < 40960) ? width : 128;
-					node.height = (height > 0 && height < 40960) ? height : 128;
+					node.width = (width > 0 && width < 40960) ? width : 256;
+					node.height = (height > 0 && height < 40960) ? height : 256;
 					node.token = SystemClock.elapsedRealtime();
 					node.listenner = listenner;
 					
