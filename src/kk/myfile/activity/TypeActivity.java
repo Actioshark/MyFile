@@ -477,8 +477,10 @@ public class TypeActivity extends BaseActivity {
 					Tree.delete(TypeActivity.this, selected, new IProgressCallback() {
 						@Override
 						public void onProgress(ProgressType type) {
-							setMode(Mode.Normal);
-							refresh();
+							if (type == ProgressType.Finish || type == ProgressType.Cancel) {
+								setMode(Mode.Normal);
+								refresh();
+							}
 						}
 					});
 				}
@@ -568,8 +570,10 @@ public class TypeActivity extends BaseActivity {
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {
-						setMode(Mode.Normal);
-						refresh();
+						if (type == ProgressType.Finish || type == ProgressType.Cancel) {
+							setMode(Mode.Normal);
+							refresh();
+						}
 					}
 				}
 			);
@@ -584,8 +588,10 @@ public class TypeActivity extends BaseActivity {
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {
-						setMode(Mode.Normal);
-						refresh();
+						if (type == ProgressType.Finish || type == ProgressType.Cancel) {
+							setMode(Mode.Normal);
+							refresh();
+						}
 					}
 				}
 			);
