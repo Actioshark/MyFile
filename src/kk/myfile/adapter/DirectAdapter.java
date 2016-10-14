@@ -48,21 +48,21 @@ public class DirectAdapter extends BaseAdapter {
 	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
-	
+
 	public DirectAdapter(DirectActivity activity) {
 		mActivity = activity;
 	}
-	
+
 	public void setData(final List<Leaf> data, final int position) {
 		mMark = data;
-		
+
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
 				synchronized (data) {
 					Sorter.sort(Classify.Tree, data);
 				}
-				
+
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
@@ -71,11 +71,11 @@ public class DirectAdapter extends BaseAdapter {
 							synchronized (data) {
 								mData.addAll(data);
 							}
-							
+
 							mActivity.updateTitle();
 							mActivity.updateInfo();
 							notifyDataSetChanged();
-							
+
 							AppUtil.runOnUiThread(new Runnable() {
 								public void run() {
 									mActivity.setSelection(position);
@@ -87,7 +87,7 @@ public class DirectAdapter extends BaseAdapter {
 			}
 		});
 	}
-	
+
 	@Override
 	public int getCount() {
 		return mData.size();
@@ -102,36 +102,36 @@ public class DirectAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return 0;
 	}
-	
+
 	public List<Leaf> getSelected() {
 		List<Leaf> list = new ArrayList<Leaf>();
 		int size = mData.size();
-		
+
 		for (Integer position : mSelected) {
 			if (position < size) {
 				list.add(mData.get(position));
 			}
 		}
-		
+
 		return list;
 	}
-	
+
 	public int getSelectedCount() {
 		return mSelected.size();
 	}
-	
+
 	public void selectAll(boolean select) {
 		if (select) {
 			mSelected.clear();
-			
+
 			int len = mData.size();
-			for (int i = 0 ; i < len; i++) {
+			for (int i = 0; i < len; i++) {
 				mSelected.add(i);
 			}
 		} else {
 			mSelected.clear();
 		}
-		
+
 		mActivity.updateTitle();
 		mActivity.updateInfo();
 		notifyDataSetChanged();
@@ -140,20 +140,21 @@ public class DirectAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 		final ViewHolder holder;
-		
+
 		if (view == null) {
 			String key = Setting.getListStyle();
 			ListStyle ls = SettingListStyleActivity.getListStyle(key);
 			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
-			
+
 			holder = new ViewHolder();
 			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
 			holder.name = (TextView) view.findViewById(R.id.tv_name);
 			holder.size = (TextView) view.findViewById(R.id.tv_size);
 			holder.time = (TextView) view.findViewById(R.id.tv_time);
+			holder.sign = (ImageView) view.findViewById(R.id.iv_sign);
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
-			
+
 			if (ls.needDetail) {
 				view.setOnTouchListener(new OnTouchListener() {
 					@Override
@@ -161,12 +162,12 @@ public class DirectAdapter extends BaseAdapter {
 						if (event.getAction() == MotionEvent.ACTION_DOWN) {
 							mActivity.showDetail(holder.leaf);
 						}
-						
+
 						return view.onTouchEvent(event);
 					}
 				});
 			}
-			
+
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -176,7 +177,7 @@ public class DirectAdapter extends BaseAdapter {
 						} else {
 							mSelected.add(holder.position);
 						}
-						
+
 						mActivity.updateTitle();
 						mActivity.updateInfo();
 						notifyDataSetChanged();
@@ -187,8 +188,8 @@ public class DirectAdapter extends BaseAdapter {
 							SimpleDialog dialog = new SimpleDialog(mActivity);
 							dialog.setCanceledOnTouchOutside(true);
 							dialog.setMessage(R.string.msg_open_as);
-							dialog.setButtons(new int[] {R.string.type_text, R.string.type_image,
-									R.string.type_audio, R.string.type_video, R.string.word_any});
+							dialog.setButtons(new int[] { R.string.type_text, R.string.type_image, R.string.type_audio,
+									R.string.type_video, R.string.word_any });
 							dialog.setClickListener(new IDialogClickListener() {
 								@Override
 								public void onClick(Dialog dialog, int index) {
@@ -196,24 +197,24 @@ public class DirectAdapter extends BaseAdapter {
 									case 0:
 										IntentUtil.view(mActivity, holder.leaf, Text.TYPE);
 										break;
-										
+
 									case 1:
 										IntentUtil.view(mActivity, holder.leaf, Image.TYPE);
 										break;
-										
+
 									case 2:
 										IntentUtil.view(mActivity, holder.leaf, Audio.TYPE);
 										break;
-										
+
 									case 3:
 										IntentUtil.view(mActivity, holder.leaf, Video.TYPE);
 										break;
-									
+
 									case 4:
 										IntentUtil.view(mActivity, holder.leaf, "*/*");
 										break;
 									}
-									
+
 									dialog.dismiss();
 								}
 							});
@@ -222,7 +223,7 @@ public class DirectAdapter extends BaseAdapter {
 					}
 				}
 			});
-			
+
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View view) {
@@ -236,28 +237,28 @@ public class DirectAdapter extends BaseAdapter {
 						} else {
 							mSelected.add(holder.position);
 						}
-						
+
 						mActivity.updateTitle();
 						mActivity.updateInfo();
 						notifyDataSetChanged();
 					}
-					
+
 					return true;
 				}
 			});
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-		
+
 		final Leaf leaf = mData.get(position);
 		final File file = leaf.getFile();
-		
+
 		holder.name.setText(file.getName());
-		
+
 		if (leaf.equals(holder.leaf) == false || holder.hasThum == false) {
 			holder.hasThum = false;
 			holder.icon.setImageResource(leaf.getIcon());
-			
+
 			ImageUtil.getThum(leaf, holder.icon.getWidth(), holder.icon.getHeight(), new IThumListenner() {
 				@Override
 				public void onThumGot(Drawable drawable) {
@@ -268,13 +269,13 @@ public class DirectAdapter extends BaseAdapter {
 				}
 			});
 		}
-		
+
 		if (holder.time != null) {
 			Date date = new Date(file.lastModified());
 			DateFormat df = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss", Setting.LOCALE);
 			holder.time.setText(df.format(date));
 		}
-		
+
 		if (holder.size != null) {
 			if (leaf instanceof Direct) {
 				holder.size.setText("");
@@ -284,7 +285,7 @@ public class DirectAdapter extends BaseAdapter {
 				int len = num.length();
 				for (int i = 0; i < len; i++) {
 					sb.append(num.charAt(i));
-	
+
 					if (i + 1 != len && (len - i) % 3 == 1) {
 						sb.append(',');
 					}
@@ -292,7 +293,23 @@ public class DirectAdapter extends BaseAdapter {
 				holder.size.setText(String.format(Setting.LOCALE, "%s B", sb.toString()));
 			}
 		}
-		
+
+		boolean isLink;
+		try {
+			File canon;
+			File par = file.getParentFile();
+			if (par == null) {
+				canon = file;
+			} else {
+				canon = new File(par.getCanonicalFile(), file.getName());
+			}
+			
+			isLink = canon.getCanonicalFile().equals(canon.getAbsoluteFile()) == false;
+		} catch (Exception e) {
+			isLink = false;
+		}
+		holder.sign.setVisibility(isLink ? View.VISIBLE : View.GONE);
+
 		if (mActivity.getMode() == Mode.Select) {
 			if (mSelected.contains(position)) {
 				holder.select.setImageResource(R.drawable.multi_select_pre);
@@ -303,10 +320,10 @@ public class DirectAdapter extends BaseAdapter {
 		} else {
 			holder.select.setVisibility(View.GONE);
 		}
-		
+
 		holder.leaf = leaf;
 		holder.position = position;
-		
+
 		return view;
 	}
 
@@ -314,11 +331,12 @@ public class DirectAdapter extends BaseAdapter {
 		public Leaf leaf;
 		public int position = -1;
 		public boolean hasThum = false;
-		
+
 		public ImageView icon;
 		public TextView name;
 		public TextView time;
 		public TextView size;
+		public ImageView sign;
 		public ImageView select;
 	}
 }

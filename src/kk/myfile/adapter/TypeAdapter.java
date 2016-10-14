@@ -160,6 +160,7 @@ public class TypeAdapter extends BaseAdapter {
 			holder.name = (TextView) view.findViewById(R.id.tv_name);
 			holder.size = (TextView) view.findViewById(R.id.tv_size);
 			holder.time = (TextView) view.findViewById(R.id.tv_time);
+			holder.sign = (ImageView) view.findViewById(R.id.iv_sign);
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
 			
@@ -300,6 +301,22 @@ public class TypeAdapter extends BaseAdapter {
 			}
 		}
 		
+		boolean isLink;
+		try {
+			File canon;
+			File par = file.getParentFile();
+			if (par == null) {
+				canon = file;
+			} else {
+				canon = new File(par.getCanonicalFile(), file.getName());
+			}
+			
+			isLink = canon.getCanonicalFile().equals(canon.getAbsoluteFile()) == false;
+		} catch (Exception e) {
+			isLink = false;
+		}
+		holder.sign.setVisibility(isLink ? View.VISIBLE : View.GONE);
+		
 		if (mActivity.getMode() == Mode.Select) {
 			if (mSelected.contains(position)) {
 				holder.select.setImageResource(R.drawable.multi_select_pre);
@@ -326,6 +343,7 @@ public class TypeAdapter extends BaseAdapter {
 		public TextView name;
 		public TextView time;
 		public TextView size;
+		public ImageView sign;
 		public ImageView select;
 	}
 }
