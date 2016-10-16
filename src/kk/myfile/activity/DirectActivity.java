@@ -402,7 +402,13 @@ public class DirectActivity extends BaseActivity {
 		}
 		
 		// 更新文件列表
-		node.direct.loadChildrenAll();
+		final Direct direct = node.direct;
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				direct.loadChildrenAll();
+			}
+		});
 		mDirectAdapter.setData(node.direct.getChildren(), node.position);
 		
 		// 信息
@@ -427,7 +433,13 @@ public class DirectActivity extends BaseActivity {
 		}
 		
 		// 更新文件列表
-		mNode.direct.loadChildrenAll();
+		final Direct direct = mNode.direct;
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				direct.loadChildrenAll();
+			}
+		});
 		mDirectAdapter.setData(mNode.direct.getChildren(), -1);
 		
 		// 信息
@@ -717,13 +729,6 @@ public class DirectActivity extends BaseActivity {
 		if (position >= 0 && position < mDirectAdapter.getCount()) {
 			mGvList.setSelection(position);
 		}
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		refreshDirect();
 	}
 	
 	@Override
