@@ -33,7 +33,7 @@ public class Tree {
 		public void onProgress(ProgressType type);
 	}
 	
-	public static Direct load(String path) {
+	public static Direct getDirect(String path) {
 		final Direct direct = new Direct(path);
 		direct.setTag(direct);
 		

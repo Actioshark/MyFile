@@ -182,7 +182,7 @@ public class DirectActivity extends BaseActivity {
 					synchronized (mEtSearch) {
 						mSearchRun = new Runnable() {
 							public void run() {
-								Direct direct = Tree.load(mNode.direct.getPath());
+								Direct direct = Tree.getDirect(mNode.direct.getPath());
 								String key = mEtSearch.getText().toString();
 								final Runnable mark = this;
 								
