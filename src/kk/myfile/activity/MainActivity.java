@@ -322,9 +322,9 @@ public class MainActivity extends BaseActivity {
 					final long[] counts = new long[mTypes.length];
 					final long[] sizes = new long[mTypes.length];
 					
-					Tree.loadCallback(Tree.sTypeDirect, new ILoadCallback() {
+					Tree.loadAll(Tree.sTypeDirect, new ILoadCallback() {
 						@Override
-						public void onLoad(Leaf leaf) {
+						public void onLoad(List<Leaf> list, Leaf leaf) {
 							try {
 								for (int i = 0; i < mTypes.length; i++) {
 									if (mTypes[i].isInstance(leaf)) {

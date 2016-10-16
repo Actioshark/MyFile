@@ -13,6 +13,7 @@ import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.adapter.TypeAdapter;
 import kk.myfile.file.ClipPad;
 import kk.myfile.file.Tree;
+import kk.myfile.file.Tree.ILoadCallback;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
@@ -25,7 +26,6 @@ import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -185,17 +185,9 @@ public class TypeActivity extends BaseActivity {
 						mSearchMark = mark;
 					}
 					
-					AppUtil.runOnNewThread(new Runnable() {
-						public void run() {
-							List<Leaf> list;
-							if (mType == TYPE_BIG) {
-								list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
-							} else if (mType == TYPE_RECENT) {
-								list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
-							} else {
-								list = Tree.loadType(Tree.sTypeDirect, mClass);
-							}
-							
+					final ILoadCallback lcb = new ILoadCallback() {
+						@Override
+						public void onLoad(List<Leaf> list, Leaf leaf) {
 							final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 							
 							AppUtil.runOnUiThread(new Runnable() {
@@ -207,6 +199,18 @@ public class TypeActivity extends BaseActivity {
 									}
 								}
 							});
+						}
+					};
+					
+					AppUtil.runOnNewThread(new Runnable() {
+						public void run() {
+							if (mType == TYPE_BIG) {
+								Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum(), lcb);
+							} else if (mType == TYPE_RECENT) {
+								Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum(), lcb);
+							} else {
+								Tree.loadType(Tree.sTypeDirect, mClass, lcb);
+							}
 						}
 					});
 				}
@@ -287,6 +291,23 @@ public class TypeActivity extends BaseActivity {
 					mSearchMark = mark;
 				}
 				
+				ILoadCallback lcb = new ILoadCallback() {
+					@Override
+					public void onLoad(List<Leaf> list, Leaf leaf) {
+						final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
+						
+						AppUtil.runOnUiThread(new Runnable() {
+							public void run() {
+								synchronized (mEtSearch) {
+									if (mSearchMark == mark) {
+										mTypeAdapter.setData(ret);
+									}
+								}
+							}
+						});
+					}
+				};
+				
 				while (isFinishing() == false) {
 					synchronized (mEtSearch) {
 						if (mSearchMark != mark) {
@@ -296,26 +317,13 @@ public class TypeActivity extends BaseActivity {
 					
 					boolean finished = Tree.isTypeDirectRefreshing() == false;
 					
-					List<Leaf> list;
 					if (mType == TYPE_BIG) {
-						list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
+						Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum(), lcb);
 					} else if (mType == TYPE_RECENT) {
-						list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
+						Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum(), lcb);
 					} else {
-						list = Tree.loadType(Tree.sTypeDirect, mClass);
+						Tree.loadType(Tree.sTypeDirect, mClass, lcb);
 					}
-					
-					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
-						
-					AppUtil.runOnUiThread(new Runnable() {
-						public void run() {
-							synchronized (mEtSearch) {
-								if (mSearchMark == mark) {
-									mTypeAdapter.setData(ret);
-								}
-							}
-						}
-					});
 					
 					if (finished) {
 						return;

@@ -188,7 +188,7 @@ public class DirectActivity extends BaseActivity {
 								
 								while (true) {
 									boolean finished = direct.getTag() == null;
-									final List<Leaf> ret = Tree.search(Tree.loadAll(direct), key);
+									final List<Leaf> ret = Tree.search(Tree.loadAll(direct, null), key);
 									
 									synchronized (mEtSearch) {
 										if (mSearchRun != mark) {
