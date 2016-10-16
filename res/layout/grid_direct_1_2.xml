@@ -30,15 +30,15 @@
 			android:textSize="13dp"
 			android:textColor="@color/main_text_color" />
 	</LinearLayout>
-	
+
 	<ImageView
 		android:id="@+id/iv_sign"
 		android:layout_width="@dimen/direct_select_width"
 		android:layout_height="@dimen/direct_select_height"
 		android:layout_gravity="left|top"
 		android:scaleType="centerCrop"
-		android:src="@drawable/refresh" />
-	
+		android:src="@drawable/link" />
+
 	<ImageView
 		android:id="@+id/iv_select"
 		android:layout_width="@dimen/direct_select_width"

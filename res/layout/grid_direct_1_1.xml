@@ -37,7 +37,7 @@
 		android:layout_height="@dimen/direct_select_height"
 		android:layout_gravity="left|top"
 		android:scaleType="centerCrop"
-		android:src="@drawable/refresh" />
+		android:src="@drawable/link" />
 
 	<ImageView
 		android:id="@+id/iv_select"
