@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-
 import kk.myfile.R;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -83,6 +82,22 @@ public class FileUtil {
 		Leaf leaf = new Unknown(path);
 		leaf.setType(type);
 		return leaf;
+	}
+	
+	public static boolean isLink(File file) {
+		try {
+			File canon;
+			File par = file.getParentFile();
+			if (par == null) {
+				canon = file;
+			} else {
+				canon = new File(par.getCanonicalFile(), file.getName());
+			}
+			
+			return canon.getCanonicalFile().equals(canon.getAbsoluteFile()) == false;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public static String readString(InputStream is, int length) throws Exception {

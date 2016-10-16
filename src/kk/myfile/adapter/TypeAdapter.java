@@ -4,6 +4,7 @@ import kk.myfile.R;
 import kk.myfile.activity.BaseActivity.Mode;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.activity.TypeActivity;
+import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
 import kk.myfile.file.ImageUtil.IThumListenner;
 import kk.myfile.file.Sorter;
@@ -301,21 +302,7 @@ public class TypeAdapter extends BaseAdapter {
 			}
 		}
 		
-		boolean isLink;
-		try {
-			File canon;
-			File par = file.getParentFile();
-			if (par == null) {
-				canon = file;
-			} else {
-				canon = new File(par.getCanonicalFile(), file.getName());
-			}
-			
-			isLink = canon.getCanonicalFile().equals(canon.getAbsoluteFile()) == false;
-		} catch (Exception e) {
-			isLink = false;
-		}
-		holder.sign.setVisibility(isLink ? View.VISIBLE : View.GONE);
+		holder.sign.setVisibility(FileUtil.isLink(file) ? View.VISIBLE : View.GONE);
 		
 		if (mActivity.getMode() == Mode.Select) {
 			if (mSelected.contains(position)) {
