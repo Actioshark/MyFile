@@ -54,7 +54,6 @@ public class TypeActivity extends BaseActivity {
 	private int mType;
 	private Class<?> mClass;
 	private String mName;
-	private Direct mDirect;
 	
 	private Mode mMode;
 	
@@ -173,13 +172,10 @@ public class TypeActivity extends BaseActivity {
 				}
 
 				synchronized (mGvList) {
-					synchronized (mDirect) {
-						if (mDirect.getTag() != null) {
-							return;
-						}
+					if (Tree.isTypeDirectRefreshing()) {
+						return;
 					}
 					
-					final Direct direct = mDirect;
 					final Object mark = new Object();
 					synchronized (mEtSearch) {
 						mSearchMark = mark;
@@ -189,11 +185,11 @@ public class TypeActivity extends BaseActivity {
 						public void run() {
 							List<Leaf> list;
 							if (mType == TYPE_BIG) {
-								list = Tree.loadBig(direct, Setting.getBigFileNum());
+								list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
 							} else if (mType == TYPE_RECENT) {
-								list = Tree.loadRecent(direct, Setting.getRecentFileNum());
+								list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
 							} else {
-								list = Tree.loadType(direct, mClass);
+								list = Tree.loadType(Tree.sTypeDirect, mClass);
 							}
 							
 							final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
@@ -257,7 +253,7 @@ public class TypeActivity extends BaseActivity {
 		
 		// 开始
 		setMode(Mode.Normal);
-		refresh();
+		refresh(false);
 	}
 	
 	public Mode getMode() {
@@ -274,47 +270,51 @@ public class TypeActivity extends BaseActivity {
 		}
 	}
 	
-	public void refresh() {
+	public void refresh(boolean reload) {
+		if (reload) {
+			Tree.refreshTypeDirect();
+		}
+		
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				final Direct direct = Tree.load(Setting.DEFAULT_PATH);
-				synchronized (mGvList) {
-					mDirect = direct;
+				final Object mark = new Object();
+				synchronized (mEtSearch) {
+					mSearchMark = mark;
 				}
 				
 				while (isFinishing() == false) {
-					List<Leaf> list;
-					if (mType == TYPE_BIG) {
-						list = Tree.loadBig(direct, Setting.getBigFileNum());
-					} else if (mType == TYPE_RECENT) {
-						list = Tree.loadRecent(direct, Setting.getRecentFileNum());
-					} else {
-						list = Tree.loadType(direct, mClass);
-					}
-					
-					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
-
-					synchronized (mGvList) {
-						if (mDirect != direct) {
+					synchronized (mEtSearch) {
+						if (mSearchMark != mark) {
 							return;
 						}
 					}
+					
+					boolean finished = Tree.isTypeDirectRefreshing() == false;
+					
+					List<Leaf> list;
+					if (mType == TYPE_BIG) {
+						list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
+					} else if (mType == TYPE_RECENT) {
+						list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
+					} else {
+						list = Tree.loadType(Tree.sTypeDirect, mClass);
+					}
+					
+					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 						
 					AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
-							synchronized (mGvList) {
-								if (mDirect == direct) {
+							synchronized (mEtSearch) {
+								if (mSearchMark == mark) {
 									mTypeAdapter.setData(ret);
 								}
 							}
 						}
 					});
 					
-					synchronized (direct) {
-						if (direct.getTag() == null) {
-							return;
-						}
+					if (finished) {
+						return;
 					}
 					
 					SystemClock.sleep(300);
@@ -425,7 +425,7 @@ public class TypeActivity extends BaseActivity {
 								@Override
 								public void onProgress(ProgressType type) {
 									setMode(Mode.Normal);
-									refresh();
+									refresh(true);
 								}
 							}
 						);
@@ -479,7 +479,7 @@ public class TypeActivity extends BaseActivity {
 						public void onProgress(ProgressType type) {
 							if (type == ProgressType.Finish || type == ProgressType.Cancel) {
 								setMode(Mode.Normal);
-								refresh();
+								refresh(true);
 							}
 						}
 					});
@@ -525,7 +525,7 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					refresh();
+					refresh(true);
 				}
 			}));
 			
@@ -572,7 +572,7 @@ public class TypeActivity extends BaseActivity {
 					public void onProgress(ProgressType type) {
 						if (type == ProgressType.Finish || type == ProgressType.Cancel) {
 							setMode(Mode.Normal);
-							refresh();
+							refresh(true);
 						}
 					}
 				}
@@ -590,7 +590,7 @@ public class TypeActivity extends BaseActivity {
 					public void onProgress(ProgressType type) {
 						if (type == ProgressType.Finish || type == ProgressType.Cancel) {
 							setMode(Mode.Normal);
-							refresh();
+							refresh(true);
 						}
 					}
 				}

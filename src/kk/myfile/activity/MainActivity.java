@@ -13,6 +13,7 @@ import android.view.View.OnLongClickListener;
 import android.widget.TextView;
 
 import kk.myfile.R;
+import kk.myfile.file.Tree;
 import kk.myfile.leaf.Apk;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Image;
@@ -248,6 +249,8 @@ public class MainActivity extends BaseActivity {
 		
 		mPaths = Setting.getDefPath();
 		refreshPath();
+		
+		Tree.refreshTypeDirect();
 	}
 	
 	private void refreshPath() {

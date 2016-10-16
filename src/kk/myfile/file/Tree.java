@@ -55,6 +55,47 @@ public class Tree {
 		return direct;
 	}
 	
+	public static final Direct sTypeDirect = new Direct(Setting.DEFAULT_PATH);
+	private static boolean sIsTypeDirectRefreshing = false;
+	private static boolean sIsTypeDirectNeedRefresh = false;
+	
+	public static boolean isTypeDirectRefreshing() {
+		synchronized (sTypeDirect) {
+			return sIsTypeDirectRefreshing;
+		}
+	}
+	
+	public static void refreshTypeDirect() {
+		synchronized (sTypeDirect) {
+			if (sIsTypeDirectRefreshing) {
+				sIsTypeDirectNeedRefresh = true;
+				return;
+			}
+			
+			sIsTypeDirectRefreshing = true;
+		}
+		
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				if (Setting.getShowHidden()) {
+					sTypeDirect.loadChildrenRecAll();
+				} else {
+					sTypeDirect.loadChildrenRecVis();
+				}
+				
+				synchronized (sTypeDirect) {
+					sIsTypeDirectRefreshing = false;
+					
+					if (sIsTypeDirectNeedRefresh) {
+						sIsTypeDirectNeedRefresh = false;
+						refreshTypeDirect();
+					}
+				}
+			}
+		});
+	}
+	
 	public static List<Leaf> loadAll(Direct direct) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		Queue<Direct> queue = new LinkedList<Direct>();
