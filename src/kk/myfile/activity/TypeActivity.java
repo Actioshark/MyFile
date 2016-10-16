@@ -106,6 +106,10 @@ public class TypeActivity extends BaseActivity {
 				finish();
 				return;
 			}
+		} else if (mType == TYPE_BIG) {
+			mName = AppUtil.getString(R.string.word_big_file);
+		} else if (mType == TYPE_RECENT) {
+			mName = AppUtil.getString(R.string.word_recent_file);
 		}
 		
 		setContentView(R.layout.activity_type);
