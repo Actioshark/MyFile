@@ -5,8 +5,6 @@ import java.io.File;
 public abstract class Leaf {
 	protected final String mPath;
 	
-	protected String mType;
-	
 	private Object mTag;
 	
 	public Leaf(String path) {
@@ -23,16 +21,6 @@ public abstract class Leaf {
 	
 	public String getPath() {
 		return mPath;
-	}
-	
-	public void setType(String type) {
-		if (mType == null) {
-			mType = type;
-		}
-	}
-	
-	public String getType() {
-		return mType;
 	}
 	
 	public void setTag(Object tag) {

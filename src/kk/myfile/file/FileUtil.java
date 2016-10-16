@@ -45,6 +45,25 @@ public class FileUtil {
 			Logger.print(null, e);
 		}
 	}
+	
+	public static String getType(Leaf leaf) {
+		String path = leaf.getPath();
+		String name = path.substring(path.lastIndexOf('/') + 1);
+		int pointIndex = name.lastIndexOf('.');
+		
+		if (pointIndex != -1) {
+			String subfix = name.substring(pointIndex + 1).toLowerCase(
+				Setting.LOCALE);
+
+			try {
+				JSONObject map = sTypeMap.getJSONObject(subfix);
+				return map.getString("type");
+			} catch (Exception e) {
+			}
+		}
+		
+		return null;
+	}
 
 	public static Leaf createLeaf(File file) {
 		String path = file.getAbsolutePath();
@@ -52,19 +71,15 @@ public class FileUtil {
 			return new Direct(path);
 		}
 
-		String type = null;
-
 		String name = file.getName();
 		int pointIndex = name.lastIndexOf('.');
 		if (pointIndex != -1) {
-			String subfix = name.substring(pointIndex + 1, name.length()).toLowerCase(
+			String subfix = name.substring(pointIndex + 1).toLowerCase(
 				Setting.LOCALE);
 
 			try {
 				JSONObject map = sTypeMap.getJSONObject(subfix);
 				if (map != null) {
-					type = map.getString("type");
-
 					String cls = map.getString("cls");
 					cls = String.format("%c%s", Character.toUpperCase(cls.charAt(0)), cls
 						.substring(1));
@@ -73,7 +88,6 @@ public class FileUtil {
 					if (clazz != null) {
 						Constructor<?> ct = clazz.getConstructor(String.class);
 						Leaf leaf = (Leaf) ct.newInstance(path);
-						leaf.setType(type);
 
 						return leaf;
 					}
@@ -83,7 +97,6 @@ public class FileUtil {
 		}
 
 		Leaf leaf = new Unknown(path);
-		leaf.setType(type);
 		return leaf;
 	}
 

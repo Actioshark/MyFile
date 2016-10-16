@@ -18,10 +18,6 @@ public class Direct extends Leaf {
 	}
 	
 	@Override
-	public void setType(String type) {
-	}
-	
-	@Override
 	public int getIcon() {
 		return R.drawable.file_directory;
 	}

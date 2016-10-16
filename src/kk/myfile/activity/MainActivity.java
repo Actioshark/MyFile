@@ -357,8 +357,8 @@ public class MainActivity extends BaseActivity {
 						Logger.print(null, e);
 					}
 					
-					final long TOTAL = total;
-					final long USED = used;
+					final float TOTAL = ((float) total) / (1024 * 1024 * 1024);
+					final float USED = ((float) used) / (1024 * 1024 * 1024);
 					AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							synchronized (mTvTypes) {
@@ -369,9 +369,7 @@ public class MainActivity extends BaseActivity {
 									
 									mCvStat.setArcs(arcs);
 									mCvStat.invalidate();
-									mTvStat.setText(String.format("%d/%d",
-											USED / 1024 / 1024,
-											TOTAL / 1024 / 1024));
+									mTvStat.setText(String.format("%.2f/%.2f", USED, TOTAL));
 								}
 							}
 						}

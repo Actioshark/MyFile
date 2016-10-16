@@ -6,14 +6,14 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-
+import kk.myfile.file.FileUtil;
 import kk.myfile.leaf.Leaf;
 
 public class IntentUtil {
 	public static boolean view(Context context, Leaf leaf, String type) {
 		try {
 			if (type == null) {
-				type = leaf.getType();
+				type = FileUtil.getType(leaf);
 			}
 			
 			if (type == null) {
@@ -35,7 +35,7 @@ public class IntentUtil {
 		try {
 			if (type == null) {
 				for (Leaf leaf : list) {
-					String t = leaf.getType();
+					String t = FileUtil.getType(leaf);
 					
 					if (type == null) {
 						if (t == null) {
@@ -92,7 +92,7 @@ public class IntentUtil {
 	public static boolean edit(Context context, Leaf leaf, String type) {
 		try {
 			if (type == null) {
-				type = leaf.getType();
+				type = FileUtil.getType(leaf);
 			}
 			
 			if (type == null) {
