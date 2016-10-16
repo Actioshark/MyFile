@@ -194,7 +194,7 @@ public class SelectActivity extends BaseActivity {
 		});
 		
 		// 更新文件列表
-		node.direct.loadChildrenAll();
+		node.direct.loadChildren(false);
 		mSelectAdapter.setData(node.direct.getChildren(), node.position);
 	}
 	
@@ -216,7 +216,7 @@ public class SelectActivity extends BaseActivity {
 		}
 		
 		// 更新文件列表
-		mNode.direct.loadChildrenAll();
+		mNode.direct.loadChildren(false);
 		mSelectAdapter.setData(mNode.direct.getChildren(), -1);
 	}
 	

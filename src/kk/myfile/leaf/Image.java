@@ -14,6 +14,8 @@ import kk.myfile.util.AppUtil;
 public class Image extends Leaf implements IThumable {
 	public static final String TYPE = "image/*";
 	
+	public static final int COLOR = 0xff0000cc;
+	
 	public Image(String path) {
 		super(path);
 	}

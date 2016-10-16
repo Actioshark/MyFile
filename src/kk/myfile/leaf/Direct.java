@@ -26,31 +26,18 @@ public class Direct extends Leaf {
 		return R.drawable.file_directory;
 	}
 	
-	public void loadChildrenAll() {
-		try {
-			synchronized (mChildren) {
-				mChildren.clear();
-				
-				for (File file : getFile().listFiles()) {
-					mChildren.add(FileUtil.createLeaf(file));
-				}
-			}
-		} catch (Exception e) {
-		}
-	}
-	
-	public void loadChildrenVis() {
+	public void loadChildren(boolean visible) {
 		try {
 			synchronized (mChildren) {
 				mChildren.clear();
 			
 				for (File file : getFile().listFiles()) {
-					if (Tree.HIDDEN_FILE.equals(file.getName())) {
+					if (visible && Tree.HIDDEN_FILE.equals(file.getName())) {
 						mChildren.clear();
 						return;
 					}
 					
-					if (file.isHidden() == false) {
+					if (visible == false || file.isHidden() == false) {
 						mChildren.add(FileUtil.createLeaf(file));
 					}
 				}
@@ -59,46 +46,26 @@ public class Direct extends Leaf {
 		}
 	}
 	
-	public void loadChildrenRecAll() {
-		Queue<Direct> queue = new LinkedList<Direct>();
-		queue.add(this);
-		
-		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
-			try {
-				List<Leaf> children = new ArrayList<Leaf>();
-				for (File file : new File(dir.mPath).listFiles()) {
-					children.add(FileUtil.createLeaf(file));
-				}
-				
-				synchronized (dir.mChildren) {
-					dir.mChildren.clear();
-					dir.mChildren.addAll(children);
-				}
-				
-				for (Leaf leaf : children) {
-					if (leaf instanceof Direct) {
-						queue.offer((Direct) leaf);
-					}
-				}
-			} catch (Exception e) {
-			}
-		}
-	}
-	
-	public void loadChildrenRecVis() {
+	public void loadChildrenRec(boolean visible, boolean canon) {
 		Queue<Direct> queue = new LinkedList<Direct>();
 		queue.add(this);
 
 loop:	for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
 			try {
+				File parent = dir.getFile();
+				
+				if (canon && FileUtil.isLink(parent)) {
+					continue;
+				}
+				
 				List<Leaf> children = new ArrayList<Leaf>();
 				
-				for (File file : new File(dir.mPath).listFiles()) {
-					if (Tree.HIDDEN_FILE.equals(file.getName())) {
+				for (File file : parent.listFiles()) {
+					if (visible && Tree.HIDDEN_FILE.equals(file.getName())) {
 						continue loop;
 					}
 					
-					if (file.isHidden() == false) {
+					if (visible == false || file.isHidden() == false) {
 						children.add(FileUtil.createLeaf(file));
 					}
 				}

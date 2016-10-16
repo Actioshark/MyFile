@@ -40,11 +40,7 @@ public class Tree {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				if (Setting.getShowHidden()) {
-					direct.loadChildrenRecAll();
-				} else {
-					direct.loadChildrenRecVis();
-				}
+				direct.loadChildrenRec(!Setting.getShowHidden(), false);
 				
 				synchronized (direct) {
 					direct.setTag(null);
@@ -55,7 +51,7 @@ public class Tree {
 		return direct;
 	}
 	
-	public static final Direct sTypeDirect = new Direct(Setting.DEFAULT_PATH);
+	public static final Direct sTypeDirect = new Direct("/");
 	private static boolean sIsTypeDirectRefreshing = false;
 	private static boolean sIsTypeDirectNeedRefresh = false;
 	
@@ -78,11 +74,7 @@ public class Tree {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				if (Setting.getShowHidden()) {
-					sTypeDirect.loadChildrenRecAll();
-				} else {
-					sTypeDirect.loadChildrenRecVis();
-				}
+				sTypeDirect.loadChildrenRec(!Setting.getShowHidden(), true);
 				
 				synchronized (sTypeDirect) {
 					sIsTypeDirectRefreshing = false;

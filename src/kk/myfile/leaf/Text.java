@@ -5,6 +5,8 @@ import kk.myfile.R;
 public class Text extends Leaf {
 	public static final String TYPE = "text/*";
 	
+	public static final int COLOR = 0xffaaaa00;
+	
 	public Text(String path) {
 		super(path);
 	}

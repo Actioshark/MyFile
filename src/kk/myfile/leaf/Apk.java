@@ -10,6 +10,8 @@ import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.util.AppUtil;
 
 public class Apk extends Leaf implements IThumable {
+	public static final int COLOR = 0xff00cc00;
+	
 	public Apk(String path) {
 		super(path);
 	}

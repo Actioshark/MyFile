@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
-
 import kk.myfile.R;
+import kk.myfile.file.FileUtil;
 import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.ILoadCallback;
 import kk.myfile.leaf.Apk;
@@ -22,12 +22,15 @@ import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Office;
 import kk.myfile.leaf.Text;
+import kk.myfile.leaf.Unknown;
 import kk.myfile.leaf.Video;
 import kk.myfile.leaf.Zip;
+import kk.myfile.ui.CakeView;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 public class MainActivity extends BaseActivity {
@@ -47,10 +50,13 @@ public class MainActivity extends BaseActivity {
 	
 	private final Class<?>[] mTypes = new Class<?>[] {
 		Text.class, Image.class, Audio.class, Video.class,
-		Office.class, Zip.class, Apk.class,
+		Office.class, Zip.class, Apk.class, Unknown.class,
 	};
 	private final List<TextView> mTvTypes = new ArrayList<TextView>();
 	private Object mTypeMark;
+	
+	private CakeView mCvStat;
+	private TextView mTvStat;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -221,6 +227,10 @@ public class MainActivity extends BaseActivity {
 		});
 		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
+		parent = root.findViewById(R.id.ll_stat);
+		mCvStat = (CakeView) parent.findViewById(R.id.cv_view);
+		mTvStat = (TextView) parent.findViewById(R.id.tv_text);
+		
 		// 文件分类
 		root = findViewById(R.id.ll_file_3);
 		
@@ -307,9 +317,10 @@ public class MainActivity extends BaseActivity {
 							return;
 						}
 					}
-					
 					boolean finished = Tree.isTypeDirectRefreshing() == false;
-					final long[] counts = new long[mTvTypes.size()];
+					
+					final long[] counts = new long[mTypes.length];
+					final long[] sizes = new long[mTypes.length];
 					
 					Tree.loadCallback(Tree.sTypeDirect, new ILoadCallback() {
 						@Override
@@ -318,14 +329,36 @@ public class MainActivity extends BaseActivity {
 								for (int i = 0; i < mTypes.length; i++) {
 									if (mTypes[i].isInstance(leaf)) {
 										counts[i]++;
+										sizes[i] += leaf.getFile().length();
 										break;
 									}
 								}
 							} catch (Exception e) {
+								Logger.print(null, e);
 							}
 						}
 					});
+					
+					final List<CakeView.Arc> arcs = new ArrayList<CakeView.Arc>();
+					long total = 0l;
+					long used = 0l;
+					try {
+						total = FileUtil.getTotalSize();
 						
+						for (int i = 0; i < sizes.length; i++) {
+							CakeView.Arc arc = new CakeView.Arc();
+							arc.ratio = sizes[i] / (float) total;
+							arc.color = mTypes[i].getDeclaredField("COLOR").getInt(null);
+							arcs.add(arc);
+							
+							used += sizes[i];
+						}
+					} catch (Exception e) {
+						Logger.print(null, e);
+					}
+					
+					final long TOTAL = total;
+					final long USED = used;
 					AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							synchronized (mTvTypes) {
@@ -333,6 +366,12 @@ public class MainActivity extends BaseActivity {
 									for (int i = 0; i < mTvTypes.size(); i++) {
 										mTvTypes.get(i).setText(String.format("%d", counts[i]));
 									}
+									
+									mCvStat.setArcs(arcs);
+									mCvStat.invalidate();
+									mTvStat.setText(String.format("%d/%d",
+											USED / 1024 / 1024,
+											TOTAL / 1024 / 1024));
 								}
 							}
 						}

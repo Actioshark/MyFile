@@ -406,7 +406,7 @@ public class DirectActivity extends BaseActivity {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				direct.loadChildrenAll();
+				direct.loadChildren(false);
 			}
 		});
 		mDirectAdapter.setData(node.direct.getChildren(), node.position);
@@ -437,7 +437,7 @@ public class DirectActivity extends BaseActivity {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				direct.loadChildrenAll();
+				direct.loadChildren(false);
 			}
 		});
 		mDirectAdapter.setData(mNode.direct.getChildren(), -1);

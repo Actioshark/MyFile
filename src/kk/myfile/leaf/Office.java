@@ -3,6 +3,8 @@ package kk.myfile.leaf;
 import kk.myfile.R;
 
 public class Office extends Leaf {
+	public static final int COLOR = 0xffcc8800;
+	
 	public Office(String path) {
 		super(path);
 	}

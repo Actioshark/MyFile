@@ -15,18 +15,10 @@ public class TempDirect extends Direct {
 	}
 	
 	@Override
-	public void loadChildrenAll() {
+	public void loadChildren(boolean visible) {
 	}
 	
 	@Override
-	public void loadChildrenVis() {
-	}
-	
-	@Override
-	public void loadChildrenRecAll() {
-	}
-	
-	@Override
-	public void loadChildrenRecVis() {
+	public void loadChildrenRec(boolean visible, boolean canon) {
 	}
 }
