@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -14,9 +15,11 @@ import android.widget.TextView;
 
 import kk.myfile.R;
 import kk.myfile.file.Tree;
+import kk.myfile.file.Tree.ILoadCallback;
 import kk.myfile.leaf.Apk;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Image;
+import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Office;
 import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
@@ -42,12 +45,19 @@ public class MainActivity extends BaseActivity {
 	private final List<TextView> mTvDirects = new ArrayList<TextView>();
 	private View mLlAdd;
 	
+	private final Class<?>[] mTypes = new Class<?>[] {
+		Text.class, Image.class, Audio.class, Video.class,
+		Office.class, Zip.class, Apk.class,
+	};
+	private final List<TextView> mTvTypes = new ArrayList<TextView>();
+	private Object mTypeMark;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_main);
-		View root;
+		View root, parent;
 		
 		// 常用路径
 		for (int i = 0; ; i++) {
@@ -125,8 +135,8 @@ public class MainActivity extends BaseActivity {
 		// 文件分类
 		root = findViewById(R.id.ll_file_1);
 		
-		root.findViewById(R.id.ll_text).
-		setOnClickListener(new OnClickListener() {
+		parent = root.findViewById(R.id.ll_text);
+		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
@@ -135,9 +145,10 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
-		root.findViewById(R.id.ll_image).
-		setOnClickListener(new OnClickListener() {
+		parent = root.findViewById(R.id.ll_image);
+		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
@@ -146,9 +157,10 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
-		root.findViewById(R.id.ll_audio).
-		setOnClickListener(new OnClickListener() {
+		parent = root.findViewById(R.id.ll_audio);
+		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
@@ -157,9 +169,10 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
-		root.findViewById(R.id.ll_video).
-		setOnClickListener(new OnClickListener() {
+		parent = root.findViewById(R.id.ll_video);
+		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
@@ -168,11 +181,12 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
 		root = findViewById(R.id.ll_file_2);
 		
-		root.findViewById(R.id.ll_office).
-		setOnClickListener(new OnClickListener() {
+		parent = root.findViewById(R.id.ll_office);
+		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
@@ -181,9 +195,10 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
-		root.findViewById(R.id.ll_zip).
-		setOnClickListener(new OnClickListener() {
+		parent = root.findViewById(R.id.ll_zip);
+		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
@@ -192,9 +207,10 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
-		root.findViewById(R.id.ll_apk).
-		setOnClickListener(new OnClickListener() {
+		parent = root.findViewById(R.id.ll_apk);
+		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
@@ -203,6 +219,7 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 		
 		// 文件分类
 		root = findViewById(R.id.ll_file_3);
@@ -270,6 +287,65 @@ public class MainActivity extends BaseActivity {
 		} else {
 			mLlAdd.setVisibility(View.GONE);
 		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				final Object mark = new Object();
+				synchronized (mTvTypes) {
+					mTypeMark = mark;
+				}
+				
+				while (isFinishing() == false) {
+					synchronized (mTypeMark) {
+						if (mTypeMark != mark) {
+							return;
+						}
+					}
+					
+					boolean finished = Tree.isTypeDirectRefreshing() == false;
+					final long[] counts = new long[mTvTypes.size()];
+					
+					Tree.loadCallback(Tree.sTypeDirect, new ILoadCallback() {
+						@Override
+						public void onLoad(Leaf leaf) {
+							try {
+								for (int i = 0; i < mTypes.length; i++) {
+									if (mTypes[i].isInstance(leaf)) {
+										counts[i]++;
+										break;
+									}
+								}
+							} catch (Exception e) {
+							}
+						}
+					});
+						
+					AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							synchronized (mTvTypes) {
+								if (mTypeMark == mark) {
+									for (int i = 0; i < mTvTypes.size(); i++) {
+										mTvTypes.get(i).setText(String.format("%d", counts[i]));
+									}
+								}
+							}
+						}
+					});
+					
+					if (finished) {
+						return;
+					}
+					
+					SystemClock.sleep(300);
+				}
+			}
+		});
 	}
 	
 	@Override

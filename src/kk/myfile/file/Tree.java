@@ -123,6 +123,34 @@ public class Tree {
 		return ret;
 	}
 	
+	public static interface ILoadCallback {
+		public void onLoad(Leaf leaf);
+	}
+	
+	public static void loadCallback(Direct direct, ILoadCallback callback) {
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.offer(direct);
+		
+		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			List<Leaf> children;
+			try {
+				children = dir.getChildren();
+			} catch (Exception e) {
+				continue;
+			}
+			
+			synchronized (children) {
+				for (Leaf leaf : children) {
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+					} else {
+						callback.onLoad(leaf);
+					}
+				}
+			}
+		}
+	}
+	
 	public static List<Leaf> loadType(Direct direct, Class<?> cls) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		Queue<Direct> queue = new LinkedList<Direct>();
