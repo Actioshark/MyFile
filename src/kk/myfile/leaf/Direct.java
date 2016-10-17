@@ -42,7 +42,7 @@ public class Direct extends Leaf {
 		}
 	}
 	
-	public void loadChildrenRec(boolean visible, boolean canon) {
+	public void loadChildren(List<Leaf> list, boolean visible, boolean canon) {
 		Queue<Direct> queue = new LinkedList<Direct>();
 		queue.add(this);
 
@@ -66,10 +66,7 @@ loop:	for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
 					}
 				}
 				
-				synchronized (dir.mChildren) {
-					dir.mChildren.clear();
-					dir.mChildren.addAll(children);
-				}
+				list.addAll(children);
 				
 				for (Leaf leaf : children) {
 					if (leaf instanceof Direct) {

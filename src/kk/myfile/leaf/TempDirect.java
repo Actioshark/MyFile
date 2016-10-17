@@ -19,6 +19,6 @@ public class TempDirect extends Direct {
 	}
 	
 	@Override
-	public void loadChildrenRec(boolean visible, boolean canon) {
+	public void loadChildren(List<Leaf> list, boolean visible, boolean canon) {
 	}
 }

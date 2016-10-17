@@ -182,13 +182,13 @@ public class DirectActivity extends BaseActivity {
 					synchronized (mEtSearch) {
 						mSearchRun = new Runnable() {
 							public void run() {
-								Direct direct = Tree.getDirect(mNode.direct.getPath());
+								List<Leaf> direct = Tree.getDirect(mNode.direct.getPath());
 								String key = mEtSearch.getText().toString();
 								final Runnable mark = this;
 								
 								while (true) {
-									boolean finished = direct.getTag() == null;
-									final List<Leaf> ret = Tree.search(Tree.loadAll(direct), key);
+									boolean finished = direct.get(0).getTag() == null;
+									final List<Leaf> ret = Tree.search(direct, key);
 									
 									synchronized (mEtSearch) {
 										if (mSearchRun != mark) {

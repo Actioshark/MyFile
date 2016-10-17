@@ -12,10 +12,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
+
 import kk.myfile.R;
 import kk.myfile.file.FileUtil;
 import kk.myfile.file.Tree;
-import kk.myfile.file.Tree.ILoadCallback;
 import kk.myfile.leaf.Apk;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Image;
@@ -322,22 +322,21 @@ public class MainActivity extends BaseActivity {
 					final long[] counts = new long[mTypes.length];
 					final long[] sizes = new long[mTypes.length];
 					
-					Tree.loadCallback(Tree.sTypeDirect, new ILoadCallback() {
-						@Override
-						public void onLoad(Leaf leaf) {
-							try {
-								for (int i = 0; i < mTypes.length; i++) {
-									if (mTypes[i].isInstance(leaf)) {
-										counts[i]++;
-										sizes[i] += leaf.getFile().length();
-										break;
-									}
+					for (int i = 0; i < Tree.sTypeDirect.size(); i++) {
+						Leaf leaf = Tree.sTypeDirect.get(i);
+						
+						try {
+							for (int j = 0; j < mTypes.length; j++) {
+								if (mTypes[j].isInstance(leaf)) {
+									counts[j]++;
+									sizes[j] += leaf.getFile().length();
+									break;
 								}
-							} catch (Exception e) {
-								Logger.print(null, e);
 							}
+						} catch (Exception e) {
+							Logger.print(null, e);
 						}
-					});
+					}
 					
 					final List<CakeView.Arc> arcs = new ArrayList<CakeView.Arc>();
 					long total = 0l;

@@ -13,6 +13,7 @@ import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.adapter.TypeAdapter;
 import kk.myfile.file.ClipPad;
 import kk.myfile.file.Tree;
+import kk.myfile.file.Tree.ILoadCallback;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
@@ -25,7 +26,6 @@ import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -187,26 +187,30 @@ public class TypeActivity extends BaseActivity {
 					
 					AppUtil.runOnNewThread(new Runnable() {
 						public void run() {
-							List<Leaf> list;
-							if (mType == TYPE_BIG) {
-								list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
-							} else if (mType == TYPE_RECENT) {
-								list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
-							} else {
-								list = Tree.loadType(Tree.sTypeDirect, mClass);
-							}
-							
-							final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
-							
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									synchronized (mEtSearch) {
-										if (mSearchMark == mark) {
-											mTypeAdapter.setData(ret);
+							ILoadCallback callback = new ILoadCallback() {
+								@Override
+								public void onLoad(List<Leaf> list, Leaf leaf) {
+									final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
+									
+									AppUtil.runOnUiThread(new Runnable() {
+										public void run() {
+											synchronized (mEtSearch) {
+												if (mSearchMark == mark) {
+													mTypeAdapter.setData(ret);
+												}
+											}
 										}
-									}
+									});
 								}
-							});
+							};
+							
+							if (mType == TYPE_BIG) {
+								Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum(), callback);
+							} else if (mType == TYPE_RECENT) {
+								Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum(), callback);
+							} else {
+								Tree.loadType(Tree.sTypeDirect, mClass, callback);
+							}
 						}
 					});
 				}
@@ -279,43 +283,41 @@ public class TypeActivity extends BaseActivity {
 			Tree.refreshTypeDirect();
 		}
 		
+		final Object mark = new Object();
+		synchronized (mEtSearch) {
+			mSearchMark = mark;
+		}
+		
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				final Object mark = new Object();
-				synchronized (mEtSearch) {
-					mSearchMark = mark;
-				}
-				
-				while (isFinishing() == false) {
-					synchronized (mEtSearch) {
-						if (mSearchMark != mark) {
-							return;
-						}
-					}
-					
-					boolean finished = Tree.isTypeDirectRefreshing() == false;
-					
-					List<Leaf> list;
-					if (mType == TYPE_BIG) {
-						list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
-					} else if (mType == TYPE_RECENT) {
-						list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
-					} else {
-						list = Tree.loadType(Tree.sTypeDirect, mClass);
-					}
-					
-					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
+				ILoadCallback callback = new ILoadCallback() {
+					@Override
+					public void onLoad(List<Leaf> list, Leaf leaf) {
+						final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 						
-					AppUtil.runOnUiThread(new Runnable() {
-						public void run() {
-							synchronized (mEtSearch) {
-								if (mSearchMark == mark) {
-									mTypeAdapter.setData(ret);
+						AppUtil.runOnUiThread(new Runnable() {
+							public void run() {
+								synchronized (mEtSearch) {
+									if (mSearchMark == mark) {
+										mTypeAdapter.setData(ret);
+									}
 								}
 							}
-						}
-					});
+						});
+					}
+				};
+				
+				while (isFinishing() == false) {
+					boolean finished = Tree.isTypeDirectRefreshing() == false;
+					
+					if (mType == TYPE_BIG) {
+						Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum(), callback);
+					} else if (mType == TYPE_RECENT) {
+						Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum(), callback);
+					} else {
+						Tree.loadType(Tree.sTypeDirect, mClass, callback);
+					}
 					
 					if (finished) {
 						return;

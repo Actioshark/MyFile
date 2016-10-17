@@ -2,9 +2,7 @@ package kk.myfile.file;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,14 +31,16 @@ public class Tree {
 		public void onProgress(ProgressType type);
 	}
 	
-	public static Direct getDirect(String path) {
+	public static List<Leaf> getDirect(String path) {
 		final Direct direct = new Direct(path);
 		direct.setTag(direct);
+		
+		final List<Leaf> list = new ArrayList<Leaf>();
 		
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				direct.loadChildrenRec(!Setting.getShowHidden(), false);
+				direct.loadChildren(list, !Setting.getShowHidden(), false);
 				
 				synchronized (direct) {
 					direct.setTag(null);
@@ -48,10 +48,10 @@ public class Tree {
 			}
 		});
 		
-		return direct;
+		return list;
 	}
 	
-	public static final Direct sTypeDirect = new Direct("/");
+	public static final List<Leaf> sTypeDirect = new ArrayList<Leaf>();
 	private static boolean sIsTypeDirectRefreshing = false;
 	private static boolean sIsTypeDirectNeedRefresh = false;
 	
@@ -74,7 +74,7 @@ public class Tree {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				sTypeDirect.loadChildrenRec(!Setting.getShowHidden(), true);
+				new Direct("/").loadChildren(sTypeDirect, !Setting.getShowHidden(), true);
 				
 				synchronized (sTypeDirect) {
 					sIsTypeDirectRefreshing = false;
@@ -88,180 +88,94 @@ public class Tree {
 		});
 	}
 	
-	public static List<Leaf> loadAll(Direct direct) {
-		List<Leaf> ret = new ArrayList<Leaf>();
-		Queue<Direct> queue = new LinkedList<Direct>();
-		queue.offer(direct);
-		
-		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
-			List<Leaf> children;
-			try {
-				children = dir.getChildren();
-			} catch (Exception e) {
-				continue;
-			}
-			
-			synchronized (children) {
-				for (Leaf leaf : children) {
-					ret.add(leaf);
-					
-					if (leaf instanceof Direct) {
-						queue.offer((Direct) leaf);
-					}
-				}
-			}
-		}
-		
-		return ret;
-	}
-	
 	public static interface ILoadCallback {
-		public void onLoad(Leaf leaf);
+		public void onLoad(List<Leaf> ret, Leaf leaf);
 	}
 	
-	public static void loadCallback(Direct direct, ILoadCallback callback) {
-		Queue<Direct> queue = new LinkedList<Direct>();
-		queue.offer(direct);
-		
-		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
-			List<Leaf> children;
-			try {
-				children = dir.getChildren();
-			} catch (Exception e) {
-				continue;
-			}
-			
-			synchronized (children) {
-				for (Leaf leaf : children) {
-					if (leaf instanceof Direct) {
-						queue.offer((Direct) leaf);
-					} else {
-						callback.onLoad(leaf);
-					}
-				}
-			}
-		}
-	}
-	
-	public static List<Leaf> loadType(Direct direct, Class<?> cls) {
+	public static List<Leaf> loadType(List<Leaf> direct, Class<?> cls, ILoadCallback callback) {
 		List<Leaf> ret = new ArrayList<Leaf>();
-		Queue<Direct> queue = new LinkedList<Direct>();
-		queue.offer(direct);
 		
-		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
-			List<Leaf> children;
-			try {
-				children = dir.getChildren();
-			} catch (Exception e) {
-				continue;
-			}
-			
-			synchronized (children) {
-				for (Leaf leaf : children) {
-					if (leaf instanceof Direct) {
-						queue.offer((Direct) leaf);
-					} else if (cls.isInstance(leaf)) {
-						ret.add(leaf);
-					}
-				}
+		for (int i = 0; i < direct.size(); i++) {
+			Leaf leaf = direct.get(i);
+			if (cls.isInstance(leaf)) {
+				ret.add(leaf);
+				callback.onLoad(ret, leaf);
 			}
 		}
 		
 		return ret;
 	}
 	
-	public static List<Leaf> loadBig(Direct direct, int limit) {
+	public static List<Leaf> loadBig(List<Leaf> direct, int limit, ILoadCallback callback) {
 		List<Leaf> ret = new ArrayList<Leaf>();
-		Queue<Direct> queue = new LinkedList<Direct>();
-		queue.offer(direct);
 		
-		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
-			List<Leaf> children;
-			try {
-				children = dir.getChildren();
-			} catch (Exception e) {
+		for (int i = 0; i < direct.size(); i++) {
+			Leaf leaf = direct.get(i);
+			if (leaf instanceof Direct) {
 				continue;
 			}
+					
+			long length = leaf.getFile().length();
+			leaf.setTag(length);
 			
-			synchronized (children) {
-				for (Leaf leaf : children) {
-					if (leaf instanceof Direct) {
-						queue.offer((Direct) leaf);
-						continue;
-					}
-					
-					long length = leaf.getFile().length();
-					leaf.setTag(length);
-					
-					int index = -1;
-					int size = ret.size();
-					
-					for (int i = size - 1; i >= 0; i--) {
-						long len = (Long) ret.get(i).getTag();
-						
-						if (len >= length) {
-							index = i;
-							break;
-						}
-					}
-					
-					if (++index < limit) {
-						ret.add(index, leaf);
-						
-						if (size + 1 > limit) {
-							ret.remove(size);
-						}
-					}
+			int index = -1;
+			int size = ret.size();
+			
+			for (int j = size - 1; j >= 0; j--) {
+				long len = (Long) ret.get(j).getTag();
+				
+				if (len >= length) {
+					index = j;
+					break;
 				}
+			}
+			
+			if (++index < limit) {
+				ret.add(index, leaf);
+				
+				if (size + 1 > limit) {
+					ret.remove(size);
+				}
+				
+				callback.onLoad(ret, leaf);
 			}
 		}
 		
 		return ret;
 	}
 	
-	public static List<Leaf> loadRecent(Direct direct, int limit) {
+	public static List<Leaf> loadRecent(List<Leaf> direct, int limit, ILoadCallback callback) {
 		List<Leaf> ret = new ArrayList<Leaf>();
-		Queue<Direct> queue = new LinkedList<Direct>();
-		queue.offer(direct);
 		
-		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
-			List<Leaf> children;
-			try {
-				children = dir.getChildren();
-			} catch (Exception e) {
+		for (int i = 0; i < direct.size(); i++) {
+			Leaf leaf = direct.get(i);
+			if (leaf instanceof Direct) {
 				continue;
 			}
+					
+			long time = leaf.getFile().lastModified();
+			leaf.setTag(time);
 			
-			synchronized (children) {
-				for (Leaf leaf : children) {
-					if (leaf instanceof Direct) {
-						queue.offer((Direct) leaf);
-						continue;
-					}
-					
-					long time = leaf.getFile().lastModified();
-					leaf.setTag(time);
-					
-					int index = -1;
-					int size = ret.size();
-					
-					for (int i = size - 1; i >= 0; i--) {
-						long tm = (Long) ret.get(i).getTag();
-						
-						if (tm >= time) {
-							index = i;
-							break;
-						}
-					}
-					
-					if (++index < limit) {
-						ret.add(index, leaf);
-						
-						if (size + 1 > limit) {
-							ret.remove(size);
-						}
-					}
+			int index = -1;
+			int size = ret.size();
+			
+			for (int j = size - 1; j >= 0; j--) {
+				long tm = (Long) ret.get(j).getTag();
+				
+				if (tm >= time) {
+					index = j;
+					break;
 				}
+			}
+			
+			if (++index < limit) {
+				ret.add(index, leaf);
+				
+				if (size + 1 > limit) {
+					ret.remove(size);
+				}
+				
+				callback.onLoad(ret, leaf);
 			}
 		}
 		
