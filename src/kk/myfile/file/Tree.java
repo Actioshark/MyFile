@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.SystemClock;
+
 import kk.myfile.R;
 import kk.myfile.activity.App;
 import kk.myfile.leaf.Direct;
@@ -88,16 +88,10 @@ public class Tree {
 		});
 	}
 	
-	public static interface ILoadCallback {
-		public void onLoad(List<Leaf> list, Leaf leaf);
-	}
-	
-	public static List<Leaf> loadAll(Direct direct, ILoadCallback callback) {
+	public static List<Leaf> loadAll(Direct direct) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		Queue<Direct> queue = new LinkedList<Direct>();
 		queue.offer(direct);
-		
-		long t0 = SystemClock.elapsedRealtime();
 		
 		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
 			List<Leaf> children;
@@ -114,15 +108,6 @@ public class Tree {
 					if (leaf instanceof Direct) {
 						queue.offer((Direct) leaf);
 					}
-					
-					if (callback != null) {
-						long t1 = SystemClock.elapsedRealtime();
-						
-						if (t1 - t0 > 500) {
-							t0 = t1;
-							callback.onLoad(ret, leaf);
-						}
-					}
 				}
 			}
 		}
@@ -130,12 +115,38 @@ public class Tree {
 		return ret;
 	}
 	
-	public static List<Leaf> loadType(Direct direct, Class<?> cls, ILoadCallback callback) {
-		List<Leaf> ret = new ArrayList<Leaf>();
+	public static interface ILoadCallback {
+		public void onLoad(Leaf leaf);
+	}
+	
+	public static void loadCallback(Direct direct, ILoadCallback callback) {
 		Queue<Direct> queue = new LinkedList<Direct>();
 		queue.offer(direct);
 		
-		long t0 = SystemClock.elapsedRealtime();
+		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
+			List<Leaf> children;
+			try {
+				children = dir.getChildren();
+			} catch (Exception e) {
+				continue;
+			}
+			
+			synchronized (children) {
+				for (Leaf leaf : children) {
+					if (leaf instanceof Direct) {
+						queue.offer((Direct) leaf);
+					} else {
+						callback.onLoad(leaf);
+					}
+				}
+			}
+		}
+	}
+	
+	public static List<Leaf> loadType(Direct direct, Class<?> cls) {
+		List<Leaf> ret = new ArrayList<Leaf>();
+		Queue<Direct> queue = new LinkedList<Direct>();
+		queue.offer(direct);
 		
 		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
 			List<Leaf> children;
@@ -151,15 +162,6 @@ public class Tree {
 						queue.offer((Direct) leaf);
 					} else if (cls.isInstance(leaf)) {
 						ret.add(leaf);
-						
-						if (callback != null) {
-							long t1 = SystemClock.elapsedRealtime();
-							
-							if (t1 - t0 > 500) {
-								t0 = t1;
-								callback.onLoad(ret, leaf);
-							}
-						}
 					}
 				}
 			}
@@ -168,12 +170,10 @@ public class Tree {
 		return ret;
 	}
 	
-	public static List<Leaf> loadBig(Direct direct, int limit, ILoadCallback callback) {
+	public static List<Leaf> loadBig(Direct direct, int limit) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		Queue<Direct> queue = new LinkedList<Direct>();
 		queue.offer(direct);
-		
-		long t0 = SystemClock.elapsedRealtime();
 		
 		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
 			List<Leaf> children;
@@ -211,15 +211,6 @@ public class Tree {
 						if (size + 1 > limit) {
 							ret.remove(size);
 						}
-						
-						if (callback != null) {
-							long t1 = SystemClock.elapsedRealtime();
-							
-							if (t1 - t0 > 500) {
-								t0 = t1;
-								callback.onLoad(ret, leaf);
-							}
-						}
 					}
 				}
 			}
@@ -228,12 +219,10 @@ public class Tree {
 		return ret;
 	}
 	
-	public static List<Leaf> loadRecent(Direct direct, int limit, ILoadCallback callback) {
+	public static List<Leaf> loadRecent(Direct direct, int limit) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		Queue<Direct> queue = new LinkedList<Direct>();
 		queue.offer(direct);
-		
-		long t0 = SystemClock.elapsedRealtime();
 		
 		for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
 			List<Leaf> children;
@@ -270,15 +259,6 @@ public class Tree {
 						
 						if (size + 1 > limit) {
 							ret.remove(size);
-						}
-						
-						if (callback != null) {
-							long t1 = SystemClock.elapsedRealtime();
-							
-							if (t1 - t0 > 500) {
-								t0 = t1;
-								callback.onLoad(ret, leaf);
-							}
 						}
 					}
 				}
