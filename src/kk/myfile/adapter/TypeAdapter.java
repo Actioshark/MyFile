@@ -280,7 +280,7 @@ public class TypeAdapter extends BaseAdapter {
 		
 		if (holder.time != null) {
 			Date date = new Date(file.lastModified());
-			DateFormat df = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss", Setting.LOCALE);
+			DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
 			holder.time.setText(df.format(date));
 		}
 		
