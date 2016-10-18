@@ -188,11 +188,11 @@ public class TypeActivity extends BaseActivity {
 						public void run() {
 							List<Leaf> list;
 							if (mType == TYPE_BIG) {
-								list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
+								list = Tree.loadBig(Tree.getTypeDirect(), Setting.getBigFileNum());
 							} else if (mType == TYPE_RECENT) {
-								list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
+								list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getRecentFileNum());
 							} else {
-								list = Tree.loadType(Tree.sTypeDirect, mClass);
+								list = Tree.loadType(Tree.getTypeDirect(), mClass);
 							}
 							
 							final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
@@ -291,11 +291,11 @@ public class TypeActivity extends BaseActivity {
 					
 					List<Leaf> list;
 					if (mType == TYPE_BIG) {
-						list = Tree.loadBig(Tree.sTypeDirect, Setting.getBigFileNum());
+						list = Tree.loadBig(Tree.getTypeDirect(), Setting.getBigFileNum());
 					} else if (mType == TYPE_RECENT) {
-						list = Tree.loadRecent(Tree.sTypeDirect, Setting.getRecentFileNum());
+						list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getRecentFileNum());
 					} else {
-						list = Tree.loadType(Tree.sTypeDirect, mClass);
+						list = Tree.loadType(Tree.getTypeDirect(), mClass);
 					}
 					
 					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());

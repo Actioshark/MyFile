@@ -22,7 +22,6 @@ import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Office;
 import kk.myfile.leaf.Text;
-import kk.myfile.leaf.Unknown;
 import kk.myfile.leaf.Video;
 import kk.myfile.leaf.Zip;
 import kk.myfile.ui.CakeView;
@@ -50,7 +49,7 @@ public class MainActivity extends BaseActivity {
 	
 	private final Class<?>[] mTypes = new Class<?>[] {
 		Text.class, Image.class, Audio.class, Video.class,
-		Office.class, Zip.class, Apk.class, Unknown.class,
+		Office.class, Zip.class, Apk.class,
 	};
 	private final List<TextView> mTvTypes = new ArrayList<TextView>();
 	private Object mTypeMark;
@@ -322,42 +321,50 @@ public class MainActivity extends BaseActivity {
 					final long[] counts = new long[mTypes.length];
 					final long[] sizes = new long[mTypes.length];
 					
-					for (int i = 0; i < Tree.sTypeDirect.size(); i++) {
-						Leaf leaf = Tree.sTypeDirect.get(i);
-						
-						try {
-							for (int j = 0; j < mTypes.length; j++) {
+					List<Leaf> list = Tree.getTypeDirect();
+					for (int i = 0; i < list.size(); i++) {
+						Leaf leaf = list.get(i);
+							
+						for (int j = 0; j < mTypes.length; j++) {
+							try {
 								if (mTypes[j].isInstance(leaf)) {
 									counts[j]++;
 									sizes[j] += leaf.getFile().length();
 									break;
 								}
+							} catch (Exception e) {
+								Logger.print(null, e);
 							}
-						} catch (Exception e) {
-							Logger.print(null, e);
 						}
 					}
 					
 					final List<CakeView.Arc> arcs = new ArrayList<CakeView.Arc>();
-					long total = 0l;
-					long used = 0l;
+					float total = 0l;
+					float avail = 0l;
 					try {
 						total = FileUtil.getTotalSize();
+						avail = FileUtil.getAvailSize();
+						float unknown = total - avail;
 						
 						for (int i = 0; i < sizes.length; i++) {
 							CakeView.Arc arc = new CakeView.Arc();
-							arc.ratio = sizes[i] / (float) total;
+							arc.ratio = sizes[i] / total;
 							arc.color = mTypes[i].getDeclaredField("COLOR").getInt(null);
 							arcs.add(arc);
 							
-							used += sizes[i];
+							unknown -= sizes[i];
 						}
+						
+						CakeView.Arc arc = new CakeView.Arc();
+						arc.ratio = unknown / total;
+						arc.color = 0xffcccccc;
+						arcs.add(arc);
 					} catch (Exception e) {
 						Logger.print(null, e);
 					}
 					
-					final float TOTAL = ((float) total) / (1024 * 1024 * 1024);
-					final float USED = ((float) used) / (1024 * 1024 * 1024);
+					final float TOTAL = total / (1024 * 1024 * 1024);
+					final float AVAIL = avail / (1024 * 1024 * 1024);
 					AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							synchronized (mTvTypes) {
@@ -368,7 +375,7 @@ public class MainActivity extends BaseActivity {
 									
 									mCvStat.setArcs(arcs);
 									mCvStat.invalidate();
-									mTvStat.setText(String.format("%.2f/%.2f", USED, TOTAL));
+									mTvStat.setText(String.format("%.2f/%.2f", TOTAL - AVAIL, TOTAL));
 								}
 							}
 						}

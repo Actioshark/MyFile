@@ -103,19 +103,25 @@ public class FileUtil {
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	public static long getTotalSize() {
-		long blockSize;
-		long availCount;
-		
 		StatFs sf = new StatFs(Setting.DEFAULT_PATH);
+		
 		if (Build.VERSION.SDK_INT < 18) {
-			blockSize = sf.getBlockSize();
-			availCount = sf.getBlockCount();
+			return sf.getBlockSize() * sf.getBlockCount();
 		} else {
-			blockSize = sf.getBlockSizeLong();
-			availCount = sf.getBlockCountLong();
+			return sf.getTotalBytes();
 		}
-
-		return availCount * blockSize;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	public static long getAvailSize() {
+		StatFs sf = new StatFs(Setting.DEFAULT_PATH);
+		
+		if (Build.VERSION.SDK_INT < 18) {
+			return sf.getBlockSize() * sf.getAvailableBlocks();
+		} else {
+			return sf.getAvailableBytes();
+		}
 	}
 
 	public static boolean isLink(File file) {
