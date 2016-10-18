@@ -74,7 +74,7 @@ public class Tree {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				new Direct("/").loadChildren(sTypeDirect, !Setting.getShowHidden(), true);
+				new Direct(Setting.DEFAULT_PATH).loadChildren(sTypeDirect, !Setting.getShowHidden(), true);
 				
 				synchronized (sTypeDirect) {
 					sIsTypeDirectRefreshing = false;
@@ -88,25 +88,20 @@ public class Tree {
 		});
 	}
 	
-	public static interface ILoadCallback {
-		public void onLoad(List<Leaf> ret, Leaf leaf);
-	}
-	
-	public static List<Leaf> loadType(List<Leaf> direct, Class<?> cls, ILoadCallback callback) {
+	public static List<Leaf> loadType(List<Leaf> direct, Class<?> cls) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		
 		for (int i = 0; i < direct.size(); i++) {
 			Leaf leaf = direct.get(i);
 			if (cls.isInstance(leaf)) {
 				ret.add(leaf);
-				callback.onLoad(ret, leaf);
 			}
 		}
 		
 		return ret;
 	}
 	
-	public static List<Leaf> loadBig(List<Leaf> direct, int limit, ILoadCallback callback) {
+	public static List<Leaf> loadBig(List<Leaf> direct, int limit) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		
 		for (int i = 0; i < direct.size(); i++) {
@@ -136,15 +131,13 @@ public class Tree {
 				if (size + 1 > limit) {
 					ret.remove(size);
 				}
-				
-				callback.onLoad(ret, leaf);
 			}
 		}
 		
 		return ret;
 	}
 	
-	public static List<Leaf> loadRecent(List<Leaf> direct, int limit, ILoadCallback callback) {
+	public static List<Leaf> loadRecent(List<Leaf> direct, int limit) {
 		List<Leaf> ret = new ArrayList<Leaf>();
 		
 		for (int i = 0; i < direct.size(); i++) {
@@ -174,8 +167,6 @@ public class Tree {
 				if (size + 1 > limit) {
 					ret.remove(size);
 				}
-				
-				callback.onLoad(ret, leaf);
 			}
 		}
 		
