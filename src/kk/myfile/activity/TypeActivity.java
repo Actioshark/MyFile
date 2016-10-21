@@ -414,6 +414,15 @@ public class TypeActivity extends BaseActivity {
 			}
 			
 			if (selected.size() == 1) {
+				list.add(new DataItem(R.drawable.detail, R.string.word_detail, new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						Intent intent = new Intent(TypeActivity.this, DetailActivity.class);
+						intent.putExtra(DetailActivity.KEY_PATH, first.getPath());
+						startActivity(intent);
+					}
+				}));
+				
 				list.add(new DataItem(R.drawable.edit, R.string.word_rename, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index) {

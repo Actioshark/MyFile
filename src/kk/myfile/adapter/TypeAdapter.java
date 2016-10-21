@@ -3,6 +3,7 @@ package kk.myfile.adapter;
 import kk.myfile.R;
 import kk.myfile.activity.BaseActivity.Mode;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
+import kk.myfile.activity.DetailActivity;
 import kk.myfile.activity.TypeActivity;
 import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -236,9 +238,9 @@ public class TypeAdapter extends BaseAdapter {
 				@Override
 				public boolean onLongClick(View view) {
 					if (mActivity.getMode() == Mode.Normal) {
-						mSelected.clear();
-						mSelected.add(holder.position);
-						mActivity.setMode(Mode.Select);
+						Intent intent = new Intent(mActivity, DetailActivity.class);
+						intent.putExtra(DetailActivity.KEY_PATH, holder.leaf.getPath());
+						mActivity.startActivity(intent);
 					} else {
 						if (mSelected.contains(holder.position)) {
 							mSelected.remove(holder.position);

@@ -26,6 +26,15 @@
 	<string name="word_any">Any</string>
 	<string name="word_big_file">Big File</string>
 	<string name="word_recent_file">Recent File</string>
+	<string name="word_name">Name</string>
+	<string name="word_parent">Parent</string>
+	<string name="word_real_path">Real Path</string>
+	<string name="word_type">Type</string>
+	<string name="word_size">Size</string>
+	<string name="word_modify_time">Modify Time</string>
+	<string name="word_package_name">Package Name</string>
+	<string name="word_version_code">Version Code</string>
+	<string name="word_version_name">Version Name</string>
 
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_input_path_name">Input name for path</string>
