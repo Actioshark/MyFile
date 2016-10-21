@@ -95,8 +95,9 @@ public class Tree {
 
 	public static List<Leaf> loadType(List<Leaf> direct, Class<?> cls) {
 		List<Leaf> ret = new ArrayList<Leaf>();
+		int size = direct.size();
 
-		for (int i = 0; i < direct.size(); i++) {
+		for (int i = 0; i < size; i++) {
 			Leaf leaf = direct.get(i);
 			if (cls.isInstance(leaf)) {
 				ret.add(leaf);
@@ -108,8 +109,9 @@ public class Tree {
 
 	public static List<Leaf> loadBig(List<Leaf> direct, int limit) {
 		List<Leaf> ret = new ArrayList<Leaf>();
+		int size = direct.size();
 
-		for (int i = 0; i < direct.size(); i++) {
+		for (int i = 0; i < size; i++) {
 			Leaf leaf = direct.get(i);
 			if (leaf instanceof Direct) {
 				continue;
@@ -119,9 +121,9 @@ public class Tree {
 			leaf.setTag(length);
 
 			int index = -1;
-			int size = ret.size();
+			int s = ret.size();
 
-			for (int j = size - 1; j >= 0; j--) {
+			for (int j = s - 1; j >= 0; j--) {
 				long len = (Long) ret.get(j).getTag();
 
 				if (len >= length) {
@@ -133,8 +135,8 @@ public class Tree {
 			if (++index < limit) {
 				ret.add(index, leaf);
 
-				if (size + 1 > limit) {
-					ret.remove(size);
+				if (s + 1 > limit) {
+					ret.remove(s);
 				}
 			}
 		}
@@ -144,8 +146,9 @@ public class Tree {
 
 	public static List<Leaf> loadRecent(List<Leaf> direct, int limit) {
 		List<Leaf> ret = new ArrayList<Leaf>();
+		int size = direct.size();
 
-		for (int i = 0; i < direct.size(); i++) {
+		for (int i = 0; i < size; i++) {
 			Leaf leaf = direct.get(i);
 			if (leaf instanceof Direct) {
 				continue;
@@ -155,9 +158,9 @@ public class Tree {
 			leaf.setTag(time);
 
 			int index = -1;
-			int size = ret.size();
+			int s = ret.size();
 
-			for (int j = size - 1; j >= 0; j--) {
+			for (int j = s - 1; j >= 0; j--) {
 				long tm = (Long) ret.get(j).getTag();
 
 				if (tm >= time) {
@@ -169,8 +172,8 @@ public class Tree {
 			if (++index < limit) {
 				ret.add(index, leaf);
 
-				if (size + 1 > limit) {
-					ret.remove(size);
+				if (s + 1 > limit) {
+					ret.remove(s);
 				}
 			}
 		}
@@ -180,10 +183,12 @@ public class Tree {
 
 	public static List<Leaf> search(List<Leaf> list, String key) {
 		List<Leaf> ret = new ArrayList<Leaf>();
+		int size = list.size();
 		key = key.toLowerCase(Setting.LOCALE);
 
-		for (Leaf leaf : list) {
+		for (int i = 0; i < size; i++) {
 			try {
+				Leaf leaf = list.get(i);
 				if (leaf.getFile().getName().toLowerCase(Setting.LOCALE).contains(key)) {
 					ret.add(leaf);
 				}

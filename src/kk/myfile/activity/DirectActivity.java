@@ -187,27 +187,29 @@ public class DirectActivity extends BaseActivity {
 								final Runnable mark = this;
 								
 								while (true) {
-									boolean finished = direct.get(0).getTag() == null;
-									final List<Leaf> ret = Tree.search(direct, key);
-									
-									synchronized (mEtSearch) {
-										if (mSearchRun != mark) {
-											return;
-										}
+									if (direct.size() > 0) {
+										boolean finished = direct.get(0).getTag() == null;
+										final List<Leaf> ret = Tree.search(direct, key);
 										
-										AppUtil.runOnUiThread(new Runnable() {
-											public void run() {
-												synchronized (mEtSearch) {
-													if (mSearchRun == mark) {
-														showSearchResult(ret);
+										synchronized (mEtSearch) {
+											if (mSearchRun != mark) {
+												return;
+											}
+											
+											AppUtil.runOnUiThread(new Runnable() {
+												public void run() {
+													synchronized (mEtSearch) {
+														if (mSearchRun == mark) {
+															showSearchResult(ret);
+														}
 													}
 												}
-											}
-										});
-									}
-									
-									if (finished) {
-										return;
+											});
+										}
+										
+										if (finished) {
+											return;
+										}
 									}
 									
 									SystemClock.sleep(300);
