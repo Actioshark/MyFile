@@ -153,7 +153,7 @@ public class FileUtil {
 
 	public static String checkNewName(String parent, String name) {
 		if (name == null || name.length() < 1 || name.length() > 255) {
-			return AppUtil.getString(R.string.err_illegal_file_name_length);
+			return AppUtil.getString(R.string.err_name_length_valid, 1, 255);
 		}
 
 		for (char ch : ILLEGAL_FILE_NAME_CHAR) {

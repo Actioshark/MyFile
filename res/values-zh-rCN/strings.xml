@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">文件</string>
+
+	<string name="def_direct_name">目录_%03d</string>
+	<string name="def_file_name">文件_%03d</string>
+	<string name="def_path_name">SD卡</string>
+
+	<string name="err_create_direct_failed">创建目录失败！</string>
+	<string name="err_create_direct_success">成功</string>
+	<string name="err_create_file_failed">创建文件失败！</string>
+	<string name="err_create_file_success">成功</string>
+	<string name="err_delete_file_failed">%s\n删除失败</string>
+	<string name="err_file_exist">此文件已经存在</string>
+	<string name="err_file_read_error">文件读取错误</string>
+	<string name="err_illegal_file_name_char">含有非法字符！</string>
+	<string name="err_name_length_valid">长度必须是 %1$d 到 %2$d！</string>
+	<string name="err_nothing_selected">没有选择任何文件</string>
+	<string name="err_path_not_valid">这是个无效路径</string>
+	<string name="err_rename_file_failed">重命名失败！</string>
+	<string name="err_rename_file_success">成功</string>
+	<string name="err_share_failed">分享失败！</string>
+
+	<string name="list_style_1_1">网格小</string>
+	<string name="list_style_1_2">网格中</string>
+	<string name="list_style_1_3">网格大</string>
+	<string name="list_style_2_1">列表小</string>
+	<string name="list_style_2_2">列表中</string>
+	<string name="list_style_2_3">列表大</string>
+
+	<string name="msg_children_select_with_num">%1$d/%2$d 文件</string>
+	<string name="msg_children_with_num">%d 文件</string>
+	<string name="msg_copy_file_progress">正在复制 %1$d/%2$d 个文件\n\n成功 %3$d\n失败 %4$d</string>
+	<string name="msg_cut_file_progress">正在剪切 %1$d/%2$d 个文件\n\n成功%3$d\n失败 %4$d</string>
+	<string name="msg_delete_file_confirm">删除这 %d 个文件？</string>
+	<string name="msg_delete_file_progress">正在删除 %1$d/%2$d 个文件\n\n成功 %3$d\n失败 %4$d</string>
+	<string name="msg_edit_as">编辑为</string>
+	<string name="msg_enter_target_direct_and_paste">进入目标目录并粘贴</string>
+	<string name="msg_file_exist">以下文件已经存在\n\n%s</string>
+	<string name="msg_input_direct_name">输入目录名</string>
+	<string name="msg_input_file_name">输入文件名</string>
+	<string name="msg_input_path_name">请输入名称</string>
+	<string name="msg_input_to_search">输入并搜索</string>
+	<string name="msg_multi_select_mode">多选模式</string>
+	<string name="msg_open_as">打开为</string>
+	<string name="msg_select_operation">请选择一个操作</string>
+	<string name="msg_wait">请稍等</string>
+	
+	<string name="setting_big_file_limit">大文件数量</string>
+	<string name="setting_hidden">是否搜索隐藏文件</string>
+	<string name="setting_list_style">列表样式</string>
+	<string name="setting_num_limit">文件数量限制</string>
+	<string name="setting_recent_file_limit">最近文件数量</string>
+	<string name="setting_sort_tree">文件排序</string>
+	<string name="setting_sort_type">分类文件排序</string>
+
+	<string name="sort_Directory">目录是否在前</string>
+	<string name="sort_ModifyTime">修改时间</string>
+	<string name="sort_Name">名称</string>
+	<string name="sort_Path">路径</string>
+	<string name="sort_Size">大小</string>
+	<string name="sort_Subfix">类型</string>
+
+	<string name="type_apk">应用</string>
+	<string name="type_audio">音频</string>
+	<string name="type_direct">目录</string>
+	<string name="type_image">图片</string>
+	<string name="type_office">文档</string>
+	<string name="type_text">文本</string>
+	<string name="type_unknown">未知</string>
+	<string name="type_video">视频</string>
+	<string name="type_zip">压缩包</string>
+	
+	<string name="word_album">专辑</string>
+	<string name="word_any">任意</string>
+	<string name="word_app_name">应用名称</string>
+	<string name="word_artist">艺术家</string>
+	<string name="word_author">作者</string>
+	<string name="word_big_file">大文件</string>
+	<string name="word_bitrate">比特率</string>
+	<string name="word_cancel">取消</string>
+	<string name="word_children_num">子文件数量</string>
+	<string name="word_compilation">编辑</string>
+	<string name="word_composer">编曲</string>
+	<string name="word_confirm">确定</string>
+	<string name="word_copy">复制</string>
+	<string name="word_copy_to">复制到</string>
+	<string name="word_cover">覆盖</string>
+	<string name="word_cover_all">覆盖所有</string>
+	<string name="word_cut">剪切</string>
+	<string name="word_cut_to">剪切到</string>
+	<string name="word_date">日期</string>
+	<string name="word_delete">删除</string>
+	<string name="word_detail">详情</string>
+	<string name="word_duration">时长</string>
+	<string name="word_edit">编辑</string>
+	<string name="word_height">高</string>
+	<string name="word_minetype">媒体类型</string>
+	<string name="word_modify_time">修改时间</string>
+	<string name="word_multi_select">多选</string>
+	<string name="word_name">名称</string>
+	<string name="word_new_direct">新建目录</string>
+	<string name="word_new_file">新建文件</string>
+	<string name="word_package_name">包名</string>
+	<string name="word_parent">父目录</string>
+	<string name="word_paste">粘贴</string>
+	<string name="word_real_path">真实路径</string>
+	<string name="word_recent_file">最近文件</string>
+	<string name="word_refresh">刷新</string>
+	<string name="word_rename">重命名</string>
+	<string name="word_rotation">角度</string>
+	<string name="word_share">分享</string>
+	<string name="word_size">大小</string>
+	<string name="word_skip">跳过</string>
+	<string name="word_skip_all">跳过全部</string>
+	<string name="word_title">标题</string>
+	<string name="word_type">类型</string>
+	<string name="word_version_code">版本号</string>
+	<string name="word_version_name">版本名</string>
+	<string name="word_width">宽</string>
+	<string name="word_year">年代</string>
+
+</resources>
