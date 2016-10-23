@@ -1,6 +1,6 @@
 <resources>
 
-	<dimen name="main_bar_height">52dp</dimen>
+	<dimen name="main_bar_height">46dp</dimen>
 	<dimen name="main_bar_large_height">100dp</dimen>
 	<dimen name="main_gap">3dp</dimen>
 	<dimen name="main_padding">7dp</dimen>
