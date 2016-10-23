@@ -22,6 +22,7 @@ import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
+import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
 
 import java.io.File;
@@ -283,17 +284,8 @@ public class DirectAdapter extends BaseAdapter {
 			if (leaf instanceof Direct) {
 				holder.size.setText("");
 			} else {
-				String num = String.valueOf(file.length());
-				StringBuilder sb = new StringBuilder();
-				int len = num.length();
-				for (int i = 0; i < len; i++) {
-					sb.append(num.charAt(i));
-
-					if (i + 1 != len && (len - i) % 3 == 1) {
-						sb.append(',');
-					}
-				}
-				holder.size.setText(String.format(Setting.LOCALE, "%s B", sb.toString()));
+				holder.size.setText(String.format(Setting.LOCALE,
+					"%s B", MathUtil.insertComma(file.length())));
 			}
 		}
 

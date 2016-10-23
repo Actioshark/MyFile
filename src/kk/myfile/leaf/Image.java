@@ -1,14 +1,18 @@
 package kk.myfile.leaf;
 
+import java.util.Map;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
 import kk.myfile.R;
 import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Logger;
 
 public class Image extends Leaf implements IThumable {
 	public static final String TYPE = "image/*";
@@ -30,10 +34,24 @@ public class Image extends Leaf implements IThumable {
 	}
 	
 	@Override
-	public Drawable getThum(int width, int height) {
-		Options size = new Options();
-		size.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(mPath, size);
+	public Map<String, String> getDetail() {
+		Map<String, String> map = super.getDetail();
+		
+		try {
+			Options op = getOptions();
+			putDetail(map, R.string.word_minetype, op.outMimeType);
+			putDetail(map, R.string.word_width, op.outWidth);
+			putDetail(map, R.string.word_height, op.outHeight);
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+		
+		return map;
+	}
+	
+	@Override
+	public Drawable getThum(int width, int height) throws Exception {
+		Options size = getOptions();
 		
 		int sw = (size.outWidth + width - 1) / width;
 		int sh = (size.outHeight + height - 1) / height;
@@ -60,5 +78,13 @@ public class Image extends Leaf implements IThumable {
 		bmp = Bitmap.createBitmap(pixels, rw, rh, config);
 	
 		return new BitmapDrawable(AppUtil.getRes(), bmp);
+	}
+	
+	public Options getOptions() throws Exception {
+		Options size = new Options();
+		size.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(mPath, size);
+		
+		return size;
 	}
 }

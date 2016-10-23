@@ -24,6 +24,7 @@ import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
+import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
 import android.app.Dialog;
 import android.content.Intent;
@@ -349,17 +350,8 @@ public class TypeActivity extends BaseActivity {
 			mTvDetailSize.setText(AppUtil.getString(R.string.msg_children_with_num,
 					children == null ? 0 : children.length));
 		} else {
-			String num = String.valueOf(file.length());
-			StringBuilder sb = new StringBuilder();
-			int len = num.length();
-			for (int i = 0; i < len; i++) {
-				sb.append(num.charAt(i));
-
-				if (i + 1 != len && (len - i) % 3 == 1) {
-					sb.append(',');
-				}
-			}
-			mTvDetailSize.setText(String.format(Setting.LOCALE, "%s B", sb.toString()));
+			mTvDetailSize.setText(String.format(Setting.LOCALE,
+				"%s B", MathUtil.insertComma(file.length())));
 		}
 		
 		mDetailShowPoint = SystemClock.elapsedRealtime();

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import kk.myfile.R;
@@ -25,6 +26,16 @@ public class Direct extends Leaf {
 	@Override
 	public int getTypeName() {
 		return R.string.type_direct;
+	}
+	
+	@Override
+	public Map<String, String> getDetail() {
+		Map<String, String> map = super.getDetail();
+		
+		loadChildren(false);
+		putDetail(map, R.string.word_children_num, mChildren.size());
+		
+		return map;
 	}
 	
 	public void loadChildren(boolean visible) {

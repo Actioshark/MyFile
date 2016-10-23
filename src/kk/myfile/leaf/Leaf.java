@@ -9,6 +9,8 @@ import java.util.Map;
 
 import kk.myfile.R;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.Logger;
+import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
 
 public abstract class Leaf {
@@ -44,6 +46,27 @@ public abstract class Leaf {
 	
 	public abstract int getTypeName();
 	
+	protected void putDetail(Map<String, String> map, int key, Object value, Object... args) {
+		if (value == null) {
+			return;
+		}
+		
+		String v = String.valueOf(value);
+		if (v == null || v.length() < 1) {
+			return;
+		}
+		
+		if (args != null && args.length > 0) {
+			v = String.format(v, args);
+			
+			if (v == null || v.length() < 1) {
+				return;
+			}
+		}
+			
+		map.put(AppUtil.getString(key), v);
+	}
+	
 	public Map<String, String> getDetail() {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		
@@ -52,36 +75,29 @@ public abstract class Leaf {
 		String name = mPath.substring(idx + 1);
 		File file = new File(mPath);
 		
-		map.put(AppUtil.getString(R.string.word_name), name);
-		map.put(AppUtil.getString(R.string.word_parent), parent);
+		putDetail(map, R.string.word_name, name);
+		putDetail(map, R.string.word_parent, parent);
 		try {
-			map.put(AppUtil.getString(R.string.word_real_path), file.getCanonicalPath());
+			putDetail(map, R.string.word_real_path, file.getCanonicalPath());
 		} catch (Exception e) {
+			Logger.print(null, e);
 		}
 		
-		map.put(AppUtil.getString(R.string.word_type), AppUtil.getString(getTypeName()));
+		putDetail(map, R.string.word_type, AppUtil.getString(getTypeName()));
 		
 		try {
-			String num = String.valueOf(file.length());
-			StringBuilder sb = new StringBuilder();
-			int len = num.length();
-			for (int i = 0; i < len; i++) {
-				sb.append(num.charAt(i));
-	
-				if (i + 1 != len && (len - i) % 3 == 1) {
-					sb.append(',');
-				}
-			}
-			map.put(AppUtil.getString(R.string.word_size), String.format(
-					Setting.LOCALE, "%s B", sb.toString()));
+			putDetail(map, R.string.word_size, "%s B",
+				MathUtil.insertComma(file.length()));
 		} catch (Exception e) {
+			Logger.print(null, e);
 		}
 		
 		try {
 			Date date = new Date(file.lastModified());
 			DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
-			map.put(AppUtil.getString(R.string.word_modify_time), df.format(date));
+			putDetail(map, R.string.word_modify_time, df.format(date));
 		} catch (Exception e) {
+			Logger.print(null, e);
 		}
 		
 		return map;
