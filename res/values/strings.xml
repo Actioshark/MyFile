@@ -35,6 +35,7 @@
 	<string name="word_package_name">Package Name</string>
 	<string name="word_version_code">Version Code</string>
 	<string name="word_version_name">Version Name</string>
+	<string name="word_duration">Duration</string>
 
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_input_path_name">Input name for path</string>
@@ -84,6 +85,8 @@
 	<string name="type_office">Office</string>
 	<string name="type_zip">Zip</string>
 	<string name="type_apk">Apk</string>
+	<string name="type_direct">Directory</string>
+	<string name="type_unknown">Unknown</string>
 
 	<string name="setting_sort_tree">Sort Files Of Directory</string>
 	<string name="setting_sort_type">Sort Files Of Type</string>

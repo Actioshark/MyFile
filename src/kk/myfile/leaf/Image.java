@@ -6,7 +6,6 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 import kk.myfile.R;
 import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.util.AppUtil;
@@ -23,6 +22,11 @@ public class Image extends Leaf implements IThumable {
 	@Override
 	public int getIcon() {
 		return R.drawable.file_image;
+	}
+	
+	@Override
+	public int getTypeName() {
+		return R.string.type_image;
 	}
 	
 	@Override

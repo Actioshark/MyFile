@@ -11,7 +11,7 @@ import kk.myfile.util.Logger;
 
 public class ImageUtil {
 	public static interface IThumable {
-		public Drawable getThum(int width, int height);
+		public Drawable getThum(int width, int height) throws Exception;
 	}
 	
 	public static interface IThumListenner {

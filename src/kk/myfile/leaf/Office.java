@@ -13,4 +13,9 @@ public class Office extends Leaf {
 	public int getIcon() {
 		return R.drawable.file_office;
 	}
+	
+	@Override
+	public int getTypeName() {
+		return R.string.type_office;
+	}
 }

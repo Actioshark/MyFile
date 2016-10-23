@@ -15,4 +15,9 @@ public class Unknown extends Leaf {
 	public int getIcon() {
 		return R.drawable.file_unknown;
 	}
+	
+	@Override
+	public int getTypeName() {
+		return R.string.type_unknown;
+	}
 }

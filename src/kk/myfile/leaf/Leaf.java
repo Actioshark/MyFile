@@ -42,6 +42,8 @@ public abstract class Leaf {
 	
 	public abstract int getIcon();
 	
+	public abstract int getTypeName();
+	
 	public Map<String, String> getDetail() {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		
@@ -57,25 +59,30 @@ public abstract class Leaf {
 		} catch (Exception e) {
 		}
 		
-		map.put(AppUtil.getString(R.string.word_type), AppUtil.getString(
-				String.format("type_%s", getClass().getSimpleName().toLowerCase(Setting.LOCALE))));
+		map.put(AppUtil.getString(R.string.word_type), AppUtil.getString(getTypeName()));
 		
-		String num = String.valueOf(file.length());
-		StringBuilder sb = new StringBuilder();
-		int len = num.length();
-		for (int i = 0; i < len; i++) {
-			sb.append(num.charAt(i));
-
-			if (i + 1 != len && (len - i) % 3 == 1) {
-				sb.append(',');
+		try {
+			String num = String.valueOf(file.length());
+			StringBuilder sb = new StringBuilder();
+			int len = num.length();
+			for (int i = 0; i < len; i++) {
+				sb.append(num.charAt(i));
+	
+				if (i + 1 != len && (len - i) % 3 == 1) {
+					sb.append(',');
+				}
 			}
+			map.put(AppUtil.getString(R.string.word_size), String.format(
+					Setting.LOCALE, "%s B", sb.toString()));
+		} catch (Exception e) {
 		}
-		map.put(AppUtil.getString(R.string.word_size), String.format(
-				Setting.LOCALE, "%s B", sb.toString()));
 		
-		Date date = new Date(file.lastModified());
-		DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
-		map.put(AppUtil.getString(R.string.word_modify_time), df.format(date));
+		try {
+			Date date = new Date(file.lastModified());
+			DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
+			map.put(AppUtil.getString(R.string.word_modify_time), df.format(date));
+		} catch (Exception e) {
+		}
 		
 		return map;
 	}

@@ -22,6 +22,11 @@ public class Direct extends Leaf {
 		return R.drawable.file_directory;
 	}
 	
+	@Override
+	public int getTypeName() {
+		return R.string.type_direct;
+	}
+	
 	public void loadChildren(boolean visible) {
 		try {
 			synchronized (mChildren) {

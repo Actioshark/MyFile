@@ -7,6 +7,7 @@ import kk.myfile.adapter.DetailAdapter;
 import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.util.AppUtil;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,14 +32,22 @@ public class DetailActivity extends BaseActivity {
 			finish();
 			return;
 		}
-		Leaf leaf = FileUtil.createLeaf(file);
+		final Leaf leaf = FileUtil.createLeaf(file);
 		
 		setContentView(R.layout.activity_detail);
 		
 		final ImageView thum = (ImageView) findViewById(R.id.iv_thum);
 		thum.setImageResource(leaf.getIcon());
 		if (leaf instanceof IThumable) {
-			thum.setImageDrawable(((IThumable) leaf).getThum(40960, 40960));
+			AppUtil.runOnNewThread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						thum.setImageDrawable(((IThumable) leaf).getThum(40960, 40960));
+					} catch (Exception e) {
+					}
+				}
+			});
 		}
 		
 		ListView lv = (ListView) findViewById(R.id.lv_list);

@@ -22,6 +22,11 @@ public class Apk extends Leaf implements IThumable {
 		return R.drawable.file_apk;
 	}
 	
+	@Override
+	public int getTypeName() {
+		return R.string.type_apk;
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public Drawable getThum(int width, int height) {
@@ -39,12 +44,15 @@ public class Apk extends Leaf implements IThumable {
 	public Map<String, String> getDetail() {
 		Map<String, String> map = super.getDetail();
 		
-		PackageManager pm = AppUtil.getContext().getPackageManager();
-		PackageInfo pi = pm.getPackageArchiveInfo(mPath, PackageManager.GET_ACTIVITIES);
-		map.put(AppUtil.getString(R.string.word_package_name), pi.packageName);
-		
-		map.put(AppUtil.getString(R.string.word_version_code), String.valueOf(pi.versionCode));
-		map.put(AppUtil.getString(R.string.word_version_name), pi.versionName);
+		try {
+			PackageManager pm = AppUtil.getContext().getPackageManager();
+			PackageInfo pi = pm.getPackageArchiveInfo(mPath, PackageManager.GET_ACTIVITIES);
+			map.put(AppUtil.getString(R.string.word_package_name), pi.packageName);
+			
+			map.put(AppUtil.getString(R.string.word_version_code), String.valueOf(pi.versionCode));
+			map.put(AppUtil.getString(R.string.word_version_name), pi.versionName);
+		} catch (Exception e) {
+		}
 		
 		return map;
 	}

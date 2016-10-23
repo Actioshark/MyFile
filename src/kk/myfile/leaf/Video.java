@@ -15,4 +15,9 @@ public class Video extends Leaf {
 	public int getIcon() {
 		return R.drawable.file_video;
 	}
+	
+	@Override
+	public int getTypeName() {
+		return R.string.type_video;
+	}
 }

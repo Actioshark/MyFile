@@ -99,6 +99,7 @@ public class TypeActivity extends BaseActivity {
 				String cls = getIntent().getStringExtra(KEY_CLASS);
 				mClass = Class.forName(cls);
 				int index = cls.lastIndexOf('.');
+				
 				mName = AppUtil.getString(String.format("type_%s", cls.substring(index + 1)
 						.toLowerCase(Setting.LOCALE)));
 			} catch (Exception e) {
