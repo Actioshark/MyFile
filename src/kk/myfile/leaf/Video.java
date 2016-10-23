@@ -3,13 +3,19 @@ package kk.myfile.leaf;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
+
 import kk.myfile.R;
+import kk.myfile.file.ImageUtil.IThumable;
+import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 
-public class Video extends Leaf {
+public class Video extends Leaf implements IThumable {
 	public static final String TYPE = "video/*";
 	
 	public static final int COLOR = 0xffcc00cc;
@@ -21,6 +27,14 @@ public class Video extends Leaf {
 	@Override
 	public int getIcon() {
 		return R.drawable.file_video;
+	}
+	
+	@Override
+	public Drawable getThum(int width, int height) throws Exception {
+		MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+		mmr.setDataSource(mPath);
+		Bitmap bmp = mmr.getFrameAtTime();
+		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
 	
 	@Override

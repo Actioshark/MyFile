@@ -3,13 +3,20 @@ package kk.myfile.leaf;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
+
 import kk.myfile.R;
+import kk.myfile.file.ImageUtil.IThumable;
+import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 
-public class Audio extends Leaf {
+public class Audio extends Leaf implements IThumable {
 	public static final String TYPE = "audio/*";
 	
 	public static final int COLOR = 0xffcc0000;
@@ -21,6 +28,15 @@ public class Audio extends Leaf {
 	@Override
 	public int getIcon() {
 		return R.drawable.file_audio;
+	}
+
+	@Override
+	public Drawable getThum(int width, int height) throws Exception {
+		MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+		mmr.setDataSource(mPath);
+		byte[] data = mmr.getEmbeddedPicture();
+		Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
 	
 	@Override
