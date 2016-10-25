@@ -46,13 +46,14 @@
 	<string name="msg_open_as">打开为</string>
 	<string name="msg_select_operation">请选择一个操作</string>
 	<string name="msg_wait">请稍等</string>
-	
-	<string name="setting_big_file_limit">大文件数量</string>
+
 	<string name="setting_hidden">是否搜索隐藏文件</string>
-	<string name="setting_list_style">列表样式</string>
-	<string name="setting_num_limit">文件数量限制</string>
-	<string name="setting_recent_file_limit">最近文件数量</string>
-	<string name="setting_sort_tree">文件排序</string>
+	<string name="setting_list_style_big_recent">大/最近文件列表样式</string>
+	<string name="setting_list_style_direct">目录文件列表样式</string>
+	<string name="setting_list_style_type">分类文件列表样式</string>
+	<string name="setting_num_limit_big">大文件数量限制</string>
+	<string name="setting_num_limit_recent">最近文件数量限制</string>
+	<string name="setting_sort_direct">目录文件排序</string>
 	<string name="setting_sort_type">分类文件排序</string>
 
 	<string name="sort_Directory">目录是否在前</string>
@@ -71,7 +72,7 @@
 	<string name="type_unknown">未知</string>
 	<string name="type_video">视频</string>
 	<string name="type_zip">压缩包</string>
-	
+
 	<string name="word_album">专辑</string>
 	<string name="word_any">任意</string>
 	<string name="word_app_name">应用名称</string>

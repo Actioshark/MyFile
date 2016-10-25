@@ -190,9 +190,9 @@ public class TypeActivity extends BaseActivity {
 						public void run() {
 							List<Leaf> list;
 							if (mType == TYPE_BIG) {
-								list = Tree.loadBig(Tree.getTypeDirect(), Setting.getBigFileNum());
+								list = Tree.loadBig(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Big));
 							} else if (mType == TYPE_RECENT) {
-								list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getRecentFileNum());
+								list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Recent));
 							} else {
 								list = Tree.loadType(Tree.getTypeDirect(), mClass);
 							}
@@ -216,9 +216,6 @@ public class TypeActivity extends BaseActivity {
 		
 		// 文件列表
 		String key = Setting.getListStyle();
-		if (mType != TypeActivity.TYPE_CLASS) {
-			key = SettingListStyleActivity.changeKey(key, 2, -1);
-		}
 		ListStyle ls = SettingListStyleActivity.getListStyle(key);
 		
 		mTypeAdapter = new TypeAdapter(this, mType, ls);
@@ -293,9 +290,9 @@ public class TypeActivity extends BaseActivity {
 					
 					List<Leaf> list;
 					if (mType == TYPE_BIG) {
-						list = Tree.loadBig(Tree.getTypeDirect(), Setting.getBigFileNum());
+						list = Tree.loadBig(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Big));
 					} else if (mType == TYPE_RECENT) {
-						list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getRecentFileNum());
+						list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Recent));
 					} else {
 						list = Tree.loadType(Tree.getTypeDirect(), mClass);
 					}

@@ -1,6 +1,7 @@
 package kk.myfile.adapter;
 
 import kk.myfile.R;
+import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.activity.BaseActivity.Mode;
 import kk.myfile.activity.DetailActivity;
 import kk.myfile.activity.DirectActivity;
@@ -11,7 +12,6 @@ import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
 import kk.myfile.file.ImageUtil.IThumListenner;
 import kk.myfile.file.Sorter;
-import kk.myfile.file.Sorter.Classify;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Image;
@@ -64,7 +64,7 @@ public class DirectAdapter extends BaseAdapter {
 			@Override
 			public void run() {
 				synchronized (data) {
-					Sorter.sort(Classify.Tree, data);
+					Sorter.sort(Classify.Direct, data);
 				}
 
 				AppUtil.runOnUiThread(new Runnable() {
@@ -146,7 +146,7 @@ public class DirectAdapter extends BaseAdapter {
 		final ViewHolder holder;
 
 		if (view == null) {
-			String key = Setting.getListStyle();
+			String key = Setting.getListStyle(Classify.Direct);
 			ListStyle ls = SettingListStyleActivity.getListStyle(key);
 			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
 

@@ -1,6 +1,7 @@
 package kk.myfile.adapter;
 
 import kk.myfile.R;
+import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.activity.BaseActivity.Mode;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.activity.DetailActivity;
@@ -9,7 +10,6 @@ import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
 import kk.myfile.file.ImageUtil.IThumListenner;
 import kk.myfile.file.Sorter;
-import kk.myfile.file.Sorter.Classify;
 import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Image;
@@ -80,7 +80,7 @@ public class TypeAdapter extends BaseAdapter {
 			@Override
 			public void run() {
 				synchronized (data) {
-					Sorter.sort(Classify.Tree, data);
+					Sorter.sort(Classify.Direct, data);
 				}
 				
 				AppUtil.runOnUiThread(new Runnable() {

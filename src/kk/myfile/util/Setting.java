@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.Locale;
 
 import kk.myfile.R;
+import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.activity.MainActivity.DefPath;
-import kk.myfile.activity.SettingNumLimitActivity;
-import kk.myfile.file.Sorter.Classify;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,10 +23,13 @@ public class Setting {
 	
 	static final String KEY_DEF_PATH = "def_path";
 	static final String KEY_SORT_FACTOR = "sort_factor_%s";
-	static final String KEY_LIST_STYLE = "list_style";
+	static final String KEY_LIST_STYLE = "list_style_%s";
 	static final String KEY_SHOW_HIDDEN = "show_hidden";
-	static final String KEY_BIG_FILE_NUM = "big_file_num";
-	static final String KEY_RECENT_FILE_NUM = "recent_file_num";
+	static final String KEY_NUM_LIMIT = "num_limit_%s";
+	
+	public static final int NUM_LIMIT_MIN = 1;
+	public static final int NUM_LIMIT_MAX = 9999;
+	public static final int NUM_LIMIT_DEF = 100;
 
 	private static SharedPreferences sPrefer;
 
@@ -101,13 +103,13 @@ public class Setting {
 		editor.commit();
 	}
 	
-	public static String getListStyle() {
-		return sPrefer.getString(KEY_LIST_STYLE, null);
+	public static String getListStyle(Classify classify) {
+		return sPrefer.getString(String.format(KEY_LIST_STYLE, classify.name()), null);
 	}
 	
-	public static void setListStyle(String value) {
+	public static void setListStyle(Classify classify, String value) {
 		Editor editor = sPrefer.edit();
-		editor.putString(KEY_LIST_STYLE, value);
+		editor.putString(String.format(KEY_LIST_STYLE, classify.name()), value);
 		editor.commit();
 	}
 	
@@ -121,43 +123,23 @@ public class Setting {
 		editor.commit();
 	}
 	
-	public static int getBigFileNum() {
-		int num = sPrefer.getInt(KEY_BIG_FILE_NUM, SettingNumLimitActivity.DEF_NUM);
-		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
-			num = SettingNumLimitActivity.DEF_NUM;
-			setBigFileNum(num);
+	public static int getNumLimit(Classify classify) {
+		int num = sPrefer.getInt(String.format(KEY_NUM_LIMIT, classify.name()), NUM_LIMIT_DEF);
+		if (num < NUM_LIMIT_MIN || num > NUM_LIMIT_MAX) {
+			num = NUM_LIMIT_DEF;
+			setNumLimit(classify, num);
 		}
 		
 		return num;
 	}
 	
-	public static void setBigFileNum(int num) {
-		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
-			num = SettingNumLimitActivity.DEF_NUM;
+	public static void setNumLimit(Classify classify, int num) {
+		if (num < NUM_LIMIT_MIN || num > NUM_LIMIT_MAX) {
+			num = NUM_LIMIT_DEF;
 		}
 		
 		Editor editor = sPrefer.edit();
-		editor.putInt(KEY_BIG_FILE_NUM, num);
-		editor.commit();
-	}
-	
-	public static int getRecentFileNum() {
-		int num = sPrefer.getInt(KEY_RECENT_FILE_NUM, SettingNumLimitActivity.DEF_NUM);
-		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
-			num = SettingNumLimitActivity.DEF_NUM;
-			setRecentFileNum(num);
-		}
-		
-		return num;
-	}
-	
-	public static void setRecentFileNum(int num) {
-		if (num < SettingNumLimitActivity.MIN_NUM || num > SettingNumLimitActivity.MAX_NUM) {
-			num = SettingNumLimitActivity.DEF_NUM;
-		}
-		
-		Editor editor = sPrefer.edit();
-		editor.putInt(KEY_RECENT_FILE_NUM, num);
+		editor.putInt(String.format(KEY_NUM_LIMIT, classify.name()), num);
 		editor.commit();
 	}
 }

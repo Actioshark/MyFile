@@ -249,7 +249,7 @@ public class DirectActivity extends BaseActivity {
 			}
 		});
 
-		String key = Setting.getListStyle();
+		String key = Setting.getListStyle(Classify.Direct);
 		ListStyle ls = SettingListStyleActivity.getListStyle(key);
 		mGvList.setNumColumns(ls.column);
 		mGvList.setVerticalSpacing(ls.vertSpace);

@@ -9,13 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout.LayoutParams;
-
 import kk.myfile.R;
 import kk.myfile.util.AppUtil;
 
 public abstract class BaseActivity extends Activity {
 	public static final int REQ_COPY_TO = 1;
 	public static final int REQ_CUT_TO = 2;
+	
+	public static final String KEY_CLASSIFY = "sort_classify";
+	public static enum Classify {
+		Direct, Type, Big, Recent,
+	}
 	
 	public static enum Mode {
 		Normal, Select,

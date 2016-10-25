@@ -11,15 +11,13 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 public class Sorter {
-	public static enum Classify {
-		Tree, Type,
-	}
 	
 	public static enum SortType {
 		Directory, ModifyTime, Name, Path, Size, Subfix,

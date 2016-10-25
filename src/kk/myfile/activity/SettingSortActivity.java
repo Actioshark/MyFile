@@ -5,9 +5,9 @@ import java.util.List;
 
 import kk.myfile.R;
 import kk.myfile.file.Sorter;
-import kk.myfile.file.Sorter.Classify;
 import kk.myfile.file.Sorter.SortFactor;
 import kk.myfile.util.AppUtil;
+
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class SettingSortActivity extends BaseActivity {
-	public static final String KEY_CLASSIFY = "sort_classify";
 	
 	private Classify mClassify;
 	private List<SortFactor> mFactor;
@@ -38,7 +37,7 @@ public class SettingSortActivity extends BaseActivity {
 		try {
 			mClassify = Classify.valueOf(getIntent().getStringExtra(KEY_CLASSIFY));
 		} catch (Exception e) {
-			mClassify = Classify.Tree;
+			mClassify = Classify.Direct;
 		}
 		mFactor = Sorter.getFactors(mClassify);
 

@@ -17,7 +17,7 @@
 			android:orientation="vertical">
 
 			<LinearLayout
-				android:id="@+id/ll_sort_tree"
+				android:id="@+id/ll_sort_direct"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/main_bar_height"
 				android:layout_marginTop="@dimen/main_gap"
@@ -40,7 +40,7 @@
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
-					android:text="@string/setting_sort_tree" />
+					android:text="@string/setting_sort_direct" />
 
 			</LinearLayout>
 
@@ -73,7 +73,35 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:id="@+id/ll_list_style"
+				android:id="@+id/ll_list_style_direct"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/main_bar_height"
+				android:layout_marginTop="@dimen/main_margin"
+				android:background="@drawable/btn_bar"
+				android:orientation="horizontal">
+
+				<ImageView
+					android:layout_width="@dimen/main_bar_height"
+					android:layout_height="@dimen/main_bar_height"
+					android:padding="@dimen/setting_icon_padding"
+					android:scaleType="centerInside"
+					android:src="@drawable/grid" />
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingLeft="@dimen/main_padding"
+					android:paddingRight="@dimen/main_padding"
+					android:layout_marginTop="@dimen/main_gap"
+					android:gravity="left|center_vertical"
+					android:textSize="@dimen/main_direct_text"
+					android:textColor="@color/main_text_color"
+					android:text="@string/setting_list_style_direct" />
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/ll_list_style_type"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/main_bar_height"
 				android:layout_marginTop="@dimen/main_gap"
@@ -96,7 +124,35 @@
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
-					android:text="@string/setting_list_style" />
+					android:text="@string/setting_list_style_type" />
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/ll_list_style_big_recent"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/main_bar_height"
+				android:layout_marginTop="@dimen/main_gap"
+				android:background="@drawable/btn_bar"
+				android:orientation="horizontal">
+
+				<ImageView
+					android:layout_width="@dimen/main_bar_height"
+					android:layout_height="@dimen/main_bar_height"
+					android:padding="@dimen/setting_icon_padding"
+					android:scaleType="centerInside"
+					android:src="@drawable/grid" />
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingLeft="@dimen/main_padding"
+					android:paddingRight="@dimen/main_padding"
+					android:layout_marginTop="@dimen/main_gap"
+					android:gravity="left|center_vertical"
+					android:textSize="@dimen/main_direct_text"
+					android:textColor="@color/main_text_color"
+					android:text="@string/setting_list_style_big_recent" />
 
 			</LinearLayout>
 
@@ -104,7 +160,7 @@
 				android:id="@+id/ll_hidden"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/main_bar_height"
-				android:layout_marginTop="@dimen/main_gap"
+				android:layout_marginTop="@dimen/main_margin"
 				android:background="@drawable/btn_bar"
 				android:orientation="horizontal">
 
@@ -129,7 +185,35 @@
 			</LinearLayout>
 
 			<LinearLayout
-				android:id="@+id/ll_num_limit"
+				android:id="@+id/ll_num_limit_big"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/main_bar_height"
+				android:layout_marginTop="@dimen/main_margin"
+				android:background="@drawable/btn_bar"
+				android:orientation="horizontal">
+
+				<ImageView
+					android:layout_width="@dimen/main_bar_height"
+					android:layout_height="@dimen/main_bar_height"
+					android:padding="@dimen/setting_icon_padding"
+					android:scaleType="centerInside"
+					android:src="@drawable/number" />
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingLeft="@dimen/main_padding"
+					android:paddingRight="@dimen/main_padding"
+					android:layout_marginTop="@dimen/main_gap"
+					android:gravity="left|center_vertical"
+					android:textSize="@dimen/main_direct_text"
+					android:textColor="@color/main_text_color"
+					android:text="@string/setting_num_limit_big" />
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/ll_num_limit_recent"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/main_bar_height"
 				android:layout_marginTop="@dimen/main_gap"
@@ -152,7 +236,7 @@
 					android:gravity="left|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
-					android:text="@string/setting_num_limit" />
+					android:text="@string/setting_num_limit_recent" />
 
 			</LinearLayout>
 

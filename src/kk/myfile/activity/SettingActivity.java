@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+
 import kk.myfile.R;
-import kk.myfile.file.Sorter.Classify;
 
 public class SettingActivity extends BaseActivity {
 	@Override
@@ -24,13 +24,13 @@ public class SettingActivity extends BaseActivity {
 			}
 		});
 		
-		// 文件夹排序
-		findViewById(R.id.ll_sort_tree)
+		// 目录文件排序
+		findViewById(R.id.ll_sort_direct)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
-				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Tree.name());
+				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Direct.name());
 				startActivity(intent);
 			}
 		});
@@ -46,12 +46,35 @@ public class SettingActivity extends BaseActivity {
 			}
 		});
 		
-		// 列表视图
-		findViewById(R.id.ll_list_style)
+		// 目录文件列表视图
+		findViewById(R.id.ll_list_style_direct)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
+				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Direct.name());
+				startActivity(intent);
+			}
+		});
+		
+		// 分类文件列表视图
+		findViewById(R.id.ll_list_style_type)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
+				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Type.name());
+				startActivity(intent);
+			}
+		});
+		
+		// 大/最近文件列表视图
+		findViewById(R.id.ll_list_style_big_recent)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
+				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.BigRecent.name());
 				startActivity(intent);
 			}
 		});
@@ -61,18 +84,25 @@ public class SettingActivity extends BaseActivity {
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent intent = new Intent(SettingActivity.this, SettingHiddenActivity.class);
-				startActivity(intent);
+				// TODO
 			}
 		});
 		
-		// 数量限制
-		findViewById(R.id.ll_num_limit)
+		// 大文件数量限制
+		findViewById(R.id.ll_num_limit_big)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent intent = new Intent(SettingActivity.this, SettingNumLimitActivity.class);
-				startActivity(intent);
+				// TODO
+			}
+		});
+
+		// 最近文件数量限制
+		findViewById(R.id.ll_num_limit_recent)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO
 			}
 		});
 	}

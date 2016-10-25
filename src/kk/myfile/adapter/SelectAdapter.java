@@ -5,9 +5,9 @@ import java.util.List;
 
 import kk.myfile.R;
 import kk.myfile.activity.SelectActivity;
+import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.activity.SelectActivity.Node;
 import kk.myfile.file.Sorter;
-import kk.myfile.file.Sorter.Classify;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
@@ -35,7 +35,7 @@ public class SelectAdapter extends BaseAdapter {
 			@Override
 			public void run() {
 				synchronized (data) {
-					Sorter.sort(Classify.Tree, data);
+					Sorter.sort(Classify.Direct, data);
 				}
 				
 				AppUtil.runOnUiThread(new Runnable() {

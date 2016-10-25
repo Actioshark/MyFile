@@ -11,7 +11,7 @@
 	<string name="err_create_direct_success">Success</string>
 	<string name="err_create_file_failed">Create File Failed!</string>
 	<string name="err_create_file_success">Success</string>
-	<string name="err_delete_file_failed">%s\ndelete failed!</string>
+	<string name="err_delete_file_failed">%s\nDelete failed!</string>
 	<string name="err_file_exist">The name already exist!</string>
 	<string name="err_file_read_error">File reading error</string>
 	<string name="err_illegal_file_name_char">Illegal characters!</string>
@@ -52,13 +52,14 @@
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_wait">Wait a monent</string>
 
-	<string name="setting_big_file_limit">Number Of Big</string>
 	<string name="setting_hidden">Show Hidden Files When Searching</string>
-	<string name="setting_list_style">List Style</string>
-	<string name="setting_num_limit">Number Of Files Limit</string>
-	<string name="setting_recent_file_limit">Number Of Recent</string>
-	<string name="setting_sort_tree">Sort Files Of Directory</string>
-	<string name="setting_sort_type">Sort Files Of Type</string>
+	<string name="setting_list_style_big_recent">List Style For Big/Recent Files</string>
+	<string name="setting_list_style_direct">List Style For Files Of Directory</string>
+	<string name="setting_list_style_type">List Style For Files Of Type</string>
+	<string name="setting_num_limit_big">Number Of Big Files</string>
+	<string name="setting_num_limit_recent">Number Of Recent Files</string>
+	<string name="setting_sort_direct">Sorting For Files Of Directory</string>
+	<string name="setting_sort_type">Sorting For Files Of Type</string>
 
 	<string name="sort_Directory">Directory or File</string>
 	<string name="sort_ModifyTime">Modify Time</string>

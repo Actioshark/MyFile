@@ -45,20 +45,6 @@ public class SettingListStyleActivity extends BaseActivity {
 		return String.format(Setting.LOCALE, "ls_%d_%d", cls, index);
 	}
 	
-	public static String changeKey(String key, int cls, int index) {
-		int c = key.charAt(3) - '0';
-		if (cls >= 1 && cls <= 2) {
-			c = cls;
-		}
-		
-		int i = key.charAt(5) - '0';
-		if (index >= 1 && index <= 3) {
-			i = index;
-		}
-		
-		return getKey(c, i);
-	}
-	
 	public static ListStyle getListStyle(String key) {
 		if (sListMap.containsKey(key)) {
 			return sListMap.get(key);
@@ -75,9 +61,18 @@ public class SettingListStyleActivity extends BaseActivity {
 	
 	private final List<ViewHolder> mList = new ArrayList<ViewHolder>();
 	
+	private Classify mClassify;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// 数据
+		try {
+			mClassify = Classify.valueOf(getIntent().getStringExtra(KEY_CLASSIFY));
+		} catch (Exception e) {
+			mClassify = Classify.Direct;
+		}
 		
 		setContentView(R.layout.activity_setting_list_style);
 		
@@ -93,7 +88,7 @@ public class SettingListStyleActivity extends BaseActivity {
 				root.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						Setting.setListStyle(vh.key);
+						Setting.setListStyle(mClassify, vh.key);
 						refreshList();
 					}
 				});
@@ -120,7 +115,7 @@ public class SettingListStyleActivity extends BaseActivity {
 	}
 	
 	private void refreshList() {
-		String sel = Setting.getListStyle();
+		String sel = Setting.getListStyle(mClassify);
 		
 		for (ViewHolder vh : mList) {
 			if (vh.key.equals(sel)) {
