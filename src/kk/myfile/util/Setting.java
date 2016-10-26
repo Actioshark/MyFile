@@ -125,8 +125,11 @@ public class Setting {
 	
 	public static int getNumLimit(Classify classify) {
 		int num = sPrefer.getInt(String.format(KEY_NUM_LIMIT, classify.name()), NUM_LIMIT_DEF);
-		if (num < NUM_LIMIT_MIN || num > NUM_LIMIT_MAX) {
-			num = NUM_LIMIT_DEF;
+		if (num < NUM_LIMIT_MIN) {
+			num = NUM_LIMIT_MIN;
+			setNumLimit(classify, num);
+		} else if (num > NUM_LIMIT_MAX) {
+			num = NUM_LIMIT_MAX;
 			setNumLimit(classify, num);
 		}
 		
@@ -134,8 +137,10 @@ public class Setting {
 	}
 	
 	public static void setNumLimit(Classify classify, int num) {
-		if (num < NUM_LIMIT_MIN || num > NUM_LIMIT_MAX) {
-			num = NUM_LIMIT_DEF;
+		if (num < NUM_LIMIT_MIN) {
+			num = NUM_LIMIT_MIN;
+		} else if (num > NUM_LIMIT_MAX) {
+			num = NUM_LIMIT_MAX;
 		}
 		
 		Editor editor = sPrefer.edit();

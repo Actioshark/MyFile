@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-
+import android.view.View.OnLongClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import kk.myfile.R;
+import kk.myfile.util.Setting;
 
 public class SettingActivity extends BaseActivity {
 	@Override
@@ -91,29 +94,87 @@ public class SettingActivity extends BaseActivity {
 		});
 		
 		// 隐藏文件
-		findViewById(R.id.ll_hidden)
-		.setOnClickListener(new OnClickListener() {
+		View llHidden = findViewById(R.id.ll_hidden);
+		final ImageView ivHiddenSelect = (ImageView) llHidden.findViewById(R.id.iv_select);
+		ivHiddenSelect.setImageResource(Setting.getShowHidden() ?
+			R.drawable.single_select_pre : R.drawable.single_select_nor);
+		llHidden.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				boolean show = !Setting.getShowHidden();
+				Setting.setShowHidden(show);
+				ivHiddenSelect.setImageResource(show ?
+					R.drawable.single_select_pre : R.drawable.single_select_nor);
 			}
 		});
 		
 		// 大文件数量限制
-		findViewById(R.id.ll_num_limit_big)
-		.setOnClickListener(new OnClickListener() {
+		View llBigLimit = findViewById(R.id.ll_num_limit_big);
+		final TextView tvBigLimitNum = (TextView) llBigLimit.findViewById(R.id.tv_num);
+		tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+		llBigLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
+				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+			}
+		});
+		llBigLimit.findViewById(R.id.iv_up).setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 20);
+				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+				return true;
+			}
+		});
+		llBigLimit.findViewById(R.id.iv_dn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
+				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+			}
+		});
+		llBigLimit.findViewById(R.id.iv_dn).setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 20);
+				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+				return true;
 			}
 		});
 
 		// 最近文件数量限制
-		findViewById(R.id.ll_num_limit_recent)
-		.setOnClickListener(new OnClickListener() {
+		View llRecentLimit = findViewById(R.id.ll_num_limit_recent);
+		final TextView tvRecentLimitNum = (TextView) llRecentLimit.findViewById(R.id.tv_num);
+		tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+		llRecentLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO
+				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 1);
+				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+			}
+		});
+		llRecentLimit.findViewById(R.id.iv_up).setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 20);
+				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+				return true;
+			}
+		});
+		llRecentLimit.findViewById(R.id.iv_dn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 1);
+				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+			}
+		});
+		llRecentLimit.findViewById(R.id.iv_dn).setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 20);
+				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+				return true;
 			}
 		});
 	}
