@@ -30,7 +30,7 @@ public class SettingActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
-				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Direct.name());
+				intent.putExtra(KEY_CLASSIFY, Classify.Direct.name());
 				startActivity(intent);
 			}
 		});
@@ -41,7 +41,7 @@ public class SettingActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
-				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
 				startActivity(intent);
 			}
 		});
@@ -52,7 +52,7 @@ public class SettingActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
-				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Direct.name());
+				intent.putExtra(KEY_CLASSIFY, Classify.Direct.name());
 				startActivity(intent);
 			}
 		});
@@ -63,18 +63,29 @@ public class SettingActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
-				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
 				startActivity(intent);
 			}
 		});
 		
-		// 大/最近文件列表视图
-		findViewById(R.id.ll_list_style_big_recent)
+		// 大文件列表视图
+		findViewById(R.id.ll_list_style_big)
 		.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
-				intent.putExtra(SettingSortActivity.KEY_CLASSIFY, Classify.BigRecent.name());
+				intent.putExtra(KEY_CLASSIFY, Classify.Big.name());
+				startActivity(intent);
+			}
+		});
+		
+		// 最近文件列表视图
+		findViewById(R.id.ll_list_style_recent)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
+				intent.putExtra(KEY_CLASSIFY, Classify.Recent.name());
 				startActivity(intent);
 			}
 		});

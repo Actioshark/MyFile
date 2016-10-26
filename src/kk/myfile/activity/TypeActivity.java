@@ -26,6 +26,7 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,14 +46,9 @@ import android.widget.TextView;
 
 public class TypeActivity extends BaseActivity {
 	public static final String KEY_TYPE = "type_type";
-	public static final String KEY_CLASS = "type_class";
-
-	public static final int TYPE_BIG = 1;
-	public static final int TYPE_RECENT = 2;
-	public static final int TYPE_CLASS = 3;
 	
-	private int mType;
-	private Class<?> mClass;
+	private Classify mClassify;
+	private Class<?> mType;
 	private String mName;
 	
 	private Mode mMode;
@@ -94,22 +90,27 @@ public class TypeActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mType = getIntent().getIntExtra(KEY_TYPE, TYPE_CLASS);
-		if (mType == TYPE_CLASS) {
+		try {
+			mClassify = Classify.valueOf(getIntent().getStringExtra(KEY_CLASSIFY));
+		} catch (Exception e) {
+			mClassify = Classify.Type;
+		}
+		
+		if (mClassify == Classify.Type) {
 			try {
-				String cls = getIntent().getStringExtra(KEY_CLASS);
-				mClass = Class.forName(cls);
-				int index = cls.lastIndexOf('.');
+				String type = getIntent().getStringExtra(KEY_TYPE);
+				mType = Class.forName(type);
+				int index = type.lastIndexOf('.');
 				
-				mName = AppUtil.getString(String.format("type_%s", cls.substring(index + 1)
+				mName = AppUtil.getString(String.format("type_%s", type.substring(index + 1)
 						.toLowerCase(Setting.LOCALE)));
 			} catch (Exception e) {
 				finish();
 				return;
 			}
-		} else if (mType == TYPE_BIG) {
+		} else if (mClassify == Classify.Big) {
 			mName = AppUtil.getString(R.string.word_big_file);
-		} else if (mType == TYPE_RECENT) {
+		} else if (mClassify == Classify.Recent) {
 			mName = AppUtil.getString(R.string.word_recent_file);
 		}
 		
@@ -189,12 +190,12 @@ public class TypeActivity extends BaseActivity {
 					AppUtil.runOnNewThread(new Runnable() {
 						public void run() {
 							List<Leaf> list;
-							if (mType == TYPE_BIG) {
+							if (mClassify == Classify.Big) {
 								list = Tree.loadBig(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Big));
-							} else if (mType == TYPE_RECENT) {
+							} else if (mClassify == Classify.Recent) {
 								list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Recent));
 							} else {
-								list = Tree.loadType(Tree.getTypeDirect(), mClass);
+								list = Tree.loadType(Tree.getTypeDirect(), mType);
 							}
 							
 							final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
@@ -215,10 +216,10 @@ public class TypeActivity extends BaseActivity {
 		});
 		
 		// 文件列表
-		String key = Setting.getListStyle();
+		String key = Setting.getListStyle(mClassify);
 		ListStyle ls = SettingListStyleActivity.getListStyle(key);
 		
-		mTypeAdapter = new TypeAdapter(this, mType, ls);
+		mTypeAdapter = new TypeAdapter(this, mClassify, ls);
 		mGvList = (GridView) findViewById(R.id.gv_list);
 		mGvList.setAdapter(mTypeAdapter);
 		mGvList.setNumColumns(ls.column);
@@ -289,12 +290,12 @@ public class TypeActivity extends BaseActivity {
 					boolean finished = Tree.isTypeDirectRefreshing() == false;
 					
 					List<Leaf> list;
-					if (mType == TYPE_BIG) {
+					if (mClassify == Classify.Big) {
 						list = Tree.loadBig(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Big));
-					} else if (mType == TYPE_RECENT) {
+					} else if (mClassify == Classify.Recent) {
 						list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Recent));
 					} else {
-						list = Tree.loadType(Tree.getTypeDirect(), mClass);
+						list = Tree.loadType(Tree.getTypeDirect(), mType);
 					}
 					
 					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());

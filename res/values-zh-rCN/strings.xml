@@ -48,8 +48,9 @@
 	<string name="msg_wait">请稍等</string>
 
 	<string name="setting_hidden">是否搜索隐藏文件</string>
-	<string name="setting_list_style_big_recent">大/最近文件列表样式</string>
+	<string name="setting_list_style_big">大文件列表样式</string>
 	<string name="setting_list_style_direct">目录文件列表样式</string>
+	<string name="setting_list_style_recent">最近文件列表样式</string>
 	<string name="setting_list_style_type">分类文件列表样式</string>
 	<string name="setting_num_limit_big">大文件数量限制</string>
 	<string name="setting_num_limit_recent">最近文件数量限制</string>

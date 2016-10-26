@@ -47,21 +47,21 @@ import android.widget.TextView;
 
 public class TypeAdapter extends BaseAdapter {
 	private final TypeActivity mActivity;
-	private final int mType;
+	private final Classify mClassify;
 	private final ListStyle mListStyle;
 	
 	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
 	
-	public TypeAdapter(TypeActivity activity, int type, ListStyle ls) {
+	public TypeAdapter(TypeActivity activity, Classify classify, ListStyle ls) {
 		mActivity = activity;
-		mType = type;
+		mClassify = classify;
 		mListStyle = ls;
 	}
 	
 	public void setData(final List<Leaf> data) {
-		if (mType != TypeActivity.TYPE_CLASS) {
+		if (mClassify != Classify.Type) {
 			mData.clear();
 			synchronized (data) {
 				mData.addAll(data);

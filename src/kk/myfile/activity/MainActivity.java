@@ -145,8 +145,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
-				intent.putExtra(TypeActivity.KEY_CLASS, Text.class.getName());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(TypeActivity.KEY_TYPE, Text.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -157,8 +157,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
-				intent.putExtra(TypeActivity.KEY_CLASS, Image.class.getName());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(TypeActivity.KEY_TYPE, Image.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -169,8 +169,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
-				intent.putExtra(TypeActivity.KEY_CLASS, Audio.class.getName());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(TypeActivity.KEY_TYPE, Audio.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -181,8 +181,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
-				intent.putExtra(TypeActivity.KEY_CLASS, Video.class.getName());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(TypeActivity.KEY_TYPE, Video.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -195,8 +195,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
-				intent.putExtra(TypeActivity.KEY_CLASS, Office.class.getName());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(TypeActivity.KEY_TYPE, Office.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -207,8 +207,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
-				intent.putExtra(TypeActivity.KEY_CLASS, Zip.class.getName());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(TypeActivity.KEY_TYPE, Zip.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -219,8 +219,8 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_CLASS);
-				intent.putExtra(TypeActivity.KEY_CLASS, Apk.class.getName());
+				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
+				intent.putExtra(TypeActivity.KEY_TYPE, Apk.class.getName());
 				startActivity(intent);
 			}
 		});
@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_BIG);
+				intent.putExtra(KEY_CLASSIFY, Classify.Big.name());
 				startActivity(intent);
 			}
 		});
@@ -248,7 +248,7 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
-				intent.putExtra(TypeActivity.KEY_TYPE, TypeActivity.TYPE_RECENT);
+				intent.putExtra(KEY_CLASSIFY, Classify.Recent.name());
 				startActivity(intent);
 			}
 		});

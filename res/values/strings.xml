@@ -53,8 +53,9 @@
 	<string name="msg_wait">Wait a monent</string>
 
 	<string name="setting_hidden">Show Hidden Files When Searching</string>
-	<string name="setting_list_style_big_recent">List Style For Big/Recent Files</string>
+	<string name="setting_list_style_big">List Style For Big Files</string>
 	<string name="setting_list_style_direct">List Style For Files Of Directory</string>
+	<string name="setting_list_style_recent">List Style For Recent Files</string>
 	<string name="setting_list_style_type">List Style For Files Of Type</string>
 	<string name="setting_num_limit_big">Number Of Big Files</string>
 	<string name="setting_num_limit_recent">Number Of Recent Files</string>
