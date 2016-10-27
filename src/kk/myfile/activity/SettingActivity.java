@@ -2,15 +2,23 @@ package kk.myfile.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import kk.myfile.R;
+import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
 public class SettingActivity extends BaseActivity {
+	static final long NUM_LIMIT_DELAY = 500;
+	static final long NUM_LIMIT_REPEAT = 20;
+	
+	private Runnable mNumLimitToken;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,31 +123,57 @@ public class SettingActivity extends BaseActivity {
 		llBigLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
-				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
 			}
 		});
-		llBigLimit.findViewById(R.id.iv_up).setOnLongClickListener(new OnLongClickListener() {
+		llBigLimit.findViewById(R.id.iv_up).setOnTouchListener(new OnTouchListener() {
 			@Override
-			public boolean onLongClick(View view) {
-				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 20);
-				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
-				return true;
+			public boolean onTouch(View view, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
+					tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+					
+					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
+							tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+						}
+					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
+				} else if (event.getAction() == MotionEvent.ACTION_UP ||
+						event.getAction() == MotionEvent.ACTION_CANCEL) {
+					
+					AppUtil.removeUiThread(mNumLimitToken);
+					mNumLimitToken = null;
+				}
+
+				return view.onTouchEvent(event);
 			}
 		});
 		llBigLimit.findViewById(R.id.iv_dn).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
-				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
 			}
 		});
-		llBigLimit.findViewById(R.id.iv_dn).setOnLongClickListener(new OnLongClickListener() {
+		llBigLimit.findViewById(R.id.iv_dn).setOnTouchListener(new OnTouchListener() {
 			@Override
-			public boolean onLongClick(View view) {
-				Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 20);
-				tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
-				return true;
+			public boolean onTouch(View view, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
+					tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+					
+					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
+							tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+						}
+					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
+				} else if (event.getAction() == MotionEvent.ACTION_UP ||
+						event.getAction() == MotionEvent.ACTION_CANCEL) {
+					
+					AppUtil.removeUiThread(mNumLimitToken);
+					mNumLimitToken = null;
+				}
+
+				return view.onTouchEvent(event);
 			}
 		});
 
@@ -150,31 +184,57 @@ public class SettingActivity extends BaseActivity {
 		llRecentLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 1);
-				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
 			}
 		});
-		llRecentLimit.findViewById(R.id.iv_up).setOnLongClickListener(new OnLongClickListener() {
+		llRecentLimit.findViewById(R.id.iv_up).setOnTouchListener(new OnTouchListener() {
 			@Override
-			public boolean onLongClick(View view) {
-				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 20);
-				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
-				return true;
+			public boolean onTouch(View view, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 1);
+					tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+					
+					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 1);
+							tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+						}
+					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
+				} else if (event.getAction() == MotionEvent.ACTION_UP ||
+						event.getAction() == MotionEvent.ACTION_CANCEL) {
+					
+					AppUtil.removeUiThread(mNumLimitToken);
+					mNumLimitToken = null;
+				}
+
+				return view.onTouchEvent(event);
 			}
 		});
 		llRecentLimit.findViewById(R.id.iv_dn).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 1);
-				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
 			}
 		});
-		llRecentLimit.findViewById(R.id.iv_dn).setOnLongClickListener(new OnLongClickListener() {
+		llRecentLimit.findViewById(R.id.iv_dn).setOnTouchListener(new OnTouchListener() {
 			@Override
-			public boolean onLongClick(View view) {
-				Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 20);
-				tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
-				return true;
+			public boolean onTouch(View view, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 1);
+					tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+					
+					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 1);
+							tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+						}
+					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
+				} else if (event.getAction() == MotionEvent.ACTION_UP ||
+						event.getAction() == MotionEvent.ACTION_CANCEL) {
+					
+					AppUtil.removeUiThread(mNumLimitToken);
+					mNumLimitToken = null;
+				}
+
+				return view.onTouchEvent(event);
 			}
 		});
 	}
