@@ -44,6 +44,7 @@
 	<string name="msg_input_to_search">输入并搜索</string>
 	<string name="msg_multi_select_mode">多选模式</string>
 	<string name="msg_open_as">打开为</string>
+	<string name="msg_confirm_save_modify">保存修改？</string>
 	<string name="msg_select_operation">请选择一个操作</string>
 	<string name="msg_wait">请稍等</string>
 
@@ -104,6 +105,7 @@
 	<string name="word_name">名称</string>
 	<string name="word_new_direct">新建目录</string>
 	<string name="word_new_file">新建文件</string>
+	<string name="word_no">否</string>
 	<string name="word_package_name">包名</string>
 	<string name="word_parent">父目录</string>
 	<string name="word_paste">粘贴</string>
@@ -122,5 +124,6 @@
 	<string name="word_version_name">版本名</string>
 	<string name="word_width">宽</string>
 	<string name="word_year">年代</string>
+	<string name="word_yes">是</string>
 
 </resources>

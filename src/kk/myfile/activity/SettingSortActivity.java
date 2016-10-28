@@ -6,8 +6,10 @@ import java.util.List;
 import kk.myfile.R;
 import kk.myfile.file.Sorter;
 import kk.myfile.file.Sorter.SortFactor;
+import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
-
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -28,6 +30,8 @@ public class SettingSortActivity extends BaseActivity {
 	private AbsoluteLayout mAlLayout;
 	private View[] mViewGrids;
 	private int mGridHeight;
+	
+	private View mConfirm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,27 +46,6 @@ public class SettingSortActivity extends BaseActivity {
 		mFactor = Sorter.getFactors(mClassify);
 
 		setContentView(R.layout.activity_setting_sort);
-		
-		View menu = findViewById(R.id.ll_menu);
-		
-		// 取消
-		menu.findViewById(R.id.iv_cancel)
-		.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				finish();
-			}
-		});
-		
-		// 保存
-		menu.findViewById(R.id.iv_confirm)
-		.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				save();
-				finish();
-			}
-		});
 
 		// 格子
 		mAlLayout = (AbsoluteLayout) findViewById(R.id.al_layout);
@@ -119,6 +102,8 @@ public class SettingSortActivity extends BaseActivity {
 						}
 					}
 
+					mConfirm.setVisibility(haveChange() ? View.VISIBLE : View.GONE);
+
 					return true;
 				}
 			});
@@ -142,6 +127,48 @@ public class SettingSortActivity extends BaseActivity {
 				}
 			});
 		}
+		
+		View menu = findViewById(R.id.ll_menu);
+		
+		// 取消
+		menu.findViewById(R.id.iv_cancel)
+		.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (haveChange()) {
+					SimpleDialog dialog = new SimpleDialog(SettingSortActivity.this);
+					dialog.setMessage(R.string.msg_confirm_save_modify);
+					dialog.setButtons(new int[] {R.string.word_yes, R.string.word_no, R.string.word_cancel});
+					dialog.setClickListener(new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							if (index == 0) {
+								save();
+								finish();
+							} else if (index == 1) {
+								finish();
+							}
+							
+							dialog.dismiss();
+						}
+					});
+					dialog.show();
+				} else {
+					finish();
+				}
+			}
+		});
+		
+		// 保存
+		mConfirm = menu.findViewById(R.id.iv_confirm);
+		mConfirm.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				save();
+				finish();
+			}
+		});
+		mConfirm.setVisibility(haveChange() ? View.VISIBLE : View.GONE);
 	}
 
 	@Override
@@ -153,26 +180,24 @@ public class SettingSortActivity extends BaseActivity {
 
 		return super.onKeyUp(keyCode, event);
 	}
+	
+	private boolean haveChange() {
+		for (int i = 0; i < mViewGrids.length; i++) {
+			View grid = mViewGrids[i];
+			ViewHolder vh = (ViewHolder) grid.getTag();
+
+			if (vh.sf.equals(mFactor.get(i)) == false) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	private void save() {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				boolean diff = false;
-				for (int i = 0; i < mViewGrids.length; i++) {
-					View grid = mViewGrids[i];
-					ViewHolder vh = (ViewHolder) grid.getTag();
-
-					if (vh.sf.equals(mFactor.get(i)) == false) {
-						diff = true;
-						break;
-					}
-				}
-
-				if (!diff) {
-					return;
-				}
-
 				List<SortFactor> list = new ArrayList<SortFactor>();
 				for (View grid : mViewGrids) {
 					ViewHolder vh = (ViewHolder) grid.getTag();

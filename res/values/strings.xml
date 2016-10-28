@@ -49,6 +49,7 @@
 	<string name="msg_input_to_search">Input to search</string>
 	<string name="msg_multi_select_mode">Multi Select Mode</string>
 	<string name="msg_open_as">Open As</string>
+	<string name="msg_confirm_save_modify">Save Modify?</string>
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_wait">Wait a monent</string>
 
@@ -109,6 +110,7 @@
 	<string name="word_name">Name</string>
 	<string name="word_new_direct">New Directory</string>
 	<string name="word_new_file">New File</string>
+	<string name="word_no">No</string>
 	<string name="word_package_name">Package Name</string>
 	<string name="word_parent">Parent</string>
 	<string name="word_paste">Paste</string>
@@ -127,5 +129,6 @@
 	<string name="word_version_name">Version Name</string>
 	<string name="word_width">Width</string>
 	<string name="word_year">Year</string>
+	<string name="word_yes">Yes</string>
 
 </resources>
