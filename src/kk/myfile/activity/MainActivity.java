@@ -229,6 +229,13 @@ public class MainActivity extends BaseActivity {
 		parent = root.findViewById(R.id.ll_stat);
 		mCvStat = (CakeView) parent.findViewById(R.id.cv_view);
 		mTvStat = (TextView) parent.findViewById(R.id.tv_text);
+		parent.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				Tree.refreshTypeDirect();
+				return true;
+			}
+		});
 		
 		// 文件分类
 		root = findViewById(R.id.ll_file_3);
