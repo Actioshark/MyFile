@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity {
 				public boolean onLongClick(View view) {
 					SimpleDialog dialog = new SimpleDialog(MainActivity.this);
 					dialog.setMessage(R.string.msg_select_operation);
-					dialog.setButtons(new int[] {R.string.word_cancel, R.string.word_delete, R.string.word_edit});
+					dialog.setButtons(R.string.word_cancel, R.string.word_delete, R.string.word_edit);
 					dialog.setClickListener(new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int btn) {

@@ -348,9 +348,7 @@ public class Tree {
 		final IProgressCallback cb) {
 		SimpleDialog sd = new SimpleDialog(context);
 		sd.setMessage(AppUtil.getString(R.string.msg_delete_file_confirm, list.size()));
-		sd.setButtons(new int[] {
-			R.string.word_cancel, R.string.word_confirm
-		});
+		sd.setButtons(R.string.word_cancel, R.string.word_confirm);
 		sd.setClickListener(new IDialogClickListener() {
 			@Override
 			public void onClick(Dialog dialog, int index) {
@@ -358,9 +356,7 @@ public class Tree {
 					final SimpleDialog sd = new SimpleDialog(context);
 					sd.setMessage(AppUtil.getString(R.string.msg_delete_file_progress, 0, list
 						.size(), 0, 0));
-					sd.setButtons(new int[] {
-						R.string.word_cancel
-					});
+					sd.setButtons(R.string.word_cancel);
 					sd.setClickListener(new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index) {
@@ -403,9 +399,7 @@ public class Tree {
 											}
 
 											if (s + f >= t) {
-												sd.setButtons(new int[] {
-													R.string.word_confirm
-												});
+												sd.setButtons(R.string.word_confirm);
 
 												if (cb != null) {
 													cb.onProgress(ProgressType.Finish);
@@ -518,10 +512,8 @@ public class Tree {
 								final SimpleDialog ec = new SimpleDialog(pg.getContext());
 								ec.setMessage(AppUtil.getString(R.string.msg_file_exist, fp.to
 									.getAbsolutePath()));
-								ec.setButtons(new int[] {
-									R.string.word_skip, R.string.word_skip_all,
-									R.string.word_cover, R.string.word_cover_all
-								});
+								ec.setButtons(R.string.word_skip, R.string.word_skip_all,
+									R.string.word_cover, R.string.word_cover_all);
 								ec.setClickListener(new IDialogClickListener() {
 									@Override
 									public void onClick(Dialog dialog, int index) {
@@ -584,9 +576,7 @@ public class Tree {
 						if (s + f >= size) {
 							stop.set(true);
 
-							pg.setButtons(new int[] {
-								R.string.word_confirm
-							});
+							pg.setButtons(R.string.word_confirm);
 
 							if (cb != null) {
 								cb.onProgress(ProgressType.Finish);
@@ -628,9 +618,7 @@ public class Tree {
 
 		final SimpleDialog pg = new SimpleDialog(context);
 		pg.setMessage(R.string.msg_wait);
-		pg.setButtons(new int[] {
-			R.string.word_cancel
-		});
+		pg.setButtons(R.string.word_cancel);
 		pg.setClickListener(new IDialogClickListener() {
 			@Override
 			public void onClick(Dialog dialog, int index) {

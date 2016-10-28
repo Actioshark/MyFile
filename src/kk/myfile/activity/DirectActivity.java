@@ -585,8 +585,7 @@ public class DirectActivity extends BaseActivity {
 							SimpleDialog st = new SimpleDialog(DirectActivity.this);
 							st.setCanceledOnTouchOutside(true);
 							st.setMessage(R.string.msg_edit_as);
-							st.setButtons(new int[] {R.string.type_text, R.string.type_image,
-									R.string.word_any});
+							st.setButtons(R.string.type_text, R.string.type_image, R.string.word_any);
 							st.setClickListener(new IDialogClickListener() {
 								@Override
 								public void onClick(Dialog dialog, int index) {

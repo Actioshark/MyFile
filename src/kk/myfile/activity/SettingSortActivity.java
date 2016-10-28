@@ -138,7 +138,7 @@ public class SettingSortActivity extends BaseActivity {
 				if (haveChange()) {
 					SimpleDialog dialog = new SimpleDialog(SettingSortActivity.this);
 					dialog.setMessage(R.string.msg_confirm_save_modify);
-					dialog.setButtons(new int[] {R.string.word_yes, R.string.word_no, R.string.word_cancel});
+					dialog.setButtons(R.string.word_yes, R.string.word_no, R.string.word_cancel);
 					dialog.setClickListener(new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index) {

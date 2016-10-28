@@ -68,21 +68,15 @@ public class SimpleDialog extends Dialog {
 		mTvMessage.setText(text);
 	}
 
-	public void setButtons(int[] resIds) {
+	public void setButtons(Object... btns) {
 		for (int i = 0; i < mTvButtons.length; i++) {
-			if (i < resIds.length) {
-				mTvButtons[i].setText(resIds[i]);
-				mTvButtons[i].setVisibility(View.VISIBLE);
-			} else {
-				mTvButtons[i].setVisibility(View.GONE);
-			}
-		}
-	}
-
-	public void setButtons(String[] texts) {
-		for (int i = 0; i < mTvButtons.length; i++) {
-			if (i < texts.length) {
-				mTvButtons[i].setText(texts[i]);
+			if (i < btns.length) {
+				Object btn = btns[i];
+				if (btn instanceof Integer) {
+					btn = AppUtil.getString((Integer) btn);
+				}
+				
+				mTvButtons[i].setText(String.valueOf(btn));
 				mTvButtons[i].setVisibility(View.VISIBLE);
 			} else {
 				mTvButtons[i].setVisibility(View.GONE);

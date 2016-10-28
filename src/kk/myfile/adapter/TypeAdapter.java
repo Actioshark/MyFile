@@ -199,8 +199,8 @@ public class TypeAdapter extends BaseAdapter {
 							SimpleDialog dialog = new SimpleDialog(mActivity);
 							dialog.setCanceledOnTouchOutside(true);
 							dialog.setMessage(R.string.msg_open_as);
-							dialog.setButtons(new int[] {R.string.type_text, R.string.type_image,
-									R.string.type_audio, R.string.type_video, R.string.word_any});
+							dialog.setButtons(R.string.type_text, R.string.type_image,
+									R.string.type_audio, R.string.type_video, R.string.word_any);
 							dialog.setClickListener(new IDialogClickListener() {
 								@Override
 								public void onClick(Dialog dialog, int index) {
