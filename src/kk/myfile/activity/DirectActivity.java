@@ -301,6 +301,7 @@ public class DirectActivity extends BaseActivity {
 			
 			updateTitle();
 			updateInfo();
+			mDirectAdapter.selectAll(false);
 			mDirectAdapter.notifyDataSetChanged();
 		}
 	}

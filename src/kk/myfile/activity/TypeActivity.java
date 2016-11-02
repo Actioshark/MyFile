@@ -269,6 +269,7 @@ public class TypeActivity extends BaseActivity {
 			
 			updateTitle();
 			updateInfo();
+			mTypeAdapter.selectAll(false);
 			mTypeAdapter.notifyDataSetChanged();
 		}
 	}
