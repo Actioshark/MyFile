@@ -15,10 +15,12 @@ import kk.myfile.file.ClipPad;
 import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
+import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Text;
+import kk.myfile.leaf.Video;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
@@ -26,7 +28,6 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -409,6 +410,46 @@ public class TypeActivity extends BaseActivity {
 			}
 			
 			if (selected.size() == 1) {
+				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as, new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dl, int index) {
+						SimpleDialog dialog = new SimpleDialog(TypeActivity.this);
+						dialog.setCanceledOnTouchOutside(true);
+						dialog.setMessage(R.string.msg_open_as);
+						dialog.setButtons(R.string.type_text, R.string.type_image, R.string.type_audio,
+								R.string.type_video, R.string.word_any);
+						dialog.setClickListener(new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index) {
+								switch (index) {
+								case 0:
+									IntentUtil.view(TypeActivity.this, first, Text.TYPE);
+									break;
+
+								case 1:
+									IntentUtil.view(TypeActivity.this, first, Image.TYPE);
+									break;
+
+								case 2:
+									IntentUtil.view(TypeActivity.this, first, Audio.TYPE);
+									break;
+
+								case 3:
+									IntentUtil.view(TypeActivity.this, first, Video.TYPE);
+									break;
+
+								case 4:
+									IntentUtil.view(TypeActivity.this, first, "*/*");
+									break;
+								}
+
+								dialog.dismiss();
+							}
+						});
+						dialog.show();
+					}
+				}));
+				
 				list.add(new DataItem(R.drawable.detail, R.string.word_detail, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index) {

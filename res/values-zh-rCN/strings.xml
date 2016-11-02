@@ -106,6 +106,7 @@
 	<string name="word_new_direct">新建目录</string>
 	<string name="word_new_file">新建文件</string>
 	<string name="word_no">否</string>
+	<string name="word_open_as">打开为</string>
 	<string name="word_package_name">包名</string>
 	<string name="word_parent">父目录</string>
 	<string name="word_paste">粘贴</string>
