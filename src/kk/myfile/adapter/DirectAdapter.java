@@ -37,10 +37,10 @@ import java.util.Set;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -52,6 +52,9 @@ public class DirectAdapter extends BaseAdapter {
 	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
+	
+	private long mTouchDownTime;
+	private Runnable mTouchRunnable;
 
 	public DirectAdapter(DirectActivity activity) {
 		mActivity = activity;
@@ -147,7 +150,7 @@ public class DirectAdapter extends BaseAdapter {
 
 		if (view == null) {
 			String key = Setting.getListStyle(Classify.Direct);
-			ListStyle ls = SettingListStyleActivity.getListStyle(key);
+			final ListStyle ls = SettingListStyleActivity.getListStyle(key);
 			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
 
 			holder = new ViewHolder();
@@ -158,96 +161,119 @@ public class DirectAdapter extends BaseAdapter {
 			holder.sign = (ImageView) view.findViewById(R.id.iv_sign);
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
-
-			if (ls.needDetail) {
-				view.setOnTouchListener(new OnTouchListener() {
-					@Override
-					public boolean onTouch(View view, MotionEvent event) {
-						if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			
+			view.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View view, MotionEvent event) {
+					int action = event.getAction();
+					
+					if (action == MotionEvent.ACTION_DOWN) {
+						if (ls.needDetail) {
 							mActivity.showDetail(holder.leaf);
 						}
-
-						return view.onTouchEvent(event);
+						
+						mTouchDownTime = SystemClock.elapsedRealtime();
+						mTouchRunnable = new Runnable() {
+							@Override
+							public void run() {
+								mTouchRunnable = null;
+								
+								Intent intent = new Intent(mActivity, DetailActivity.class);
+								intent.putExtra(DetailActivity.KEY_PATH, holder.leaf.getPath());
+								mActivity.startActivity(intent);
+							}
+						};
+						AppUtil.runOnUiThread(mTouchRunnable, 800);
+					} else if (action == MotionEvent.ACTION_UP) {
+						if (mTouchRunnable != null) {
+							AppUtil.removeUiThread(mTouchRunnable);
+							mTouchRunnable = null;
+							
+							long delta = SystemClock.elapsedRealtime() - mTouchDownTime;
+							
+							if (delta < 300) {
+								if (mActivity.getMode() == Mode.Select) {
+									if (mSelected.contains(holder.position)) {
+										mSelected.remove(holder.position);
+									} else {
+										mSelected.add(holder.position);
+									}
+	
+									mActivity.updateTitle();
+									mActivity.updateInfo();
+									notifyDataSetChanged();
+								} else if (holder.leaf instanceof Direct) {
+									mActivity.changeDirect(new Node((Direct) holder.leaf), true);
+								} else {
+									if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
+										SimpleDialog dialog = new SimpleDialog(mActivity);
+										dialog.setCanceledOnTouchOutside(true);
+										dialog.setMessage(R.string.msg_open_as);
+										dialog.setButtons(R.string.type_text, R.string.type_image, R.string.type_audio,
+												R.string.type_video, R.string.word_any);
+										dialog.setClickListener(new IDialogClickListener() {
+											@Override
+											public void onClick(Dialog dialog, int index) {
+												switch (index) {
+												case 0:
+													IntentUtil.view(mActivity, holder.leaf, Text.TYPE);
+													break;
+	
+												case 1:
+													IntentUtil.view(mActivity, holder.leaf, Image.TYPE);
+													break;
+	
+												case 2:
+													IntentUtil.view(mActivity, holder.leaf, Audio.TYPE);
+													break;
+	
+												case 3:
+													IntentUtil.view(mActivity, holder.leaf, Video.TYPE);
+													break;
+	
+												case 4:
+													IntentUtil.view(mActivity, holder.leaf, "*/*");
+													break;
+												}
+	
+												dialog.dismiss();
+											}
+										});
+										dialog.show();
+									}
+								}
+							} else {
+								if (mActivity.getMode() == Mode.Select) {
+									if (mSelected.contains(holder.position)) {
+										mSelected.remove(holder.position);
+									} else {
+										mSelected.add(holder.position);
+									}
+	
+									mActivity.updateTitle();
+									mActivity.updateInfo();
+									notifyDataSetChanged();
+								} else {
+									mSelected.clear();
+									mSelected.add(holder.position);
+									mActivity.setMode(Mode.Select);
+								}
+							}
+						}
+					} else if (action == MotionEvent.ACTION_CANCEL) {
+						if (mTouchRunnable != null) {
+							AppUtil.removeUiThread(mTouchRunnable);
+							mTouchRunnable = null;
+						}
 					}
-				});
-			}
+
+					return view.onTouchEvent(event);
+				}
+			});
 
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (mActivity.getMode() == Mode.Select) {
-						if (mSelected.contains(holder.position)) {
-							mSelected.remove(holder.position);
-						} else {
-							mSelected.add(holder.position);
-						}
-
-						mActivity.updateTitle();
-						mActivity.updateInfo();
-						notifyDataSetChanged();
-					} else if (holder.leaf instanceof Direct) {
-						mActivity.changeDirect(new Node((Direct) holder.leaf), true);
-					} else {
-						if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
-							SimpleDialog dialog = new SimpleDialog(mActivity);
-							dialog.setCanceledOnTouchOutside(true);
-							dialog.setMessage(R.string.msg_open_as);
-							dialog.setButtons(R.string.type_text, R.string.type_image, R.string.type_audio,
-									R.string.type_video, R.string.word_any);
-							dialog.setClickListener(new IDialogClickListener() {
-								@Override
-								public void onClick(Dialog dialog, int index) {
-									switch (index) {
-									case 0:
-										IntentUtil.view(mActivity, holder.leaf, Text.TYPE);
-										break;
-
-									case 1:
-										IntentUtil.view(mActivity, holder.leaf, Image.TYPE);
-										break;
-
-									case 2:
-										IntentUtil.view(mActivity, holder.leaf, Audio.TYPE);
-										break;
-
-									case 3:
-										IntentUtil.view(mActivity, holder.leaf, Video.TYPE);
-										break;
-
-									case 4:
-										IntentUtil.view(mActivity, holder.leaf, "*/*");
-										break;
-									}
-
-									dialog.dismiss();
-								}
-							});
-							dialog.show();
-						}
-					}
-				}
-			});
-
-			view.setOnLongClickListener(new OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View view) {
-					if (mActivity.getMode() == Mode.Normal) {
-						Intent intent = new Intent(mActivity, DetailActivity.class);
-						intent.putExtra(DetailActivity.KEY_PATH, holder.leaf.getPath());
-						mActivity.startActivity(intent);
-					} else {
-						if (mSelected.contains(holder.position)) {
-							mSelected.remove(holder.position);
-						} else {
-							mSelected.add(holder.position);
-						}
-
-						mActivity.updateTitle();
-						mActivity.updateInfo();
-						notifyDataSetChanged();
-					}
-
-					return true;
 				}
 			});
 		} else {

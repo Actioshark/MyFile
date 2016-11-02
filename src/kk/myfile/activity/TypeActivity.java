@@ -269,7 +269,10 @@ public class TypeActivity extends BaseActivity {
 			
 			updateTitle();
 			updateInfo();
-			mTypeAdapter.selectAll(false);
+			
+			if (mode != Mode.Select) {
+				mTypeAdapter.selectAll(false);
+			}
 			mTypeAdapter.notifyDataSetChanged();
 		}
 	}

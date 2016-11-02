@@ -301,7 +301,10 @@ public class DirectActivity extends BaseActivity {
 			
 			updateTitle();
 			updateInfo();
-			mDirectAdapter.selectAll(false);
+			
+			if (mode != Mode.Select) {
+				mDirectAdapter.selectAll(false);
+			}
 			mDirectAdapter.notifyDataSetChanged();
 		}
 	}
