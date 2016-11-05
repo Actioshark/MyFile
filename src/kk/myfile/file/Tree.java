@@ -611,7 +611,7 @@ public class Tree {
 		}
 	}
 
-	public static void carry(final Context context, final List<Leaf> list, final String direct,
+	public static void carry(final Context context, final List<String> list, final String direct,
 		final boolean delete, final IProgressCallback cb) {
 
 		final AtomicBoolean stop = new AtomicBoolean(false);
@@ -645,13 +645,13 @@ public class Tree {
 			public void run() {
 				try {
 					List<FilePair> fps = new ArrayList<FilePair>();
-					for (Leaf leaf : list) {
+					for (String path : list) {
 						if (stop.get()) {
 							return;
 						}
 
 						FilePair fp = new FilePair();
-						fp.from = leaf.getFile();
+						fp.from = new File(path);
 						fp.to = new File(direct, fp.from.getName());
 						fps.add(fp);
 					}

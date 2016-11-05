@@ -11,7 +11,8 @@ import kk.myfile.R;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DirectAdapter;
 import kk.myfile.adapter.DownListAdapter.DataItem;
-import kk.myfile.file.ClipPad;
+import kk.myfile.file.ClipBoard;
+import kk.myfile.file.ClipBoard.ClipType;
 import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
@@ -692,9 +693,12 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.copy, R.string.word_copy, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					ClipPad.setClip(ClipPad.Mode.Copy, mDirectAdapter.getSelected());
-					App.showToast(R.string.msg_enter_target_direct_and_paste);
-					setMode(Mode.Normal);
+					if (ClipBoard.put(DirectActivity.this, ClipType.Copy, selected)) {
+						setMode(Mode.Normal);
+						App.showToast(R.string.msg_enter_target_direct_and_paste);
+					} else {
+						App.showToast(R.string.err_nothing_selected);
+					}
 				}
 			}));
 			
@@ -709,32 +713,36 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.cut, R.string.word_cut, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					ClipPad.setClip(ClipPad.Mode.Cut, mDirectAdapter.getSelected());
-					App.showToast(R.string.msg_enter_target_direct_and_paste);
-					setMode(Mode.Normal);
+					if (ClipBoard.put(DirectActivity.this, ClipType.Cut, selected)) {
+						setMode(Mode.Normal);
+						App.showToast(R.string.msg_enter_target_direct_and_paste);
+					} else {
+						App.showToast(R.string.err_nothing_selected);
+					}
 				}
 			}));
 			
 			dl.show();
 		} else {
-			if (ClipPad.size() > 0) {
+			if (ClipBoard.hasFile(DirectActivity.this)) {
 				list.add(new DataItem(R.drawable.paste, R.string.word_paste, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index) {
-						if (ClipPad.size() > 0) {
-							Tree.carry(DirectActivity.this, ClipPad.getClip(),
-								mNode.direct.getPath(), ClipPad.getMode() == ClipPad.Mode.Cut,
-								new IProgressCallback() {
-									@Override
-									public void onProgress(ProgressType type) {
-										refreshDirect();
-										
-										if (type == Tree.ProgressType.Finish) {
-											ClipPad.clear();
-										}
-									}
+						List<String> fl = ClipBoard.getFiles(DirectActivity.this);
+						
+						if (fl.size() > 0) {
+							boolean delete = ClipBoard.getType(DirectActivity.this) == ClipType.Cut;
+							
+							Tree.carry(DirectActivity.this, fl, mNode.direct.getPath(), delete,
+									new IProgressCallback() {
+								
+								@Override
+								public void onProgress(ProgressType type) {
+									refreshDirect();
 								}
-							);
+							});
+						} else {
+							App.showToast(R.string.err_nothing_selected);
 						}
 					}
 				}));
@@ -814,9 +822,14 @@ public class DirectActivity extends BaseActivity {
 				return;
 			}
 			
+			List<String> selected = new ArrayList<String>();
+			for (Leaf leaf : mDirectAdapter.getSelected()) {
+				selected.add(leaf.getPath());
+			}
+			
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.carry(this, mDirectAdapter.getSelected(), path, false,
+			Tree.carry(this, selected, path, false,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {
@@ -830,9 +843,14 @@ public class DirectActivity extends BaseActivity {
 				return;
 			}
 			
+			List<String> selected = new ArrayList<String>();
+			for (Leaf leaf : mDirectAdapter.getSelected()) {
+				selected.add(leaf.getPath());
+			}
+			
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.carry(this, mDirectAdapter.getSelected(), path, true,
+			Tree.carry(this, selected, path, true,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {

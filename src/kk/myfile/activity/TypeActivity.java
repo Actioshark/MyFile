@@ -11,8 +11,9 @@ import kk.myfile.R;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.adapter.TypeAdapter;
-import kk.myfile.file.ClipPad;
+import kk.myfile.file.ClipBoard;
 import kk.myfile.file.Tree;
+import kk.myfile.file.ClipBoard.ClipType;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Audio;
@@ -28,6 +29,7 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -538,9 +540,12 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.copy, R.string.word_copy, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					ClipPad.setClip(ClipPad.Mode.Copy, mTypeAdapter.getSelected());
-					App.showToast(R.string.msg_enter_target_direct_and_paste);
-					setMode(Mode.Normal);
+					if (ClipBoard.put(TypeActivity.this, ClipType.Copy, selected)) {
+						setMode(Mode.Normal);
+						App.showToast(R.string.msg_enter_target_direct_and_paste);
+					} else {
+						App.showToast(R.string.err_nothing_selected);
+					}
 				}
 			}));
 			
@@ -555,9 +560,12 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.cut, R.string.word_cut, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
-					ClipPad.setClip(ClipPad.Mode.Cut, mTypeAdapter.getSelected());
-					App.showToast(R.string.msg_enter_target_direct_and_paste);
-					setMode(Mode.Normal);
+					if (ClipBoard.put(TypeActivity.this, ClipType.Cut, selected)) {
+						setMode(Mode.Normal);
+						App.showToast(R.string.msg_enter_target_direct_and_paste);
+					} else {
+						App.showToast(R.string.err_nothing_selected);
+					}
 				}
 			}));
 			
@@ -605,9 +613,14 @@ public class TypeActivity extends BaseActivity {
 				return;
 			}
 			
+			List<String> selected = new ArrayList<String>();
+			for (Leaf leaf : mTypeAdapter.getSelected()) {
+				selected.add(leaf.getPath());
+			}
+			
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.carry(this, mTypeAdapter.getSelected(), path, false,
+			Tree.carry(this, selected, path, false,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {
@@ -623,9 +636,14 @@ public class TypeActivity extends BaseActivity {
 				return;
 			}
 			
+			List<String> selected = new ArrayList<String>();
+			for (Leaf leaf : mTypeAdapter.getSelected()) {
+				selected.add(leaf.getPath());
+			}
+			
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.carry(this, mTypeAdapter.getSelected(), path, true,
+			Tree.carry(this, selected, path, true,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {
