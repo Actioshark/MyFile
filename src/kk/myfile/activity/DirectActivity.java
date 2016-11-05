@@ -29,6 +29,7 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,7 +77,75 @@ public class DirectActivity extends BaseActivity {
 	private ImageView mIvSelect;
 	
 	private EditText mEtSearch;
+	private ImageView mIvDelete;
 	private Runnable mSearchRun;
+	private TextWatcher mTextWatcher = new TextWatcher() {
+		@Override
+		public void beforeTextChanged(CharSequence cs, int start, int count, int after) {
+		}
+		
+		@Override
+		public void onTextChanged(CharSequence cs, int start, int before, int count) {
+		}
+		
+		@Override
+		public void afterTextChanged(Editable editable) {
+			final String key = editable.toString();
+			
+			if (key.length() > 0) {
+				mIvDelete.setVisibility(View.VISIBLE);
+				
+				synchronized (mEtSearch) {
+					mSearchRun = new Runnable() {
+						public void run() {
+							List<Leaf> direct = Tree.getDirect(mNode.direct.getPath());
+							final Runnable mark = this;
+							
+							while (true) {
+								if (direct.size() > 0) {
+									boolean finished = direct.get(0).getTag() == null;
+									final List<Leaf> ret = Tree.search(direct, key);
+									
+									synchronized (mEtSearch) {
+										if (mSearchRun != mark) {
+											return;
+										}
+										
+										AppUtil.runOnUiThread(new Runnable() {
+											public void run() {
+												synchronized (mEtSearch) {
+													if (mSearchRun == mark) {
+														showSearchResult(ret);
+													}
+												}
+											}
+										});
+									}
+									
+									if (finished) {
+										return;
+									}
+								}
+								
+								SystemClock.sleep(300);
+							}
+						}
+					};
+					AppUtil.runOnNewThread(mSearchRun);
+				}
+			} else {
+				mIvDelete.setVisibility(View.GONE);
+				
+				if (mNode.direct instanceof TempDirect) {
+					backDirect();
+				}
+				
+				synchronized (mEtSearch) {
+					mSearchRun = null;
+				}
+			}
+		}
+	};
 	
 	private GridView mGvList;
 	private DirectAdapter mDirectAdapter;
@@ -154,85 +223,26 @@ public class DirectActivity extends BaseActivity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					mEtSearch.setFocusable(true);
 					mEtSearch.setFocusableInTouchMode(true);
+					
+					synchronized (mEtSearch) {
+						if (mSearchRun == null && mEtSearch.getText().length() > 0) {
+							mTextWatcher.afterTextChanged(mEtSearch.getText());
+						}
+					}
 				}
 					
 				return false;
 			}
 		});
 		
-		final View ivDelete = llSearch.findViewById(R.id.iv_delete);
-		ivDelete.setOnClickListener(new OnClickListener() {
+		mIvDelete = (ImageView) llSearch.findViewById(R.id.iv_delete);
+		mIvDelete.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				mEtSearch.getText().clear();
 			}
 		});
-		mEtSearch.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence cs, int start, int count, int after) {
-			}
-			
-			@Override
-			public void onTextChanged(CharSequence cs, int start, int before, int count) {
-			}
-			
-			@Override
-			public void afterTextChanged(final Editable editable) {
-				if (editable.length() > 0) {
-					ivDelete.setVisibility(View.VISIBLE);
-					
-					synchronized (mEtSearch) {
-						mSearchRun = new Runnable() {
-							public void run() {
-								List<Leaf> direct = Tree.getDirect(mNode.direct.getPath());
-								String key = mEtSearch.getText().toString();
-								final Runnable mark = this;
-								
-								while (true) {
-									if (direct.size() > 0) {
-										boolean finished = direct.get(0).getTag() == null;
-										final List<Leaf> ret = Tree.search(direct, key);
-										
-										synchronized (mEtSearch) {
-											if (mSearchRun != mark) {
-												return;
-											}
-											
-											AppUtil.runOnUiThread(new Runnable() {
-												public void run() {
-													synchronized (mEtSearch) {
-														if (mSearchRun == mark) {
-															showSearchResult(ret);
-														}
-													}
-												}
-											});
-										}
-										
-										if (finished) {
-											return;
-										}
-									}
-									
-									SystemClock.sleep(300);
-								}
-							}
-						};
-						AppUtil.runOnNewThread(mSearchRun);
-					}
-				} else {
-					ivDelete.setVisibility(View.GONE);
-					
-					if (mNode.direct instanceof TempDirect) {
-						backDirect();
-					}
-					
-					synchronized (mEtSearch) {
-						mSearchRun = null;
-					}
-				}
-			}
-		});
+		mEtSearch.addTextChangedListener(mTextWatcher);
 		
 		// 文件列表
 		mDirectAdapter = new DirectAdapter(this);
