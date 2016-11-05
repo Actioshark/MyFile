@@ -5,14 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import kk.myfile.R;
+import kk.myfile.activity.App;
 
 public class DetailAdapter extends BaseAdapter {
 	private final Context mContext;
@@ -46,8 +50,8 @@ public class DetailAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
-		ViewHolder holder;
-		Data data = mData.get(position);
+		final ViewHolder holder;
+		final Data data = mData.get(position);
 
 		if (view == null) {
 			view = LayoutInflater.from(mContext).inflate(R.layout.grid_detail, null);
@@ -55,6 +59,18 @@ public class DetailAdapter extends BaseAdapter {
 			holder.key = (TextView) view.findViewById(R.id.tv_key);
 			holder.value = (TextView) view.findViewById(R.id.tv_value);
 			view.setTag(holder);
+			
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					ClipboardManager cbm = (ClipboardManager) mContext.
+							getSystemService(Context.CLIPBOARD_SERVICE);
+					ClipData cd = ClipData.newPlainText(data.key, data.value);
+					cbm.setPrimaryClip(cd);
+					
+					App.showToast(R.string.msg_has_been_copied_to_clipboard);
+				}
+			});
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}

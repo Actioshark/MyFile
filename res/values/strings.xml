@@ -43,6 +43,7 @@
 	<string name="msg_edit_as">Edit As</string>
 	<string name="msg_enter_target_direct_and_paste">Enter target directory and PASTE</string>
 	<string name="msg_file_exist">The following file already exists:\n\n%s</string>
+	<string name="msg_has_been_copied_to_clipboard">Has been copied to the clipboard</string>
 	<string name="msg_input_direct_name">Input directory name</string>
 	<string name="msg_input_file_name">Input file name</string>
 	<string name="msg_input_path_name">Input name for path</string>

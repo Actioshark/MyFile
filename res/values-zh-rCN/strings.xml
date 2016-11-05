@@ -38,6 +38,7 @@
 	<string name="msg_edit_as">编辑为</string>
 	<string name="msg_enter_target_direct_and_paste">进入目标目录并粘贴</string>
 	<string name="msg_file_exist">以下文件已经存在\n\n%s</string>
+	<string name="msg_has_been_copied_to_clipboard">已复制到剪切板</string>
 	<string name="msg_input_direct_name">输入目录名</string>
 	<string name="msg_input_file_name">输入文件名</string>
 	<string name="msg_input_path_name">请输入名称</string>
