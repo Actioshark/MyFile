@@ -83,7 +83,7 @@ public class TypeAdapter extends BaseAdapter {
 			@Override
 			public void run() {
 				synchronized (data) {
-					Sorter.sort(Classify.Direct, data);
+					Sorter.sort(Classify.Type, data);
 				}
 				
 				AppUtil.runOnUiThread(new Runnable() {
