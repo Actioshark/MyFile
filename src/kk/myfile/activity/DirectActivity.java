@@ -70,6 +70,7 @@ public class DirectActivity extends BaseActivity {
 
 	private Node mNode;
 	private final List<Node> mHistory = new ArrayList<Node>();
+	private String mPath;
 	private String mCurChild;
 
 	private Mode mMode = Mode.Normal;
@@ -185,9 +186,7 @@ public class DirectActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		// 数据
-		String path = getIntent().getStringExtra(KEY_PATH);
-		Direct direct = new Direct(path);
-
+		mPath = getIntent().getStringExtra(KEY_PATH);
 		mCurChild = getIntent().getStringExtra(KEY_CUR_CHILD);
 
 		setContentView(R.layout.activity_direct);
@@ -300,16 +299,17 @@ public class DirectActivity extends BaseActivity {
 				}
 			}
 		});
-
-		// 开始
-		mNode = new Node(direct);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 
-		refreshDirect();
+		if (mNode == null) {
+			changeDirect(new Node(new Direct(mPath)), false);
+		} else {
+			refreshDirect();
+		}
 	}
 
 	public Mode getMode() {
@@ -331,6 +331,8 @@ public class DirectActivity extends BaseActivity {
 	}
 
 	public void changeDirect(Node node, boolean lastToHistory) {
+		updateStyle();
+		
 		if (node.direct instanceof TempDirect == false && mNode != null
 			&& node.direct.getPath().equals(mNode.direct.getPath())) {
 
