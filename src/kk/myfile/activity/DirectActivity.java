@@ -877,6 +877,8 @@ public class DirectActivity extends BaseActivity {
 					}
 				}
 			}
+			
+			mCurChild = null;
 		}
 		
 		if (position >= 0 && position < mDirectAdapter.getCount()) {
