@@ -17,6 +17,20 @@ public class ClipBoard {
 	public static enum ClipType {
 		Copy, Cut,
 	}
+	
+	public static boolean put(Context context, String label, String text) {
+		try {
+			ClipData cd = ClipData.newPlainText(label, text);
+			ClipboardManager cbm = (ClipboardManager) context
+				.getSystemService(Context.CLIPBOARD_SERVICE);
+			cbm.setPrimaryClip(cd);
+
+			return true;
+		} catch (Exception e) {
+			Logger.print(null, e);
+			return false;
+		}
+	}
 
 	public static boolean put(Context context, ClipType clipType, List<Leaf> list) {
 		try {

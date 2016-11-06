@@ -44,6 +44,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLayoutChangeListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -332,7 +333,7 @@ public class DirectActivity extends BaseActivity {
 
 	public void changeDirect(Node node, boolean lastToHistory) {
 		updateStyle();
-		
+
 		if (node.direct instanceof TempDirect == false && mNode != null
 			&& node.direct.getPath().equals(mNode.direct.getPath())) {
 
@@ -404,6 +405,21 @@ public class DirectActivity extends BaseActivity {
 					}
 
 					changeDirect(new Node(new Direct(sb.toString())), true);
+				}
+			});
+			grid.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View view) {
+					StringBuilder sb = new StringBuilder();
+
+					for (int i = 1; i <= index; i++) {
+						sb.append('/').append(nodes[i]);
+					}
+					
+					ClipBoard.put(DirectActivity.this, "path", sb.toString());
+					
+					App.showToast(R.string.msg_already_copied_to_clipboard);
+					return true;
 				}
 			});
 
