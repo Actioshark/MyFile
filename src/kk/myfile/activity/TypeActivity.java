@@ -29,8 +29,10 @@ import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
 import kk.myfile.util.IntentUtil;
+import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,22 +52,22 @@ import android.widget.TextView;
 
 public class TypeActivity extends BaseActivity {
 	public static final String KEY_TYPE = "type_type";
-	
+
 	private Classify mClassify;
 	private Class<?> mType;
 	private String mName;
-	
+
 	private Mode mMode;
-	
+
 	private TextView mTvTitle;
 	private ImageView mIvSelect;
-	
+
 	private EditText mEtSearch;
 	private Object mSearchMark;
-	
+
 	private GridView mGvList;
 	private TypeAdapter mTypeAdapter;
-	
+
 	private View mLlDetail;
 	private ImageView mIvDetailIcon;
 	private TextView mTvDetailName;
@@ -76,7 +78,7 @@ public class TypeActivity extends BaseActivity {
 		@Override
 		public void run() {
 			long duration = SystemClock.elapsedRealtime() - mDetailShowPoint - 2000;
-			
+
 			if (duration > 1000) {
 				mLlDetail.setAlpha(0);
 				AppUtil.removeUiThread(mDetailMark);
@@ -86,28 +88,28 @@ public class TypeActivity extends BaseActivity {
 		}
 	};
 	private Runnable mDetailMark;
-	
+
 	private View mLlInfo;
 	private TextView mTvInfoCount;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		try {
 			mClassify = Classify.valueOf(getIntent().getStringExtra(KEY_CLASSIFY));
 		} catch (Exception e) {
 			mClassify = Classify.Type;
 		}
-		
+
 		if (mClassify == Classify.Type) {
 			try {
 				String type = getIntent().getStringExtra(KEY_TYPE);
 				mType = Class.forName(type);
 				int index = type.lastIndexOf('.');
-				
+
 				mName = AppUtil.getString(String.format("type_%s", type.substring(index + 1)
-						.toLowerCase(Setting.LOCALE)));
+					.toLowerCase(Setting.LOCALE)));
 			} catch (Exception e) {
 				finish();
 				return;
@@ -117,14 +119,13 @@ public class TypeActivity extends BaseActivity {
 		} else if (mClassify == Classify.Recent) {
 			mName = AppUtil.getString(R.string.word_recent_file);
 		}
-		
+
 		setContentView(R.layout.activity_type);
-		
+
 		// 标题
 		View rlTitle = findViewById(R.id.rl_title);
 		mTvTitle = (TextView) rlTitle.findViewById(R.id.tv_title);
-		rlTitle.findViewById(R.id.iv_back).
-		setOnClickListener(new OnClickListener() {
+		rlTitle.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (mMode == Mode.Select) {
@@ -141,7 +142,7 @@ public class TypeActivity extends BaseActivity {
 				mTypeAdapter.selectAll(mTypeAdapter.getSelectedCount() < mTypeAdapter.getCount());
 			}
 		});
-		
+
 		// 搜索栏
 		View llSearch = findViewById(R.id.ll_search);
 		mEtSearch = (EditText) llSearch.findViewById(R.id.et_input);
@@ -152,11 +153,11 @@ public class TypeActivity extends BaseActivity {
 					mEtSearch.setFocusable(true);
 					mEtSearch.setFocusableInTouchMode(true);
 				}
-					
+
 				return false;
 			}
 		});
-		
+
 		final View ivDelete = llSearch.findViewById(R.id.iv_delete);
 		ivDelete.setOnClickListener(new OnClickListener() {
 			@Override
@@ -168,11 +169,11 @@ public class TypeActivity extends BaseActivity {
 			@Override
 			public void beforeTextChanged(CharSequence cs, int start, int count, int after) {
 			}
-			
+
 			@Override
 			public void onTextChanged(CharSequence cs, int start, int before, int count) {
 			}
-			
+
 			@Override
 			public void afterTextChanged(final Editable editable) {
 				if (editable.length() > 0) {
@@ -185,25 +186,28 @@ public class TypeActivity extends BaseActivity {
 					if (Tree.isTypeDirectRefreshing()) {
 						return;
 					}
-					
+
 					final Object mark = new Object();
 					synchronized (mEtSearch) {
 						mSearchMark = mark;
 					}
-					
+
 					AppUtil.runOnNewThread(new Runnable() {
 						public void run() {
 							List<Leaf> list;
 							if (mClassify == Classify.Big) {
-								list = Tree.loadBig(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Big));
+								list = Tree.loadBig(Tree.getTypeDirect(), Setting
+									.getNumLimit(Classify.Big));
 							} else if (mClassify == Classify.Recent) {
-								list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Recent));
+								list = Tree.loadRecent(Tree.getTypeDirect(), Setting
+									.getNumLimit(Classify.Recent));
 							} else {
 								list = Tree.loadType(Tree.getTypeDirect(), mType);
 							}
-							
-							final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
-							
+
+							final List<Leaf> ret = Tree
+								.search(list, mEtSearch.getText().toString());
+
 							AppUtil.runOnUiThread(new Runnable() {
 								public void run() {
 									synchronized (mEtSearch) {
@@ -218,29 +222,28 @@ public class TypeActivity extends BaseActivity {
 				}
 			}
 		});
-		
+
 		// 文件列表
 		String key = Setting.getListStyle(mClassify);
 		ListStyle ls = SettingListStyleActivity.getListStyle(key);
-		
+
 		mTypeAdapter = new TypeAdapter(this, mClassify, ls);
 		mGvList = (GridView) findViewById(R.id.gv_list);
 		mGvList.setAdapter(mTypeAdapter);
 		mGvList.setNumColumns(ls.column);
 		mGvList.setVerticalSpacing(ls.vertSpace);
-		
+
 		// 详情
 		mLlDetail = findViewById(R.id.ll_detail);
 		mIvDetailIcon = (ImageView) mLlDetail.findViewById(R.id.iv_icon);
 		mTvDetailName = (TextView) mLlDetail.findViewById(R.id.tv_name);
 		mTvDetailTime = (TextView) mLlDetail.findViewById(R.id.tv_time);
 		mTvDetailSize = (TextView) mLlDetail.findViewById(R.id.tv_size);
-		
+
 		// 信息
 		mLlInfo = findViewById(R.id.ll_info);
 		mTvInfoCount = (TextView) mLlInfo.findViewById(R.id.tv_count);
-		mLlInfo.findViewById(R.id.iv_menu)
-		.setOnClickListener(new OnClickListener() {
+		mLlInfo.findViewById(R.id.iv_menu).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				showMenu();
@@ -248,66 +251,68 @@ public class TypeActivity extends BaseActivity {
 		});
 		mLlInfo.addOnLayoutChangeListener(new OnLayoutChangeListener() {
 			@Override
-			public void onLayoutChange(View view, int left, int top, int right, int bottom,
-				int ol, int ot, int or, int ob) {
-				
+			public void onLayoutChange(View view, int left, int top, int right, int bottom, int ol,
+				int ot, int or, int ob) {
+
 				if (ob < bottom) {
 					mEtSearch.setFocusable(false);
 					mEtSearch.setFocusableInTouchMode(false);
 				}
 			}
 		});
-		
+
 		// 开始
 		setMode(Mode.Normal);
 		refresh(false);
 	}
-	
+
 	public Mode getMode() {
 		return mMode;
 	}
-	
+
 	public void setMode(Mode mode) {
 		if (mMode != mode) {
 			mMode = mode;
-			
+
 			updateTitle();
 			updateInfo();
-			
+
 			if (mode != Mode.Select) {
 				mTypeAdapter.selectAll(false);
 			}
 			mTypeAdapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	public void refresh(boolean reload) {
 		if (reload) {
 			Tree.refreshTypeDirect();
 		}
-		
+
 		final Object mark = new Object();
 		synchronized (mEtSearch) {
 			mSearchMark = mark;
 		}
-		
+
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
 				while (isFinishing() == false) {
 					boolean finished = Tree.isTypeDirectRefreshing() == false;
-					
+
 					List<Leaf> list;
 					if (mClassify == Classify.Big) {
-						list = Tree.loadBig(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Big));
+						list = Tree
+							.loadBig(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Big));
 					} else if (mClassify == Classify.Recent) {
-						list = Tree.loadRecent(Tree.getTypeDirect(), Setting.getNumLimit(Classify.Recent));
+						list = Tree.loadRecent(Tree.getTypeDirect(), Setting
+							.getNumLimit(Classify.Recent));
 					} else {
 						list = Tree.loadType(Tree.getTypeDirect(), mType);
 					}
-					
+
 					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
-					
+
 					AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							synchronized (mEtSearch) {
@@ -317,80 +322,81 @@ public class TypeActivity extends BaseActivity {
 							}
 						}
 					});
-					
+
 					if (finished) {
 						return;
 					}
-					
+
 					SystemClock.sleep(300);
 				}
 			}
 		});
 	}
-	
+
 	public void updateTitle() {
 		if (mMode == Mode.Select) {
 			mTvTitle.setText(R.string.msg_multi_select_mode);
-			mIvSelect.setImageResource(mTypeAdapter.getSelectedCount() < mTypeAdapter.getCount()
-					? R.drawable.multi_select_pre : R.drawable.multi_select_nor);
+			mIvSelect
+				.setImageResource(mTypeAdapter.getSelectedCount() < mTypeAdapter.getCount() ? R.drawable.multi_select_pre
+					: R.drawable.multi_select_nor);
 			mIvSelect.setVisibility(View.VISIBLE);
 		} else {
 			mTvTitle.setText(mName);
 			mIvSelect.setVisibility(View.GONE);
 		}
 	}
-	
+
 	public void showDetail(Leaf leaf) {
 		File file = leaf.getFile();
-		
+
 		mIvDetailIcon.setImageResource(leaf.getIcon());
-		
+
 		mTvDetailName.setText(file.getName());
-		
+
 		Date date = new Date(file.lastModified());
 		DateFormat df = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss", Setting.LOCALE);
 		mTvDetailTime.setText(df.format(date));
-		
+
 		if (leaf instanceof Direct) {
 			String[] children = file.list();
 			mTvDetailSize.setText(AppUtil.getString(R.string.msg_children_with_num,
-					children == null ? 0 : children.length));
+				children == null ? 0 : children.length));
 		} else {
-			mTvDetailSize.setText(String.format(Setting.LOCALE,
-				"%s B", MathUtil.insertComma(file.length())));
+			mTvDetailSize.setText(String.format(Setting.LOCALE, "%s B", MathUtil.insertComma(file
+				.length())));
 		}
-		
+
 		mDetailShowPoint = SystemClock.elapsedRealtime();
-		
+
 		AppUtil.removeUiThread(mDetailMark);
 		mLlDetail.setAlpha(1f);
 		mDetailMark = AppUtil.runOnUiThread(mDetailRun, 2000, 20);
 	}
-	
+
 	public void updateInfo() {
 		if (mMode == Mode.Select) {
 			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_select_with_num,
 				mTypeAdapter.getSelectedCount(), mTypeAdapter.getCount()));
 		} else {
-			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_with_num,
-					mTypeAdapter.getCount()));
+			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_with_num, mTypeAdapter
+				.getCount()));
 		}
 	}
-	
+
 	public void showMenu() {
 		DownList dl = new DownList(this);
 		List<DataItem> list = new ArrayList<DataItem>();
 		dl.getAdapter().setDataList(list);
-		
+
 		if (mMode == Mode.Select) {
 			final List<Leaf> selected = mTypeAdapter.getSelected();
 			if (selected.size() < 1) {
 				App.showToast(R.string.err_nothing_selected);
 				return;
 			}
-			
+
 			final Leaf first = selected.get(0);
-			
+
 			boolean hasDirect = false;
 			for (Leaf leaf : selected) {
 				if (leaf instanceof Direct) {
@@ -398,88 +404,134 @@ public class TypeActivity extends BaseActivity {
 					break;
 				}
 			}
-			
+
 			if (hasDirect == false) {
-				list.add(new DataItem(R.drawable.share, R.string.word_share, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index) {
-						if (IntentUtil.share(TypeActivity.this, mTypeAdapter.getSelected(), null)) {
-							setMode(Mode.Normal);
-						} else {
-							App.showToast(R.string.err_share_failed);
+				list.add(new DataItem(R.drawable.share, R.string.word_share,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							if (IntentUtil.share(TypeActivity.this, mTypeAdapter.getSelected(),
+								null)) {
+								setMode(Mode.Normal);
+							} else {
+								App.showToast(R.string.err_share_failed);
+							}
 						}
-					}
-				}));
-			}
-			
-			list.add(new DataItem(R.drawable.detail, R.string.word_detail, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					Intent intent = new Intent(TypeActivity.this, DetailActivity.class);
-					intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH,
-						DataUtil.leaf2PathCs(selected));
-					intent.putExtra(DetailActivity.KEY_INDEX, 0);
-					startActivity(intent);
-				}
-			}));
-			
-			if (selected.size() == 1) {
-				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dl, int index) {
-						SimpleDialog dialog = new SimpleDialog(TypeActivity.this);
-						dialog.setCanceledOnTouchOutside(true);
-						dialog.setMessage(R.string.msg_open_as);
-						dialog.setButtons(R.string.type_text, R.string.type_image, R.string.type_audio,
-								R.string.type_video, R.string.word_any);
-						dialog.setClickListener(new IDialogClickListener() {
-							@Override
-							public void onClick(Dialog dialog, int index) {
-								switch (index) {
-								case 0:
-									IntentUtil.view(TypeActivity.this, first, Text.TYPE);
-									break;
+					}, new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							AppUtil.runOnNewThread(new Runnable() {
+								@Override
+								public void run() {
+									for (Leaf leaf : selected) {
+										try {
+											String path = leaf.getPath();
+											if (path.endsWith(".xor")) {
+												path = path.substring(0, path.length() - 4);
+											} else {
+												path = path + ".xor";
+											}
+											File to = new File(path);
 
-								case 1:
-									IntentUtil.view(TypeActivity.this, first, Image.TYPE);
-									break;
+											String ret = FileUtil.createFile(to);
+											if (ret != null) {
+												App.showToast(ret);
+												continue;
+											}
 
-								case 2:
-									IntentUtil.view(TypeActivity.this, first, Audio.TYPE);
-									break;
+											File from = leaf.getFile();
 
-								case 3:
-									IntentUtil.view(TypeActivity.this, first, Video.TYPE);
-									break;
+											boolean suc = FileUtil.write(from, to, 0xff);
+											if (suc == false) {
+												App.showToast(R.string.err_file_read_error);
+												continue;
+											}
 
-								case 4:
-									IntentUtil.view(TypeActivity.this, first, "*/*");
-									break;
+											ret = FileUtil.delete(from);
+											if (ret != null) {
+												App.showToast(ret);
+												continue;
+											}
+										} catch (Exception e) {
+											Logger.print(null, e);
+										}
+									}
 								}
+							});
+						}
+					}));
+			}
 
-								dialog.dismiss();
-							}
-						});
-						dialog.show();
-					}
-				}));
-				
-				list.add(new DataItem(R.drawable.edit, R.string.word_rename, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.detail, R.string.word_detail,
+				new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index) {
-						Tree.rename(TypeActivity.this, first.getFile(),
-							new IProgressCallback() {
-								@Override
-								public void onProgress(ProgressType type) {
-									setMode(Mode.Normal);
-									refresh(true);
-								}
-							}
-						);
+						Intent intent = new Intent(TypeActivity.this, DetailActivity.class);
+						intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH, DataUtil
+							.leaf2PathCs(selected));
+						intent.putExtra(DetailActivity.KEY_INDEX, 0);
+						startActivity(intent);
 					}
 				}));
+
+			if (selected.size() == 1) {
+				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dl, int index) {
+							SimpleDialog dialog = new SimpleDialog(TypeActivity.this);
+							dialog.setCanceledOnTouchOutside(true);
+							dialog.setMessage(R.string.msg_open_as);
+							dialog.setButtons(R.string.type_text, R.string.type_image,
+								R.string.type_audio, R.string.type_video, R.string.word_any);
+							dialog.setClickListener(new IDialogClickListener() {
+								@Override
+								public void onClick(Dialog dialog, int index) {
+									switch (index) {
+									case 0:
+										IntentUtil.view(TypeActivity.this, first, Text.TYPE);
+										break;
+
+									case 1:
+										IntentUtil.view(TypeActivity.this, first, Image.TYPE);
+										break;
+
+									case 2:
+										IntentUtil.view(TypeActivity.this, first, Audio.TYPE);
+										break;
+
+									case 3:
+										IntentUtil.view(TypeActivity.this, first, Video.TYPE);
+										break;
+
+									case 4:
+										IntentUtil.view(TypeActivity.this, first, "*/*");
+										break;
+									}
+
+									dialog.dismiss();
+								}
+							});
+							dialog.show();
+						}
+					}));
+
+				list.add(new DataItem(R.drawable.edit, R.string.word_rename,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							Tree.rename(TypeActivity.this, first.getFile(),
+								new IProgressCallback() {
+									@Override
+									public void onProgress(ProgressType type) {
+										setMode(Mode.Normal);
+										refresh(true);
+									}
+								});
+						}
+					}));
 			}
-			
+
 			if (hasDirect == false && selected.size() == 1) {
 				list.add(new DataItem(R.drawable.edit, R.string.word_edit,
 					new IDialogClickListener() {
@@ -491,7 +543,8 @@ public class TypeActivity extends BaseActivity {
 								SimpleDialog st = new SimpleDialog(TypeActivity.this);
 								st.setCanceledOnTouchOutside(true);
 								st.setMessage(R.string.msg_edit_as);
-								st.setButtons(R.string.type_text, R.string.type_image, R.string.word_any);
+								st.setButtons(R.string.type_text, R.string.type_image,
+									R.string.word_any);
 								st.setClickListener(new IDialogClickListener() {
 									@Override
 									public void onClick(Dialog dialog, int index) {
@@ -499,86 +552,50 @@ public class TypeActivity extends BaseActivity {
 										case 0:
 											IntentUtil.edit(TypeActivity.this, first, Text.TYPE);
 											break;
-											
+
 										case 1:
 											IntentUtil.edit(TypeActivity.this, first, Image.TYPE);
 											break;
-											
+
 										case 2:
 											IntentUtil.edit(TypeActivity.this, first, "*/*");
 											break;
 										}
-										
+
 										dialog.dismiss();
 									}
 								});
 								st.show();
 							}
 						}
-					},
-					new IDialogClickListener() {
-						@Override
-						public void onClick(Dialog dialog, int index) {
-							AppUtil.runOnNewThread(new Runnable() {
-								@Override
-								public void run() {
-									String path = first.getPath();
-									if (path.endsWith(".xor")) {
-										path = path.substring(0, path.length() - 4);
-									} else {
-										path = path + ".xor";
-									}
-									File to = new File(path);
-									
-									String ret = FileUtil.createFile(to);
-									if (ret != null) {
-										App.showToast(ret);
-										return;
-									}
-									
-									File from = first.getFile();
-									
-									boolean suc = FileUtil.write(from, to, 0xff);
-									if (suc == false) {
-										App.showToast(R.string.err_file_read_error);
-										return;
-									}
-									
-									ret = FileUtil.delete(from);
-									if (ret != null) {
-										App.showToast(ret);
-										return;
-									}
-								}
-							});
-						}
-					}
-				));
+					}));
 			}
-			
-			list.add(new DataItem(R.drawable.cross, R.string.word_delete, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					Tree.delete(TypeActivity.this, selected, new IProgressCallback() {
-						@Override
-						public void onProgress(ProgressType type) {
-							if (type == ProgressType.Finish || type == ProgressType.Cancel) {
-								setMode(Mode.Normal);
-								refresh(true);
+
+			list.add(new DataItem(R.drawable.cross, R.string.word_delete,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						Tree.delete(TypeActivity.this, selected, new IProgressCallback() {
+							@Override
+							public void onProgress(ProgressType type) {
+								if (type == ProgressType.Finish || type == ProgressType.Cancel) {
+									setMode(Mode.Normal);
+									refresh(true);
+								}
 							}
-						}
-					});
-				}
-			}));
-			
-			list.add(new DataItem(R.drawable.copy, R.string.word_copy_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-					startActivityForResult(intent, REQ_COPY_TO);
-				}
-			}));
-			
+						});
+					}
+				}));
+
+			list.add(new DataItem(R.drawable.copy, R.string.word_copy_to,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+						startActivityForResult(intent, REQ_COPY_TO);
+					}
+				}));
+
 			list.add(new DataItem(R.drawable.copy, R.string.word_copy, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
@@ -590,7 +607,7 @@ public class TypeActivity extends BaseActivity {
 					}
 				}
 			}));
-			
+
 			list.add(new DataItem(R.drawable.cut, R.string.word_cut_to, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
@@ -598,7 +615,7 @@ public class TypeActivity extends BaseActivity {
 					startActivityForResult(intent, REQ_CUT_TO);
 				}
 			}));
-			
+
 			list.add(new DataItem(R.drawable.cut, R.string.word_cut, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
@@ -610,27 +627,29 @@ public class TypeActivity extends BaseActivity {
 					}
 				}
 			}));
-			
+
 			dl.show();
 		} else {
-			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					refresh(true);
-				}
-			}));
-			
-			list.add(new DataItem(R.drawable.multi_select_pre, R.string.word_multi_select, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					setMode(Mode.Select);
-				}
-			}));
+			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						refresh(true);
+					}
+				}));
+
+			list.add(new DataItem(R.drawable.multi_select_pre, R.string.word_multi_select,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						setMode(Mode.Select);
+					}
+				}));
 		}
-			
+
 		dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
 	}
-	
+
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -642,21 +661,21 @@ public class TypeActivity extends BaseActivity {
 			showMenu();
 			return true;
 		}
-		
+
 		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		if (requestCode == REQ_COPY_TO) {
 			if (resultCode != RESULT_OK || data == null) {
 				return;
 			}
-			
+
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
-			
+
 			Tree.carry(this, DataUtil.leaf2PathString(mTypeAdapter.getSelected()), path, false,
 				new IProgressCallback() {
 					@Override
@@ -666,15 +685,14 @@ public class TypeActivity extends BaseActivity {
 							refresh(true);
 						}
 					}
-				}
-			);
+				});
 		} else if (requestCode == REQ_CUT_TO) {
 			if (resultCode != RESULT_OK || data == null) {
 				return;
 			}
-			
+
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
-			
+
 			Tree.carry(this, DataUtil.leaf2PathString(mTypeAdapter.getSelected()), path, true,
 				new IProgressCallback() {
 					@Override
@@ -684,8 +702,7 @@ public class TypeActivity extends BaseActivity {
 							refresh(true);
 						}
 					}
-				}
-			);
+				});
 		}
 	}
 }
