@@ -1,14 +1,19 @@
 package kk.myfile.leaf;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import kk.myfile.R;
+import kk.myfile.adapter.DetailItemAdapter.Data;
+import kk.myfile.adapter.DetailItemAdapter.IClickListener;
+import kk.myfile.adapter.DetailItemAdapter.ViewHolder;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
@@ -46,47 +51,63 @@ public abstract class Leaf {
 	
 	public abstract int getTypeName();
 	
-	protected void putDetail(Map<String, String> map, int key, Object value, Object... args) {
+	protected Data putDetail(List<Data> list, int sort, int key, Object value, Object... args) {
+		Data data = new Data();
+		
 		if (value == null) {
-			return;
+			return data;
 		}
 		
 		String v = String.valueOf(value);
 		if (v == null || v.length() < 1) {
-			return;
+			return data;
 		}
 		
 		if (args != null && args.length > 0) {
 			v = String.format(v, args);
 			
 			if (v == null || v.length() < 1) {
-				return;
+				return data;
+			}
+		}
+		
+		data.leaf = this;
+		data.sort = sort;
+		data.key = AppUtil.getString(key);
+		data.value = v;
+		
+		for (int i = 0; i < list.size(); i++) {
+			if (sort < list.get(i).sort) {
+				list.add(i, data);
+				return data;
 			}
 		}
 			
-		map.put(AppUtil.getString(key), v);
+		list.add(data);
+		
+		return data;
 	}
 	
-	public Map<String, String> getDetail() {
-		Map<String, String> map = new LinkedHashMap<String, String>();
+	public List<Data> getDetail() {
+		List<Data> list = new ArrayList<Data>();
 		
 		int idx = mPath.lastIndexOf('/');
 		String parent = mPath.substring(0, idx);
 		String name = mPath.substring(idx + 1);
 		File file = new File(mPath);
 		
-		putDetail(map, R.string.word_name, name);
-		putDetail(map, R.string.word_parent, parent);
+		putDetail(list, 1, R.string.word_name, name);
+		putDetail(list, 1, R.string.word_parent, parent);
 		try {
-			putDetail(map, R.string.word_real_path, file.getCanonicalPath());
+			putDetail(list, 1, R.string.word_real_path, file.getCanonicalPath());
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}
 		
-		putDetail(map, R.string.word_type, AppUtil.getString(getTypeName()));
+		putDetail(list, 1, R.string.word_type, AppUtil.getString(getTypeName()));
 		
 		try {
-			putDetail(map, R.string.word_size, "%s B",
+			putDetail(list, 1, R.string.word_size, "%s B",
 				MathUtil.insertComma(file.length()));
 		} catch (Exception e) {
 			Logger.print(null, e);
@@ -95,12 +116,42 @@ public abstract class Leaf {
 		try {
 			Date date = new Date(file.lastModified());
 			DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
-			putDetail(map, R.string.word_modify_time, df.format(date));
+			putDetail(list, 1, R.string.word_modify_time, df.format(date));
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}
 		
-		return map;
+		Data data = putDetail(list, 3, R.string.word_md5, AppUtil.getString(R.string.msg_click_to_calc));
+		data.clickListener = new IClickListener() {
+			@Override
+			public void onClick(final Data data, final ViewHolder vh) {
+				if (AppUtil.getString(R.string.msg_click_to_calc).equals(data.value)) {
+					AppUtil.runOnNewThread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								byte[] bs = DataUtil.md5(new FileInputStream(data.leaf.getPath()));
+								final String str = DataUtil.toHexStr(bs);
+								
+								AppUtil.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										if (data == vh.data) {
+											data.value = str;
+											vh.value.setText(str);
+										}
+									}
+								});
+							} catch (Exception e) {
+								Logger.print(null, e);
+							}
+						}
+					});
+				}
+			}
+		};
+		
+		return list;
 	}
 	
 	@Override

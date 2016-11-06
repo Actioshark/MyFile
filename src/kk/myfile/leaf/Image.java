@@ -1,6 +1,6 @@
 package kk.myfile.leaf;
 
-import java.util.Map;
+import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import kk.myfile.R;
+import kk.myfile.adapter.DetailItemAdapter.Data;
 import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
@@ -34,19 +35,19 @@ public class Image extends Leaf implements IThumable {
 	}
 	
 	@Override
-	public Map<String, String> getDetail() {
-		Map<String, String> map = super.getDetail();
+	public List<Data> getDetail() {
+		List<Data> list = super.getDetail();
 		
 		try {
 			Options op = getOptions();
-			putDetail(map, R.string.word_minetype, op.outMimeType);
-			putDetail(map, R.string.word_width, op.outWidth);
-			putDetail(map, R.string.word_height, op.outHeight);
+			putDetail(list, 2, R.string.word_minetype, op.outMimeType);
+			putDetail(list, 2, R.string.word_width, op.outWidth);
+			putDetail(list, 2, R.string.word_height, op.outHeight);
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}
 		
-		return map;
+		return list;
 	}
 	
 	@Override

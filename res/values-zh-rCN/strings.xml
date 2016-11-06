@@ -29,9 +29,11 @@
 	<string name="list_style_2_2">列表中</string>
 	<string name="list_style_2_3">列表大</string>
 
+	<string name="msg_already_copied_to_clipboard">已复制到剪切板</string>
 	<string name="msg_already_installed">已安装</string>
 	<string name="msg_children_select_with_num">%1$d/%2$d 文件</string>
 	<string name="msg_children_with_num">%d 文件</string>
+	<string name="msg_click_to_calc">点击计算</string>
 	<string name="msg_confirm_save_modify">保存修改？</string>
 	<string name="msg_copy_file_progress">正在复制 %1$d/%2$d 个文件\n\n成功 %3$d\n失败 %4$d</string>
 	<string name="msg_cut_file_progress">正在剪切 %1$d/%2$d 个文件\n\n成功%3$d\n失败 %4$d</string>
@@ -40,7 +42,6 @@
 	<string name="msg_edit_as">编辑为</string>
 	<string name="msg_enter_target_direct_and_paste">进入目标目录并粘贴</string>
 	<string name="msg_file_exist">以下文件已经存在\n\n%s</string>
-	<string name="msg_already_copied_to_clipboard">已复制到剪切板</string>
 	<string name="msg_input_direct_name">输入目录名</string>
 	<string name="msg_input_file_name">输入文件名</string>
 	<string name="msg_input_path_name">请输入名称</string>
@@ -102,6 +103,7 @@
 	<string name="word_duration">时长</string>
 	<string name="word_edit">编辑</string>
 	<string name="word_height">高</string>
+	<string name="word_md5">MD5</string>
 	<string name="word_minetype">媒体类型</string>
 	<string name="word_modify_time">修改时间</string>
 	<string name="word_multi_select">多选</string>

@@ -29,9 +29,11 @@
 	<string name="list_style_2_2">List Middle</string>
 	<string name="list_style_2_3">List Big</string>
 
+	<string name="msg_already_copied_to_clipboard">Already copied to the clipboard</string>
 	<string name="msg_already_installed">Already Installed</string>
 	<string name="msg_children_select_with_num">%1$d/%2$d children</string>
 	<string name="msg_children_with_num">%d children</string>
+	<string name="msg_click_to_calc">Click To Calculate</string>
 	<string name="msg_confirm_save_modify">Save Modify?</string>
 	<string name="msg_copy_file_progress">Copying %1$d/%2$d files\n\n%3$d success\n%4$d
 		failed
@@ -45,7 +47,6 @@
 	<string name="msg_edit_as">Edit As</string>
 	<string name="msg_enter_target_direct_and_paste">Enter target directory and PASTE</string>
 	<string name="msg_file_exist">The following file already exists:\n\n%s</string>
-	<string name="msg_already_copied_to_clipboard">Already copied to the clipboard</string>
 	<string name="msg_input_direct_name">Input directory name</string>
 	<string name="msg_input_file_name">Input file name</string>
 	<string name="msg_input_path_name">Input name for path</string>
@@ -107,6 +108,7 @@
 	<string name="word_duration">Duration</string>
 	<string name="word_edit">Edit</string>
 	<string name="word_height">Height</string>
+	<string name="word_md5">MD5</string>
 	<string name="word_minetype">MineType</string>
 	<string name="word_modify_time">Modify Time</string>
 	<string name="word_multi_select">Multi Select</string>
