@@ -68,7 +68,7 @@ public class DetailAdapter extends BaseAdapter {
 					ClipData cd = ClipData.newPlainText(data.key, data.value);
 					cbm.setPrimaryClip(cd);
 					
-					App.showToast(R.string.msg_has_been_copied_to_clipboard);
+					App.showToast(R.string.msg_already_copied_to_clipboard);
 				}
 			});
 		} else {

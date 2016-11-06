@@ -13,21 +13,21 @@ import kk.myfile.util.Logger;
 
 public class Apk extends Leaf implements IThumable {
 	public static final int COLOR = 0xff00cc00;
-	
+
 	public Apk(String path) {
 		super(path);
 	}
-	
+
 	@Override
 	public int getIcon() {
 		return R.drawable.file_apk;
 	}
-	
+
 	@Override
 	public int getTypeName() {
 		return R.string.type_apk;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public Drawable getThum(int width, int height) {
@@ -36,26 +36,39 @@ public class Apk extends Leaf implements IThumable {
 		ApplicationInfo ai = pi.applicationInfo;
 		ai.sourceDir = mPath;
 		ai.publicSourceDir = mPath;
-		
+
 		return ai.loadIcon(pm);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public Map<String, String> getDetail() {
 		Map<String, String> map = super.getDetail();
-		
+
 		try {
 			PackageManager pm = AppUtil.getContext().getPackageManager();
 			PackageInfo pi = pm.getPackageArchiveInfo(mPath, PackageManager.GET_ACTIVITIES);
+			ApplicationInfo ai = pi.applicationInfo;
+			ai.sourceDir = mPath;
+			ai.publicSourceDir = mPath;
+
 			putDetail(map, R.string.word_app_name, pi.applicationInfo.loadLabel(pm));
 			putDetail(map, R.string.word_package_name, pi.packageName);
 			putDetail(map, R.string.word_version_code, pi.versionCode);
 			putDetail(map, R.string.word_version_name, pi.versionName);
+
+			boolean installed = false;
+			try {
+				pm.getPackageInfo(pi.packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
+				installed = true;
+			} catch (Exception e) {
+			}
+			putDetail(map, R.string.word_state, AppUtil.getString(installed ? R.string.msg_already_installed
+				: R.string.msg_not_installed));
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}
-		
+
 		return map;
 	}
 }

@@ -29,8 +29,10 @@
 	<string name="list_style_2_2">List Middle</string>
 	<string name="list_style_2_3">List Big</string>
 
+	<string name="msg_already_installed">Already Installed</string>
 	<string name="msg_children_select_with_num">%1$d/%2$d children</string>
 	<string name="msg_children_with_num">%d children</string>
+	<string name="msg_confirm_save_modify">Save Modify?</string>
 	<string name="msg_copy_file_progress">Copying %1$d/%2$d files\n\n%3$d success\n%4$d
 		failed
 	</string>
@@ -43,14 +45,14 @@
 	<string name="msg_edit_as">Edit As</string>
 	<string name="msg_enter_target_direct_and_paste">Enter target directory and PASTE</string>
 	<string name="msg_file_exist">The following file already exists:\n\n%s</string>
-	<string name="msg_has_been_copied_to_clipboard">Has been copied to the clipboard</string>
+	<string name="msg_already_copied_to_clipboard">Already copied to the clipboard</string>
 	<string name="msg_input_direct_name">Input directory name</string>
 	<string name="msg_input_file_name">Input file name</string>
 	<string name="msg_input_path_name">Input name for path</string>
 	<string name="msg_input_to_search">Input to search</string>
 	<string name="msg_multi_select_mode">Multi Select Mode</string>
+	<string name="msg_not_installed">Not Installed</string>
 	<string name="msg_open_as">Open As</string>
-	<string name="msg_confirm_save_modify">Save Modify?</string>
 	<string name="msg_select_operation">Please select an operation</string>
 	<string name="msg_wait">Wait a monent</string>
 
@@ -125,6 +127,7 @@
 	<string name="word_size">Size</string>
 	<string name="word_skip">Skip</string>
 	<string name="word_skip_all">Skip All</string>
+	<string name="word_state">State</string>
 	<string name="word_title">Title</string>
 	<string name="word_type">Type</string>
 	<string name="word_version_code">Version Code</string>
