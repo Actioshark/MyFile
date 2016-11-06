@@ -27,10 +27,10 @@ import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -566,6 +566,17 @@ public class DirectActivity extends BaseActivity {
 				}));
 			}
 			
+			list.add(new DataItem(R.drawable.detail, R.string.word_detail, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					Intent intent = new Intent(DirectActivity.this, DetailActivity.class);
+					intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH,
+						DataUtil.leaf2PathCs(selected));
+					intent.putExtra(DetailActivity.KEY_INDEX, 0);
+					startActivity(intent);
+				}
+			}));
+			
 			if (selected.size() == 1) {
 				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as, new IDialogClickListener() {
 					@Override
@@ -604,15 +615,6 @@ public class DirectActivity extends BaseActivity {
 							}
 						});
 						dialog.show();
-					}
-				}));
-				
-				list.add(new DataItem(R.drawable.detail, R.string.word_detail, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index) {
-						Intent intent = new Intent(DirectActivity.this, DetailActivity.class);
-						intent.putExtra(DetailActivity.KEY_PATH, first.getPath());
-						startActivity(intent);
 					}
 				}));
 				
@@ -822,14 +824,9 @@ public class DirectActivity extends BaseActivity {
 				return;
 			}
 			
-			List<String> selected = new ArrayList<String>();
-			for (Leaf leaf : mDirectAdapter.getSelected()) {
-				selected.add(leaf.getPath());
-			}
-			
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.carry(this, selected, path, false,
+			Tree.carry(this, DataUtil.leaf2PathString(mDirectAdapter.getSelected()), path, false,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {
@@ -843,14 +840,9 @@ public class DirectActivity extends BaseActivity {
 				return;
 			}
 			
-			List<String> selected = new ArrayList<String>();
-			for (Leaf leaf : mDirectAdapter.getSelected()) {
-				selected.add(leaf.getPath());
-			}
-			
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.carry(this, selected, path, true,
+			Tree.carry(this, DataUtil.leaf2PathString(mDirectAdapter.getSelected()), path, true,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type) {

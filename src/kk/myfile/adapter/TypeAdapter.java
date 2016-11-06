@@ -19,6 +19,7 @@ import kk.myfile.leaf.Video;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.IntentUtil;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
@@ -122,12 +123,11 @@ public class TypeAdapter extends BaseAdapter {
 	
 	public List<Leaf> getSelected() {
 		List<Leaf> list = new ArrayList<Leaf>();
-		
 		int size = mData.size();
 		
-		for (Integer position : mSelected) {
-			if (position < size) {
-				list.add(mData.get(position));
+		for (int i = 0; i < size; i++) {
+			if (mSelected.contains(i)) {
+				list.add(mData.get(i));
 			}
 		}
 		
@@ -187,8 +187,23 @@ public class TypeAdapter extends BaseAdapter {
 							public void run() {
 								mTouchRunnable = null;
 								
+								List<Leaf> selected = getSelected();
+								if (selected.size() < 1) { 
+									selected = mData;
+								}
+								
+								int index = 0;
+								for (int i = 0; i < selected.size(); i++) {
+									if (selected.get(i) == holder.leaf) {
+										index = i;
+										break;
+									}
+								}
+								
 								Intent intent = new Intent(mActivity, DetailActivity.class);
-								intent.putExtra(DetailActivity.KEY_PATH, holder.leaf.getPath());
+								intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH,
+										DataUtil.leaf2PathCs(selected));
+								intent.putExtra(DetailActivity.KEY_INDEX, index);
 								mActivity.startActivity(intent);
 							}
 						};
