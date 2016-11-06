@@ -16,28 +16,26 @@ import kk.myfile.util.Setting;
 public class SettingActivity extends BaseActivity {
 	static final long NUM_LIMIT_DELAY = 500;
 	static final long NUM_LIMIT_REPEAT = 20;
-	
+
 	private Runnable mNumLimitToken;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_setting);
-		
+
 		// 返回
-		findViewById(R.id.ll_menu)
-		.findViewById(R.id.iv_back)
-		.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				finish();
-			}
-		});
-		
+		findViewById(R.id.ll_menu).findViewById(R.id.iv_back).setOnClickListener(
+			new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					finish();
+				}
+			});
+
 		// 目录文件排序
-		findViewById(R.id.ll_sort_direct)
-		.setOnClickListener(new OnClickListener() {
+		findViewById(R.id.ll_sort_direct).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
@@ -45,10 +43,9 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
-		
+
 		// 分类文件排序
-		findViewById(R.id.ll_sort_type)
-		.setOnClickListener(new OnClickListener() {
+		findViewById(R.id.ll_sort_type).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingSortActivity.class);
@@ -56,10 +53,9 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
-		
+
 		// 目录文件列表视图
-		findViewById(R.id.ll_list_style_direct)
-		.setOnClickListener(new OnClickListener() {
+		findViewById(R.id.ll_list_style_direct).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
@@ -67,10 +63,9 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
-		
+
 		// 分类文件列表视图
-		findViewById(R.id.ll_list_style_type)
-		.setOnClickListener(new OnClickListener() {
+		findViewById(R.id.ll_list_style_type).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
@@ -78,10 +73,9 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
-		
+
 		// 大文件列表视图
-		findViewById(R.id.ll_list_style_big)
-		.setOnClickListener(new OnClickListener() {
+		findViewById(R.id.ll_list_style_big).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
@@ -89,10 +83,9 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
-		
+
 		// 最近文件列表视图
-		findViewById(R.id.ll_list_style_recent)
-		.setOnClickListener(new OnClickListener() {
+		findViewById(R.id.ll_list_style_recent).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(SettingActivity.this, SettingListStyleActivity.class);
@@ -100,22 +93,22 @@ public class SettingActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
-		
+
 		// 隐藏文件
 		View llHidden = findViewById(R.id.ll_hidden);
 		final ImageView ivHiddenSelect = (ImageView) llHidden.findViewById(R.id.iv_select);
-		ivHiddenSelect.setImageResource(Setting.getShowHidden() ?
-			R.drawable.single_select_pre : R.drawable.single_select_nor);
+		ivHiddenSelect.setImageResource(Setting.getShowHidden() ? R.drawable.single_select_pre
+			: R.drawable.single_select_nor);
 		llHidden.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				boolean show = !Setting.getShowHidden();
 				Setting.setShowHidden(show);
-				ivHiddenSelect.setImageResource(show ?
-					R.drawable.single_select_pre : R.drawable.single_select_nor);
+				ivHiddenSelect.setImageResource(show ? R.drawable.single_select_pre
+					: R.drawable.single_select_nor);
 			}
 		});
-		
+
 		// 大文件数量限制
 		View llBigLimit = findViewById(R.id.ll_num_limit_big);
 		final TextView tvBigLimitNum = (TextView) llBigLimit.findViewById(R.id.tv_num);
@@ -131,16 +124,18 @@ public class SettingActivity extends BaseActivity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
 					tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
-					
+
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
-							Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
-							tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+							Setting
+								.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
+							tvBigLimitNum.setText(String.format("%d", Setting
+								.getNumLimit(Classify.Big)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
-				} else if (event.getAction() == MotionEvent.ACTION_UP ||
-						event.getAction() == MotionEvent.ACTION_CANCEL) {
-					
+				} else if (event.getAction() == MotionEvent.ACTION_UP
+					|| event.getAction() == MotionEvent.ACTION_CANCEL) {
+
 					AppUtil.removeUiThread(mNumLimitToken);
 					mNumLimitToken = null;
 				}
@@ -159,16 +154,18 @@ public class SettingActivity extends BaseActivity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
 					tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
-					
+
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
-							Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
-							tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+							Setting
+								.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
+							tvBigLimitNum.setText(String.format("%d", Setting
+								.getNumLimit(Classify.Big)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
-				} else if (event.getAction() == MotionEvent.ACTION_UP ||
-						event.getAction() == MotionEvent.ACTION_CANCEL) {
-					
+				} else if (event.getAction() == MotionEvent.ACTION_UP
+					|| event.getAction() == MotionEvent.ACTION_CANCEL) {
+
 					AppUtil.removeUiThread(mNumLimitToken);
 					mNumLimitToken = null;
 				}
@@ -191,17 +188,20 @@ public class SettingActivity extends BaseActivity {
 			public boolean onTouch(View view, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 1);
-					tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
-					
+					tvRecentLimitNum.setText(String.format("%d", Setting
+						.getNumLimit(Classify.Recent)));
+
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
-							Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 1);
-							tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+							Setting.setNumLimit(Classify.Recent, Setting
+								.getNumLimit(Classify.Recent) + 1);
+							tvRecentLimitNum.setText(String.format("%d", Setting
+								.getNumLimit(Classify.Recent)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
-				} else if (event.getAction() == MotionEvent.ACTION_UP ||
-						event.getAction() == MotionEvent.ACTION_CANCEL) {
-					
+				} else if (event.getAction() == MotionEvent.ACTION_UP
+					|| event.getAction() == MotionEvent.ACTION_CANCEL) {
+
 					AppUtil.removeUiThread(mNumLimitToken);
 					mNumLimitToken = null;
 				}
@@ -219,17 +219,20 @@ public class SettingActivity extends BaseActivity {
 			public boolean onTouch(View view, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 1);
-					tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
-					
+					tvRecentLimitNum.setText(String.format("%d", Setting
+						.getNumLimit(Classify.Recent)));
+
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
-							Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 1);
-							tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+							Setting.setNumLimit(Classify.Recent, Setting
+								.getNumLimit(Classify.Recent) - 1);
+							tvRecentLimitNum.setText(String.format("%d", Setting
+								.getNumLimit(Classify.Recent)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
-				} else if (event.getAction() == MotionEvent.ACTION_UP ||
-						event.getAction() == MotionEvent.ACTION_CANCEL) {
-					
+				} else if (event.getAction() == MotionEvent.ACTION_UP
+					|| event.getAction() == MotionEvent.ACTION_CANCEL) {
+
 					AppUtil.removeUiThread(mNumLimitToken);
 					mNumLimitToken = null;
 				}

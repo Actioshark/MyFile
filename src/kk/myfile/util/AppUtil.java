@@ -9,13 +9,13 @@ import android.view.WindowManager;
 public class AppUtil {
 	private static Context sContext;
 	private static Resources sRes;
-	
+
 	private static String sPackageName;
-	
+
 	private static Handler sHandler;
 
 	private static float sDensity;
-	
+
 	private static int sScreenWidth;
 	private static int sScreenHeight;
 	public static int sStatusBarHeight = 0;
@@ -24,20 +24,20 @@ public class AppUtil {
 		if (sRes != null) {
 			return;
 		}
-		
+
 		sContext = context;
 		sRes = context.getResources();
-		
+
 		sHandler = new Handler(context.getMainLooper());
-		
+
 		sPackageName = context.getPackageName();
 
 		WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics metrics = new DisplayMetrics();
 		manager.getDefaultDisplay().getMetrics(metrics);
-		
+
 		sDensity = metrics.density;
-		
+
 		sScreenWidth = metrics.widthPixels;
 		sScreenHeight = metrics.heightPixels;
 
@@ -46,7 +46,7 @@ public class AppUtil {
 			sStatusBarHeight = sRes.getDimensionPixelSize(id);
 		}
 	}
-	
+
 	@Deprecated
 	public static Context getContext() {
 		return sContext;
@@ -95,7 +95,7 @@ public class AppUtil {
 	public static int getColor(String name) {
 		return getColor(getId("color", name));
 	}
-	
+
 	public static int getPixcel(float dp) {
 		return (int) (dp * sDensity);
 	}
@@ -123,7 +123,7 @@ public class AppUtil {
 	public static void runOnUiThread(Runnable runnable, long delay) {
 		sHandler.postDelayed(runnable, delay);
 	}
-	
+
 	public static Runnable runOnUiThread(final Runnable runnable, long delay, final long repeat) {
 		Runnable repeater = new Runnable() {
 			@Override
@@ -132,12 +132,12 @@ public class AppUtil {
 				runnable.run();
 			}
 		};
-		
+
 		sHandler.postDelayed(repeater, delay);
-		
+
 		return repeater;
 	}
-	
+
 	public static void removeUiThread(final Runnable runnable) {
 		runOnUiThread(new Runnable() {
 			@Override

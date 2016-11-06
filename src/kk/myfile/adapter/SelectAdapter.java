@@ -23,21 +23,21 @@ public class SelectAdapter extends BaseAdapter {
 	private final List<Direct> mData = new ArrayList<Direct>();
 	private Object mMark;
 	private Direct mSelected;
-	
+
 	public SelectAdapter(SelectActivity activity) {
 		mActivity = activity;
 	}
-	
+
 	public void setData(final List<Leaf> data, final int position) {
 		mMark = data;
-		
+
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
 				synchronized (data) {
 					Sorter.sort(Classify.Direct, data);
 				}
-				
+
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
@@ -50,9 +50,9 @@ public class SelectAdapter extends BaseAdapter {
 									}
 								}
 							}
-							
+
 							notifyDataSetChanged();
-							
+
 							AppUtil.runOnUiThread(new Runnable() {
 								public void run() {
 									mActivity.setSelection(position);
@@ -63,10 +63,10 @@ public class SelectAdapter extends BaseAdapter {
 				});
 			}
 		});
-		
+
 		mSelected = null;
 	}
-	
+
 	@Override
 	public int getCount() {
 		return mData == null ? 0 : mData.size();
@@ -85,23 +85,23 @@ public class SelectAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 		final ViewHolder holder;
-		
+
 		if (view == null) {
 			view = mActivity.getLayoutInflater().inflate(R.layout.grid_select, null);
-			
+
 			holder = new ViewHolder();
 			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
 			holder.name = (TextView) view.findViewById(R.id.tv_name);
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
-			
+
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					mActivity.showDirect(new Node(holder.data), true);
 				}
 			});
-			
+
 			holder.select.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -110,25 +110,25 @@ public class SelectAdapter extends BaseAdapter {
 					} else {
 						mSelected = holder.data;
 					}
-					
+
 					notifyDataSetChanged();
 				}
 			});
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-		
+
 		Direct data = mData.get(position);
-		
+
 		holder.icon.setImageResource(data.getIcon());
 		holder.name.setText(data.getFile().getName());
 		holder.select.setImageResource(mSelected == data ? R.drawable.single_select_pre
 			: R.drawable.single_select_nor);
 		holder.data = data;
-		
+
 		return view;
 	}
-	
+
 	public Direct getSelected() {
 		return mSelected;
 	}

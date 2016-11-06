@@ -23,14 +23,14 @@ import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class SettingSortActivity extends BaseActivity {
-	
+
 	private Classify mClassify;
 	private List<SortFactor> mFactor;
 
 	private AbsoluteLayout mAlLayout;
 	private View[] mViewGrids;
 	private int mGridHeight;
-	
+
 	private View mConfirm;
 
 	@Override
@@ -53,10 +53,9 @@ public class SettingSortActivity extends BaseActivity {
 		mGridHeight = AppUtil.getDimenInt(R.dimen.sort_grid_height);
 
 		for (int i = 0; i < mViewGrids.length; i++) {
-			final View grid = getLayoutInflater().inflate(R.layout.grid_sort,
-					null);
-			LayoutParams lp = new LayoutParams(AppUtil.getScreenWidth(),
-					mGridHeight, 0, mGridHeight * i);
+			final View grid = getLayoutInflater().inflate(R.layout.grid_sort, null);
+			LayoutParams lp = new LayoutParams(AppUtil.getScreenWidth(), mGridHeight, 0,
+				mGridHeight * i);
 			mAlLayout.addView(grid, lp);
 			mViewGrids[i] = grid;
 
@@ -72,8 +71,7 @@ public class SettingSortActivity extends BaseActivity {
 
 						mAlLayout.removeView(grid);
 						mAlLayout.addView(grid);
-					} else if (action == MotionEvent.ACTION_MOVE
-							|| action == MotionEvent.ACTION_UP) {
+					} else if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) {
 
 						grid.setY(grid.getY() + event.getY() - vh.dy);
 
@@ -115,24 +113,22 @@ public class SettingSortActivity extends BaseActivity {
 			vh.text.setText(vh.sf.text);
 
 			vh.direct = (ImageView) grid.findViewById(R.id.iv_direct);
-			vh.direct.setImageResource(vh.sf.up ? R.drawable.arrow_up
-					: R.drawable.arrow_down);
+			vh.direct.setImageResource(vh.sf.up ? R.drawable.arrow_up : R.drawable.arrow_down);
 			vh.direct.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					vh.sf.up = !vh.sf.up;
 
 					vh.direct.setImageResource(vh.sf.up ? R.drawable.arrow_up
-							: R.drawable.arrow_down);
+						: R.drawable.arrow_down);
 				}
 			});
 		}
-		
+
 		View menu = findViewById(R.id.ll_menu);
-		
+
 		// 取消
-		menu.findViewById(R.id.iv_cancel)
-		.setOnClickListener(new OnClickListener() {
+		menu.findViewById(R.id.iv_cancel).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (haveChange()) {
@@ -148,7 +144,7 @@ public class SettingSortActivity extends BaseActivity {
 							} else if (index == 1) {
 								finish();
 							}
-							
+
 							dialog.dismiss();
 						}
 					});
@@ -158,7 +154,7 @@ public class SettingSortActivity extends BaseActivity {
 				}
 			}
 		});
-		
+
 		// 保存
 		mConfirm = menu.findViewById(R.id.iv_confirm);
 		mConfirm.setOnClickListener(new OnClickListener() {
@@ -180,7 +176,7 @@ public class SettingSortActivity extends BaseActivity {
 
 		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	private boolean haveChange() {
 		for (int i = 0; i < mViewGrids.length; i++) {
 			View grid = mViewGrids[i];
@@ -190,7 +186,7 @@ public class SettingSortActivity extends BaseActivity {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 

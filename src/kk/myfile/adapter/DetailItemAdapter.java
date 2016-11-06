@@ -26,25 +26,26 @@ public class DetailItemAdapter extends BaseAdapter {
 		public String value;
 		public IClickListener clickListener;
 	}
-	
+
 	public static interface IClickListener {
 		public void onClick(Data data, ViewHolder vh);
 	}
 
-	public static class ViewHolder {;
+	public static class ViewHolder {
+		;
 		public TextView key;
 		public TextView value;
-		
+
 		public Data data;
 	}
-	
+
 	private final Context mContext;
 	private final List<Data> mDataList = new ArrayList<Data>();
 
 	public DetailItemAdapter(Context context) {
 		mContext = context;
 	}
-	
+
 	public void setDataList(List<Data> dataList) {
 		mDataList.clear();
 		mDataList.addAll(dataList);
@@ -76,7 +77,7 @@ public class DetailItemAdapter extends BaseAdapter {
 			vh.key = (TextView) view.findViewById(R.id.tv_key);
 			vh.value = (TextView) view.findViewById(R.id.tv_value);
 			view.setTag(vh);
-			
+
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -85,27 +86,27 @@ public class DetailItemAdapter extends BaseAdapter {
 					}
 				}
 			});
-			
+
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View view) {
-					ClipboardManager cbm = (ClipboardManager) mContext.
-							getSystemService(Context.CLIPBOARD_SERVICE);
+					ClipboardManager cbm = (ClipboardManager) mContext
+						.getSystemService(Context.CLIPBOARD_SERVICE);
 					ClipData cd = ClipData.newPlainText(vh.data.key, vh.data.value);
 					cbm.setPrimaryClip(cd);
-					
+
 					App.showToast(R.string.msg_already_copied_to_clipboard);
-					
+
 					return true;
 				}
 			});
 		} else {
 			vh = (ViewHolder) view.getTag();
 		}
-		
+
 		vh.key.setText(data.key);
 		vh.value.setText(data.value);
-		
+
 		vh.data = data;
 
 		return view;

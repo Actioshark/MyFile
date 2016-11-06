@@ -23,7 +23,7 @@ public class DetailAdapter extends PagerAdapter {
 	static class ViewHolder {
 		public ImageView thum;
 		public ListView list;
-		
+
 		public int position = -1;
 	}
 
@@ -33,7 +33,7 @@ public class DetailAdapter extends PagerAdapter {
 
 	public DetailAdapter(Context context) {
 		mContext = context;
-		
+
 		for (int i = 0; i < 5; i++) {
 			View root = LayoutInflater.from(context).inflate(R.layout.grid_detail, null);
 			ViewHolder holder = new ViewHolder();
@@ -68,13 +68,13 @@ public class DetailAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, final int position) {
 		View root = mViewList.get(getViewPosition(position));
 		final ViewHolder vh = (ViewHolder) root.getTag();
-		
+
 		String path = mDataList.get(position);
 		if (vh.position != position) {
 			vh.position = position;
-			
+
 			final Leaf leaf = FileUtil.createLeaf(new File(path));
-			
+
 			vh.thum.setImageResource(leaf.getIcon());
 			if (leaf instanceof IThumable) {
 				AppUtil.runOnNewThread(new Runnable() {
@@ -95,7 +95,7 @@ public class DetailAdapter extends PagerAdapter {
 					}
 				});
 			}
-			
+
 			DetailItemAdapter adapter = new DetailItemAdapter(mContext);
 			adapter.setDataList(leaf.getDetail());
 			vh.list.setAdapter(adapter);

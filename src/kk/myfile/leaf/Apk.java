@@ -65,8 +65,8 @@ public class Apk extends Leaf implements IThumable {
 				installed = true;
 			} catch (Exception e) {
 			}
-			putDetail(list, 2, R.string.word_state, AppUtil.getString(installed ? R.string.msg_already_installed
-				: R.string.msg_not_installed));
+			putDetail(list, 2, R.string.word_state, AppUtil
+				.getString(installed ? R.string.msg_already_installed : R.string.msg_not_installed));
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}

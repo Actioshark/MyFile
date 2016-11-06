@@ -20,8 +20,7 @@ public class Broadcast {
 
 	private static final Map<String, Map<IListener, Node>> sMap = new HashMap<String, Map<IListener, Node>>();
 
-	public static synchronized void addListener(IListener listener,
-			String name, boolean onUiThread) {
+	public static synchronized void addListener(IListener listener, String name, boolean onUiThread) {
 
 		Map<IListener, Node> map = sMap.get(name);
 
@@ -33,8 +32,7 @@ public class Broadcast {
 		map.put(listener, new Node(listener, onUiThread));
 	}
 
-	public static synchronized void removeLsitener(IListener listener,
-			String name) {
+	public static synchronized void removeLsitener(IListener listener, String name) {
 		Map<IListener, Node> map = sMap.get(name);
 
 		if (map != null) {

@@ -30,17 +30,16 @@ public class InputDialog extends Dialog {
 		Window window = getWindow();
 		LayoutParams lp = window.getAttributes();
 		lp.width = Math.min(AppUtil.getDimenInt(R.dimen.dialog_width),
-				AppUtil.getScreenWidth() * 9 / 10);
+			AppUtil.getScreenWidth() * 9 / 10);
 		lp.height = Math.min(AppUtil.getDimenInt(R.dimen.dialog_height),
-				AppUtil.getScreenHeight() * 8 / 10);
+			AppUtil.getScreenHeight() * 8 / 10);
 		window.setAttributes(lp);
 
 		mTvMessage = (TextView) findViewById(R.id.tv_message);
-		
+
 		mEtInput = (EditText) findViewById(R.id.et_input);
 
-		findViewById(R.id.iv_cancel).
-		setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (mClickListener != null) {
@@ -48,9 +47,8 @@ public class InputDialog extends Dialog {
 				}
 			}
 		});
-		
-		findViewById(R.id.iv_confirm).
-		setOnClickListener(new View.OnClickListener() {
+
+		findViewById(R.id.iv_confirm).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (mClickListener != null) {
@@ -58,7 +56,7 @@ public class InputDialog extends Dialog {
 				}
 			}
 		});
-		
+
 		setCanceledOnTouchOutside(true);
 		setOnCancelListener(new OnCancelListener() {
 			@Override
@@ -68,9 +66,9 @@ public class InputDialog extends Dialog {
 				}
 			}
 		});
-		
-		window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
-            WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+		window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+			| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 	}
 
 	public void setMessage(int resId) {
@@ -80,19 +78,19 @@ public class InputDialog extends Dialog {
 	public void setMessage(String text) {
 		mTvMessage.setText(text);
 	}
-	
+
 	public void setInput(String text) {
 		mEtInput.setText(text);
 	}
-	
+
 	public String getInput() {
 		return mEtInput.getText().toString();
 	}
-	
+
 	public void setSelection(int index) {
 		mEtInput.setSelection(index);
 	}
-	
+
 	public void setSelection(int start, int stop) {
 		mEtInput.setSelection(start, stop);
 	}

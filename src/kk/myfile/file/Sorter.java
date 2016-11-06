@@ -18,13 +18,12 @@ import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 public class Sorter {
-	
+
 	public static enum SortType {
 		Directory, ModifyTime, Name, Path, Size, Subfix,
 	}
 
-	public static abstract class SortFactor implements Comparator<Leaf>,
-			Cloneable {
+	public static abstract class SortFactor implements Comparator<Leaf>, Cloneable {
 
 		public final SortType type;
 		public final String text;
@@ -55,7 +54,7 @@ public class Sorter {
 			if (temp == null) {
 				temp = new SortFactorDirectory();
 			}
-			
+
 			temp.up = up;
 
 			return temp;
@@ -72,7 +71,7 @@ public class Sorter {
 			return false;
 		}
 	}
-	
+
 	public static class SortFactorDirectory extends SortFactor {
 		public SortFactorDirectory() {
 			super(SortType.Directory);
@@ -82,7 +81,7 @@ public class Sorter {
 		public int cmp(Leaf a, Leaf b) {
 			boolean ad = a.getFile().isDirectory();
 			boolean bd = b.getFile().isDirectory();
-			
+
 			if (ad == bd) {
 				return 0;
 			} else if (ad) {
@@ -170,32 +169,31 @@ public class Sorter {
 		public int cmp(Leaf a, Leaf b) {
 			String an = a.getFile().getName();
 			String bn = b.getFile().getName();
-			
+
 			int ai = an.lastIndexOf('.');
 			String as = "";
 			if (ai != -1) {
 				as = an.substring(ai + 1, an.length()).toLowerCase(Setting.LOCALE);
 			}
-			
+
 			int bi = bn.lastIndexOf('.');
 			String bs = "";
 			if (bi != -1) {
 				bs = bn.substring(bi + 1, bn.length()).toLowerCase(Setting.LOCALE);
 			}
-			
+
 			return as.compareTo(bs);
 		}
 	}
 
-	private static final Map<Classify, List<SortFactor>> sFactors =
-			new HashMap<Classify, List<SortFactor>>();
+	private static final Map<Classify, List<SortFactor>> sFactors = new HashMap<Classify, List<SortFactor>>();
 
 	private static SortFactor createFactor(String type) {
 		SortFactor factor = null;
 
 		try {
-			factor = (SortFactor) Class.forName(
-					"kk.myfile.file.Sorter$SortFactor" + type).newInstance();
+			factor = (SortFactor) Class.forName("kk.myfile.file.Sorter$SortFactor" + type)
+				.newInstance();
 		} catch (Exception e) {
 			Logger.print(null, e, type);
 		}
@@ -240,22 +238,19 @@ public class Sorter {
 
 	public static synchronized List<SortFactor> getFactors(Classify classify) {
 		List<SortFactor> list = sFactors.get(classify);
-		
+
 		if (list == null) {
 			list = new ArrayList<SortFactor>();
 
 			SortFactor[] array;
 			if (classify == Classify.Type) {
 				array = new SortFactor[] {
-					new SortFactorPath(), new SortFactorName(),
-					new SortFactorModifyTime(),
+					new SortFactorPath(), new SortFactorName(), new SortFactorModifyTime(),
 					new SortFactorSize(), new SortFactorSubfix(),
 				};
 			} else {
-				array = new SortFactor[] { 
-					new SortFactorDirectory(),
-					new SortFactorName(),
-					new SortFactorModifyTime(),
+				array = new SortFactor[] {
+					new SortFactorDirectory(), new SortFactorName(), new SortFactorModifyTime(),
 					new SortFactorSize(), new SortFactorSubfix(),
 				};
 			}
@@ -274,7 +269,7 @@ public class Sorter {
 					SortFactor factor = createFactor(type);
 					if (factor != null) {
 						factor.up = up;
-	
+
 						for (int j = 0; j < array.length; j++) {
 							if (array[j] != null && array[j].type == factor.type) {
 								list.add(factor);
@@ -292,10 +287,10 @@ public class Sorter {
 					list.add(array[j]);
 				}
 			}
-			
+
 			sFactors.put(classify, list);
 		}
-		
+
 		return cloneFactors(list);
 	}
 
@@ -312,7 +307,7 @@ public class Sorter {
 
 	public static void sort(Classify classify, List<? extends Leaf> list) {
 		final List<SortFactor> factors = getFactors(classify);
-		
+
 		Collections.sort(list, new Comparator<Leaf>() {
 			@Override
 			public int compare(Leaf a, Leaf b) {
@@ -320,10 +315,10 @@ public class Sorter {
 			}
 		});
 	}
-	
+
 	public static void sort(Classify classify, Leaf[] list) {
 		final List<SortFactor> factors = getFactors(classify);
-		
+
 		Arrays.sort(list, new Comparator<Leaf>() {
 			@Override
 			public int compare(Leaf a, Leaf b) {

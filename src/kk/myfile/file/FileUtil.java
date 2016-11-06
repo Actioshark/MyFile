@@ -45,15 +45,14 @@ public class FileUtil {
 			Logger.print(null, e);
 		}
 	}
-	
+
 	public static String getType(Leaf leaf) {
 		String path = leaf.getPath();
 		String name = path.substring(path.lastIndexOf('/') + 1);
 		int pointIndex = name.lastIndexOf('.');
-		
+
 		if (pointIndex != -1) {
-			String subfix = name.substring(pointIndex + 1).toLowerCase(
-				Setting.LOCALE);
+			String subfix = name.substring(pointIndex + 1).toLowerCase(Setting.LOCALE);
 
 			try {
 				JSONObject map = sTypeMap.getJSONObject(subfix);
@@ -61,7 +60,7 @@ public class FileUtil {
 			} catch (Exception e) {
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -74,8 +73,7 @@ public class FileUtil {
 		String name = file.getName();
 		int pointIndex = name.lastIndexOf('.');
 		if (pointIndex != -1) {
-			String subfix = name.substring(pointIndex + 1).toLowerCase(
-				Setting.LOCALE);
+			String subfix = name.substring(pointIndex + 1).toLowerCase(Setting.LOCALE);
 
 			try {
 				JSONObject map = sTypeMap.getJSONObject(subfix);
@@ -104,19 +102,19 @@ public class FileUtil {
 	@SuppressLint("NewApi")
 	public static long getTotalSize() {
 		StatFs sf = new StatFs(Setting.DEFAULT_PATH);
-		
+
 		if (Build.VERSION.SDK_INT < 18) {
 			return sf.getBlockSize() * sf.getBlockCount();
 		} else {
 			return sf.getTotalBytes();
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	public static long getAvailSize() {
 		StatFs sf = new StatFs(Setting.DEFAULT_PATH);
-		
+
 		if (Build.VERSION.SDK_INT < 18) {
 			return sf.getBlockSize() * sf.getAvailableBlocks();
 		} else {
@@ -264,7 +262,7 @@ public class FileUtil {
 
 		return false;
 	}
-	
+
 	public static boolean write(File from, File to, int xor) {
 		try {
 			InputStream is = new FileInputStream(from);
@@ -276,7 +274,7 @@ public class FileUtil {
 				for (int i = 0; i < len; i++) {
 					buf[i] = (byte) (buf[i] ^ xor);
 				}
-				
+
 				os.write(buf, 0, len);
 			}
 

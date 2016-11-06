@@ -17,27 +17,27 @@ import kk.myfile.util.Logger;
 
 public class Image extends Leaf implements IThumable {
 	public static final String TYPE = "image/*";
-	
+
 	public static final int COLOR = 0xff0000cc;
-	
+
 	public Image(String path) {
 		super(path);
 	}
-	
+
 	@Override
 	public int getIcon() {
 		return R.drawable.file_image;
 	}
-	
+
 	@Override
 	public int getTypeName() {
 		return R.string.type_image;
 	}
-	
+
 	@Override
 	public List<Data> getDetail() {
 		List<Data> list = super.getDetail();
-		
+
 		try {
 			Options op = getOptions();
 			putDetail(list, 2, R.string.word_minetype, op.outMimeType);
@@ -46,21 +46,21 @@ public class Image extends Leaf implements IThumable {
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}
-		
+
 		return list;
 	}
-	
+
 	@Override
 	public Drawable getThum(int width, int height) throws Exception {
 		Options size = getOptions();
-		
+
 		int sw = (size.outWidth + width - 1) / width;
 		int sh = (size.outHeight + height - 1) / height;
-		
+
 		Options op = new Options();
 		op.inSampleSize = Math.min(sw, sh);
 		op.inScaled = true;
-		
+
 		Bitmap bmp = BitmapFactory.decodeFile(mPath, op);
 		int bw = bmp.getWidth();
 		int bh = bmp.getHeight();
@@ -68,24 +68,24 @@ public class Image extends Leaf implements IThumable {
 		int rh = Math.min(bh, height);
 		int x = (bw - rw) / 2;
 		int y = (bh - rh) / 2;
-		
+
 		int[] pixels = new int[rw * rh];
 		bmp.getPixels(pixels, 0, rw, x, y, rw, rh);
-		
+
 		Config config = bmp.getConfig();
 		if (config == null) {
 			config = Config.ARGB_8888;
 		}
 		bmp = Bitmap.createBitmap(pixels, rw, rh, config);
-	
+
 		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
-	
+
 	public Options getOptions() throws Exception {
 		Options size = new Options();
 		size.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(mPath, size);
-		
+
 		return size;
 	}
 }

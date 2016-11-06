@@ -79,7 +79,8 @@ public class Tree {
 			@Override
 			public void run() {
 				sTypeDirect = new ArrayList<Leaf>();
-				new Direct(Setting.DEFAULT_PATH).loadChildren(sTypeDirect, !Setting.getShowHidden(), true);
+				new Direct(Setting.DEFAULT_PATH).loadChildren(sTypeDirect,
+					!Setting.getShowHidden(), true);
 
 				synchronized (sIsTypeDirectRefreshing) {
 					sIsTypeDirectRefreshing = false;

@@ -57,6 +57,7 @@ import android.widget.TextView;
 
 public class DirectActivity extends BaseActivity {
 	public static final String KEY_PATH = "direct_path";
+	public static final String KEY_CUR_CHILD = "direct_cur_child";
 
 	public static class Node {
 		public Direct direct;
@@ -69,6 +70,7 @@ public class DirectActivity extends BaseActivity {
 
 	private Node mNode;
 	private final List<Node> mHistory = new ArrayList<Node>();
+	private String mCurChild;
 
 	private Mode mMode = Mode.Normal;
 
@@ -185,6 +187,8 @@ public class DirectActivity extends BaseActivity {
 		// 数据
 		String path = getIntent().getStringExtra(KEY_PATH);
 		Direct direct = new Direct(path);
+		
+		mCurChild = getIntent().getStringExtra(KEY_CUR_CHILD);
 
 		setContentView(R.layout.activity_direct);
 
@@ -583,21 +587,21 @@ public class DirectActivity extends BaseActivity {
 												path = path + ".xor";
 											}
 											File to = new File(path);
-		
+
 											String ret = FileUtil.createFile(to);
 											if (ret != null) {
 												App.showToast(ret);
 												continue;
 											}
-		
+
 											File from = leaf.getFile();
-		
+
 											boolean suc = FileUtil.write(from, to, 0xff);
 											if (suc == false) {
 												App.showToast(R.string.err_file_read_error);
 												continue;
 											}
-		
+
 											ret = FileUtil.delete(from);
 											if (ret != null) {
 												App.showToast(ret);
@@ -861,6 +865,20 @@ public class DirectActivity extends BaseActivity {
 	}
 
 	public void setSelection(int position) {
+		if (mCurChild != null) {
+			List<Leaf> children = mNode.direct.getChildren();
+			synchronized (children) {
+				int size = children.size();
+				
+				for (int i = 0; i < size; i++) {
+					if (mCurChild.equals(children.get(i).getPath())) {
+						position = i;
+						break;
+					}
+				}
+			}
+		}
+		
 		if (position >= 0 && position < mDirectAdapter.getCount()) {
 			mGvList.setSelection(position);
 		}

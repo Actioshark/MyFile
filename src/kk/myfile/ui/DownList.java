@@ -15,7 +15,7 @@ public class DownList extends Dialog {
 	public static final int POS_START = 0;
 	public static final int POS_CENTER = 1;
 	public static final int POS_END = 2;
-	
+
 	private ListView mLvList;
 	private DownListAdapter mAdapter;
 
@@ -30,7 +30,7 @@ public class DownList extends Dialog {
 		mLvList = (ListView) findViewById(R.id.lv_list);
 		mAdapter = new DownListAdapter(getContext(), this);
 		mLvList.setAdapter(mAdapter);
-		
+
 		setCanceledOnTouchOutside(true);
 	}
 
@@ -43,11 +43,11 @@ public class DownList extends Dialog {
 		LayoutParams lp = window.getAttributes();
 
 		int screenWidth = AppUtil.getScreenWidth() - horPadding - AppUtil.getPixcel(5);
-		
-		lp.width = AppUtil.getDimenInt(R.dimen.downlist_grid_width) + 
-				AppUtil.getDimenInt(R.dimen.downlist_gap) * 2;
+
+		lp.width = AppUtil.getDimenInt(R.dimen.downlist_grid_width)
+			+ AppUtil.getDimenInt(R.dimen.downlist_gap) * 2;
 		if (horPos == POS_START) {
-			lp.x = - (screenWidth - lp.width) / 2;
+			lp.x = -(screenWidth - lp.width) / 2;
 		} else if (horPos == POS_END) {
 			lp.x = (screenWidth - lp.width) / 2;
 		} else {
@@ -57,7 +57,7 @@ public class DownList extends Dialog {
 		int gridHeight = AppUtil.getDimenInt(R.dimen.downlist_grid_height);
 		int divider = mLvList.getDividerHeight();
 		int screenHeight = AppUtil.getScreenHeight() - verPadding - AppUtil.getPixcel(20);
-		
+
 		lp.height = (gridHeight + divider) * mAdapter.getCount() + divider;
 		if (lp.height > screenHeight) {
 			lp.height = screenHeight;

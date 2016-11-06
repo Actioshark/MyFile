@@ -50,43 +50,43 @@ public class TypeAdapter extends BaseAdapter {
 	private final TypeActivity mActivity;
 	private final Classify mClassify;
 	private final ListStyle mListStyle;
-	
+
 	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
-	
+
 	private long mTouchDownTime;
 	private Runnable mTouchRunnable;
-	
+
 	public TypeAdapter(TypeActivity activity, Classify classify, ListStyle ls) {
 		mActivity = activity;
 		mClassify = classify;
 		mListStyle = ls;
 	}
-	
+
 	public void setData(final List<Leaf> data) {
 		if (mClassify != Classify.Type) {
 			mData.clear();
 			synchronized (data) {
 				mData.addAll(data);
 			}
-			
+
 			mActivity.updateTitle();
 			mActivity.updateInfo();
 			notifyDataSetChanged();
-			
+
 			return;
 		}
-		
+
 		mMark = data;
-		
+
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
 				synchronized (data) {
 					Sorter.sort(Classify.Type, data);
 				}
-				
+
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
@@ -95,7 +95,7 @@ public class TypeAdapter extends BaseAdapter {
 							synchronized (data) {
 								mData.addAll(data);
 							}
-							
+
 							mActivity.updateTitle();
 							mActivity.updateInfo();
 							notifyDataSetChanged();
@@ -105,7 +105,7 @@ public class TypeAdapter extends BaseAdapter {
 			}
 		});
 	}
-	
+
 	@Override
 	public int getCount() {
 		return mData.size();
@@ -120,36 +120,36 @@ public class TypeAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return 0;
 	}
-	
+
 	public List<Leaf> getSelected() {
 		List<Leaf> list = new ArrayList<Leaf>();
 		int size = mData.size();
-		
+
 		for (int i = 0; i < size; i++) {
 			if (mSelected.contains(i)) {
 				list.add(mData.get(i));
 			}
 		}
-		
+
 		return list;
 	}
-	
+
 	public int getSelectedCount() {
 		return mSelected.size();
 	}
-	
+
 	public void selectAll(boolean select) {
 		if (select) {
 			mSelected.clear();
-			
+
 			int len = getCount();
-			for (int i = 0 ; i < len; i++) {
+			for (int i = 0; i < len; i++) {
 				mSelected.add(i);
 			}
 		} else {
 			mSelected.clear();
 		}
-		
+
 		mActivity.updateTitle();
 		mActivity.updateInfo();
 		notifyDataSetChanged();
@@ -158,10 +158,10 @@ public class TypeAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 		final ViewHolder holder;
-		
+
 		if (view == null) {
 			view = mActivity.getLayoutInflater().inflate(mListStyle.layout, null);
-			
+
 			holder = new ViewHolder();
 			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
 			holder.name = (TextView) view.findViewById(R.id.tv_name);
@@ -170,28 +170,28 @@ public class TypeAdapter extends BaseAdapter {
 			holder.sign = (ImageView) view.findViewById(R.id.iv_sign);
 			holder.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(holder);
-			
+
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View view, MotionEvent event) {
 					int action = event.getAction();
-					
+
 					if (action == MotionEvent.ACTION_DOWN) {
 						if (mListStyle.needDetail) {
 							mActivity.showDetail(holder.leaf);
 						}
-						
+
 						mTouchDownTime = SystemClock.elapsedRealtime();
 						mTouchRunnable = new Runnable() {
 							@Override
 							public void run() {
 								mTouchRunnable = null;
-								
+
 								List<Leaf> selected = getSelected();
-								if (selected.size() < 1) { 
+								if (selected.size() < 1) {
 									selected = mData;
 								}
-								
+
 								int index = 0;
 								for (int i = 0; i < selected.size(); i++) {
 									if (selected.get(i) == holder.leaf) {
@@ -199,10 +199,10 @@ public class TypeAdapter extends BaseAdapter {
 										break;
 									}
 								}
-								
+
 								Intent intent = new Intent(mActivity, DetailActivity.class);
 								intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH,
-										DataUtil.leaf2PathCs(selected));
+									DataUtil.leaf2PathCs(selected));
 								intent.putExtra(DetailActivity.KEY_INDEX, index);
 								mActivity.startActivity(intent);
 							}
@@ -212,9 +212,9 @@ public class TypeAdapter extends BaseAdapter {
 						if (mTouchRunnable != null) {
 							AppUtil.removeUiThread(mTouchRunnable);
 							mTouchRunnable = null;
-							
+
 							long delta = SystemClock.elapsedRealtime() - mTouchDownTime;
-							
+
 							if (delta < 300) {
 								if (mActivity.getMode() == Mode.Select) {
 									if (mSelected.contains(holder.position)) {
@@ -222,7 +222,7 @@ public class TypeAdapter extends BaseAdapter {
 									} else {
 										mSelected.add(holder.position);
 									}
-									
+
 									mActivity.updateTitle();
 									mActivity.updateInfo();
 									notifyDataSetChanged();
@@ -232,32 +232,37 @@ public class TypeAdapter extends BaseAdapter {
 										dialog.setCanceledOnTouchOutside(true);
 										dialog.setMessage(R.string.msg_open_as);
 										dialog.setButtons(R.string.type_text, R.string.type_image,
-												R.string.type_audio, R.string.type_video, R.string.word_any);
+											R.string.type_audio, R.string.type_video,
+											R.string.word_any);
 										dialog.setClickListener(new IDialogClickListener() {
 											@Override
 											public void onClick(Dialog dialog, int index) {
 												switch (index) {
 												case 0:
-													IntentUtil.view(mActivity, holder.leaf, Text.TYPE);
+													IntentUtil.view(mActivity, holder.leaf,
+														Text.TYPE);
 													break;
-													
+
 												case 1:
-													IntentUtil.view(mActivity, holder.leaf, Image.TYPE);
+													IntentUtil.view(mActivity, holder.leaf,
+														Image.TYPE);
 													break;
-													
+
 												case 2:
-													IntentUtil.view(mActivity, holder.leaf, Audio.TYPE);
+													IntentUtil.view(mActivity, holder.leaf,
+														Audio.TYPE);
 													break;
-													
+
 												case 3:
-													IntentUtil.view(mActivity, holder.leaf, Video.TYPE);
+													IntentUtil.view(mActivity, holder.leaf,
+														Video.TYPE);
 													break;
-												
+
 												case 4:
 													IntentUtil.view(mActivity, holder.leaf, "*/*");
 													break;
 												}
-												
+
 												dialog.dismiss();
 											}
 										});
@@ -271,7 +276,7 @@ public class TypeAdapter extends BaseAdapter {
 									} else {
 										mSelected.add(holder.position);
 									}
-	
+
 									mActivity.updateTitle();
 									mActivity.updateInfo();
 									notifyDataSetChanged();
@@ -288,11 +293,11 @@ public class TypeAdapter extends BaseAdapter {
 							mTouchRunnable = null;
 						}
 					}
-					
+
 					return view.onTouchEvent(event);
 				}
 			});
-			
+
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -301,44 +306,45 @@ public class TypeAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-		
+
 		final Leaf leaf = mData.get(position);
 		final File file = leaf.getFile();
-		
+
 		holder.name.setText(file.getName());
-		
+
 		if (leaf.equals(holder.leaf) == false || holder.hasThum == false) {
 			holder.hasThum = false;
 			holder.icon.setImageResource(leaf.getIcon());
-			
-			ImageUtil.getThum(leaf, holder.icon.getWidth(), holder.icon.getHeight(), new IThumListenner() {
-				@Override
-				public void onThumGot(Drawable drawable) {
-					if (leaf.equals(holder.leaf)) {
-						holder.hasThum = true;
-						holder.icon.setImageDrawable(drawable);
+
+			ImageUtil.getThum(leaf, holder.icon.getWidth(), holder.icon.getHeight(),
+				new IThumListenner() {
+					@Override
+					public void onThumGot(Drawable drawable) {
+						if (leaf.equals(holder.leaf)) {
+							holder.hasThum = true;
+							holder.icon.setImageDrawable(drawable);
+						}
 					}
-				}
-			});
+				});
 		}
-		
+
 		if (holder.time != null) {
 			Date date = new Date(file.lastModified());
 			DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
 			holder.time.setText(df.format(date));
 		}
-		
+
 		if (holder.size != null) {
 			if (leaf instanceof Direct) {
 				holder.size.setText("");
 			} else {
-				holder.size.setText(String.format(Setting.LOCALE,
-					"%s B", MathUtil.insertComma(file.length())));
+				holder.size.setText(String.format(Setting.LOCALE, "%s B", MathUtil.insertComma(file
+					.length())));
 			}
 		}
-		
+
 		holder.sign.setVisibility(FileUtil.isLink(file) ? View.VISIBLE : View.GONE);
-		
+
 		if (mActivity.getMode() == Mode.Select) {
 			if (mSelected.contains(position)) {
 				holder.select.setImageResource(R.drawable.multi_select_pre);
@@ -349,10 +355,10 @@ public class TypeAdapter extends BaseAdapter {
 		} else {
 			holder.select.setVisibility(View.GONE);
 		}
-		
+
 		holder.leaf = leaf;
 		holder.position = position;
-		
+
 		return view;
 	}
 
@@ -360,7 +366,7 @@ public class TypeAdapter extends BaseAdapter {
 		public Leaf leaf;
 		public int position;
 		public boolean hasThum;
-		
+
 		public ImageView icon;
 		public TextView name;
 		public TextView time;

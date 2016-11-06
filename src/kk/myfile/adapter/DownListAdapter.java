@@ -19,7 +19,7 @@ public class DownListAdapter extends BaseAdapter {
 	public static class DataItem {
 		public int icon;
 		public int text;
-		
+
 		public IDialogClickListener click;
 		public IDialogClickListener longClick;
 
@@ -31,10 +31,10 @@ public class DownListAdapter extends BaseAdapter {
 			this.text = text;
 			this.click = click;
 		}
-		
+
 		public DataItem(int icon, int text, IDialogClickListener click,
-				IDialogClickListener longClick) {
-			
+			IDialogClickListener longClick) {
+
 			this.icon = icon;
 			this.text = text;
 			this.click = click;
@@ -75,8 +75,7 @@ public class DownListAdapter extends BaseAdapter {
 		final ViewHolder vh;
 
 		if (view == null) {
-			view = LayoutInflater.from(mContext)
-					.inflate(R.layout.grid_list_down, null);
+			view = LayoutInflater.from(mContext).inflate(R.layout.grid_list_down, null);
 
 			vh = new ViewHolder();
 			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
@@ -90,7 +89,7 @@ public class DownListAdapter extends BaseAdapter {
 					mDownList.dismiss();
 				}
 			});
-			
+
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View view) {
@@ -98,9 +97,9 @@ public class DownListAdapter extends BaseAdapter {
 					if (data.longClick == null) {
 						return false;
 					}
-					
+
 					data.longClick.onClick(mDownList, vh.index);
-					
+
 					mDownList.dismiss();
 					return true;
 				}

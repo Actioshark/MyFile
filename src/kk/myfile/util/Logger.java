@@ -20,9 +20,8 @@ public class Logger {
 		if (stack.length > 1) {
 			StackTraceElement element = stack[1];
 
-			sb.append(element.getFileName()).append('-')
-				.append(element.getLineNumber()).append(':')
-				.append(element.getMethodName()).append("()\n");
+			sb.append(element.getFileName()).append('-').append(element.getLineNumber())
+				.append(':').append(element.getMethodName()).append("()\n");
 		}
 
 		for (Object obj : args) {
@@ -49,9 +48,8 @@ public class Logger {
 		if (stack.length > 1) {
 			StackTraceElement element = stack[1];
 
-			sb.append(element.getFileName()).append('-')
-				.append(element.getLineNumber()).append(':')
-				.append(element.getMethodName()).append("()\n");
+			sb.append(element.getFileName()).append('-').append(element.getLineNumber())
+				.append(':').append(element.getMethodName()).append("()\n");
 		}
 
 		for (Object obj : args) {

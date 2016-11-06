@@ -27,9 +27,9 @@ public class SimpleDialog extends Dialog {
 		Window window = getWindow();
 		LayoutParams lp = window.getAttributes();
 		lp.width = Math.min(AppUtil.getDimenInt(R.dimen.dialog_width),
-				AppUtil.getScreenWidth() * 9 / 10);
+			AppUtil.getScreenWidth() * 9 / 10);
 		lp.height = Math.min(AppUtil.getDimenInt(R.dimen.dialog_height),
-				AppUtil.getScreenHeight() * 8 / 10);
+			AppUtil.getScreenHeight() * 8 / 10);
 		window.setAttributes(lp);
 
 		mTvMessage = (TextView) findViewById(R.id.tv_message);
@@ -48,7 +48,7 @@ public class SimpleDialog extends Dialog {
 				}
 			});
 		}
-		
+
 		setCanceledOnTouchOutside(true);
 		setOnCancelListener(new OnCancelListener() {
 			@Override
@@ -75,7 +75,7 @@ public class SimpleDialog extends Dialog {
 				if (btn instanceof Integer) {
 					btn = AppUtil.getString((Integer) btn);
 				}
-				
+
 				mTvButtons[i].setText(String.valueOf(btn));
 				mTvButtons[i].setVisibility(View.VISIBLE);
 			} else {
