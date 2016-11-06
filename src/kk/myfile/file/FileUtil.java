@@ -264,4 +264,30 @@ public class FileUtil {
 
 		return false;
 	}
+	
+	public static boolean write(File from, File to, int xor) {
+		try {
+			InputStream is = new FileInputStream(from);
+			OutputStream os = new FileOutputStream(to);
+			byte[] buf = new byte[1024 * 1024];
+			int len = 0;
+
+			while ((len = is.read(buf)) != -1) {
+				for (int i = 0; i < len; i++) {
+					buf[i] = (byte) (buf[i] ^ xor);
+				}
+				
+				os.write(buf, 0, len);
+			}
+
+			is.close();
+			os.close();
+
+			return true;
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+
+		return false;
+	}
 }

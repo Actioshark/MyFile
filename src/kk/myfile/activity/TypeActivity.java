@@ -12,6 +12,7 @@ import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.adapter.DownListAdapter.DataItem;
 import kk.myfile.adapter.TypeAdapter;
 import kk.myfile.file.ClipBoard;
+import kk.myfile.file.FileUtil;
 import kk.myfile.file.Tree;
 import kk.myfile.file.ClipBoard.ClipType;
 import kk.myfile.file.Tree.IProgressCallback;
@@ -480,40 +481,79 @@ public class TypeActivity extends BaseActivity {
 			}
 			
 			if (hasDirect == false && selected.size() == 1) {
-				list.add(new DataItem(R.drawable.edit, R.string.word_edit, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index) {
-						if (IntentUtil.edit(TypeActivity.this, first, null)) {
-							setMode(Mode.Normal);
-						} else {
-							SimpleDialog st = new SimpleDialog(TypeActivity.this);
-							st.setCanceledOnTouchOutside(true);
-							st.setMessage(R.string.msg_edit_as);
-							st.setButtons(R.string.type_text, R.string.type_image, R.string.word_any);
-							st.setClickListener(new IDialogClickListener() {
+				list.add(new DataItem(R.drawable.edit, R.string.word_edit,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							if (IntentUtil.edit(TypeActivity.this, first, null)) {
+								setMode(Mode.Normal);
+							} else {
+								SimpleDialog st = new SimpleDialog(TypeActivity.this);
+								st.setCanceledOnTouchOutside(true);
+								st.setMessage(R.string.msg_edit_as);
+								st.setButtons(R.string.type_text, R.string.type_image, R.string.word_any);
+								st.setClickListener(new IDialogClickListener() {
+									@Override
+									public void onClick(Dialog dialog, int index) {
+										switch (index) {
+										case 0:
+											IntentUtil.edit(TypeActivity.this, first, Text.TYPE);
+											break;
+											
+										case 1:
+											IntentUtil.edit(TypeActivity.this, first, Image.TYPE);
+											break;
+											
+										case 2:
+											IntentUtil.edit(TypeActivity.this, first, "*/*");
+											break;
+										}
+										
+										dialog.dismiss();
+									}
+								});
+								st.show();
+							}
+						}
+					},
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index) {
+							AppUtil.runOnNewThread(new Runnable() {
 								@Override
-								public void onClick(Dialog dialog, int index) {
-									switch (index) {
-									case 0:
-										IntentUtil.edit(TypeActivity.this, first, Text.TYPE);
-										break;
-										
-									case 1:
-										IntentUtil.edit(TypeActivity.this, first, Image.TYPE);
-										break;
-										
-									case 2:
-										IntentUtil.edit(TypeActivity.this, first, "*/*");
-										break;
+								public void run() {
+									String path = first.getPath();
+									if (path.endsWith(".xor")) {
+										path = path.substring(0, path.length() - 4);
+									} else {
+										path = path + ".xor";
+									}
+									File to = new File(path);
+									
+									String ret = FileUtil.createFile(to);
+									if (ret != null) {
+										App.showToast(ret);
+										return;
 									}
 									
-									dialog.dismiss();
+									File from = first.getFile();
+									
+									boolean suc = FileUtil.write(from, to, 0xff);
+									if (suc == false) {
+										App.showToast(R.string.err_file_read_error);
+										return;
+									}
+									
+									ret = FileUtil.delete(from);
+									if (ret != null) {
+										App.showToast(ret);
+										return;
+									}
 								}
 							});
-							st.show();
 						}
 					}
-				}));
+				));
 			}
 			
 			list.add(new DataItem(R.drawable.cross, R.string.word_delete, new IDialogClickListener() {

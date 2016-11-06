@@ -8,6 +8,7 @@ import kk.myfile.ui.IDialogClickListener;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -18,15 +19,26 @@ public class DownListAdapter extends BaseAdapter {
 	public static class DataItem {
 		public int icon;
 		public int text;
-		public IDialogClickListener listener;
+		
+		public IDialogClickListener click;
+		public IDialogClickListener longClick;
 
 		public DataItem() {
 		}
 
-		public DataItem(int icon, int text, IDialogClickListener listener) {
+		public DataItem(int icon, int text, IDialogClickListener click) {
 			this.icon = icon;
 			this.text = text;
-			this.listener = listener;
+			this.click = click;
+		}
+		
+		public DataItem(int icon, int text, IDialogClickListener click,
+				IDialogClickListener longClick) {
+			
+			this.icon = icon;
+			this.text = text;
+			this.click = click;
+			this.longClick = longClick;
 		}
 	}
 
@@ -74,8 +86,23 @@ public class DownListAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View view) {
 					DataItem data = mData.get(vh.index);
-					data.listener.onClick(mDownList, vh.index);
+					data.click.onClick(mDownList, vh.index);
 					mDownList.dismiss();
+				}
+			});
+			
+			view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View view) {
+					DataItem data = mData.get(vh.index);
+					if (data.longClick == null) {
+						return false;
+					}
+					
+					data.longClick.onClick(mDownList, vh.index);
+					
+					mDownList.dismiss();
+					return true;
 				}
 			});
 
