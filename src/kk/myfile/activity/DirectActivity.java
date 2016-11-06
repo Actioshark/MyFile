@@ -187,7 +187,7 @@ public class DirectActivity extends BaseActivity {
 		// 数据
 		String path = getIntent().getStringExtra(KEY_PATH);
 		Direct direct = new Direct(path);
-		
+
 		mCurChild = getIntent().getStringExtra(KEY_CUR_CHILD);
 
 		setContentView(R.layout.activity_direct);
@@ -269,11 +269,6 @@ public class DirectActivity extends BaseActivity {
 			}
 		});
 
-		String key = Setting.getListStyle(Classify.Direct);
-		ListStyle ls = SettingListStyleActivity.getListStyle(key);
-		mGvList.setNumColumns(ls.column);
-		mGvList.setVerticalSpacing(ls.vertSpace);
-
 		// 详情
 		mLlDetail = findViewById(R.id.ll_detail);
 		mIvDetailIcon = (ImageView) mLlDetail.findViewById(R.id.iv_icon);
@@ -307,7 +302,14 @@ public class DirectActivity extends BaseActivity {
 		});
 
 		// 开始
-		changeDirect(new Node(direct), false);
+		mNode = new Node(direct);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		refreshDirect();
 	}
 
 	public Mode getMode() {
@@ -442,6 +444,9 @@ public class DirectActivity extends BaseActivity {
 	}
 
 	public void refreshDirect() {
+		// 主题样式
+		updateStyle();
+
 		// 合法性
 		try {
 			File file = mNode.direct.getFile();
@@ -480,6 +485,13 @@ public class DirectActivity extends BaseActivity {
 		}
 
 		return false;
+	}
+
+	private void updateStyle() {
+		String key = Setting.getListStyle(Classify.Direct);
+		ListStyle ls = SettingListStyleActivity.getListStyle(key);
+		mGvList.setNumColumns(ls.column);
+		mGvList.setVerticalSpacing(ls.vertSpace);
 	}
 
 	public void updateTitle() {
@@ -859,6 +871,15 @@ public class DirectActivity extends BaseActivity {
 						setMode(Mode.Select);
 					}
 				}));
+
+			list.add(new DataItem(R.drawable.setting, R.string.word_setting,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						Intent intent = new Intent(DirectActivity.this, SettingActivity.class);
+						startActivity(intent);
+					}
+				}));
 		}
 
 		dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
@@ -869,7 +890,7 @@ public class DirectActivity extends BaseActivity {
 			List<Leaf> children = mNode.direct.getChildren();
 			synchronized (children) {
 				int size = children.size();
-				
+
 				for (int i = 0; i < size; i++) {
 					if (mCurChild.equals(children.get(i).getPath())) {
 						position = i;
@@ -877,10 +898,10 @@ public class DirectActivity extends BaseActivity {
 					}
 				}
 			}
-			
+
 			mCurChild = null;
 		}
-		
+
 		if (position >= 0 && position < mDirectAdapter.getCount()) {
 			mGvList.setSelection(position);
 		}

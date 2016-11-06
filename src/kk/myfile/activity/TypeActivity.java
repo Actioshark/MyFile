@@ -32,7 +32,6 @@ import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -224,14 +223,10 @@ public class TypeActivity extends BaseActivity {
 		});
 
 		// 文件列表
-		String key = Setting.getListStyle(mClassify);
-		ListStyle ls = SettingListStyleActivity.getListStyle(key);
 
-		mTypeAdapter = new TypeAdapter(this, mClassify, ls);
+		mTypeAdapter = new TypeAdapter(this, mClassify);
 		mGvList = (GridView) findViewById(R.id.gv_list);
 		mGvList.setAdapter(mTypeAdapter);
-		mGvList.setNumColumns(ls.column);
-		mGvList.setVerticalSpacing(ls.vertSpace);
 
 		// 详情
 		mLlDetail = findViewById(R.id.ll_detail);
@@ -260,9 +255,12 @@ public class TypeActivity extends BaseActivity {
 				}
 			}
 		});
+	}
 
-		// 开始
-		setMode(Mode.Normal);
+	@Override
+	public void onResume() {
+		super.onResume();
+
 		refresh(false);
 	}
 
@@ -285,6 +283,8 @@ public class TypeActivity extends BaseActivity {
 	}
 
 	public void refresh(boolean reload) {
+		updateStyle();
+
 		if (reload) {
 			Tree.refreshTypeDirect();
 		}
@@ -331,6 +331,13 @@ public class TypeActivity extends BaseActivity {
 				}
 			}
 		});
+	}
+
+	private void updateStyle() {
+		String key = Setting.getListStyle(mClassify);
+		ListStyle ls = SettingListStyleActivity.getListStyle(key);
+		mGvList.setNumColumns(ls.column);
+		mGvList.setVerticalSpacing(ls.vertSpace);
 	}
 
 	public void updateTitle() {
@@ -643,6 +650,15 @@ public class TypeActivity extends BaseActivity {
 					@Override
 					public void onClick(Dialog dialog, int index) {
 						setMode(Mode.Select);
+					}
+				}));
+
+			list.add(new DataItem(R.drawable.setting, R.string.word_setting,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index) {
+						Intent intent = new Intent(TypeActivity.this, SettingActivity.class);
+						startActivity(intent);
 					}
 				}));
 		}

@@ -1,7 +1,7 @@
 package kk.myfile.activity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public class SettingListStyleActivity extends BaseActivity {
 		}
 	}
 
-	private static final Map<String, ListStyle> sListMap = new HashMap<String, ListStyle>();
+	private static final Map<String, ListStyle> sListMap = new LinkedHashMap<String, ListStyle>();
 
 	static {
 		sListMap.put(getKey(1, 1), new ListStyle(R.layout.grid_direct_1_1, 7, 0, true));
@@ -39,6 +39,24 @@ public class SettingListStyleActivity extends BaseActivity {
 		sListMap.put(getKey(2, 1), new ListStyle(R.layout.grid_direct_2_1, 1, 4, false));
 		sListMap.put(getKey(2, 2), new ListStyle(R.layout.grid_direct_2_2, 1, 4, false));
 		sListMap.put(getKey(2, 3), new ListStyle(R.layout.grid_direct_2_3, 1, 4, false));
+	}
+
+	public static int getStyleSize() {
+		return sListMap.size();
+	}
+
+	public static int getStyleIndex(String key) {
+		int i = 0;
+
+		for (String k : sListMap.keySet()) {
+			if (k.equals(key)) {
+				return i;
+			}
+
+			i++;
+		}
+
+		return -1;
 	}
 
 	public static String getKey(int cls, int index) {

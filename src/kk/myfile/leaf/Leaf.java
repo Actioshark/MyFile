@@ -118,7 +118,7 @@ public abstract class Leaf {
 				public void onClick(Data data, ViewHolder vh) {
 					try {
 						File file = data.leaf.getFile().getCanonicalFile();
-						
+
 						Intent intent = new Intent(AppUtil.getContext(), DirectActivity.class);
 						intent.putExtra(DirectActivity.KEY_PATH, file.getParent());
 						intent.putExtra(DirectActivity.KEY_CUR_CHILD, file.getPath());

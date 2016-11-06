@@ -102,6 +102,17 @@ public class DirectAdapter extends BaseAdapter {
 	}
 
 	@Override
+	public int getViewTypeCount() {
+		return SettingListStyleActivity.getStyleSize();
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		String key = Setting.getListStyle(Classify.Direct);
+		return SettingListStyleActivity.getStyleIndex(key);
+	}
+
+	@Override
 	public Object getItem(int position) {
 		return null;
 	}

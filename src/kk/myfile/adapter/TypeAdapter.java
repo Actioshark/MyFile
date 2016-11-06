@@ -5,6 +5,7 @@ import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.activity.BaseActivity.Mode;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.activity.DetailActivity;
+import kk.myfile.activity.SettingListStyleActivity;
 import kk.myfile.activity.TypeActivity;
 import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
@@ -49,7 +50,6 @@ import android.widget.TextView;
 public class TypeAdapter extends BaseAdapter {
 	private final TypeActivity mActivity;
 	private final Classify mClassify;
-	private final ListStyle mListStyle;
 
 	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
@@ -58,10 +58,9 @@ public class TypeAdapter extends BaseAdapter {
 	private long mTouchDownTime;
 	private Runnable mTouchRunnable;
 
-	public TypeAdapter(TypeActivity activity, Classify classify, ListStyle ls) {
+	public TypeAdapter(TypeActivity activity, Classify classify) {
 		mActivity = activity;
 		mClassify = classify;
-		mListStyle = ls;
 	}
 
 	public void setData(final List<Leaf> data) {
@@ -109,6 +108,17 @@ public class TypeAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		return mData.size();
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		return SettingListStyleActivity.getStyleSize();
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		String key = Setting.getListStyle(mClassify);
+		return SettingListStyleActivity.getStyleIndex(key);
 	}
 
 	@Override
@@ -160,7 +170,9 @@ public class TypeAdapter extends BaseAdapter {
 		final ViewHolder holder;
 
 		if (view == null) {
-			view = mActivity.getLayoutInflater().inflate(mListStyle.layout, null);
+			String key = Setting.getListStyle(mClassify);
+			final ListStyle ls = SettingListStyleActivity.getListStyle(key);
+			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
 
 			holder = new ViewHolder();
 			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
@@ -177,7 +189,7 @@ public class TypeAdapter extends BaseAdapter {
 					int action = event.getAction();
 
 					if (action == MotionEvent.ACTION_DOWN) {
-						if (mListStyle.needDetail) {
+						if (ls.needDetail) {
 							mActivity.showDetail(holder.leaf);
 						}
 
