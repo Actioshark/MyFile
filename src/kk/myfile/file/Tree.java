@@ -31,10 +31,8 @@ public class Tree {
 		public void onProgress(ProgressType type);
 	}
 
-	public static List<Leaf> getDirect(String path) {
+	public static List<Leaf> getDirect(String path, final AtomicBoolean finish) {
 		final Direct direct = new Direct(path);
-		direct.setTag(direct);
-
 		final List<Leaf> list = new ArrayList<Leaf>();
 
 		AppUtil.runOnNewThread(new Runnable() {
@@ -42,9 +40,7 @@ public class Tree {
 			public void run() {
 				direct.loadChildren(list, !Setting.getShowHidden(), false);
 
-				synchronized (direct) {
-					direct.setTag(null);
-				}
+				finish.set(true);
 			}
 		});
 

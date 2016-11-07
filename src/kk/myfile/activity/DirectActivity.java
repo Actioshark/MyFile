@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import kk.myfile.R;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
@@ -33,6 +34,7 @@ import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -106,12 +108,12 @@ public class DirectActivity extends BaseActivity {
 				synchronized (mEtSearch) {
 					mSearchRun = new Runnable() {
 						public void run() {
-							List<Leaf> direct = Tree.getDirect(mNode.direct.getPath());
+							AtomicBoolean finish = new AtomicBoolean(false);
+							List<Leaf> direct = Tree.getDirect(mNode.direct.getPath(), finish);
 							final Runnable mark = this;
 
 							while (true) {
 								if (direct.size() > 0) {
-									boolean finished = direct.get(0).getTag() == null;
 									final List<Leaf> ret = Tree.search(direct, key);
 
 									synchronized (mEtSearch) {
@@ -130,7 +132,7 @@ public class DirectActivity extends BaseActivity {
 										});
 									}
 
-									if (finished) {
+									if (finish.get()) {
 										return;
 									}
 								}
