@@ -594,15 +594,6 @@ public class TypeActivity extends BaseActivity {
 					}
 				}));
 
-			list.add(new DataItem(R.drawable.copy, R.string.word_copy_to,
-				new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index) {
-						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_COPY_TO);
-					}
-				}));
-
 			list.add(new DataItem(R.drawable.copy, R.string.word_copy, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
@@ -613,13 +604,11 @@ public class TypeActivity extends BaseActivity {
 						App.showToast(R.string.err_nothing_selected);
 					}
 				}
-			}));
-
-			list.add(new DataItem(R.drawable.cut, R.string.word_cut_to, new IDialogClickListener() {
+			}, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
 					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-					startActivityForResult(intent, REQ_CUT_TO);
+					startActivityForResult(intent, REQ_COPY_TO);
 				}
 			}));
 
@@ -632,6 +621,12 @@ public class TypeActivity extends BaseActivity {
 					} else {
 						App.showToast(R.string.err_nothing_selected);
 					}
+				}
+			}, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index) {
+					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+					startActivityForResult(intent, REQ_CUT_TO);
 				}
 			}));
 

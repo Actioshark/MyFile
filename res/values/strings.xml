@@ -96,12 +96,10 @@
 	<string name="word_compilation">Compilation</string>
 	<string name="word_composer">Composer</string>
 	<string name="word_confirm">Confirm</string>
-	<string name="word_copy">Copy</string>
-	<string name="word_copy_to">Copy To</string>
+	<string name="word_copy">Copy (To)</string>
 	<string name="word_cover">Cover</string>
 	<string name="word_cover_all">Cover All</string>
-	<string name="word_cut">Cut</string>
-	<string name="word_cut_to">Cut To</string>
+	<string name="word_cut">Cut (To)</string>
 	<string name="word_date">Date</string>
 	<string name="word_delete">Delete</string>
 	<string name="word_detail">Detail</string>
