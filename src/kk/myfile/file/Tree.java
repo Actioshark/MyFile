@@ -214,7 +214,7 @@ public class Tree {
 
 		id.setClickListener(new IDialogClickListener() {
 			@Override
-			public void onClick(Dialog dialog, int index) {
+			public void onClick(Dialog dialog, int index, ClickType type) {
 				if (index == 1) {
 					String input = id.getInput();
 					String err = FileUtil.checkNewName(parent, input);
@@ -263,7 +263,7 @@ public class Tree {
 
 		id.setClickListener(new IDialogClickListener() {
 			@Override
-			public void onClick(Dialog dialog, int index) {
+			public void onClick(Dialog dialog, int index, ClickType type) {
 				if (index == 1) {
 					String input = id.getInput();
 					String err = FileUtil.checkNewName(parent, input);
@@ -307,7 +307,7 @@ public class Tree {
 
 			id.setClickListener(new IDialogClickListener() {
 				@Override
-				public void onClick(Dialog dialog, int index) {
+				public void onClick(Dialog dialog, int index, ClickType type) {
 					if (index == 1) {
 						String input = id.getInput();
 						String err = FileUtil.checkNewName(parent, input);
@@ -348,7 +348,7 @@ public class Tree {
 		sd.setButtons(R.string.word_cancel, R.string.word_confirm);
 		sd.setClickListener(new IDialogClickListener() {
 			@Override
-			public void onClick(Dialog dialog, int index) {
+			public void onClick(Dialog dialog, int index, ClickType type) {
 				if (index == 1) {
 					final SimpleDialog sd = new SimpleDialog(context);
 					sd.setMessage(AppUtil.getString(R.string.msg_delete_file_progress, 0, list
@@ -356,7 +356,7 @@ public class Tree {
 					sd.setButtons(R.string.word_cancel);
 					sd.setClickListener(new IDialogClickListener() {
 						@Override
-						public void onClick(Dialog dialog, int index) {
+						public void onClick(Dialog dialog, int index, ClickType type) {
 							dialog.dismiss();
 						}
 					});
@@ -513,7 +513,7 @@ public class Tree {
 									R.string.word_cover, R.string.word_cover_all);
 								ec.setClickListener(new IDialogClickListener() {
 									@Override
-									public void onClick(Dialog dialog, int index) {
+									public void onClick(Dialog dialog, int index, ClickType type) {
 										exist.set(index);
 
 										AppUtil.runOnNewThread(new Runnable() {
@@ -618,7 +618,7 @@ public class Tree {
 		pg.setButtons(R.string.word_cancel);
 		pg.setClickListener(new IDialogClickListener() {
 			@Override
-			public void onClick(Dialog dialog, int index) {
+			public void onClick(Dialog dialog, int index, ClickType type) {
 				if (stop.get()) {
 					if (cb != null) {
 						cb.onProgress(ProgressType.Confirm);

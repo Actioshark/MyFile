@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import kk.myfile.R;
+import kk.myfile.ui.IDialogClickListener.ClickType;
 import kk.myfile.util.AppUtil;
 
 public class SimpleDialog extends Dialog {
@@ -43,7 +44,7 @@ public class SimpleDialog extends Dialog {
 				@Override
 				public void onClick(View view) {
 					if (mClickListener != null) {
-						mClickListener.onClick(SimpleDialog.this, index);
+						mClickListener.onClick(SimpleDialog.this, index, ClickType.Click);
 					}
 				}
 			});
@@ -54,7 +55,7 @@ public class SimpleDialog extends Dialog {
 			@Override
 			public void onCancel(DialogInterface di) {
 				if (mClickListener != null) {
-					mClickListener.onClick(SimpleDialog.this, -1);
+					mClickListener.onClick(SimpleDialog.this, -1, ClickType.Click);
 				}
 			}
 		});

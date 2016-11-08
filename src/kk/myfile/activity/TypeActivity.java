@@ -416,55 +416,55 @@ public class TypeActivity extends BaseActivity {
 				list.add(new DataItem(R.drawable.share, R.string.word_share,
 					new IDialogClickListener() {
 						@Override
-						public void onClick(Dialog dialog, int index) {
-							if (IntentUtil.share(TypeActivity.this, mTypeAdapter.getSelected(),
-								null)) {
-								setMode(Mode.Normal);
-							} else {
-								App.showToast(R.string.err_share_failed);
-							}
-						}
-					}, new IDialogClickListener() {
-						@Override
-						public void onClick(Dialog dialog, int index) {
-							AppUtil.runOnNewThread(new Runnable() {
-								@Override
-								public void run() {
-									for (Leaf leaf : selected) {
-										try {
-											String path = leaf.getPath();
-											if (path.endsWith(".xor")) {
-												path = path.substring(0, path.length() - 4);
-											} else {
-												path = path + ".xor";
-											}
-											File to = new File(path);
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							if (type == ClickType.Click) {
+								if (IntentUtil.share(TypeActivity.this, mTypeAdapter.getSelected(),
+									null)) {
+									setMode(Mode.Normal);
+								} else {
+									App.showToast(R.string.err_share_failed);
+								}
+							} else if (type == ClickType.LongClick) {
 
-											String ret = FileUtil.createFile(to);
-											if (ret != null) {
-												App.showToast(ret);
-												continue;
-											}
+								AppUtil.runOnNewThread(new Runnable() {
+									@Override
+									public void run() {
+										for (Leaf leaf : selected) {
+											try {
+												String path = leaf.getPath();
+												if (path.endsWith(".xor")) {
+													path = path.substring(0, path.length() - 4);
+												} else {
+													path = path + ".xor";
+												}
+												File to = new File(path);
 
-											File from = leaf.getFile();
+												String ret = FileUtil.createFile(to);
+												if (ret != null) {
+													App.showToast(ret);
+													continue;
+												}
 
-											boolean suc = FileUtil.write(from, to, 0xff);
-											if (suc == false) {
-												App.showToast(R.string.err_file_read_error);
-												continue;
-											}
+												File from = leaf.getFile();
 
-											ret = FileUtil.delete(from);
-											if (ret != null) {
-												App.showToast(ret);
-												continue;
+												boolean suc = FileUtil.write(from, to, 0xff);
+												if (suc == false) {
+													App.showToast(R.string.err_file_read_error);
+													continue;
+												}
+
+												ret = FileUtil.delete(from);
+												if (ret != null) {
+													App.showToast(ret);
+													continue;
+												}
+											} catch (Exception e) {
+												Logger.print(null, e);
 											}
-										} catch (Exception e) {
-											Logger.print(null, e);
 										}
 									}
-								}
-							});
+								});
+							}
 						}
 					}));
 			}
@@ -472,7 +472,7 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.detail, R.string.word_detail,
 				new IDialogClickListener() {
 					@Override
-					public void onClick(Dialog dialog, int index) {
+					public void onClick(Dialog dialog, int index, ClickType type) {
 						Intent intent = new Intent(TypeActivity.this, DetailActivity.class);
 						intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH, DataUtil
 							.leaf2PathCs(selected));
@@ -485,7 +485,7 @@ public class TypeActivity extends BaseActivity {
 				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as,
 					new IDialogClickListener() {
 						@Override
-						public void onClick(Dialog dl, int index) {
+						public void onClick(Dialog dl, int index, ClickType type) {
 							SimpleDialog dialog = new SimpleDialog(TypeActivity.this);
 							dialog.setCanceledOnTouchOutside(true);
 							dialog.setMessage(R.string.msg_open_as);
@@ -493,7 +493,7 @@ public class TypeActivity extends BaseActivity {
 								R.string.type_audio, R.string.type_video, R.string.word_any);
 							dialog.setClickListener(new IDialogClickListener() {
 								@Override
-								public void onClick(Dialog dialog, int index) {
+								public void onClick(Dialog dialog, int index, ClickType type) {
 									switch (index) {
 									case 0:
 										IntentUtil.view(TypeActivity.this, first, Text.TYPE);
@@ -526,7 +526,7 @@ public class TypeActivity extends BaseActivity {
 				list.add(new DataItem(R.drawable.edit, R.string.word_rename,
 					new IDialogClickListener() {
 						@Override
-						public void onClick(Dialog dialog, int index) {
+						public void onClick(Dialog dialog, int index, ClickType type) {
 							Tree.rename(TypeActivity.this, first.getFile(),
 								new IProgressCallback() {
 									@Override
@@ -543,7 +543,7 @@ public class TypeActivity extends BaseActivity {
 				list.add(new DataItem(R.drawable.edit, R.string.word_edit,
 					new IDialogClickListener() {
 						@Override
-						public void onClick(Dialog dialog, int index) {
+						public void onClick(Dialog dialog, int index, ClickType type) {
 							if (IntentUtil.edit(TypeActivity.this, first, null)) {
 								setMode(Mode.Normal);
 							} else {
@@ -554,7 +554,7 @@ public class TypeActivity extends BaseActivity {
 									R.string.word_any);
 								st.setClickListener(new IDialogClickListener() {
 									@Override
-									public void onClick(Dialog dialog, int index) {
+									public void onClick(Dialog dialog, int index, ClickType type) {
 										switch (index) {
 										case 0:
 											IntentUtil.edit(TypeActivity.this, first, Text.TYPE);
@@ -581,7 +581,7 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.cross, R.string.word_delete,
 				new IDialogClickListener() {
 					@Override
-					public void onClick(Dialog dialog, int index) {
+					public void onClick(Dialog dialog, int index, ClickType type) {
 						Tree.delete(TypeActivity.this, selected, new IProgressCallback() {
 							@Override
 							public void onProgress(ProgressType type) {
@@ -596,37 +596,35 @@ public class TypeActivity extends BaseActivity {
 
 			list.add(new DataItem(R.drawable.copy, R.string.word_copy_or_to, new IDialogClickListener() {
 				@Override
-				public void onClick(Dialog dialog, int index) {
-					if (ClipBoard.put(TypeActivity.this, ClipType.Copy, selected)) {
-						setMode(Mode.Normal);
-						App.showToast(R.string.msg_enter_target_direct_and_paste);
-					} else {
-						App.showToast(R.string.err_nothing_selected);
+				public void onClick(Dialog dialog, int index, ClickType type) {
+					if (type == ClickType.Click) {
+						if (ClipBoard.put(TypeActivity.this, ClipType.Copy, selected)) {
+							setMode(Mode.Normal);
+							App.showToast(R.string.msg_enter_target_direct_and_paste);
+						} else {
+							App.showToast(R.string.err_nothing_selected);
+						}
+					} else if (type == ClickType.LongClick) {
+						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+						startActivityForResult(intent, REQ_COPY_TO);
 					}
-				}
-			}, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-					startActivityForResult(intent, REQ_COPY_TO);
 				}
 			}));
 
 			list.add(new DataItem(R.drawable.cut, R.string.word_cut_or_to, new IDialogClickListener() {
 				@Override
-				public void onClick(Dialog dialog, int index) {
-					if (ClipBoard.put(TypeActivity.this, ClipType.Cut, selected)) {
-						setMode(Mode.Normal);
-						App.showToast(R.string.msg_enter_target_direct_and_paste);
-					} else {
-						App.showToast(R.string.err_nothing_selected);
+				public void onClick(Dialog dialog, int index, ClickType type) {
+					if (type == ClickType.Click) {
+						if (ClipBoard.put(TypeActivity.this, ClipType.Cut, selected)) {
+							setMode(Mode.Normal);
+							App.showToast(R.string.msg_enter_target_direct_and_paste);
+						} else {
+							App.showToast(R.string.err_nothing_selected);
+						}
+					} else if (type == ClickType.LongClick) {
+						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+						startActivityForResult(intent, REQ_CUT_TO);
 					}
-				}
-			}, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index) {
-					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-					startActivityForResult(intent, REQ_CUT_TO);
 				}
 			}));
 
@@ -635,7 +633,7 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh,
 				new IDialogClickListener() {
 					@Override
-					public void onClick(Dialog dialog, int index) {
+					public void onClick(Dialog dialog, int index, ClickType type) {
 						refresh(true);
 					}
 				}));
@@ -643,7 +641,7 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.multi_select_pre, R.string.word_multi_select,
 				new IDialogClickListener() {
 					@Override
-					public void onClick(Dialog dialog, int index) {
+					public void onClick(Dialog dialog, int index, ClickType type) {
 						setMode(Mode.Select);
 					}
 				}));
@@ -651,7 +649,7 @@ public class TypeActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.setting, R.string.word_setting,
 				new IDialogClickListener() {
 					@Override
-					public void onClick(Dialog dialog, int index) {
+					public void onClick(Dialog dialog, int index, ClickType type) {
 						Intent intent = new Intent(TypeActivity.this, SettingActivity.class);
 						startActivity(intent);
 					}

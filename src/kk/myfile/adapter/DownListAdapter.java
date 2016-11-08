@@ -5,6 +5,7 @@ import java.util.List;
 import kk.myfile.R;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.IDialogClickListener.ClickType;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,6 @@ public class DownListAdapter extends BaseAdapter {
 		public int text;
 
 		public IDialogClickListener click;
-		public IDialogClickListener longClick;
 
 		public DataItem() {
 		}
@@ -30,15 +30,6 @@ public class DownListAdapter extends BaseAdapter {
 			this.icon = icon;
 			this.text = text;
 			this.click = click;
-		}
-
-		public DataItem(int icon, int text, IDialogClickListener click,
-			IDialogClickListener longClick) {
-
-			this.icon = icon;
-			this.text = text;
-			this.click = click;
-			this.longClick = longClick;
 		}
 	}
 
@@ -85,7 +76,7 @@ public class DownListAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View view) {
 					DataItem data = mData.get(vh.index);
-					data.click.onClick(mDownList, vh.index);
+					data.click.onClick(mDownList, vh.index, ClickType.Click);
 					mDownList.dismiss();
 				}
 			});
@@ -94,12 +85,7 @@ public class DownListAdapter extends BaseAdapter {
 				@Override
 				public boolean onLongClick(View view) {
 					DataItem data = mData.get(vh.index);
-					if (data.longClick == null) {
-						return false;
-					}
-
-					data.longClick.onClick(mDownList, vh.index);
-
+					data.click.onClick(mDownList, vh.index, ClickType.LongClick);
 					mDownList.dismiss();
 					return true;
 				}

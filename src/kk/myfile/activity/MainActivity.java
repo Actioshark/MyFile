@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity {
 						R.string.word_edit);
 					dialog.setClickListener(new IDialogClickListener() {
 						@Override
-						public void onClick(Dialog dialog, int btn) {
+						public void onClick(Dialog dialog, int btn, ClickType type) {
 							if (btn == 1) {
 								if (index < mPaths.size()) {
 									mPaths.remove(index);
@@ -428,7 +428,7 @@ public class MainActivity extends BaseActivity {
 			id.setInput(name);
 			id.setClickListener(new IDialogClickListener() {
 				@Override
-				public void onClick(Dialog dialog, int index) {
+				public void onClick(Dialog dialog, int index, ClickType type) {
 					if (index == 1) {
 						String name = id.getInput();
 						if (name.length() < 1 || name.length() > 20) {

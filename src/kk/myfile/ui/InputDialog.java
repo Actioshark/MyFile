@@ -11,6 +11,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
 import kk.myfile.R;
+import kk.myfile.ui.IDialogClickListener.ClickType;
 import kk.myfile.util.AppUtil;
 
 public class InputDialog extends Dialog {
@@ -43,7 +44,7 @@ public class InputDialog extends Dialog {
 			@Override
 			public void onClick(View view) {
 				if (mClickListener != null) {
-					mClickListener.onClick(InputDialog.this, 0);
+					mClickListener.onClick(InputDialog.this, 0, ClickType.Click);
 				}
 			}
 		});
@@ -52,7 +53,7 @@ public class InputDialog extends Dialog {
 			@Override
 			public void onClick(View view) {
 				if (mClickListener != null) {
-					mClickListener.onClick(InputDialog.this, 1);
+					mClickListener.onClick(InputDialog.this, 1, ClickType.Click);
 				}
 			}
 		});
@@ -62,7 +63,7 @@ public class InputDialog extends Dialog {
 			@Override
 			public void onCancel(DialogInterface di) {
 				if (mClickListener != null) {
-					mClickListener.onClick(InputDialog.this, -1);
+					mClickListener.onClick(InputDialog.this, -1, ClickType.Click);
 				}
 			}
 		});
