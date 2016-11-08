@@ -92,7 +92,7 @@
 	<string name="word_composer">编曲</string>
 	<string name="word_confirm">确定</string>
 	<string name="word_copy_or_to">复制（到）</string>
-	<string name="word_cover_or_all">覆盖（所有）</string>
+	<string name="word_cover_or_all">覆盖\n（所有）</string>
 	<string name="word_cut_or_to">剪切（到）</string>
 	<string name="word_date">日期</string>
 	<string name="word_delete">删除</string>
@@ -116,12 +116,12 @@
 	<string name="word_recent_file">最近文件</string>
 	<string name="word_refresh">刷新</string>
 	<string name="word_rename">重命名</string>
-	<string name="word_rename_or_all">重命名（所有）</string>
+	<string name="word_rename_or_all">重命名\n（所有）</string>
 	<string name="word_rotation">角度</string>
 	<string name="word_setting">设置</string>
 	<string name="word_share">分享</string>
 	<string name="word_size">大小</string>
-	<string name="word_skip_or_all">跳过（全部）</string>
+	<string name="word_skip_or_all">跳过\n（所有）</string>
 	<string name="word_state">状态</string>
 	<string name="word_title">标题</string>
 	<string name="word_type">类型</string>
