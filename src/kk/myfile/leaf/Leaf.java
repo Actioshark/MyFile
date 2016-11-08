@@ -149,34 +149,36 @@ public abstract class Leaf {
 			Logger.print(null, e);
 		}
 
-		putDetail(list, 3, R.string.word_md5, AppUtil.getString(R.string.msg_click_to_calc)).clickListener = new IClickListener() {
-			@Override
-			public void onClick(final Data data, final ViewHolder vh) {
-				if (AppUtil.getString(R.string.msg_click_to_calc).equals(data.value)) {
-					AppUtil.runOnNewThread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								byte[] bs = DataUtil.md5(new FileInputStream(data.leaf.getPath()));
-								final String str = DataUtil.toHexStr(bs);
-
-								AppUtil.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										if (data == vh.data) {
-											data.value = str;
-											vh.value.setText(str);
+		if (this instanceof Direct == false) {
+			putDetail(list, 3, R.string.word_md5, AppUtil.getString(R.string.msg_click_to_calc)).clickListener = new IClickListener() {
+				@Override
+				public void onClick(final Data data, final ViewHolder vh) {
+					if (AppUtil.getString(R.string.msg_click_to_calc).equals(data.value)) {
+						AppUtil.runOnNewThread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									byte[] bs = DataUtil.md5(new FileInputStream(data.leaf.getPath()));
+									final String str = DataUtil.toHexStr(bs);
+	
+									AppUtil.runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											if (data == vh.data) {
+												data.value = str;
+												vh.value.setText(str);
+											}
 										}
-									}
-								});
-							} catch (Exception e) {
-								Logger.print(null, e);
+									});
+								} catch (Exception e) {
+									Logger.print(null, e);
+								}
 							}
-						}
-					});
+						});
+					}
 				}
-			}
-		};
+			};
+		}
 
 		return list;
 	}
