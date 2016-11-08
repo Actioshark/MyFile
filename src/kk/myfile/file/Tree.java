@@ -429,6 +429,15 @@ public class Tree {
 		public File to;
 		public boolean delete = false;
 	}
+	
+	public static final int SELECT_MASK = 0xf;
+	public static final int SELECT_SKIP = 0x1;
+	public static final int SELECT_COVER = 0x2;
+	public static final int SELECT_RENAME = 0x3;
+	
+	public static final int ALL_MASK = 0xf0;
+	public static final int ALL_NO = 0x00;
+	public static final int ALL_YES = 0x10;
 
 	private static void carry(final List<FilePair> fps, int fpi, final AtomicBoolean stop,
 		final AtomicInteger exist, final SimpleDialog pg, final AtomicInteger suc,
@@ -443,21 +452,19 @@ public class Tree {
 			final FilePair fp = fps.get(i);
 
 			int ext = exist.get();
-			if (ext != 1 && ext != 3) {
-				exist.set(-1);
+			if ((ext & ALL_MASK) == ALL_NO) {
+				exist.set(0);
 			}
 
 			try {
 				if (fp.to.exists()) {
-					switch (ext) {
-					case 0:
-					case 1:
+					switch (ext & SELECT_MASK) {
+					case SELECT_SKIP:
 						suc.addAndGet(1);
 						fp.delete = false;
 						break;
 
-					case 2:
-					case 3:
+					case SELECT_COVER:
 						if (fp.from.isDirectory()) {
 							if (fp.to.isDirectory()) {
 								suc.addAndGet(1);
@@ -496,6 +503,22 @@ public class Tree {
 							}
 						}
 						break;
+					
+					case SELECT_RENAME:
+						String path = fp.to.getPath();
+						int pi = path.lastIndexOf('.');
+						String prefix = pi == -1 ? path : path.substring(0, pi);
+						String subfix = pi == -1 ? "" : path.substring(pi, path.length());
+						
+						for (int j = 1; ; j++) {
+							fp.to = new File(String.format("%s_%d%s", prefix, j, subfix));
+							if (fp.to.exists() == false) {
+								break;
+							}
+						}
+						
+						i--;
+						continue;
 
 					default:
 						final int idx = i;
@@ -509,12 +532,33 @@ public class Tree {
 								final SimpleDialog ec = new SimpleDialog(pg.getContext());
 								ec.setMessage(AppUtil.getString(R.string.msg_file_exist, fp.to
 									.getAbsolutePath()));
-								ec.setButtons(R.string.word_skip, R.string.word_skip_all,
-									R.string.word_cover, R.string.word_cover_all);
+								ec.setButtons(R.string.word_skip_or_all,
+									R.string.word_cover_or_all, R.string.word_rename_or_all);
 								ec.setClickListener(new IDialogClickListener() {
 									@Override
 									public void onClick(Dialog dialog, int index, ClickType type) {
-										exist.set(index);
+										switch (index) {
+										case 0:
+											exist.set(SELECT_SKIP);
+											break;
+
+										case 1:
+											exist.set(SELECT_COVER);
+											break;
+											
+
+										case 2:
+											exist.set(SELECT_RENAME);
+											break;
+											
+										default:
+											exist.set(0);
+											break;
+										}
+										
+										if (type == ClickType.LongClick) {
+											exist.set(exist.get() | ALL_YES);
+										}
 
 										AppUtil.runOnNewThread(new Runnable() {
 											@Override

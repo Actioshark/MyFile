@@ -97,8 +97,7 @@
 	<string name="word_composer">Composer</string>
 	<string name="word_confirm">Confirm</string>
 	<string name="word_copy_or_to">Copy (To)</string>
-	<string name="word_cover">Cover</string>
-	<string name="word_cover_all">Cover All</string>
+	<string name="word_cover_or_all">Cover (All)</string>
 	<string name="word_cut_or_to">Cut (To)</string>
 	<string name="word_date">Date</string>
 	<string name="word_delete">Delete</string>
@@ -122,12 +121,12 @@
 	<string name="word_recent_file">Recent File</string>
 	<string name="word_refresh">Refresh</string>
 	<string name="word_rename">Rename</string>
+	<string name="word_rename_or_all">Rename (All)</string>
 	<string name="word_rotation">Rotation</string>
 	<string name="word_setting">Setting</string>
 	<string name="word_share">Share</string>
 	<string name="word_size">Size</string>
-	<string name="word_skip">Skip</string>
-	<string name="word_skip_all">Skip All</string>
+	<string name="word_skip_or_all">Skip (All)</string>
 	<string name="word_state">State</string>
 	<string name="word_title">Title</string>
 	<string name="word_type">Type</string>
