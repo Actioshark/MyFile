@@ -594,7 +594,7 @@ public class TypeActivity extends BaseActivity {
 					}
 				}));
 
-			list.add(new DataItem(R.drawable.copy, R.string.word_copy, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.copy, R.string.word_copy_or_to, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
 					if (ClipBoard.put(TypeActivity.this, ClipType.Copy, selected)) {
@@ -612,7 +612,7 @@ public class TypeActivity extends BaseActivity {
 				}
 			}));
 
-			list.add(new DataItem(R.drawable.cut, R.string.word_cut, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.cut, R.string.word_cut_or_to, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index) {
 					if (ClipBoard.put(TypeActivity.this, ClipType.Cut, selected)) {
