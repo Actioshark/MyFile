@@ -16,11 +16,13 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.StatFs;
+
 import kk.myfile.R;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Unknown;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
@@ -47,18 +49,11 @@ public class FileUtil {
 	}
 
 	public static String getType(Leaf leaf) {
-		String path = leaf.getPath();
-		String name = path.substring(path.lastIndexOf('/') + 1);
-		int pointIndex = name.lastIndexOf('.');
-
-		if (pointIndex != -1) {
-			String subfix = name.substring(pointIndex + 1).toLowerCase(Setting.LOCALE);
-
-			try {
-				JSONObject map = sTypeMap.getJSONObject(subfix);
-				return map.getString("type");
-			} catch (Exception e) {
-			}
+		try {
+			String subfix = DataUtil.getSubfix(leaf.getPath());
+			JSONObject map = sTypeMap.getJSONObject(subfix);
+			return map.getString("type");
+		} catch (Exception e) {
 		}
 
 		return null;
@@ -70,28 +65,20 @@ public class FileUtil {
 			return new Direct(path);
 		}
 
-		String name = file.getName();
-		int pointIndex = name.lastIndexOf('.');
-		if (pointIndex != -1) {
-			String subfix = name.substring(pointIndex + 1).toLowerCase(Setting.LOCALE);
-
-			try {
-				JSONObject map = sTypeMap.getJSONObject(subfix);
-				if (map != null) {
-					String cls = map.getString("cls");
-					cls = String.format("%c%s", Character.toUpperCase(cls.charAt(0)), cls
-						.substring(1));
-					Class<?> clazz = Class.forName(String.format("kk.myfile.leaf.%s", cls));
-
-					if (clazz != null) {
-						Constructor<?> ct = clazz.getConstructor(String.class);
-						Leaf leaf = (Leaf) ct.newInstance(path);
-
-						return leaf;
-					}
-				}
-			} catch (Exception e) {
-			}
+		try {
+			String subfix = DataUtil.getSubfix(path);
+			JSONObject map = sTypeMap.getJSONObject(subfix);
+			
+			String cls = map.getString("cls");
+			cls = String.format("%c%s", Character.toUpperCase(cls.charAt(0)), cls
+				.substring(1));
+			
+			Class<?> clazz = Class.forName(String.format("kk.myfile.leaf.%s", cls));
+			Constructor<?> ct = clazz.getConstructor(String.class);
+			
+			Leaf leaf = (Leaf) ct.newInstance(path);
+			return leaf;
+		} catch (Exception e) {
 		}
 
 		Leaf leaf = new Unknown(path);

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
@@ -167,19 +168,14 @@ public class Sorter {
 
 		@Override
 		public int cmp(Leaf a, Leaf b) {
-			String an = a.getFile().getName();
-			String bn = b.getFile().getName();
-
-			int ai = an.lastIndexOf('.');
-			String as = "";
-			if (ai != -1) {
-				as = an.substring(ai + 1, an.length()).toLowerCase(Setting.LOCALE);
+			String as = DataUtil.getSubfix(a.getPath());
+			if (as == null) {
+				as = "";
 			}
 
-			int bi = bn.lastIndexOf('.');
-			String bs = "";
-			if (bi != -1) {
-				bs = bn.substring(bi + 1, bn.length()).toLowerCase(Setting.LOCALE);
+			String bs = DataUtil.getSubfix(b.getPath());
+			if (bs == null) {
+				bs = "";
 			}
 
 			return as.compareTo(bs);
