@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bumptech.glide.Glide;
+
 import kk.myfile.R;
 import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
-
+import kk.myfile.util.DataUtil;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
@@ -76,7 +78,11 @@ public class DetailAdapter extends PagerAdapter {
 			final Leaf leaf = FileUtil.createLeaf(new File(path));
 
 			vh.thum.setImageResource(leaf.getIcon());
-			if (leaf instanceof IThumable) {
+			if ("gif".equals(DataUtil.getSubfix(leaf.getPath()))) {
+				Glide.with(mContext)
+				.load(leaf.getPath())
+				.into(vh.thum);
+			} else if (leaf instanceof IThumable) {
 				AppUtil.runOnNewThread(new Runnable() {
 					@Override
 					public void run() {
