@@ -28,7 +28,7 @@ public class Tree {
 	}
 
 	public static interface IProgressCallback {
-		public void onProgress(ProgressType type);
+		public void onProgress(ProgressType type, Object... data);
 	}
 
 	public static List<Leaf> getDirect(String path, final AtomicBoolean finish) {
@@ -223,7 +223,8 @@ public class Tree {
 						return;
 					}
 
-					err = FileUtil.createDirect(new File(parent, input));
+					File file = new File(parent, input);
+					err = FileUtil.createDirect(file);
 					if (err == null) {
 						err = AppUtil.getString(R.string.err_create_direct_success);
 					}
@@ -231,7 +232,7 @@ public class Tree {
 					App.showToast(err);
 
 					if (cb != null) {
-						cb.onProgress(ProgressType.Finish);
+						cb.onProgress(ProgressType.Finish, file);
 					}
 				} else {
 					if (cb != null) {
@@ -272,7 +273,8 @@ public class Tree {
 						return;
 					}
 
-					err = FileUtil.createFile(new File(parent, input));
+					File file = new File(parent, input);
+					err = FileUtil.createFile(file);
 					if (err == null) {
 						err = AppUtil.getString(R.string.err_create_file_success);
 					}
@@ -280,7 +282,7 @@ public class Tree {
 					App.showToast(err);
 
 					if (cb != null) {
-						cb.onProgress(ProgressType.Finish);
+						cb.onProgress(ProgressType.Finish, file);
 					}
 				} else {
 					if (cb != null) {
@@ -316,7 +318,8 @@ public class Tree {
 							return;
 						}
 
-						err = FileUtil.rename(file, new File(parent, input));
+						File to = new File(parent, input);
+						err = FileUtil.rename(file, to);
 						if (err == null) {
 							err = AppUtil.getString(R.string.err_rename_file_success);
 						}
@@ -324,7 +327,7 @@ public class Tree {
 						App.showToast(err);
 
 						if (cb != null) {
-							cb.onProgress(ProgressType.Finish);
+							cb.onProgress(ProgressType.Finish, to);
 						}
 					} else {
 						if (cb != null) {

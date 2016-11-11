@@ -530,7 +530,7 @@ public class TypeActivity extends BaseActivity {
 							Tree.rename(TypeActivity.this, first.getFile(),
 								new IProgressCallback() {
 									@Override
-									public void onProgress(ProgressType type) {
+									public void onProgress(ProgressType type, Object... data) {
 										setMode(Mode.Normal);
 										refresh(true);
 									}
@@ -584,7 +584,7 @@ public class TypeActivity extends BaseActivity {
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						Tree.delete(TypeActivity.this, selected, new IProgressCallback() {
 							@Override
-							public void onProgress(ProgressType type) {
+							public void onProgress(ProgressType type, Object... data) {
 								if (type == ProgressType.Finish || type == ProgressType.Cancel) {
 									setMode(Mode.Normal);
 									refresh(true);
@@ -688,7 +688,7 @@ public class TypeActivity extends BaseActivity {
 			Tree.carry(this, DataUtil.leaf2PathString(mTypeAdapter.getSelected()), path, false,
 				new IProgressCallback() {
 					@Override
-					public void onProgress(ProgressType type) {
+					public void onProgress(ProgressType type, Object... data) {
 						if (type == ProgressType.Finish || type == ProgressType.Cancel) {
 							setMode(Mode.Normal);
 							refresh(true);
@@ -705,7 +705,7 @@ public class TypeActivity extends BaseActivity {
 			Tree.carry(this, DataUtil.leaf2PathString(mTypeAdapter.getSelected()), path, true,
 				new IProgressCallback() {
 					@Override
-					public void onProgress(ProgressType type) {
+					public void onProgress(ProgressType type, Object... data) {
 						if (type == ProgressType.Finish || type == ProgressType.Cancel) {
 							setMode(Mode.Normal);
 							refresh(true);

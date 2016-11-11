@@ -95,11 +95,15 @@
 	<string name="word_children_num">Children Num</string>
 	<string name="word_compilation">Compilation</string>
 	<string name="word_composer">Composer</string>
+	<string name="word_compress_or_to">Compress (To)</string>
+	<string name="word_compress_to">Compress To</string>
 	<string name="word_confirm">Confirm</string>
 	<string name="word_copy_or_to">Copy (To)</string>
 	<string name="word_cover_or_all">Cover\n(All)</string>
 	<string name="word_cut_or_to">Cut (To)</string>
 	<string name="word_date">Date</string>
+	<string name="word_decompress_or_to">Decompress (To)</string>
+	<string name="word_decompress_to">Decompress To</string>
 	<string name="word_delete">Delete</string>
 	<string name="word_detail">Detail</string>
 	<string name="word_duration">Duration</string>
