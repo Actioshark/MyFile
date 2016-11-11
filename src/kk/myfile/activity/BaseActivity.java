@@ -15,8 +15,8 @@ import kk.myfile.util.AppUtil;
 public abstract class BaseActivity extends Activity {
 	public static final int REQ_COPY_TO = 1;
 	public static final int REQ_CUT_TO = 2;
-	public static final int REQ_COMPRESS_TO = 2;
-	public static final int REQ_DECOMPRESS_TO = 2;
+	public static final int REQ_COMPRESS_TO = 3;
+	public static final int REQ_DECOMPRESS_TO = 4;
 
 	public static final String KEY_CLASSIFY = "sort_classify";
 

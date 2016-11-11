@@ -735,7 +735,6 @@ public class TypeActivity extends BaseActivity {
 				@Override
 				public void onProgress(ProgressType type, Object... data) {
 					if (type == ProgressType.Finish) {
-						refresh(true);
 						setMode(Mode.Normal);
 					}
 				}
@@ -747,7 +746,6 @@ public class TypeActivity extends BaseActivity {
 				@Override
 				public void onProgress(ProgressType type, Object... data) {
 					if (type == ProgressType.Finish) {
-						refresh(true);
 						setMode(Mode.Normal);
 					}
 				}
