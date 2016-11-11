@@ -630,7 +630,7 @@ public class TypeActivity extends BaseActivity {
 				}
 			}));
 			
-			list.add(new DataItem(R.drawable.compress, R.string.word_compress_or_to, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.compress, R.string.word_compress_to, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index, ClickType type) {
 					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
@@ -639,7 +639,7 @@ public class TypeActivity extends BaseActivity {
 			}));
 
 			if (selected.size() == 1 && first instanceof Zip) {
-				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_or_to, new IDialogClickListener() {
+				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_to, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
