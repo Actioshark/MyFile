@@ -799,35 +799,45 @@ public class DirectActivity extends BaseActivity {
 			}));
 
 			if (selected.size() == 1 && first instanceof Zip) {
-				list.add(new DataItem(R.drawable.edit, R.string.word_compress_or_to, new IDialogClickListener() {
+				list.add(new DataItem(R.drawable.edit, R.string.word_decompress_or_to, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						if (type == ClickType.Click) {
-							Tree.createFile(DirectActivity.this, mNode.direct.getPath(), new IProgressCallback() {
+							Tree.unzip(DirectActivity.this, first.getPath(), mNode.direct.getPath(), new IProgressCallback() {
 								@Override
 								public void onProgress(ProgressType type, Object... data) {
+									refreshDirect();
+									
 									if (type == ProgressType.Finish) {
-										// TODO
-										Logger.print(null, data[0]);
+										setMode(Mode.Normal);
 									}
 								}
 							});
 						} else if (type == ClickType.LongClick) {
 							Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
-							startActivityForResult(intent, REQ_COMPRESS_TO);
+							startActivityForResult(intent, REQ_DECOMPRESS_TO);
 						}
 					}
 				}));
 			}
-
-			list.add(new DataItem(R.drawable.edit, R.string.word_decompress_or_to, new IDialogClickListener() {
+			
+			list.add(new DataItem(R.drawable.edit, R.string.word_compress_or_to, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index, ClickType type) {
 					if (type == ClickType.Click) {
-						// TODO
+						Tree.zip(DirectActivity.this, mNode.direct.getPath(), selected, new IProgressCallback() {
+							@Override
+							public void onProgress(ProgressType type, Object... data) {
+								refreshDirect();
+								
+								if (type == ProgressType.Finish) {
+									setMode(Mode.Normal);
+								}
+							}
+						});
 					} else if (type == ClickType.LongClick) {
 						Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_DECOMPRESS_TO);
+						startActivityForResult(intent, REQ_COMPRESS_TO);
 					}
 				}
 			}));
@@ -868,7 +878,7 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.add, R.string.word_new_direct, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index, ClickType type) {
-					Tree.createDirect(DirectActivity.this, mNode.direct.getPath(), new IProgressCallback() {
+					Tree.createDirect(DirectActivity.this, mNode.direct.getPath(), null, new IProgressCallback() {
 						@Override
 						public void onProgress(ProgressType type, Object... data) {
 							refreshDirect();
@@ -880,7 +890,7 @@ public class DirectActivity extends BaseActivity {
 			list.add(new DataItem(R.drawable.add, R.string.word_new_file, new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index, ClickType type) {
-					Tree.createFile(DirectActivity.this, mNode.direct.getPath(), new IProgressCallback() {
+					Tree.createFile(DirectActivity.this, mNode.direct.getPath(), null, new IProgressCallback() {
 						@Override
 						public void onProgress(ProgressType type, Object... data) {
 							refreshDirect();
@@ -959,41 +969,50 @@ public class DirectActivity extends BaseActivity {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
 			Tree.carry(this, DataUtil.leaf2PathString(mDirectAdapter.getSelected()), path, false,
-					new IProgressCallback() {
-						@Override
-						public void onProgress(ProgressType type, Object... data) {
-							setMode(Mode.Normal);
-							refreshDirect();
-						}
-					});
+				new IProgressCallback() {
+					@Override
+					public void onProgress(ProgressType type, Object... data) {
+						setMode(Mode.Normal);
+						refreshDirect();
+					}
+				});
 		} else if (requestCode == REQ_CUT_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
 			Tree.carry(this, DataUtil.leaf2PathString(mDirectAdapter.getSelected()), path, true,
-					new IProgressCallback() {
-						@Override
-						public void onProgress(ProgressType type, Object... data) {
-							setMode(Mode.Normal);
-							refreshDirect();
-						}
-					});
+				new IProgressCallback() {
+					@Override
+					public void onProgress(ProgressType type, Object... data) {
+						setMode(Mode.Normal);
+						refreshDirect();
+					}
+				});
 		} else if (requestCode == REQ_COMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			Tree.createFile(this, path, new IProgressCallback() {
+			Tree.zip(this, path, mDirectAdapter.getSelected(), new IProgressCallback() {
 				@Override
 				public void onProgress(ProgressType type, Object... data) {
+					refreshDirect();
+					
 					if (type == ProgressType.Finish) {
-						// TODO
-						Logger.print(null, data[0]);
+						setMode(Mode.Normal);
 					}
 				}
 			});
 		} else if (requestCode == REQ_DECOMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 			
-			// TODO
-			Logger.print(null, path);
+			Tree.unzip(DirectActivity.this, mDirectAdapter.getSelected().get(0).getPath(), path, new IProgressCallback() {
+				@Override
+				public void onProgress(ProgressType type, Object... data) {
+					refreshDirect();
+					
+					if (type == ProgressType.Finish) {
+						setMode(Mode.Normal);
+					}
+				}
+			});
 		}
 	}
 }

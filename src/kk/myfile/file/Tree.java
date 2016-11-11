@@ -20,11 +20,16 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.progress.ProgressMonitor;
+import net.lingala.zip4j.util.Zip4jConstants;
+
 public class Tree {
 	public static final String HIDDEN_FILE = ".nomedia";
 
 	public static enum ProgressType {
-		Confirm, Cancel, Progress, Finish,
+		Confirm, Cancel, Progress, Finish, Error,
 	}
 
 	public static interface IProgressCallback {
@@ -196,17 +201,18 @@ public class Tree {
 		return ret;
 	}
 
-	public static void createDirect(Context context, final String parent, final IProgressCallback cb) {
+	public static void createDirect(Context context, final String parent, String name, final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_direct_name);
 
-		String name = "";
-		for (int i = 1; i < 1000; i++) {
-			String tmp = AppUtil.getString(R.string.def_direct_name, i);
-			String err = FileUtil.checkNewName(parent, tmp);
-			if (err == null) {
-				name = tmp;
-				break;
+		if (name == null) {
+			for (int i = 1; i < 1000; i++) {
+				String tmp = AppUtil.getString(R.string.def_direct_name, i);
+				String err = FileUtil.checkNewName(parent, tmp);
+				if (err == null) {
+					name = tmp;
+					break;
+				}
 			}
 		}
 		id.setInput(name);
@@ -246,17 +252,18 @@ public class Tree {
 		id.show();
 	}
 
-	public static void createFile(Context context, final String parent, final IProgressCallback cb) {
+	public static void createFile(Context context, final String parent, String name, final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_file_name);
 
-		String name = "";
-		for (int i = 1; i < 1000; i++) {
-			String tmp = AppUtil.getString(R.string.def_file_name, i);
-			String err = FileUtil.checkNewName(parent, tmp);
-			if (err == null) {
-				name = tmp;
-				break;
+		if (name == null) {
+			for (int i = 1; ; i++) {
+				String tmp = AppUtil.getString(R.string.def_file_name, i);
+				String err = FileUtil.checkNewName(parent, tmp);
+				if (err == null) {
+					name = tmp;
+					break;
+				}
 			}
 		}
 		id.setInput(name);
@@ -724,5 +731,188 @@ public class Tree {
 				}
 			}
 		});
+	}
+	
+	private static void monitorZip(final ProgressMonitor pm, final IProgressCallback cb) {
+		final List<Runnable> mark = new ArrayList<Runnable>();
+		
+		Runnable mk = AppUtil.runOnUiThread(new Runnable() {
+			public void run() {
+				if (pm.getState() == ProgressMonitor.STATE_BUSY) {
+					String fileName = pm.getFileName();
+					if (fileName != null) {
+						App.showToast(fileName);
+					}
+					
+					if (cb != null) {
+						cb.onProgress(ProgressType.Progress);
+					}
+				} else {
+					AppUtil.removeUiThread(mark.get(0));
+					
+					if (pm.getResult() == ProgressMonitor.RESULT_SUCCESS) {
+						App.showToast("sucess");
+					
+						if (cb != null) {
+							cb.onProgress(ProgressType.Finish);
+						}
+					} else {
+						App.showToast("failed");
+						
+						if (cb != null) {
+							cb.onProgress(ProgressType.Error);
+						}
+					}
+				}
+			}
+		}, 100, 100);
+		
+		mark.add(mk);
+	}
+	
+	public static void zip(final Context context, final String dir, final List<Leaf> list, final IProgressCallback cb) {
+		final InputDialog id = new InputDialog(context);
+		id.setMessage("file name");
+		id.setInput("Sample.zip");
+		id.setClickListener(new IDialogClickListener() {
+			@Override
+			public void onClick(Dialog dialog, int index, ClickType type) {
+				if (index != 1) {
+					dialog.dismiss();
+					
+					if (cb != null) {
+						cb.onProgress(ProgressType.Cancel);
+					}
+					return;
+				}
+				
+				String input = id.getInput();
+				String err = FileUtil.checkNewName(dir, input);
+				if (err != null) {
+					App.showToast(err);
+					return;
+				}
+				
+				dialog.dismiss();
+				
+				final File target = new File(dir, input);
+				
+				final InputDialog id = new InputDialog(context);
+				id.setMessage("password");
+				id.setClickListener(new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						dialog.dismiss();
+						if (index != 1) {
+							if (cb != null) {
+								cb.onProgress(ProgressType.Cancel);
+							}
+							return;
+						}
+						
+						try {
+							final ZipParameters zp = new ZipParameters();
+							zp.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+							zp.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+							
+							String password = id.getInput();
+							if (password != null && password.length() > 0) {
+								zp.setEncryptFiles(true);
+								zp.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
+								zp.setPassword(password);
+							}
+						
+							final ZipFile zf = new ZipFile(target);
+							
+							AppUtil.runOnNewThread(new Runnable() {
+								public void run() {
+									for (Leaf leaf : list) {
+										try {
+											if (leaf instanceof Direct) {
+												zf.addFolder(leaf.getPath(), zp);
+											} else {
+												zf.addFile(leaf.getFile(), zp);
+											}
+										} catch (Exception e) {
+											Logger.print(null, e);
+										}
+									}
+								}
+							});
+							
+							monitorZip(zf.getProgressMonitor(), cb);
+						} catch (Exception e) {
+							Logger.print(null, e);
+							
+							App.showToast("compress exception");
+							
+							if (cb != null) {
+								cb.onProgress(ProgressType.Error);
+							}
+						}
+					}
+				});
+				id.show();
+			}
+		});
+		id.show();
+	}
+	
+	public static void unzip(Context context, String zip, final String path, final IProgressCallback cb) {
+		try {
+			final ZipFile zf = new ZipFile(zip);
+			
+			if (zf.isValidZipFile() == false) {
+				App.showToast("invalid file");
+				
+				if (cb != null) {
+					cb.onProgress(ProgressType.Error);
+				}
+				return;
+			}
+			
+			zf.setRunInThread(true);
+			
+			if (zf.isEncrypted()) {
+				final InputDialog id = new InputDialog(context);
+				id.setMessage("password");
+				id.setClickListener(new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						dialog.dismiss();
+						if (index != 1) {
+							if (cb != null) {
+								cb.onProgress(ProgressType.Cancel);
+							}
+							return;
+						}
+						
+						try {
+							zf.setPassword(id.getInput());
+							zf.extractAll(path);
+						} catch (Exception e) {
+							Logger.print(null, e);
+							
+							if (cb != null) {
+								cb.onProgress(ProgressType.Error);
+							}
+							return;
+						}
+						
+						monitorZip(zf.getProgressMonitor(), cb);
+					}
+				});
+				id.show();
+			} else {
+				zf.extractAll(path);
+				monitorZip(zf.getProgressMonitor(), cb);
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
+			
+			if (cb != null) {
+				cb.onProgress(ProgressType.Error);
+			}
+		}
 	}
 }
