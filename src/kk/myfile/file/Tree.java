@@ -733,7 +733,7 @@ public class Tree {
 		});
 	}
 	
-	private static void monitorZip(final ProgressMonitor pm, final IProgressCallback cb) {
+	private static void monitorZip(final boolean cmps, final ProgressMonitor pm, final IProgressCallback cb) {
 		final List<Runnable> mark = new ArrayList<Runnable>();
 		
 		Runnable mk = AppUtil.runOnUiThread(new Runnable() {
@@ -751,13 +751,13 @@ public class Tree {
 					AppUtil.removeUiThread(mark.get(0));
 					
 					if (pm.getResult() == ProgressMonitor.RESULT_SUCCESS) {
-						App.showToast("sucess");
+						App.showToast(cmps ? R.string.err_compress_success : R.string.err_decompress_success);
 					
 						if (cb != null) {
 							cb.onProgress(ProgressType.Finish);
 						}
 					} else {
-						App.showToast("failed");
+						App.showToast(cmps ? R.string.err_compress_failed : R.string.err_decompress_failed);
 						
 						if (cb != null) {
 							cb.onProgress(ProgressType.Error);
@@ -772,8 +772,8 @@ public class Tree {
 	
 	public static void zip(final Context context, final String dir, final List<Leaf> list, final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
-		id.setMessage("file name");
-		id.setInput("Sample.zip");
+		id.setMessage(R.string.msg_input_file_name);
+		id.setInput(AppUtil.getString(R.string.def_zip_name));
 		id.setClickListener(new IDialogClickListener() {
 			@Override
 			public void onClick(Dialog dialog, int index, ClickType type) {
@@ -798,7 +798,7 @@ public class Tree {
 				final File target = new File(dir, input);
 				
 				final InputDialog id = new InputDialog(context);
-				id.setMessage("password");
+				id.setMessage(R.string.msg_input_password);
 				id.setClickListener(new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
@@ -840,11 +840,11 @@ public class Tree {
 								}
 							});
 							
-							monitorZip(zf.getProgressMonitor(), cb);
+							monitorZip(true, zf.getProgressMonitor(), cb);
 						} catch (Exception e) {
 							Logger.print(null, e);
 							
-							App.showToast("compress exception");
+							App.showToast(R.string.err_compress_failed);
 							
 							if (cb != null) {
 								cb.onProgress(ProgressType.Error);
@@ -863,7 +863,7 @@ public class Tree {
 			final ZipFile zf = new ZipFile(zip);
 			
 			if (zf.isValidZipFile() == false) {
-				App.showToast("invalid file");
+				App.showToast(R.string.err_not_zip);
 				
 				if (cb != null) {
 					cb.onProgress(ProgressType.Error);
@@ -875,7 +875,7 @@ public class Tree {
 			
 			if (zf.isEncrypted()) {
 				final InputDialog id = new InputDialog(context);
-				id.setMessage("password");
+				id.setMessage(R.string.msg_input_password);
 				id.setClickListener(new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
@@ -899,16 +899,18 @@ public class Tree {
 							return;
 						}
 						
-						monitorZip(zf.getProgressMonitor(), cb);
+						monitorZip(false, zf.getProgressMonitor(), cb);
 					}
 				});
 				id.show();
 			} else {
 				zf.extractAll(path);
-				monitorZip(zf.getProgressMonitor(), cb);
+				monitorZip(false, zf.getProgressMonitor(), cb);
 			}
 		} catch (Exception e) {
 			Logger.print(null, e);
+
+			App.showToast(R.string.err_decompress_failed);
 			
 			if (cb != null) {
 				cb.onProgress(ProgressType.Error);

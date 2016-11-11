@@ -797,9 +797,30 @@ public class DirectActivity extends BaseActivity {
 					}
 				}
 			}));
+			
+			list.add(new DataItem(R.drawable.compress, R.string.word_compress_or_to, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index, ClickType type) {
+					if (type == ClickType.Click) {
+						Tree.zip(DirectActivity.this, mNode.direct.getPath(), selected, new IProgressCallback() {
+							@Override
+							public void onProgress(ProgressType type, Object... data) {
+								refreshDirect();
+								
+								if (type == ProgressType.Finish) {
+									setMode(Mode.Normal);
+								}
+							}
+						});
+					} else if (type == ClickType.LongClick) {
+						Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
+						startActivityForResult(intent, REQ_COMPRESS_TO);
+					}
+				}
+			}));
 
 			if (selected.size() == 1 && first instanceof Zip) {
-				list.add(new DataItem(R.drawable.edit, R.string.word_decompress_or_to, new IDialogClickListener() {
+				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_or_to, new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						if (type == ClickType.Click) {
@@ -820,27 +841,6 @@ public class DirectActivity extends BaseActivity {
 					}
 				}));
 			}
-			
-			list.add(new DataItem(R.drawable.edit, R.string.word_compress_or_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					if (type == ClickType.Click) {
-						Tree.zip(DirectActivity.this, mNode.direct.getPath(), selected, new IProgressCallback() {
-							@Override
-							public void onProgress(ProgressType type, Object... data) {
-								refreshDirect();
-								
-								if (type == ProgressType.Finish) {
-									setMode(Mode.Normal);
-								}
-							}
-						});
-					} else if (type == ClickType.LongClick) {
-						Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_COMPRESS_TO);
-					}
-				}
-			}));
 
 			dl.show();
 		} else {

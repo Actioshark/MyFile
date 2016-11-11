@@ -23,6 +23,7 @@ import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
+import kk.myfile.leaf.Zip;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.SimpleDialog;
@@ -32,6 +33,7 @@ import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -627,6 +629,24 @@ public class TypeActivity extends BaseActivity {
 					}
 				}
 			}));
+			
+			list.add(new DataItem(R.drawable.compress, R.string.word_compress_or_to, new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index, ClickType type) {
+					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+					startActivityForResult(intent, REQ_COMPRESS_TO);
+				}
+			}));
+
+			if (selected.size() == 1 && first instanceof Zip) {
+				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_or_to, new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+						startActivityForResult(intent, REQ_DECOMPRESS_TO);
+					}
+				}));
+			}
 
 			dl.show();
 		} else {
@@ -677,12 +697,12 @@ public class TypeActivity extends BaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		
+		if (resultCode != RESULT_OK || data == null) {
+			return;
+		}
 
 		if (requestCode == REQ_COPY_TO) {
-			if (resultCode != RESULT_OK || data == null) {
-				return;
-			}
-
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
 			Tree.carry(this, DataUtil.leaf2PathString(mTypeAdapter.getSelected()), path, false,
@@ -696,10 +716,6 @@ public class TypeActivity extends BaseActivity {
 					}
 				});
 		} else if (requestCode == REQ_CUT_TO) {
-			if (resultCode != RESULT_OK || data == null) {
-				return;
-			}
-
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
 			Tree.carry(this, DataUtil.leaf2PathString(mTypeAdapter.getSelected()), path, true,
@@ -712,6 +728,30 @@ public class TypeActivity extends BaseActivity {
 						}
 					}
 				});
+		} else if (requestCode == REQ_COMPRESS_TO) {
+			String path = data.getStringExtra(SelectActivity.KEY_PATH);
+			
+			Tree.zip(this, path, mTypeAdapter.getSelected(), new IProgressCallback() {
+				@Override
+				public void onProgress(ProgressType type, Object... data) {
+					if (type == ProgressType.Finish) {
+						refresh(true);
+						setMode(Mode.Normal);
+					}
+				}
+			});
+		} else if (requestCode == REQ_DECOMPRESS_TO) {
+			String path = data.getStringExtra(SelectActivity.KEY_PATH);
+			
+			Tree.unzip(TypeActivity.this, mTypeAdapter.getSelected().get(0).getPath(), path, new IProgressCallback() {
+				@Override
+				public void onProgress(ProgressType type, Object... data) {
+					if (type == ProgressType.Finish) {
+						refresh(true);
+						setMode(Mode.Normal);
+					}
+				}
+			});
 		}
 	}
 }
