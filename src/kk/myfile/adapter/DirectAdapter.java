@@ -219,7 +219,7 @@ public class DirectAdapter extends BaseAdapter {
 								} else if (holder.leaf instanceof Direct) {
 									mActivity.changeDirect(new Node((Direct) holder.leaf), true);
 								} else {
-									holder.leaf.open(mActivity);
+									holder.leaf.open(mActivity, false);
 								}
 							} else {
 								if (mActivity.getMode() == Mode.Select) {

@@ -1,5 +1,6 @@
 package kk.myfile.activity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
-
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.adapter.ZipAdapter;
@@ -18,8 +18,9 @@ import kk.myfile.leaf.Leaf;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
-
+import kk.myfile.util.Setting;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -74,12 +75,20 @@ public class ZipActivity extends BaseActivity {
 		});
 
 		View menu = findViewById(R.id.ll_menu);
-
-		// 返回按钮
-		menu.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
+		
+		// 主页按钮
+		menu.findViewById(R.id.iv_home).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				finish();
+			}
+		});
+
+		// 回退按钮
+		menu.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				backDirect();
 			}
 		});
 
@@ -144,10 +153,6 @@ public class ZipActivity extends BaseActivity {
 						String path = fh.getFileName();
 						Leaf leaf;
 						
-						if (path.charAt(0) != '/') {
-							path = "/" + path;
-						}
-						
 						if (path.charAt(path.length() - 1) == '/') {
 							Direct direct = mZipMap.get(path);
 							if (direct == null) {
@@ -160,6 +165,8 @@ public class ZipActivity extends BaseActivity {
 							leaf = FileUtil.createTempLeaf(path);
 						}
 						
+						leaf.setTag(fh);
+						
 						while(true) {
 							int ni = -1;
 							for (int i = path.length() - 2; i >= 0; i--) {
@@ -169,25 +176,27 @@ public class ZipActivity extends BaseActivity {
 								}
 							}
 							
+							boolean finish = false;
+							
 							String pp;
 							if (ni == -1) {
-								pp = "/";
+								pp = "";
+								finish = true;
 							} else {
 								pp = path.substring(0, ni + 1);
 							}
 							
 							Direct parent = mZipMap.get(pp);
-							boolean found = false;
 							if (parent == null) {
 								parent = new Direct(pp);
 								mZipMap.put(pp, parent);
 							} else {
-								found = true;
+								finish = true;
 							}
 							
 							parent.getChildren().add(leaf);
 							
-							if (found || pp.equals("/")) {
+							if (finish) {
 								break;
 							} else {
 								path = pp;
@@ -205,7 +214,7 @@ public class ZipActivity extends BaseActivity {
 					@Override
 					public void run() {
 						if (success.get()) {
-							showDirect(new Node(mZipMap.get("/")), false);
+							showDirect(new Node(mZipMap.get("")), false);
 						} else {
 							App.showToast(R.string.err_decompress_failed);
 							finish();
@@ -215,11 +224,33 @@ public class ZipActivity extends BaseActivity {
 			}
 		});
 	}
+	
+	public void extractFile(final String path) {
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					String dest = Setting.DEFAULT_PATH + "/temp";
+					
+					mZipFile.setRunInThread(false);
+					mZipFile.extractFile(path, dest);
+					
+					final Leaf leaf = FileUtil.createLeaf(new File(dest, path));
+					AppUtil.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							leaf.open(ZipActivity.this, false);
+						}
+					});
+				} catch (Exception e) {
+					Logger.print(null, e);
+				}
+			}
+		});
+	}
 
 	public void showDirect(Node node, boolean lastToHistory) {
 		if (mNode != null && node.direct.getPath().equals(mNode.direct.getPath())) {
-			mNode = node;
-			refreshDirect();
 			return;
 		}
 
@@ -240,23 +271,24 @@ public class ZipActivity extends BaseActivity {
 		mNode = node;
 
 		String path = node.direct.getPath();
-		final String[] nodes;
+		final List<String> nodes = new ArrayList<String>();
 		String[] temp = path.split("/");
-		if (temp.length > 0) {
-			nodes = temp;
-		} else {
-			nodes = new String[] {
-				""
-			};
+		
+		nodes.add("/");
+		for (String s : temp) {
+			if (s.length() > 0) {
+				nodes.add(s);
+			}
 		}
+		
 		mVgPath.removeAllViews();
 
-		for (int i = 0; i < nodes.length; i++) {
+		for (int i = 0; i < nodes.size(); i++) {
 			final int index = i;
 			View grid = getLayoutInflater().inflate(R.layout.grid_path, null);
 			TextView text = (TextView) grid.findViewById(R.id.tv_text);
-			text.setText(String.format("%s %c", i == 0 ? "/" : nodes[i],
-				i == nodes.length - 1 ? ' ' : '>'));
+			text.setText(String.format("%s %c", nodes.get(i),
+				i == nodes.size() - 1 ? ' ' : '>'));
 
 			grid.setOnClickListener(new OnClickListener() {
 				@Override
@@ -264,10 +296,8 @@ public class ZipActivity extends BaseActivity {
 					StringBuilder sb = new StringBuilder();
 
 					for (int i = 1; i <= index; i++) {
-						sb.append('/').append(nodes[i]);
+						sb.append(nodes.get(i)).append('/');
 					}
-					
-					sb.append('/');
 
 					showDirect(new Node(mZipMap.get(sb.toString())), true);
 				}
@@ -287,10 +317,6 @@ public class ZipActivity extends BaseActivity {
 
 		// 更新文件列表
 		mZipAdapter.setData(node.direct.getChildren(), node.position);
-	}
-
-	public void refreshDirect() {
-		mZipAdapter.setData(mNode.direct.getChildren(), -1);
 	}
 
 	public boolean backDirect() {

@@ -191,8 +191,8 @@ public abstract class Leaf {
 		return list;
 	}
 	
-	public void open(final Context context) {
-		if (IntentUtil.view(context, this, null)) {
+	public void open(final Context context, boolean forceSelect) {
+		if (forceSelect == false && IntentUtil.view(context, this, null)) {
 			return;
 		}
 			

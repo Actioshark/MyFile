@@ -226,7 +226,7 @@ public class TypeAdapter extends BaseAdapter {
 									mActivity.updateInfo();
 									notifyDataSetChanged();
 								} else {
-									holder.leaf.open(mActivity);
+									holder.leaf.open(mActivity, false);
 								}
 							} else {
 								if (mActivity.getMode() == Mode.Select) {

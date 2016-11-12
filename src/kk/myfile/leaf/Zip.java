@@ -19,7 +19,7 @@ public class Zip extends Leaf {
 	}
 	
 	@Override
-	public void open(Context context) {
+	public void open(Context context, boolean forceSelect) {
 		Intent intent = new Intent(context, ZipActivity.class);
 		intent.putExtra(ZipActivity.KEY_PATH, mPath);
 		context.startActivity(intent);

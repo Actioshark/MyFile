@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import kk.myfile.activity.BaseActivity.Classify;
+import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
@@ -80,8 +81,8 @@ public class Sorter {
 
 		@Override
 		public int cmp(Leaf a, Leaf b) {
-			boolean ad = a.getFile().isDirectory();
-			boolean bd = b.getFile().isDirectory();
+			boolean ad = a instanceof Direct;
+			boolean bd = b instanceof Direct;
 
 			if (ad == bd) {
 				return 0;
@@ -120,8 +121,8 @@ public class Sorter {
 
 		@Override
 		public int cmp(Leaf a, Leaf b) {
-			String an = a.getFile().getName().toLowerCase(Setting.LOCALE);
-			String bn = b.getFile().getName().toLowerCase(Setting.LOCALE);
+			String an = DataUtil.getFileName(a.getPath());
+			String bn = DataUtil.getFileName(b.getPath());
 
 			return an.compareTo(bn);
 		}
@@ -134,8 +135,8 @@ public class Sorter {
 
 		@Override
 		public int cmp(Leaf a, Leaf b) {
-			String ap = a.getPath().toLowerCase(Setting.LOCALE);
-			String bp = b.getPath().toLowerCase(Setting.LOCALE);
+			String ap = a.getPath();
+			String bp = b.getPath();
 
 			return ap.compareTo(bp);
 		}

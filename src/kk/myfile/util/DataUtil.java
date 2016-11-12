@@ -76,10 +76,10 @@ public class DataUtil {
 		return paths;
 	}
 	
-	public static String getName(String path) {
+	public static String getFileName(String path) {
 		for (int i = path.length() - 2; i > 0; i--) {
 			if (path.charAt(i) == '/') {
-				return path.substring(i, path.length());
+				return path.substring(i + 1, path.length());
 			}
 		}
 		

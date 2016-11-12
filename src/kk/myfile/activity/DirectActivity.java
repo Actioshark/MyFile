@@ -18,13 +18,11 @@ import kk.myfile.file.ClipBoard.ClipType;
 import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
-import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.TempDirect;
 import kk.myfile.leaf.Text;
-import kk.myfile.leaf.Video;
 import kk.myfile.leaf.Zip;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
@@ -674,40 +672,7 @@ public class DirectActivity extends BaseActivity {
 					new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dl, int index, ClickType type) {
-							SimpleDialog dialog = new SimpleDialog(DirectActivity.this);
-							dialog.setCanceledOnTouchOutside(true);
-							dialog.setMessage(R.string.msg_open_as);
-							dialog.setButtons(R.string.type_text, R.string.type_image,
-								R.string.type_audio, R.string.type_video, R.string.word_any);
-							dialog.setClickListener(new IDialogClickListener() {
-								@Override
-								public void onClick(Dialog dialog, int index, ClickType type) {
-									switch (index) {
-									case 0:
-										IntentUtil.view(DirectActivity.this, first, Text.TYPE);
-										break;
-
-									case 1:
-										IntentUtil.view(DirectActivity.this, first, Image.TYPE);
-										break;
-
-									case 2:
-										IntentUtil.view(DirectActivity.this, first, Audio.TYPE);
-										break;
-
-									case 3:
-										IntentUtil.view(DirectActivity.this, first, Video.TYPE);
-										break;
-
-									case 4:
-										IntentUtil.view(DirectActivity.this, first, "*/*");
-										break;
-									}
-
-									dialog.dismiss();
-								}
-							});
-							dialog.show();
+							first.open(DirectActivity.this, true);
 						}
 					}));
 
