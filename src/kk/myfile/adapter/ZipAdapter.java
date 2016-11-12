@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 public class ZipAdapter extends BaseAdapter {
 	private final ZipActivity mActivity;
-	private final List<Direct> mData = new ArrayList<Direct>();
+	private final List<Leaf> mData = new ArrayList<Leaf>();
 	private Object mMark;
 
 	public ZipAdapter(ZipActivity activity) {
@@ -45,11 +45,7 @@ public class ZipAdapter extends BaseAdapter {
 						if (mMark == data) {
 							mData.clear();
 							synchronized (data) {
-								for (Leaf leaf : data) {
-									if (leaf instanceof Direct) {
-										mData.add((Direct) leaf);
-									}
-								}
+								mData.addAll(data);
 							}
 
 							notifyDataSetChanged();
@@ -96,18 +92,22 @@ public class ZipAdapter extends BaseAdapter {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					mActivity.showDirect(new Node(holder.data), true);
+					if (holder.leaf instanceof Direct) {
+						mActivity.showDirect(new Node((Direct) holder.leaf), true);
+					} else {
+						
+					}
 				}
 			});
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
 
-		Direct data = mData.get(position);
+		Leaf leaf = mData.get(position);
 
-		holder.icon.setImageResource(data.getIcon());
-		holder.name.setText(DataUtil.getName(data.getPath()));
-		holder.data = data;
+		holder.icon.setImageResource(leaf.getIcon());
+		holder.name.setText(DataUtil.getName(leaf.getPath()));
+		holder.leaf = leaf;
 
 		return view;
 	}
@@ -115,6 +115,7 @@ public class ZipAdapter extends BaseAdapter {
 	class ViewHolder {
 		public ImageView icon;
 		public TextView name;
-		public Direct data;
+		
+		public Leaf leaf;
 	}
 }

@@ -144,6 +144,10 @@ public class ZipActivity extends BaseActivity {
 						String path = fh.getFileName();
 						Leaf leaf;
 						
+						if (path.charAt(0) != '/') {
+							path = "/" + path;
+						}
+						
 						if (path.charAt(path.length() - 1) == '/') {
 							Direct direct = mZipMap.get(path);
 							if (direct == null) {
