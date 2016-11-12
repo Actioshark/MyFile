@@ -14,9 +14,9 @@
 	<string name="err_create_direct_success">成功</string>
 	<string name="err_create_file_failed">创建文件失败！</string>
 	<string name="err_create_file_success">成功</string>
-	<string name="err_decompress_failed">解压失败</string>
-	<string name="err_decompress_success">成功</string>
 	<string name="err_delete_file_failed">%s\n删除失败</string>
+	<string name="err_extract_failed">解压失败</string>
+	<string name="err_extract_success">成功</string>
 	<string name="err_file_exist">此文件已经存在</string>
 	<string name="err_file_read_error">文件读取错误</string>
 	<string name="err_illegal_file_name_char">含有非法字符！</string>
@@ -104,12 +104,12 @@
 	<string name="word_cover_or_all">覆盖\n（所有）</string>
 	<string name="word_cut_or_to">剪切（到）</string>
 	<string name="word_date">日期</string>
-	<string name="word_decompress_or_to">解压（到）</string>
-	<string name="word_decompress_to">解压到</string>
 	<string name="word_delete">删除</string>
 	<string name="word_detail">详情</string>
 	<string name="word_duration">时长</string>
 	<string name="word_edit">编辑</string>
+	<string name="word_extract_or_to">解压（到）</string>
+	<string name="word_extract_to">解压到</string>
 	<string name="word_height">高</string>
 	<string name="word_md5">MD5</string>
 	<string name="word_minetype">媒体类型</string>

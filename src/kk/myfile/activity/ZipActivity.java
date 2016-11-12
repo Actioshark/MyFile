@@ -117,7 +117,7 @@ public class ZipActivity extends BaseActivity {
 								mZipFile.setPassword(password);
 							} catch (Exception e){
 								Logger.print(null, e);
-								App.showToast(R.string.err_decompress_failed);
+								App.showToast(R.string.err_extract_failed);
 								return;
 							}
 							
@@ -136,7 +136,7 @@ public class ZipActivity extends BaseActivity {
 			}
 		} catch (Exception e) {
 			Logger.print(null, e);
-			App.showToast(R.string.err_decompress_failed);
+			App.showToast(R.string.err_extract_failed);
 			finish();
 			return;
 		}
@@ -217,7 +217,7 @@ public class ZipActivity extends BaseActivity {
 						if (success.get()) {
 							showDirect(new Node(mZipMap.get("")), false);
 						} else {
-							App.showToast(R.string.err_decompress_failed);
+							App.showToast(R.string.err_extract_failed);
 							finish();
 						}
 					}

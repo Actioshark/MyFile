@@ -599,7 +599,7 @@ public class TypeActivity extends BaseActivity {
 				}));
 
 			if (selected.size() == 1 && first instanceof Zip) {
-				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_to,
+				list.add(new DataItem(R.drawable.extract, R.string.word_extract_to,
 					new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index, ClickType type) {

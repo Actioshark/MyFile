@@ -754,14 +754,14 @@ public class Tree {
 
 					if (pm.getResult() == ProgressMonitor.RESULT_SUCCESS) {
 						App.showToast(cmps ? R.string.err_compress_success
-							: R.string.err_decompress_success);
+							: R.string.err_extract_success);
 
 						if (cb != null) {
 							cb.onProgress(ProgressType.Finish);
 						}
 					} else {
 						App.showToast(cmps ? R.string.err_compress_failed
-							: R.string.err_decompress_failed);
+							: R.string.err_extract_failed);
 
 						if (cb != null) {
 							cb.onProgress(ProgressType.Error);
@@ -916,7 +916,7 @@ public class Tree {
 		} catch (Exception e) {
 			Logger.print(null, e);
 
-			App.showToast(R.string.err_decompress_failed);
+			App.showToast(R.string.err_extract_failed);
 
 			if (cb != null) {
 				cb.onProgress(ProgressType.Error);

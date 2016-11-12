@@ -14,9 +14,9 @@
 	<string name="err_create_direct_success">Success</string>
 	<string name="err_create_file_failed">Create File Failed!</string>
 	<string name="err_create_file_success">Success</string>
-	<string name="err_decompress_failed">Decompress failed!</string>
-	<string name="err_decompress_success">Success</string>
 	<string name="err_delete_file_failed">%s\nDelete failed!</string>
+	<string name="err_extract_failed">Extract failed!</string>
+	<string name="err_extract_success">Success</string>
 	<string name="err_file_exist">The name already exist!</string>
 	<string name="err_file_read_error">File reading error</string>
 	<string name="err_illegal_file_name_char">Illegal characters!</string>
@@ -109,12 +109,12 @@
 	<string name="word_cover_or_all">Cover\n(All)</string>
 	<string name="word_cut_or_to">Cut (To)</string>
 	<string name="word_date">Date</string>
-	<string name="word_decompress_or_to">Decompress (To)</string>
-	<string name="word_decompress_to">Decompress To</string>
 	<string name="word_delete">Delete</string>
 	<string name="word_detail">Detail</string>
 	<string name="word_duration">Duration</string>
 	<string name="word_edit">Edit</string>
+	<string name="word_extract_or_to">Extract (To)</string>
+	<string name="word_extract_to">Extract To</string>
 	<string name="word_height">Height</string>
 	<string name="word_md5">MD5</string>
 	<string name="word_minetype">MineType</string>
