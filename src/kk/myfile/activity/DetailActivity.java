@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 public class DetailActivity extends BaseActivity {
-	public static final String KEY_PATH = "detail_path";
 	public static final String KEY_INDEX = "detail_index";
 
 	@Override

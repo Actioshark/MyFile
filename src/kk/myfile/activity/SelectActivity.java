@@ -25,8 +25,6 @@ import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 
 public class SelectActivity extends BaseActivity {
-	public static final String KEY_PATH = "select_path";
-
 	public static class Node {
 		public Direct direct;
 		public int position = 0;

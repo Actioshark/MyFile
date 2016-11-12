@@ -60,7 +60,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DirectActivity extends BaseActivity {
-	public static final String KEY_PATH = "direct_path";
 	public static final String KEY_CUR_CHILD = "direct_cur_child";
 
 	public static class Node {
