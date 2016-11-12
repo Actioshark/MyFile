@@ -53,30 +53,25 @@ public class DirectAdapter extends BaseAdapter {
 	}
 
 	public void setData(final List<Leaf> data, final int position) {
-		AppUtil.runOnNewThread(new Runnable() {
+		synchronized (data) {
+			Sorter.sort(Classify.Direct, data);
+		}
+
+		AppUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				mData.clear();
 				synchronized (data) {
-					Sorter.sort(Classify.Direct, data);
+					mData.addAll(data);
 				}
 
+				mActivity.updateTitle();
+				mActivity.updateInfo();
+				notifyDataSetChanged();
+
 				AppUtil.runOnUiThread(new Runnable() {
-					@Override
 					public void run() {
-						mData.clear();
-						synchronized (data) {
-							mData.addAll(data);
-						}
-
-						mActivity.updateTitle();
-						mActivity.updateInfo();
-						notifyDataSetChanged();
-
-						AppUtil.runOnUiThread(new Runnable() {
-							public void run() {
-								mActivity.setSelection(position);
-							}
-						});
+						mActivity.setSelection(position);
 					}
 				});
 			}

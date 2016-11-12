@@ -55,39 +55,23 @@ public class TypeAdapter extends BaseAdapter {
 	}
 
 	public void setData(final List<Leaf> data) {
-		if (mClassify != Classify.Type) {
-			mData.clear();
+		if (mClassify == Classify.Type) {
 			synchronized (data) {
-				mData.addAll(data);
+				Sorter.sort(Classify.Type, data);
 			}
-
-			mActivity.updateTitle();
-			mActivity.updateInfo();
-			notifyDataSetChanged();
-
-			return;
 		}
 
-		AppUtil.runOnNewThread(new Runnable() {
+		AppUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				mData.clear();
 				synchronized (data) {
-					Sorter.sort(Classify.Type, data);
+					mData.addAll(data);
 				}
 
-				AppUtil.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						mData.clear();
-						synchronized (data) {
-							mData.addAll(data);
-						}
-
-						mActivity.updateTitle();
-						mActivity.updateInfo();
-						notifyDataSetChanged();
-					}
-				});
+				mActivity.updateTitle();
+				mActivity.updateInfo();
+				notifyDataSetChanged();
 			}
 		});
 	}

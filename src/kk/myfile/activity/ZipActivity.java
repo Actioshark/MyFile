@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
+
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.adapter.ZipAdapter;
@@ -18,9 +19,9 @@ import kk.myfile.leaf.Leaf;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
-import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.KeyEvent;

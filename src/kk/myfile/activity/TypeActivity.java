@@ -207,15 +207,11 @@ public class TypeActivity extends BaseActivity {
 							final List<Leaf> ret = Tree
 								.search(list, mEtSearch.getText().toString());
 
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									synchronized (mEtSearch) {
-										if (mSearchMark == mark) {
-											mTypeAdapter.setData(ret);
-										}
-									}
+							synchronized (mEtSearch) {
+								if (mSearchMark == mark) {
+									mTypeAdapter.setData(ret);
 								}
-							});
+							}
 						}
 					});
 				}
@@ -313,15 +309,11 @@ public class TypeActivity extends BaseActivity {
 
 					final List<Leaf> ret = Tree.search(list, mEtSearch.getText().toString());
 
-					AppUtil.runOnUiThread(new Runnable() {
-						public void run() {
-							synchronized (mEtSearch) {
-								if (mSearchMark == mark) {
-									mTypeAdapter.setData(ret);
-								}
-							}
+					synchronized (mEtSearch) {
+						if (mSearchMark == mark) {
+							mTypeAdapter.setData(ret);
 						}
-					});
+					}
 
 					if (finished) {
 						return;
