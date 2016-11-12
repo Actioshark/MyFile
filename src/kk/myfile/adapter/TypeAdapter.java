@@ -44,7 +44,6 @@ public class TypeAdapter extends BaseAdapter {
 	private final Classify mClassify;
 
 	private final List<Leaf> mData = new ArrayList<Leaf>();
-	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
 
 	private long mTouchDownTime;
@@ -69,8 +68,6 @@ public class TypeAdapter extends BaseAdapter {
 			return;
 		}
 
-		mMark = data;
-
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
@@ -81,16 +78,14 @@ public class TypeAdapter extends BaseAdapter {
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if (mMark == data) {
-							mData.clear();
-							synchronized (data) {
-								mData.addAll(data);
-							}
-
-							mActivity.updateTitle();
-							mActivity.updateInfo();
-							notifyDataSetChanged();
+						mData.clear();
+						synchronized (data) {
+							mData.addAll(data);
 						}
+
+						mActivity.updateTitle();
+						mActivity.updateInfo();
+						notifyDataSetChanged();
 					}
 				});
 			}

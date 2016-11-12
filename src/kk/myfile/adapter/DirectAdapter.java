@@ -43,7 +43,6 @@ import android.widget.TextView;
 public class DirectAdapter extends BaseAdapter {
 	private final DirectActivity mActivity;
 	private final List<Leaf> mData = new ArrayList<Leaf>();
-	private Object mMark;
 	private final Set<Integer> mSelected = new HashSet<Integer>();
 
 	private long mTouchDownTime;
@@ -54,8 +53,6 @@ public class DirectAdapter extends BaseAdapter {
 	}
 
 	public void setData(final List<Leaf> data, final int position) {
-		mMark = data;
-
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
@@ -66,22 +63,20 @@ public class DirectAdapter extends BaseAdapter {
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if (mMark == data) {
-							mData.clear();
-							synchronized (data) {
-								mData.addAll(data);
-							}
-
-							mActivity.updateTitle();
-							mActivity.updateInfo();
-							notifyDataSetChanged();
-
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									mActivity.setSelection(position);
-								}
-							});
+						mData.clear();
+						synchronized (data) {
+							mData.addAll(data);
 						}
+
+						mActivity.updateTitle();
+						mActivity.updateInfo();
+						notifyDataSetChanged();
+
+						AppUtil.runOnUiThread(new Runnable() {
+							public void run() {
+								mActivity.setSelection(position);
+							}
+						});
 					}
 				});
 			}
