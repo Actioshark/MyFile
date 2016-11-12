@@ -604,7 +604,7 @@ public class TypeActivity extends BaseActivity {
 						@Override
 						public void onClick(Dialog dialog, int index, ClickType type) {
 							Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-							startActivityForResult(intent, REQ_DECOMPRESS_TO);
+							startActivityForResult(intent, REQ_EXTRACT_TO);
 						}
 					}));
 			}
@@ -700,7 +700,7 @@ public class TypeActivity extends BaseActivity {
 					}
 				}
 			});
-		} else if (requestCode == REQ_DECOMPRESS_TO) {
+		} else if (requestCode == REQ_EXTRACT_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
 			Tree.unzip(TypeActivity.this, mTypeAdapter.getSelected().get(0).getPath(), path,

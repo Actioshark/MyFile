@@ -818,7 +818,7 @@ public class DirectActivity extends BaseActivity {
 							} else if (type == ClickType.LongClick) {
 								Intent intent = new Intent(DirectActivity.this,
 									SelectActivity.class);
-								startActivityForResult(intent, REQ_DECOMPRESS_TO);
+								startActivityForResult(intent, REQ_EXTRACT_TO);
 							}
 						}
 					}));
@@ -990,7 +990,7 @@ public class DirectActivity extends BaseActivity {
 					}
 				}
 			});
-		} else if (requestCode == REQ_DECOMPRESS_TO) {
+		} else if (requestCode == REQ_EXTRACT_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
 			Tree.unzip(DirectActivity.this, mDirectAdapter.getSelected().get(0).getPath(), path,
