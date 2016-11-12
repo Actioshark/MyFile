@@ -1,0 +1,50 @@
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/main_bg"
+	android:orientation="vertical">
+
+	<ListView
+		android:id="@+id/lv_list"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+	<HorizontalScrollView
+		android:id="@+id/hsv_path"
+		android:layout_width="match_parent"
+		android:layout_height="42dp"
+		android:scrollbars="none"
+		android:background="@color/bar_bg">
+
+		<LinearLayout
+			android:id="@+id/ll_path"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_gravity="left|center_vertical"
+			android:orientation="horizontal" />
+
+	</HorizontalScrollView>
+
+	<LinearLayout
+		android:id="@+id/ll_menu"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/main_bar_height"
+		android:layout_marginTop="@dimen/main_gap"
+		android:orientation="horizontal">
+
+		<ImageView
+			android:id="@+id/iv_back"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:padding="@dimen/main_padding"
+			android:gravity="center"
+			android:scaleType="centerInside"
+			android:background="@drawable/btn_bar"
+			android:src="@drawable/arrow_left" />
+
+	</LinearLayout>
+</LinearLayout>

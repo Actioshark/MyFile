@@ -61,10 +61,15 @@ public class FileUtil {
 
 	public static Leaf createLeaf(File file) {
 		String path = file.getAbsolutePath();
+		
 		if (file.isDirectory()) {
 			return new Direct(path);
+		} else {
+			return createTempLeaf(path);
 		}
-
+	}
+	
+	public static Leaf createTempLeaf(String path) {
 		try {
 			String subfix = DataUtil.getSubfix(path);
 			JSONObject map = sTypeMap.getJSONObject(subfix);

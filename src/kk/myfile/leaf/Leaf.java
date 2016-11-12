@@ -8,14 +8,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity;
 import kk.myfile.adapter.DetailItemAdapter.Data;
 import kk.myfile.adapter.DetailItemAdapter.IClickListener;
 import kk.myfile.adapter.DetailItemAdapter.ViewHolder;
+import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
+import kk.myfile.util.IntentUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
@@ -26,7 +32,7 @@ public abstract class Leaf {
 	private Object mTag;
 
 	public Leaf(String path) {
-		if (path == null || path.startsWith("/") == false) {
+		if (path == null) {
 			mPath = "/";
 		} else {
 			mPath = path;
@@ -183,6 +189,49 @@ public abstract class Leaf {
 		}
 
 		return list;
+	}
+	
+	public void open(final Context context) {
+		if (IntentUtil.view(context, this, null)) {
+			return;
+		}
+			
+		SimpleDialog dialog = new SimpleDialog(context);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setMessage(R.string.msg_open_as);
+		dialog.setButtons(R.string.type_text, R.string.type_image,
+			R.string.type_audio, R.string.type_video,
+			R.string.word_any);
+		dialog.setClickListener(new IDialogClickListener() {
+			@Override
+			public void onClick(Dialog dialog, int index,
+				ClickType type) {
+				switch (index) {
+				case 0:
+					IntentUtil.view(context, Leaf.this, Text.TYPE);
+					break;
+
+				case 1:
+					IntentUtil.view(context, Leaf.this, Image.TYPE);
+					break;
+
+				case 2:
+					IntentUtil.view(context, Leaf.this, Audio.TYPE);
+					break;
+
+				case 3:
+					IntentUtil.view(context, Leaf.this, Video.TYPE);
+					break;
+
+				case 4:
+					IntentUtil.view(context, Leaf.this, "*/*");
+					break;
+				}
+
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
 	}
 
 	@Override

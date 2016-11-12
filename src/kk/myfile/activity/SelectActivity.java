@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kk.myfile.R;
+import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.adapter.SelectAdapter;
 import kk.myfile.leaf.Direct;
-import kk.myfile.leaf.TempDirect;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
 
@@ -25,15 +25,6 @@ import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 
 public class SelectActivity extends BaseActivity {
-	public static class Node {
-		public Direct direct;
-		public int position = 0;
-
-		public Node(Direct direct) {
-			this.direct = direct;
-		}
-	}
-
 	private Node mNode;
 	private final List<Node> mHistory = new ArrayList<Node>();
 
@@ -132,7 +123,7 @@ public class SelectActivity extends BaseActivity {
 		}
 
 		// 加入历史
-		if (lastToHistory && mNode != null && mNode.direct instanceof TempDirect == false) {
+		if (lastToHistory && mNode != null) {
 			int size = mHistory.size();
 			if (size > 0) {
 				Node n = mHistory.get(size - 1);

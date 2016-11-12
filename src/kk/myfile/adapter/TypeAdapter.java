@@ -11,17 +11,10 @@ import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
 import kk.myfile.file.ImageUtil.IThumListenner;
 import kk.myfile.file.Sorter;
-import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
-import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
-import kk.myfile.leaf.Text;
-import kk.myfile.leaf.Video;
-import kk.myfile.ui.IDialogClickListener;
-import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
-import kk.myfile.util.IntentUtil;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
 
@@ -34,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -239,48 +231,7 @@ public class TypeAdapter extends BaseAdapter {
 									mActivity.updateInfo();
 									notifyDataSetChanged();
 								} else {
-									if (IntentUtil.view(mActivity, holder.leaf, null) == false) {
-										SimpleDialog dialog = new SimpleDialog(mActivity);
-										dialog.setCanceledOnTouchOutside(true);
-										dialog.setMessage(R.string.msg_open_as);
-										dialog.setButtons(R.string.type_text, R.string.type_image,
-											R.string.type_audio, R.string.type_video,
-											R.string.word_any);
-										dialog.setClickListener(new IDialogClickListener() {
-											@Override
-											public void onClick(Dialog dialog, int index,
-												ClickType type) {
-												switch (index) {
-												case 0:
-													IntentUtil.view(mActivity, holder.leaf,
-														Text.TYPE);
-													break;
-
-												case 1:
-													IntentUtil.view(mActivity, holder.leaf,
-														Image.TYPE);
-													break;
-
-												case 2:
-													IntentUtil.view(mActivity, holder.leaf,
-														Audio.TYPE);
-													break;
-
-												case 3:
-													IntentUtil.view(mActivity, holder.leaf,
-														Video.TYPE);
-													break;
-
-												case 4:
-													IntentUtil.view(mActivity, holder.leaf, "*/*");
-													break;
-												}
-
-												dialog.dismiss();
-											}
-										});
-										dialog.show();
-									}
+									holder.leaf.open(mActivity);
 								}
 							} else {
 								if (mActivity.getMode() == Mode.Select) {
