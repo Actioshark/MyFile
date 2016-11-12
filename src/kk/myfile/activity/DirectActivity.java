@@ -71,11 +71,12 @@ public class DirectActivity extends BaseActivity {
 			this.direct = direct;
 		}
 	}
+	
+	private String mPath;
+	private String mCurChild;
 
 	private Node mNode;
 	private final List<Node> mHistory = new ArrayList<Node>();
-	private String mPath;
-	private String mCurChild;
 
 	private Mode mMode = Mode.Normal;
 
@@ -220,7 +221,8 @@ public class DirectActivity extends BaseActivity {
 		mIvSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				mDirectAdapter.selectAll(mDirectAdapter.getSelectedCount() < mDirectAdapter.getCount());
+				mDirectAdapter.selectAll(mDirectAdapter.getSelectedCount() < mDirectAdapter
+					.getCount());
 			}
 		});
 
@@ -289,8 +291,8 @@ public class DirectActivity extends BaseActivity {
 		});
 		mLlInfo.addOnLayoutChangeListener(new OnLayoutChangeListener() {
 			@Override
-			public void onLayoutChange(View view, int left, int top, int right, int bottom, int ol, int ot, int or,
-					int ob) {
+			public void onLayoutChange(View view, int left, int top, int right, int bottom, int ol,
+				int ot, int or, int ob) {
 
 				if (ob < bottom) {
 					mEtSearch.setFocusable(false);
@@ -337,7 +339,7 @@ public class DirectActivity extends BaseActivity {
 		updateStyle();
 
 		if (node.direct instanceof TempDirect == false && mNode != null
-				&& node.direct.getPath().equals(mNode.direct.getPath())) {
+			&& node.direct.getPath().equals(mNode.direct.getPath())) {
 
 			mNode = node;
 			refreshDirect();
@@ -384,7 +386,9 @@ public class DirectActivity extends BaseActivity {
 		if (temp.length > 0) {
 			nodes = temp;
 		} else {
-			nodes = new String[] { "" };
+			nodes = new String[] {
+				""
+			};
 		}
 		mVgPath.removeAllViews();
 
@@ -392,7 +396,8 @@ public class DirectActivity extends BaseActivity {
 			final int index = i;
 			View grid = getLayoutInflater().inflate(R.layout.grid_path, null);
 			TextView text = (TextView) grid.findViewById(R.id.tv_text);
-			text.setText(String.format("%s %c", i == 0 ? "/" : nodes[i], i == nodes.length - 1 ? ' ' : '>'));
+			text.setText(String.format("%s %c", i == 0 ? "/" : nodes[i],
+				i == nodes.length - 1 ? ' ' : '>'));
 
 			grid.setOnClickListener(new OnClickListener() {
 				@Override
@@ -422,8 +427,8 @@ public class DirectActivity extends BaseActivity {
 				}
 			});
 
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-					LinearLayout.LayoutParams.MATCH_PARENT);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
 			mVgPath.addView(grid, lp);
 		}
 
@@ -514,8 +519,8 @@ public class DirectActivity extends BaseActivity {
 	public void updateTitle() {
 		if (mMode == Mode.Select) {
 			mTvTitle.setText(R.string.msg_multi_select_mode);
-			mIvSelect.setImageResource(mDirectAdapter.getSelectedCount() < mDirectAdapter.getCount()
-					? R.drawable.multi_select_pre : R.drawable.multi_select_nor);
+			mIvSelect.setImageResource(mDirectAdapter.getSelectedCount() < mDirectAdapter
+				.getCount() ? R.drawable.multi_select_pre : R.drawable.multi_select_nor);
 			mLlPath.setVisibility(View.GONE);
 			mRlTitle.setVisibility(View.VISIBLE);
 		} else {
@@ -543,10 +548,11 @@ public class DirectActivity extends BaseActivity {
 
 		if (leaf instanceof Direct) {
 			String[] children = file.list();
-			mTvDetailSize
-					.setText(AppUtil.getString(R.string.msg_children_with_num, children == null ? 0 : children.length));
+			mTvDetailSize.setText(AppUtil.getString(R.string.msg_children_with_num,
+				children == null ? 0 : children.length));
 		} else {
-			mTvDetailSize.setText(String.format(Setting.LOCALE, "%s B", MathUtil.insertComma(file.length())));
+			mTvDetailSize.setText(String.format(Setting.LOCALE, "%s B", MathUtil.insertComma(file
+				.length())));
 		}
 
 		mDetailShowPoint = SystemClock.elapsedRealtime();
@@ -559,9 +565,10 @@ public class DirectActivity extends BaseActivity {
 	public void updateInfo() {
 		if (mMode == Mode.Select) {
 			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_select_with_num,
-					mDirectAdapter.getSelectedCount(), mNode.direct.getChildren().size()));
+				mDirectAdapter.getSelectedCount(), mNode.direct.getChildren().size()));
 		} else {
-			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_with_num, mNode.direct.getChildren().size()));
+			mTvInfoCount.setText(AppUtil.getString(R.string.msg_children_with_num, mNode.direct
+				.getChildren().size()));
 		}
 	}
 
@@ -588,272 +595,290 @@ public class DirectActivity extends BaseActivity {
 			}
 
 			if (hasDirect == false) {
-				list.add(new DataItem(R.drawable.share, R.string.word_share, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index, ClickType type) {
-						if (type == ClickType.Click) {
-							if (IntentUtil.share(DirectActivity.this, mDirectAdapter.getSelected(), null)) {
-								setMode(Mode.Normal);
-							} else {
-								App.showToast(R.string.err_share_failed);
-							}
-						} else if (type == ClickType.LongClick) {
-							AppUtil.runOnNewThread(new Runnable() {
-								@Override
-								public void run() {
-									for (Leaf leaf : selected) {
-										try {
-											String path = leaf.getPath();
-											if (path.endsWith(".xor")) {
-												path = path.substring(0, path.length() - 4);
-											} else {
-												path = path + ".xor";
-											}
-											File to = new File(path);
-
-											String ret = FileUtil.createFile(to);
-											if (ret != null) {
-												App.showToast(ret);
-												continue;
-											}
-
-											File from = leaf.getFile();
-
-											boolean suc = FileUtil.write(from, to, 0xff);
-											if (suc == false) {
-												App.showToast(R.string.err_file_read_error);
-												continue;
-											}
-
-											ret = FileUtil.delete(from);
-											if (ret != null) {
-												App.showToast(ret);
-												continue;
-											}
-										} catch (Exception e) {
-											Logger.print(null, e);
-										}
-									}
-
-									AppUtil.runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											setMode(Mode.Normal);
-											refreshDirect();
-										}
-									});
+				list.add(new DataItem(R.drawable.share, R.string.word_share,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							if (type == ClickType.Click) {
+								if (IntentUtil.share(DirectActivity.this, mDirectAdapter
+									.getSelected(), null)) {
+									setMode(Mode.Normal);
+								} else {
+									App.showToast(R.string.err_share_failed);
 								}
-							});
+							} else if (type == ClickType.LongClick) {
+								AppUtil.runOnNewThread(new Runnable() {
+									@Override
+									public void run() {
+										for (Leaf leaf : selected) {
+											try {
+												String path = leaf.getPath();
+												if (path.endsWith(".xor")) {
+													path = path.substring(0, path.length() - 4);
+												} else {
+													path = path + ".xor";
+												}
+												File to = new File(path);
+
+												String ret = FileUtil.createFile(to);
+												if (ret != null) {
+													App.showToast(ret);
+													continue;
+												}
+
+												File from = leaf.getFile();
+
+												boolean suc = FileUtil.write(from, to, 0xff);
+												if (suc == false) {
+													App.showToast(R.string.err_file_read_error);
+													continue;
+												}
+
+												ret = FileUtil.delete(from);
+												if (ret != null) {
+													App.showToast(ret);
+													continue;
+												}
+											} catch (Exception e) {
+												Logger.print(null, e);
+											}
+										}
+
+										AppUtil.runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												setMode(Mode.Normal);
+												refreshDirect();
+											}
+										});
+									}
+								});
+							}
 						}
-					}
-				}));
+					}));
 			}
 
-			list.add(new DataItem(R.drawable.detail, R.string.word_detail, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					Intent intent = new Intent(DirectActivity.this, DetailActivity.class);
-					intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH, DataUtil.leaf2PathCs(selected));
-					intent.putExtra(DetailActivity.KEY_INDEX, 0);
-					startActivity(intent);
-				}
-			}));
+			list.add(new DataItem(R.drawable.detail, R.string.word_detail,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						Intent intent = new Intent(DirectActivity.this, DetailActivity.class);
+						intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH, DataUtil
+							.leaf2PathCs(selected));
+						intent.putExtra(DetailActivity.KEY_INDEX, 0);
+						startActivity(intent);
+					}
+				}));
 
 			if (selected.size() == 1) {
-				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dl, int index, ClickType type) {
-						SimpleDialog dialog = new SimpleDialog(DirectActivity.this);
-						dialog.setCanceledOnTouchOutside(true);
-						dialog.setMessage(R.string.msg_open_as);
-						dialog.setButtons(R.string.type_text, R.string.type_image, R.string.type_audio,
-								R.string.type_video, R.string.word_any);
-						dialog.setClickListener(new IDialogClickListener() {
-							@Override
-							public void onClick(Dialog dialog, int index, ClickType type) {
-								switch (index) {
-								case 0:
-									IntentUtil.view(DirectActivity.this, first, Text.TYPE);
-									break;
-
-								case 1:
-									IntentUtil.view(DirectActivity.this, first, Image.TYPE);
-									break;
-
-								case 2:
-									IntentUtil.view(DirectActivity.this, first, Audio.TYPE);
-									break;
-
-								case 3:
-									IntentUtil.view(DirectActivity.this, first, Video.TYPE);
-									break;
-
-								case 4:
-									IntentUtil.view(DirectActivity.this, first, "*/*");
-									break;
-								}
-
-								dialog.dismiss();
-							}
-						});
-						dialog.show();
-					}
-				}));
-
-				list.add(new DataItem(R.drawable.edit, R.string.word_rename, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index, ClickType type) {
-						Tree.rename(DirectActivity.this, first.getFile(), new IProgressCallback() {
-							@Override
-							public void onProgress(ProgressType type, Object... data) {
-								setMode(Mode.Normal);
-								refreshDirect();
-							}
-						});
-					}
-				}));
-			}
-
-			if (hasDirect == false && selected.size() == 1) {
-				list.add(new DataItem(R.drawable.edit, R.string.word_edit, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index, ClickType type) {
-						if (IntentUtil.edit(DirectActivity.this, first, null)) {
-							setMode(Mode.Normal);
-						} else {
-							SimpleDialog st = new SimpleDialog(DirectActivity.this);
-							st.setCanceledOnTouchOutside(true);
-							st.setMessage(R.string.msg_edit_as);
-							st.setButtons(R.string.type_text, R.string.type_image, R.string.word_any);
-							st.setClickListener(new IDialogClickListener() {
+				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dl, int index, ClickType type) {
+							SimpleDialog dialog = new SimpleDialog(DirectActivity.this);
+							dialog.setCanceledOnTouchOutside(true);
+							dialog.setMessage(R.string.msg_open_as);
+							dialog.setButtons(R.string.type_text, R.string.type_image,
+								R.string.type_audio, R.string.type_video, R.string.word_any);
+							dialog.setClickListener(new IDialogClickListener() {
 								@Override
 								public void onClick(Dialog dialog, int index, ClickType type) {
 									switch (index) {
 									case 0:
-										IntentUtil.edit(DirectActivity.this, first, Text.TYPE);
+										IntentUtil.view(DirectActivity.this, first, Text.TYPE);
 										break;
 
 									case 1:
-										IntentUtil.edit(DirectActivity.this, first, Image.TYPE);
+										IntentUtil.view(DirectActivity.this, first, Image.TYPE);
 										break;
 
 									case 2:
-										IntentUtil.edit(DirectActivity.this, first, "*/*");
+										IntentUtil.view(DirectActivity.this, first, Audio.TYPE);
+										break;
+
+									case 3:
+										IntentUtil.view(DirectActivity.this, first, Video.TYPE);
+										break;
+
+									case 4:
+										IntentUtil.view(DirectActivity.this, first, "*/*");
 										break;
 									}
 
 									dialog.dismiss();
 								}
 							});
-							st.show();
+							dialog.show();
 						}
-					}
-				}));
+					}));
+
+				list.add(new DataItem(R.drawable.edit, R.string.word_rename,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							Tree.rename(DirectActivity.this, first.getFile(),
+								new IProgressCallback() {
+									@Override
+									public void onProgress(ProgressType type, Object... data) {
+										setMode(Mode.Normal);
+										refreshDirect();
+									}
+								});
+						}
+					}));
 			}
 
-			list.add(new DataItem(R.drawable.cross, R.string.word_delete, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					Tree.delete(DirectActivity.this, selected, new IProgressCallback() {
+			if (hasDirect == false && selected.size() == 1) {
+				list.add(new DataItem(R.drawable.edit, R.string.word_edit,
+					new IDialogClickListener() {
 						@Override
-						public void onProgress(ProgressType type, Object... data) {
-							setMode(Mode.Normal);
-							refreshDirect();
-						}
-					});
-				}
-			}));
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							if (IntentUtil.edit(DirectActivity.this, first, null)) {
+								setMode(Mode.Normal);
+							} else {
+								SimpleDialog st = new SimpleDialog(DirectActivity.this);
+								st.setCanceledOnTouchOutside(true);
+								st.setMessage(R.string.msg_edit_as);
+								st.setButtons(R.string.type_text, R.string.type_image,
+									R.string.word_any);
+								st.setClickListener(new IDialogClickListener() {
+									@Override
+									public void onClick(Dialog dialog, int index, ClickType type) {
+										switch (index) {
+										case 0:
+											IntentUtil.edit(DirectActivity.this, first, Text.TYPE);
+											break;
 
-			list.add(new DataItem(R.drawable.copy, R.string.word_copy_or_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					if (type == ClickType.Click) {
-						if (ClipBoard.put(DirectActivity.this, ClipType.Copy, selected)) {
-							setMode(Mode.Normal);
-							App.showToast(R.string.msg_enter_target_direct_and_paste);
-						} else {
-							App.showToast(R.string.err_nothing_selected);
-						}
-					} else if (type == ClickType.LongClick) {
-						Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_COPY_TO);
-					}
-				}
-			}));
+										case 1:
+											IntentUtil.edit(DirectActivity.this, first, Image.TYPE);
+											break;
 
-			list.add(new DataItem(R.drawable.cut, R.string.word_cut_or_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					if (type == ClickType.Click) {
-						if (ClipBoard.put(DirectActivity.this, ClipType.Cut, selected)) {
-							setMode(Mode.Normal);
-							App.showToast(R.string.msg_enter_target_direct_and_paste);
-						} else {
-							App.showToast(R.string.err_nothing_selected);
+										case 2:
+											IntentUtil.edit(DirectActivity.this, first, "*/*");
+											break;
+										}
+
+										dialog.dismiss();
+									}
+								});
+								st.show();
+							}
 						}
-					} else if (type == ClickType.LongClick) {
-						Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_CUT_TO);
-					}
-				}
-			}));
-			
-			list.add(new DataItem(R.drawable.compress, R.string.word_compress_or_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					if (type == ClickType.Click) {
-						Tree.zip(DirectActivity.this, mNode.direct.getPath(), selected, new IProgressCallback() {
+					}));
+			}
+
+			list.add(new DataItem(R.drawable.cross, R.string.word_delete,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						Tree.delete(DirectActivity.this, selected, new IProgressCallback() {
 							@Override
 							public void onProgress(ProgressType type, Object... data) {
+								setMode(Mode.Normal);
 								refreshDirect();
-								
-								if (type == ProgressType.Finish) {
-									setMode(Mode.Normal);
-								}
 							}
 						});
-					} else if (type == ClickType.LongClick) {
-						Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_COMPRESS_TO);
 					}
-				}
-			}));
+				}));
 
-			if (selected.size() == 1 && first instanceof Zip) {
-				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_or_to, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.copy, R.string.word_copy_or_to,
+				new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						if (type == ClickType.Click) {
-							Tree.unzip(DirectActivity.this, first.getPath(), mNode.direct.getPath(), new IProgressCallback() {
-								@Override
-								public void onProgress(ProgressType type, Object... data) {
-									refreshDirect();
-									
-									if (type == ProgressType.Finish) {
-										setMode(Mode.Normal);
-									}
-								}
-							});
+							if (ClipBoard.put(DirectActivity.this, ClipType.Copy, selected)) {
+								setMode(Mode.Normal);
+								App.showToast(R.string.msg_enter_target_direct_and_paste);
+							} else {
+								App.showToast(R.string.err_nothing_selected);
+							}
 						} else if (type == ClickType.LongClick) {
 							Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
-							startActivityForResult(intent, REQ_DECOMPRESS_TO);
+							startActivityForResult(intent, REQ_COPY_TO);
 						}
 					}
 				}));
+
+			list.add(new DataItem(R.drawable.cut, R.string.word_cut_or_to,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						if (type == ClickType.Click) {
+							if (ClipBoard.put(DirectActivity.this, ClipType.Cut, selected)) {
+								setMode(Mode.Normal);
+								App.showToast(R.string.msg_enter_target_direct_and_paste);
+							} else {
+								App.showToast(R.string.err_nothing_selected);
+							}
+						} else if (type == ClickType.LongClick) {
+							Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
+							startActivityForResult(intent, REQ_CUT_TO);
+						}
+					}
+				}));
+
+			list.add(new DataItem(R.drawable.compress, R.string.word_compress_or_to,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						if (type == ClickType.Click) {
+							Tree.zip(DirectActivity.this, mNode.direct.getPath(), selected,
+								new IProgressCallback() {
+									@Override
+									public void onProgress(ProgressType type, Object... data) {
+										refreshDirect();
+
+										if (type == ProgressType.Finish) {
+											setMode(Mode.Normal);
+										}
+									}
+								});
+						} else if (type == ClickType.LongClick) {
+							Intent intent = new Intent(DirectActivity.this, SelectActivity.class);
+							startActivityForResult(intent, REQ_COMPRESS_TO);
+						}
+					}
+				}));
+
+			if (selected.size() == 1 && first instanceof Zip) {
+				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_or_to,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							if (type == ClickType.Click) {
+								Tree.unzip(DirectActivity.this, first.getPath(), mNode.direct
+									.getPath(), new IProgressCallback() {
+									@Override
+									public void onProgress(ProgressType type, Object... data) {
+										refreshDirect();
+
+										if (type == ProgressType.Finish) {
+											setMode(Mode.Normal);
+										}
+									}
+								});
+							} else if (type == ClickType.LongClick) {
+								Intent intent = new Intent(DirectActivity.this,
+									SelectActivity.class);
+								startActivityForResult(intent, REQ_DECOMPRESS_TO);
+							}
+						}
+					}));
 			}
 
 			dl.show();
 		} else {
 			if (ClipBoard.hasFile(DirectActivity.this)) {
-				list.add(new DataItem(R.drawable.paste, R.string.word_paste, new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index, ClickType type) {
-						List<String> fl = ClipBoard.getFiles(DirectActivity.this);
+				list.add(new DataItem(R.drawable.paste, R.string.word_paste,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							List<String> fl = ClipBoard.getFiles(DirectActivity.this);
 
-						if (fl.size() > 0) {
-							boolean delete = ClipBoard.getType(DirectActivity.this) == ClipType.Cut;
+							if (fl.size() > 0) {
+								boolean delete = ClipBoard.getType(DirectActivity.this) == ClipType.Cut;
 
-							Tree.carry(DirectActivity.this, fl, mNode.direct.getPath(), delete,
+								Tree.carry(DirectActivity.this, fl, mNode.direct.getPath(), delete,
 									new IProgressCallback() {
 
 										@Override
@@ -861,58 +886,65 @@ public class DirectActivity extends BaseActivity {
 											refreshDirect();
 										}
 									});
-						} else {
-							App.showToast(R.string.err_nothing_selected);
+							} else {
+								App.showToast(R.string.err_nothing_selected);
+							}
 						}
-					}
-				}));
+					}));
 			}
 
-			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					refreshDirect();
-				}
-			}));
+			list.add(new DataItem(R.drawable.refresh, R.string.word_refresh,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						refreshDirect();
+					}
+				}));
 
-			list.add(new DataItem(R.drawable.add, R.string.word_new_direct, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					Tree.createDirect(DirectActivity.this, mNode.direct.getPath(), null, new IProgressCallback() {
-						@Override
-						public void onProgress(ProgressType type, Object... data) {
-							refreshDirect();
-						}
-					});
-				}
-			}));
+			list.add(new DataItem(R.drawable.add, R.string.word_new_direct,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						Tree.createDirect(DirectActivity.this, mNode.direct.getPath(), null,
+							new IProgressCallback() {
+								@Override
+								public void onProgress(ProgressType type, Object... data) {
+									refreshDirect();
+								}
+							});
+					}
+				}));
 
-			list.add(new DataItem(R.drawable.add, R.string.word_new_file, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					Tree.createFile(DirectActivity.this, mNode.direct.getPath(), null, new IProgressCallback() {
-						@Override
-						public void onProgress(ProgressType type, Object... data) {
-							refreshDirect();
-						}
-					});
-				}
-			}));
+			list.add(new DataItem(R.drawable.add, R.string.word_new_file,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						Tree.createFile(DirectActivity.this, mNode.direct.getPath(), null,
+							new IProgressCallback() {
+								@Override
+								public void onProgress(ProgressType type, Object... data) {
+									refreshDirect();
+								}
+							});
+					}
+				}));
 
-			list.add(new DataItem(R.drawable.multi_select_pre, R.string.word_multi_select, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					setMode(Mode.Select);
-				}
-			}));
+			list.add(new DataItem(R.drawable.multi_select_pre, R.string.word_multi_select,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						setMode(Mode.Select);
+					}
+				}));
 
-			list.add(new DataItem(R.drawable.setting, R.string.word_setting, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					Intent intent = new Intent(DirectActivity.this, SettingActivity.class);
-					startActivity(intent);
-				}
-			}));
+			list.add(new DataItem(R.drawable.setting, R.string.word_setting,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						Intent intent = new Intent(DirectActivity.this, SettingActivity.class);
+						startActivity(intent);
+					}
+				}));
 		}
 
 		dl.show(DownList.POS_END, DownList.POS_END, 0, mLlInfo.getHeight());
@@ -989,12 +1021,12 @@ public class DirectActivity extends BaseActivity {
 				});
 		} else if (requestCode == REQ_COMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
-			
+
 			Tree.zip(this, path, mDirectAdapter.getSelected(), new IProgressCallback() {
 				@Override
 				public void onProgress(ProgressType type, Object... data) {
 					refreshDirect();
-					
+
 					if (type == ProgressType.Finish) {
 						setMode(Mode.Normal);
 					}
@@ -1002,17 +1034,18 @@ public class DirectActivity extends BaseActivity {
 			});
 		} else if (requestCode == REQ_DECOMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
-			
-			Tree.unzip(DirectActivity.this, mDirectAdapter.getSelected().get(0).getPath(), path, new IProgressCallback() {
-				@Override
-				public void onProgress(ProgressType type, Object... data) {
-					refreshDirect();
-					
-					if (type == ProgressType.Finish) {
-						setMode(Mode.Normal);
+
+			Tree.unzip(DirectActivity.this, mDirectAdapter.getSelected().get(0).getPath(), path,
+				new IProgressCallback() {
+					@Override
+					public void onProgress(ProgressType type, Object... data) {
+						refreshDirect();
+
+						if (type == ProgressType.Finish) {
+							setMode(Mode.Normal);
+						}
 					}
-				}
-			});
+				});
 		}
 	}
 }

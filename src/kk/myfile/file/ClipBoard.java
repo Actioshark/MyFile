@@ -17,7 +17,7 @@ public class ClipBoard {
 	public static enum ClipType {
 		Copy, Cut,
 	}
-	
+
 	public static boolean put(Context context, String label, String text) {
 		try {
 			ClipData cd = ClipData.newPlainText(label, text);

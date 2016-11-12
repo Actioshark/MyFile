@@ -79,9 +79,7 @@ public class DetailAdapter extends PagerAdapter {
 
 			vh.thum.setImageResource(leaf.getIcon());
 			if ("gif".equals(DataUtil.getSubfix(leaf.getPath()))) {
-				Glide.with(mContext)
-				.load(leaf.getPath())
-				.into(vh.thum);
+				Glide.with(mContext).load(leaf.getPath()).into(vh.thum);
 			} else if (leaf instanceof IThumable) {
 				AppUtil.runOnNewThread(new Runnable() {
 					@Override

@@ -30,11 +30,6 @@ public class Image extends Leaf implements IThumable {
 	}
 
 	@Override
-	public int getTypeName() {
-		return R.string.type_image;
-	}
-
-	@Override
 	public List<Data> getDetail() {
 		List<Data> list = super.getDetail();
 

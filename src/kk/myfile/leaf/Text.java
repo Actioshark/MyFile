@@ -15,9 +15,4 @@ public class Text extends Leaf {
 	public int getIcon() {
 		return R.drawable.file_text;
 	}
-
-	@Override
-	public int getTypeName() {
-		return R.string.type_text;
-	}
 }

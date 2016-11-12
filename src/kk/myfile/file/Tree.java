@@ -201,7 +201,8 @@ public class Tree {
 		return ret;
 	}
 
-	public static void createDirect(Context context, final String parent, String name, final IProgressCallback cb) {
+	public static void createDirect(Context context, final String parent, String name,
+		final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_direct_name);
 
@@ -252,12 +253,13 @@ public class Tree {
 		id.show();
 	}
 
-	public static void createFile(Context context, final String parent, String name, final IProgressCallback cb) {
+	public static void createFile(Context context, final String parent, String name,
+		final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_file_name);
 
 		if (name == null) {
-			for (int i = 1; ; i++) {
+			for (int i = 1;; i++) {
 				String tmp = AppUtil.getString(R.string.def_file_name, i);
 				String err = FileUtil.checkNewName(parent, tmp);
 				if (err == null) {
@@ -439,12 +441,12 @@ public class Tree {
 		public File to;
 		public boolean delete = false;
 	}
-	
+
 	public static final int SELECT_MASK = 0xf;
 	public static final int SELECT_SKIP = 0x1;
 	public static final int SELECT_COVER = 0x2;
 	public static final int SELECT_RENAME = 0x3;
-	
+
 	public static final int ALL_MASK = 0xf0;
 	public static final int ALL_NO = 0x00;
 	public static final int ALL_YES = 0x10;
@@ -513,20 +515,20 @@ public class Tree {
 							}
 						}
 						break;
-					
+
 					case SELECT_RENAME:
 						String path = fp.to.getPath();
 						int pi = path.lastIndexOf('.');
 						String prefix = pi == -1 ? path : path.substring(0, pi);
 						String subfix = pi == -1 ? "" : path.substring(pi, path.length());
-						
-						for (int j = 1; ; j++) {
+
+						for (int j = 1;; j++) {
 							fp.to = new File(String.format("%s_%d%s", prefix, j, subfix));
 							if (fp.to.exists() == false) {
 								break;
 							}
 						}
-						
+
 						i--;
 						continue;
 
@@ -555,17 +557,16 @@ public class Tree {
 										case 1:
 											exist.set(SELECT_COVER);
 											break;
-											
 
 										case 2:
 											exist.set(SELECT_RENAME);
 											break;
-											
+
 										default:
 											exist.set(0);
 											break;
 										}
-										
+
 										if (type == ClickType.LongClick) {
 											exist.set(exist.get() | ALL_YES);
 										}
@@ -732,10 +733,11 @@ public class Tree {
 			}
 		});
 	}
-	
-	private static void monitorZip(final boolean cmps, final ProgressMonitor pm, final IProgressCallback cb) {
+
+	private static void monitorZip(final boolean cmps, final ProgressMonitor pm,
+		final IProgressCallback cb) {
 		final List<Runnable> mark = new ArrayList<Runnable>();
-		
+
 		Runnable mk = AppUtil.runOnUiThread(new Runnable() {
 			public void run() {
 				if (pm.getState() == ProgressMonitor.STATE_BUSY) {
@@ -743,22 +745,24 @@ public class Tree {
 					if (fileName != null) {
 						App.showToast(fileName);
 					}
-					
+
 					if (cb != null) {
 						cb.onProgress(ProgressType.Progress);
 					}
 				} else {
 					AppUtil.removeUiThread(mark.get(0));
-					
+
 					if (pm.getResult() == ProgressMonitor.RESULT_SUCCESS) {
-						App.showToast(cmps ? R.string.err_compress_success : R.string.err_decompress_success);
-					
+						App.showToast(cmps ? R.string.err_compress_success
+							: R.string.err_decompress_success);
+
 						if (cb != null) {
 							cb.onProgress(ProgressType.Finish);
 						}
 					} else {
-						App.showToast(cmps ? R.string.err_compress_failed : R.string.err_decompress_failed);
-						
+						App.showToast(cmps ? R.string.err_compress_failed
+							: R.string.err_decompress_failed);
+
 						if (cb != null) {
 							cb.onProgress(ProgressType.Error);
 						}
@@ -766,11 +770,12 @@ public class Tree {
 				}
 			}
 		}, 100, 100);
-		
+
 		mark.add(mk);
 	}
-	
-	public static void zip(final Context context, final String dir, final List<Leaf> list, final IProgressCallback cb) {
+
+	public static void zip(final Context context, final String dir, final List<Leaf> list,
+		final IProgressCallback cb) {
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_file_name);
 		id.setInput(AppUtil.getString(R.string.def_zip_name));
@@ -779,24 +784,24 @@ public class Tree {
 			public void onClick(Dialog dialog, int index, ClickType type) {
 				if (index != 1) {
 					dialog.dismiss();
-					
+
 					if (cb != null) {
 						cb.onProgress(ProgressType.Cancel);
 					}
 					return;
 				}
-				
+
 				String input = id.getInput();
 				String err = FileUtil.checkNewName(dir, input);
 				if (err != null) {
 					App.showToast(err);
 					return;
 				}
-				
+
 				dialog.dismiss();
-				
+
 				final File target = new File(dir, input);
-				
+
 				final InputDialog id = new InputDialog(context);
 				id.setMessage(R.string.msg_input_password);
 				id.setClickListener(new IDialogClickListener() {
@@ -809,21 +814,21 @@ public class Tree {
 							}
 							return;
 						}
-						
+
 						try {
 							final ZipParameters zp = new ZipParameters();
 							zp.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
 							zp.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-							
+
 							String password = id.getInput();
 							if (password != null && password.length() > 0) {
 								zp.setEncryptFiles(true);
 								zp.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
 								zp.setPassword(password);
 							}
-						
+
 							final ZipFile zf = new ZipFile(target);
-							
+
 							AppUtil.runOnNewThread(new Runnable() {
 								public void run() {
 									for (Leaf leaf : list) {
@@ -839,13 +844,13 @@ public class Tree {
 									}
 								}
 							});
-							
+
 							monitorZip(true, zf.getProgressMonitor(), cb);
 						} catch (Exception e) {
 							Logger.print(null, e);
-							
+
 							App.showToast(R.string.err_compress_failed);
-							
+
 							if (cb != null) {
 								cb.onProgress(ProgressType.Error);
 							}
@@ -857,22 +862,23 @@ public class Tree {
 		});
 		id.show();
 	}
-	
-	public static void unzip(Context context, String zip, final String path, final IProgressCallback cb) {
+
+	public static void unzip(Context context, String zip, final String path,
+		final IProgressCallback cb) {
 		try {
 			final ZipFile zf = new ZipFile(zip);
-			
+
 			if (zf.isValidZipFile() == false) {
 				App.showToast(R.string.err_not_zip);
-				
+
 				if (cb != null) {
 					cb.onProgress(ProgressType.Error);
 				}
 				return;
 			}
-			
+
 			zf.setRunInThread(true);
-			
+
 			if (zf.isEncrypted()) {
 				final InputDialog id = new InputDialog(context);
 				id.setMessage(R.string.msg_input_password);
@@ -886,19 +892,19 @@ public class Tree {
 							}
 							return;
 						}
-						
+
 						try {
 							zf.setPassword(id.getInput());
 							zf.extractAll(path);
 						} catch (Exception e) {
 							Logger.print(null, e);
-							
+
 							if (cb != null) {
 								cb.onProgress(ProgressType.Error);
 							}
 							return;
 						}
-						
+
 						monitorZip(false, zf.getProgressMonitor(), cb);
 					}
 				});
@@ -911,7 +917,7 @@ public class Tree {
 			Logger.print(null, e);
 
 			App.showToast(R.string.err_decompress_failed);
-			
+
 			if (cb != null) {
 				cb.onProgress(ProgressType.Error);
 			}

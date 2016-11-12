@@ -25,11 +25,6 @@ public class Apk extends Leaf implements IThumable {
 		return R.drawable.file_apk;
 	}
 
-	@Override
-	public int getTypeName() {
-		return R.string.type_apk;
-	}
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public Drawable getThum(int width, int height) {

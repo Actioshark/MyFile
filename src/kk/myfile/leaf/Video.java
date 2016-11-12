@@ -38,11 +38,6 @@ public class Video extends Leaf implements IThumable {
 		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
 
-	@Override
-	public int getTypeName() {
-		return R.string.type_video;
-	}
-
 	@SuppressLint("InlinedApi")
 	public List<Data> getDetail() {
 		List<Data> list = super.getDetail();

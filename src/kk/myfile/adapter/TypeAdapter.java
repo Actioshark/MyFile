@@ -248,7 +248,8 @@ public class TypeAdapter extends BaseAdapter {
 											R.string.word_any);
 										dialog.setClickListener(new IDialogClickListener() {
 											@Override
-											public void onClick(Dialog dialog, int index, ClickType type) {
+											public void onClick(Dialog dialog, int index,
+												ClickType type) {
 												switch (index) {
 												case 0:
 													IntentUtil.view(mActivity, holder.leaf,

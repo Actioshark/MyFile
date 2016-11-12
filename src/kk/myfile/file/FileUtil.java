@@ -68,14 +68,13 @@ public class FileUtil {
 		try {
 			String subfix = DataUtil.getSubfix(path);
 			JSONObject map = sTypeMap.getJSONObject(subfix);
-			
+
 			String cls = map.getString("cls");
-			cls = String.format("%c%s", Character.toUpperCase(cls.charAt(0)), cls
-				.substring(1));
-			
+			cls = String.format("%c%s", Character.toUpperCase(cls.charAt(0)), cls.substring(1));
+
 			Class<?> clazz = Class.forName(String.format("kk.myfile.leaf.%s", cls));
 			Constructor<?> ct = clazz.getConstructor(String.class);
-			
+
 			Leaf leaf = (Leaf) ct.newInstance(path);
 			return leaf;
 		} catch (Exception e) {

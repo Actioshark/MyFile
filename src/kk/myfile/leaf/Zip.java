@@ -13,9 +13,4 @@ public class Zip extends Leaf {
 	public int getIcon() {
 		return R.drawable.file_zip;
 	}
-
-	@Override
-	public int getTypeName() {
-		return R.string.type_zip;
-	}
 }

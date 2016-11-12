@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity;
 import kk.myfile.adapter.DetailItemAdapter.Data;
@@ -34,12 +33,12 @@ public abstract class Leaf {
 		}
 	}
 
-	public File getFile() {
-		return new File(mPath);
-	}
-
 	public String getPath() {
 		return mPath;
+	}
+
+	public File getFile() {
+		return new File(mPath);
 	}
 
 	public void setTag(Object tag) {
@@ -51,8 +50,6 @@ public abstract class Leaf {
 	}
 
 	public abstract int getIcon();
-
-	public abstract int getTypeName();
 
 	protected Data putDetail(List<Data> list, int sort, int key, Object value, Object... args) {
 		Data data = new Data();
@@ -132,8 +129,12 @@ public abstract class Leaf {
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}
-
-		putDetail(list, 1, R.string.word_type, AppUtil.getString(getTypeName()));
+		
+		String clsName = getClass().getSimpleName();
+		int index = clsName.lastIndexOf('.');
+		String typeName = AppUtil.getString(String.format("type_%s", clsName.substring(index + 1)
+			.toLowerCase(Setting.LOCALE)));
+		putDetail(list, 1, R.string.word_type, typeName);
 
 		try {
 			putDetail(list, 1, R.string.word_size, "%s B", MathUtil.insertComma(file.length()));
@@ -158,9 +159,10 @@ public abstract class Leaf {
 							@Override
 							public void run() {
 								try {
-									byte[] bs = DataUtil.md5(new FileInputStream(data.leaf.getPath()));
+									byte[] bs = DataUtil.md5(new FileInputStream(data.leaf
+										.getPath()));
 									final String str = DataUtil.toHexStr(bs);
-	
+
 									AppUtil.runOnUiThread(new Runnable() {
 										@Override
 										public void run() {

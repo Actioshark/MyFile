@@ -24,11 +24,6 @@ public class Direct extends Leaf {
 	}
 
 	@Override
-	public int getTypeName() {
-		return R.string.type_direct;
-	}
-
-	@Override
 	public List<Data> getDetail() {
 		List<Data> list = super.getDetail();
 

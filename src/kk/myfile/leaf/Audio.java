@@ -40,11 +40,6 @@ public class Audio extends Leaf implements IThumable {
 		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
 
-	@Override
-	public int getTypeName() {
-		return R.string.type_audio;
-	}
-
 	@SuppressLint("InlinedApi")
 	public List<Data> getDetail() {
 		List<Data> list = super.getDetail();

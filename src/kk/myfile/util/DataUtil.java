@@ -75,22 +75,22 @@ public class DataUtil {
 
 		return paths;
 	}
-	
+
 	public static String getSubfix(String path) {
 		int len = path.length();
-		
+
 		for (int i = len - 1; i >= 0; i--) {
 			char ch = path.charAt(i);
-			
+
 			if (ch == '/') {
 				return null;
 			}
-			
+
 			if (ch == '.') {
 				return path.substring(i + 1, len).toLowerCase(Setting.LOCALE);
 			}
 		}
-		
+
 		return null;
 	}
 }

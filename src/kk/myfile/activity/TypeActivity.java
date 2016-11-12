@@ -596,56 +596,60 @@ public class TypeActivity extends BaseActivity {
 					}
 				}));
 
-			list.add(new DataItem(R.drawable.copy, R.string.word_copy_or_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					if (type == ClickType.Click) {
-						if (ClipBoard.put(TypeActivity.this, ClipType.Copy, selected)) {
-							setMode(Mode.Normal);
-							App.showToast(R.string.msg_enter_target_direct_and_paste);
-						} else {
-							App.showToast(R.string.err_nothing_selected);
+			list.add(new DataItem(R.drawable.copy, R.string.word_copy_or_to,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						if (type == ClickType.Click) {
+							if (ClipBoard.put(TypeActivity.this, ClipType.Copy, selected)) {
+								setMode(Mode.Normal);
+								App.showToast(R.string.msg_enter_target_direct_and_paste);
+							} else {
+								App.showToast(R.string.err_nothing_selected);
+							}
+						} else if (type == ClickType.LongClick) {
+							Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+							startActivityForResult(intent, REQ_COPY_TO);
 						}
-					} else if (type == ClickType.LongClick) {
-						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_COPY_TO);
 					}
-				}
-			}));
+				}));
 
-			list.add(new DataItem(R.drawable.cut, R.string.word_cut_or_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					if (type == ClickType.Click) {
-						if (ClipBoard.put(TypeActivity.this, ClipType.Cut, selected)) {
-							setMode(Mode.Normal);
-							App.showToast(R.string.msg_enter_target_direct_and_paste);
-						} else {
-							App.showToast(R.string.err_nothing_selected);
+			list.add(new DataItem(R.drawable.cut, R.string.word_cut_or_to,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						if (type == ClickType.Click) {
+							if (ClipBoard.put(TypeActivity.this, ClipType.Cut, selected)) {
+								setMode(Mode.Normal);
+								App.showToast(R.string.msg_enter_target_direct_and_paste);
+							} else {
+								App.showToast(R.string.err_nothing_selected);
+							}
+						} else if (type == ClickType.LongClick) {
+							Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+							startActivityForResult(intent, REQ_CUT_TO);
 						}
-					} else if (type == ClickType.LongClick) {
-						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_CUT_TO);
 					}
-				}
-			}));
-			
-			list.add(new DataItem(R.drawable.compress, R.string.word_compress_to, new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-					startActivityForResult(intent, REQ_COMPRESS_TO);
-				}
-			}));
+				}));
 
-			if (selected.size() == 1 && first instanceof Zip) {
-				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_to, new IDialogClickListener() {
+			list.add(new DataItem(R.drawable.compress, R.string.word_compress_to,
+				new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
-						startActivityForResult(intent, REQ_DECOMPRESS_TO);
+						startActivityForResult(intent, REQ_COMPRESS_TO);
 					}
 				}));
+
+			if (selected.size() == 1 && first instanceof Zip) {
+				list.add(new DataItem(R.drawable.decompress, R.string.word_decompress_to,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							Intent intent = new Intent(TypeActivity.this, SelectActivity.class);
+							startActivityForResult(intent, REQ_DECOMPRESS_TO);
+						}
+					}));
 			}
 
 			dl.show();
@@ -697,7 +701,7 @@ public class TypeActivity extends BaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		if (resultCode != RESULT_OK || data == null) {
 			return;
 		}
@@ -730,7 +734,7 @@ public class TypeActivity extends BaseActivity {
 				});
 		} else if (requestCode == REQ_COMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
-			
+
 			Tree.zip(this, path, mTypeAdapter.getSelected(), new IProgressCallback() {
 				@Override
 				public void onProgress(ProgressType type, Object... data) {
@@ -741,15 +745,16 @@ public class TypeActivity extends BaseActivity {
 			});
 		} else if (requestCode == REQ_DECOMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
-			
-			Tree.unzip(TypeActivity.this, mTypeAdapter.getSelected().get(0).getPath(), path, new IProgressCallback() {
-				@Override
-				public void onProgress(ProgressType type, Object... data) {
-					if (type == ProgressType.Finish) {
-						setMode(Mode.Normal);
+
+			Tree.unzip(TypeActivity.this, mTypeAdapter.getSelected().get(0).getPath(), path,
+				new IProgressCallback() {
+					@Override
+					public void onProgress(ProgressType type, Object... data) {
+						if (type == ProgressType.Finish) {
+							setMode(Mode.Normal);
+						}
 					}
-				}
-			});
+				});
 		}
 	}
 }
