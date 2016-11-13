@@ -43,7 +43,7 @@ public class TypeAdapter extends BaseAdapter {
 	private final TypeActivity mActivity;
 	private final Classify mClassify;
 
-	private final List<Leaf> mData = new ArrayList<Leaf>();
+	private final List<Leaf> mDataList = new ArrayList<Leaf>();
 	private final Set<Integer> mSelected = new HashSet<Integer>();
 
 	private long mTouchDownTime;
@@ -54,19 +54,19 @@ public class TypeAdapter extends BaseAdapter {
 		mClassify = classify;
 	}
 
-	public void setData(final List<Leaf> data) {
+	public void setData(final List<Leaf> dataList) {
 		if (mClassify == Classify.Type) {
-			synchronized (data) {
-				Sorter.sort(Classify.Type, data);
+			synchronized (dataList) {
+				Sorter.sort(Classify.Type, dataList);
 			}
 		}
 
 		AppUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				mData.clear();
-				synchronized (data) {
-					mData.addAll(data);
+				mDataList.clear();
+				synchronized (dataList) {
+					mDataList.addAll(dataList);
 				}
 
 				mActivity.updateTitle();
@@ -78,7 +78,7 @@ public class TypeAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return mData.size();
+		return mDataList.size();
 	}
 
 	@Override
@@ -104,11 +104,11 @@ public class TypeAdapter extends BaseAdapter {
 
 	public List<Leaf> getSelected() {
 		List<Leaf> list = new ArrayList<Leaf>();
-		int size = mData.size();
+		int size = mDataList.size();
 
 		for (int i = 0; i < size; i++) {
 			if (mSelected.contains(i)) {
-				list.add(mData.get(i));
+				list.add(mDataList.get(i));
 			}
 		}
 
@@ -138,21 +138,21 @@ public class TypeAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
-		final ViewHolder holder;
+		final ViewHolder vh;
 
 		if (view == null) {
 			String key = Setting.getListStyle(mClassify);
 			final ListStyle ls = SettingListStyleActivity.getListStyle(key);
 			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
 
-			holder = new ViewHolder();
-			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
-			holder.name = (TextView) view.findViewById(R.id.tv_name);
-			holder.size = (TextView) view.findViewById(R.id.tv_size);
-			holder.time = (TextView) view.findViewById(R.id.tv_time);
-			holder.sign = (ImageView) view.findViewById(R.id.iv_sign);
-			holder.select = (ImageView) view.findViewById(R.id.iv_select);
-			view.setTag(holder);
+			vh = new ViewHolder();
+			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
+			vh.name = (TextView) view.findViewById(R.id.tv_name);
+			vh.size = (TextView) view.findViewById(R.id.tv_size);
+			vh.time = (TextView) view.findViewById(R.id.tv_time);
+			vh.sign = (ImageView) view.findViewById(R.id.iv_sign);
+			vh.select = (ImageView) view.findViewById(R.id.iv_select);
+			view.setTag(vh);
 
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
@@ -161,7 +161,7 @@ public class TypeAdapter extends BaseAdapter {
 
 					if (action == MotionEvent.ACTION_DOWN) {
 						if (ls.needDetail) {
-							mActivity.showDetail(holder.leaf);
+							mActivity.showDetail(vh.leaf);
 						}
 
 						mTouchDownTime = SystemClock.elapsedRealtime();
@@ -172,12 +172,12 @@ public class TypeAdapter extends BaseAdapter {
 
 								List<Leaf> selected = getSelected();
 								if (selected.size() < 1) {
-									selected = mData;
+									selected = mDataList;
 								}
 
 								int index = 0;
 								for (int i = 0; i < selected.size(); i++) {
-									if (selected.get(i) == holder.leaf) {
+									if (selected.get(i) == vh.leaf) {
 										index = i;
 										break;
 									}
@@ -200,24 +200,24 @@ public class TypeAdapter extends BaseAdapter {
 
 							if (delta < 300) {
 								if (mActivity.getMode() == Mode.Select) {
-									if (mSelected.contains(holder.position)) {
-										mSelected.remove(holder.position);
+									if (mSelected.contains(vh.position)) {
+										mSelected.remove(vh.position);
 									} else {
-										mSelected.add(holder.position);
+										mSelected.add(vh.position);
 									}
 
 									mActivity.updateTitle();
 									mActivity.updateInfo();
 									notifyDataSetChanged();
 								} else {
-									holder.leaf.open(mActivity, false);
+									vh.leaf.open(mActivity, false);
 								}
 							} else {
 								if (mActivity.getMode() == Mode.Select) {
-									if (mSelected.contains(holder.position)) {
-										mSelected.remove(holder.position);
+									if (mSelected.contains(vh.position)) {
+										mSelected.remove(vh.position);
 									} else {
-										mSelected.add(holder.position);
+										mSelected.add(vh.position);
 									}
 
 									mActivity.updateTitle();
@@ -225,7 +225,7 @@ public class TypeAdapter extends BaseAdapter {
 									notifyDataSetChanged();
 								} else {
 									mSelected.clear();
-									mSelected.add(holder.position);
+									mSelected.add(vh.position);
 									mActivity.setMode(Mode.Select);
 								}
 							}
@@ -247,65 +247,65 @@ public class TypeAdapter extends BaseAdapter {
 				}
 			});
 		} else {
-			holder = (ViewHolder) view.getTag();
+			vh = (ViewHolder) view.getTag();
 		}
 
-		final Leaf leaf = mData.get(position);
+		final Leaf leaf = mDataList.get(position);
 		final File file = leaf.getFile();
 
-		holder.name.setText(file.getName());
+		vh.name.setText(file.getName());
 
-		if (leaf.equals(holder.leaf) == false || holder.hasThum == false) {
-			holder.hasThum = false;
-			holder.icon.setImageResource(leaf.getIcon());
+		if (leaf.equals(vh.leaf) == false || vh.hasThum == false) {
+			vh.hasThum = false;
+			vh.icon.setImageResource(leaf.getIcon());
 
-			ImageUtil.getThum(leaf, holder.icon.getWidth(), holder.icon.getHeight(),
+			ImageUtil.getThum(leaf, vh.icon.getWidth(), vh.icon.getHeight(),
 				new IThumListenner() {
 					@Override
 					public void onThumGot(Drawable drawable) {
-						if (leaf.equals(holder.leaf)) {
-							holder.hasThum = true;
-							holder.icon.setImageDrawable(drawable);
+						if (leaf.equals(vh.leaf)) {
+							vh.hasThum = true;
+							vh.icon.setImageDrawable(drawable);
 						}
 					}
 				});
 		}
 
-		if (holder.time != null) {
+		if (vh.time != null) {
 			Date date = new Date(file.lastModified());
 			DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
-			holder.time.setText(df.format(date));
+			vh.time.setText(df.format(date));
 		}
 
-		if (holder.size != null) {
+		if (vh.size != null) {
 			if (leaf instanceof Direct) {
-				holder.size.setText("");
+				vh.size.setText("");
 			} else {
-				holder.size.setText(String.format(Setting.LOCALE, "%s B", MathUtil.insertComma(file
+				vh.size.setText(String.format(Setting.LOCALE, "%s B", MathUtil.insertComma(file
 					.length())));
 			}
 		}
 
-		holder.sign.setVisibility(FileUtil.isLink(file) ? View.VISIBLE : View.GONE);
+		vh.sign.setVisibility(FileUtil.isLink(file) ? View.VISIBLE : View.GONE);
 
 		if (mActivity.getMode() == Mode.Select) {
 			if (mSelected.contains(position)) {
-				holder.select.setImageResource(R.drawable.multi_select_pre);
-				holder.select.setVisibility(View.VISIBLE);
+				vh.select.setImageResource(R.drawable.multi_select_pre);
+				vh.select.setVisibility(View.VISIBLE);
 			} else {
-				holder.select.setVisibility(View.GONE);
+				vh.select.setVisibility(View.GONE);
 			}
 		} else {
-			holder.select.setVisibility(View.GONE);
+			vh.select.setVisibility(View.GONE);
 		}
 
-		holder.leaf = leaf;
-		holder.position = position;
+		vh.leaf = leaf;
+		vh.position = position;
 
 		return view;
 	}
 
-	class ViewHolder {
+	static class ViewHolder {
 		public Leaf leaf;
 		public int position;
 		public boolean hasThum;

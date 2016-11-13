@@ -35,20 +35,20 @@ public class DownListAdapter extends BaseAdapter {
 
 	private final Context mContext;
 	private final DownList mDownList;
-	private List<DataItem> mData;
+	private List<DataItem> mDataList;
 
 	public DownListAdapter(Context context, DownList downList) {
 		mContext = context;
 		mDownList = downList;
 	}
 
-	public void setDataList(List<DataItem> data) {
-		mData = data;
+	public void setDataList(List<DataItem> dataList) {
+		mDataList = dataList;
 	}
 
 	@Override
 	public int getCount() {
-		return mData == null ? 0 : mData.size();
+		return mDataList == null ? 0 : mDataList.size();
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class DownListAdapter extends BaseAdapter {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					DataItem data = mData.get(vh.index);
+					DataItem data = mDataList.get(vh.index);
 					data.click.onClick(mDownList, vh.index, ClickType.Click);
 					mDownList.dismiss();
 				}
@@ -84,7 +84,7 @@ public class DownListAdapter extends BaseAdapter {
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View view) {
-					DataItem data = mData.get(vh.index);
+					DataItem data = mDataList.get(vh.index);
 					data.click.onClick(mDownList, vh.index, ClickType.LongClick);
 					mDownList.dismiss();
 					return true;
@@ -96,7 +96,7 @@ public class DownListAdapter extends BaseAdapter {
 			vh = (ViewHolder) view.getTag();
 		}
 
-		DataItem data = mData.get(index);
+		DataItem data = mDataList.get(index);
 		vh.icon.setImageResource(data.icon);
 		vh.text.setText(data.text);
 

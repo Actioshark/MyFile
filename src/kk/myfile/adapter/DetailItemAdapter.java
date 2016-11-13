@@ -1,6 +1,5 @@
 package kk.myfile.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ClipData;
@@ -32,7 +31,6 @@ public class DetailItemAdapter extends BaseAdapter {
 	}
 
 	public static class ViewHolder {
-		;
 		public TextView key;
 		public TextView value;
 
@@ -40,20 +38,19 @@ public class DetailItemAdapter extends BaseAdapter {
 	}
 
 	private final Context mContext;
-	private final List<Data> mDataList = new ArrayList<Data>();
+	private List<Data> mDataList;
 
 	public DetailItemAdapter(Context context) {
 		mContext = context;
 	}
 
 	public void setDataList(List<Data> dataList) {
-		mDataList.clear();
-		mDataList.addAll(dataList);
+		mDataList = dataList;
 	}
 
 	@Override
 	public int getCount() {
-		return mDataList.size();
+		return mDataList == null ? 0 : mDataList.size();
 	}
 
 	@Override

@@ -122,7 +122,7 @@ public class ZipAdapter extends BaseAdapter {
 		return view;
 	}
 
-	class ViewHolder {
+	static class ViewHolder {
 		public ImageView icon;
 		public TextView name;
 		public TextView desc;

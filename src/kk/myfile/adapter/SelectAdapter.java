@@ -20,45 +20,40 @@ import android.widget.TextView;
 
 public class SelectAdapter extends BaseAdapter {
 	private final SelectActivity mActivity;
-	private final List<Direct> mData = new ArrayList<Direct>();
-	private Object mMark;
+	private final List<Direct> mDataList = new ArrayList<Direct>();
 	private Direct mSelected;
 
 	public SelectAdapter(SelectActivity activity) {
 		mActivity = activity;
 	}
 
-	public void setData(final List<Leaf> data, final int position) {
-		mMark = data;
-
+	public void setData(final List<Leaf> dataList, final int position) {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				synchronized (data) {
-					Sorter.sort(Classify.Direct, data);
+				synchronized (dataList) {
+					Sorter.sort(Classify.Direct, dataList);
 				}
 
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if (mMark == data) {
-							mData.clear();
-							synchronized (data) {
-								for (Leaf leaf : data) {
-									if (leaf instanceof Direct) {
-										mData.add((Direct) leaf);
-									}
+						mDataList.clear();
+						synchronized (dataList) {
+							for (Leaf leaf : dataList) {
+								if (leaf instanceof Direct) {
+									mDataList.add((Direct) leaf);
 								}
 							}
-
-							notifyDataSetChanged();
-
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									mActivity.setSelection(position);
-								}
-							});
 						}
+
+						notifyDataSetChanged();
+
+						AppUtil.runOnUiThread(new Runnable() {
+							public void run() {
+								mActivity.setSelection(position);
+							}
+						});
 					}
 				});
 			}
@@ -69,7 +64,7 @@ public class SelectAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return mData == null ? 0 : mData.size();
+		return mDataList == null ? 0 : mDataList.size();
 	}
 
 	@Override
@@ -84,47 +79,48 @@ public class SelectAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
-		final ViewHolder holder;
+		final ViewHolder vh;
 
 		if (view == null) {
 			view = mActivity.getLayoutInflater().inflate(R.layout.grid_select, null);
 
-			holder = new ViewHolder();
-			holder.icon = (ImageView) view.findViewById(R.id.iv_icon);
-			holder.name = (TextView) view.findViewById(R.id.tv_name);
-			holder.select = (ImageView) view.findViewById(R.id.iv_select);
-			view.setTag(holder);
+			vh = new ViewHolder();
+			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
+			vh.name = (TextView) view.findViewById(R.id.tv_name);
+			vh.select = (ImageView) view.findViewById(R.id.iv_select);
+			view.setTag(vh);
 
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					mActivity.showDirect(new Node(holder.data), true);
+					mActivity.showDirect(new Node(vh.data), true);
 				}
 			});
 
-			holder.select.setOnClickListener(new OnClickListener() {
+			vh.select.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (mSelected == holder.data) {
+					if (mSelected == vh.data) {
 						mSelected = null;
 					} else {
-						mSelected = holder.data;
+						mSelected = vh.data;
 					}
 
 					notifyDataSetChanged();
 				}
 			});
 		} else {
-			holder = (ViewHolder) view.getTag();
+			vh = (ViewHolder) view.getTag();
 		}
 
-		Direct data = mData.get(position);
+		Direct data = mDataList.get(position);
 
-		holder.icon.setImageResource(data.getIcon());
-		holder.name.setText(data.getFile().getName());
-		holder.select.setImageResource(mSelected == data ? R.drawable.single_select_pre
+		vh.icon.setImageResource(data.getIcon());
+		vh.name.setText(data.getFile().getName());
+		vh.select.setImageResource(mSelected == data ? R.drawable.single_select_pre
 			: R.drawable.single_select_nor);
-		holder.data = data;
+		
+		vh.data = data;
 
 		return view;
 	}
@@ -133,7 +129,7 @@ public class SelectAdapter extends BaseAdapter {
 		return mSelected;
 	}
 
-	class ViewHolder {
+	static class ViewHolder {
 		public ImageView icon;
 		public TextView name;
 		public ImageView select;

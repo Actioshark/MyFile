@@ -48,8 +48,8 @@ public class DetailAdapter extends PagerAdapter {
 		}
 	}
 
-	public void setDataList(List<String> list) {
-		mDataList = list;
+	public void setDataList(List<String> dataList) {
+		mDataList = dataList;
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public class DetailAdapter extends PagerAdapter {
 			final Leaf leaf = FileUtil.createLeaf(new File(path));
 
 			vh.thum.setImageResource(leaf.getIcon());
-			if ("gif".equals(DataUtil.getSubfix(leaf.getPath()))) {
-				Glide.with(mContext).load(leaf.getPath()).into(vh.thum);
+			if ("gif".equals(DataUtil.getSubfix(path))) {
+				Glide.with(mContext).load(path).into(vh.thum);
 			} else if (leaf instanceof IThumable) {
 				AppUtil.runOnNewThread(new Runnable() {
 					@Override
