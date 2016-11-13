@@ -40,7 +40,10 @@ public class SelectActivity extends BaseActivity {
 
 		// 数据
 		String path = getIntent().getStringExtra(KEY_PATH);
-		Direct direct = path == null ? null : new Direct(path);
+		if (path == null) {
+			path = Setting.getLastSelectPath();
+		}
+		Direct direct = new Direct(path);
 
 		setContentView(R.layout.activity_select);
 
@@ -84,9 +87,12 @@ public class SelectActivity extends BaseActivity {
 				if (direct == null) {
 					direct = mNode.direct;
 				}
+				
+				String path = direct.getPath();
+				Setting.setLastSelectPath(path);
 
 				Intent intent = getIntent();
-				intent.putExtra(KEY_PATH, direct.getPath());
+				intent.putExtra(KEY_PATH, path);
 				setResult(RESULT_OK, intent);
 				finish();
 			}

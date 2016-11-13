@@ -27,6 +27,7 @@ public class Setting {
 	static final String KEY_LIST_STYLE = "list_style_%s";
 	static final String KEY_SHOW_HIDDEN = "show_hidden";
 	static final String KEY_NUM_LIMIT = "num_limit_%s";
+	static final String KEY_LAST_SELECT_PATH = "last_select_path";
 
 	public static final int NUM_LIMIT_MIN = 1;
 	public static final int NUM_LIMIT_MAX = 9999;
@@ -145,6 +146,16 @@ public class Setting {
 
 		Editor editor = sPrefer.edit();
 		editor.putInt(String.format(KEY_NUM_LIMIT, classify.name()), num);
+		editor.commit();
+	}
+
+	public static String getLastSelectPath() {
+		return sPrefer.getString(KEY_LAST_SELECT_PATH, DEFAULT_PATH);
+	}
+
+	public static void setLastSelectPath(String path) {
+		Editor editor = sPrefer.edit();
+		editor.putString(KEY_LAST_SELECT_PATH, path);
 		editor.commit();
 	}
 }
