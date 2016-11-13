@@ -6,80 +6,9 @@
 	android:background="@color/main_bg"
 	android:orientation="vertical">
 
-	<LinearLayout
-		android:id="@+id/ll_path"
-		android:layout_width="match_parent"
-		android:layout_height="42dp"
-		android:background="@color/bar_bg"
-		android:orientation="horizontal">
-
-		<ImageView
-			android:id="@+id/iv_home"
-			android:layout_width="42dp"
-			android:layout_height="42dp"
-			android:padding="5dp"
-			android:layout_gravity="left|center_vertical"
-			android:background="@drawable/btn_trans"
-			android:scaleType="centerCrop"
-			android:src="@drawable/home" />
-
-		<HorizontalScrollView
-			android:id="@+id/hsv_text"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:scrollbars="none">
-
-			<LinearLayout
-				android:id="@+id/ll_text"
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:layout_gravity="left|center_vertical"
-				android:orientation="horizontal" />
-		</HorizontalScrollView>
-	</LinearLayout>
-
-	<RelativeLayout
-		android:id="@+id/rl_title"
-		android:layout_width="match_parent"
-		android:layout_height="42dp"
-		android:background="@color/bar_bg"
-		android:visibility="gone">
-
-		<ImageView
-			android:id="@+id/iv_back"
-			android:layout_width="42dp"
-			android:layout_height="42dp"
-			android:padding="10dp"
-			android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true"
-			android:scaleType="centerCrop"
-			android:background="@drawable/btn_trans"
-			android:src="@drawable/arrow_left" />
-
-		<TextView
-			android:id="@+id/tv_title"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:gravity="center"
-			android:textSize="18sp"
-			android:textColor="@color/main_text" />
-
-		<ImageView
-			android:id="@+id/iv_select"
-			android:layout_width="42dp"
-			android:layout_height="42dp"
-			android:padding="10dp"
-			android:layout_alignParentRight="true"
-			android:layout_centerVertical="true"
-			android:scaleType="centerCrop"
-			android:background="@drawable/btn_trans" />
-	</RelativeLayout>
-
 	<FrameLayout
 		android:layout_width="match_parent"
-		android:layout_height="38dp"
-		android:layout_marginTop="@dimen/main_gap">
+		android:layout_height="38dp">
 
 		<LinearLayout
 			android:id="@+id/ll_search"
@@ -241,4 +170,76 @@
 			android:background="@drawable/btn_trans"
 			android:src="@drawable/menu" />
 	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/ll_path"
+		android:layout_width="match_parent"
+		android:layout_height="42dp"
+		android:layout_marginTop="@dimen/main_gap"
+		android:background="@color/bar_bg"
+		android:orientation="horizontal">
+
+		<ImageView
+			android:id="@+id/iv_home"
+			android:layout_width="42dp"
+			android:layout_height="42dp"
+			android:padding="5dp"
+			android:layout_gravity="left|center_vertical"
+			android:background="@drawable/btn_trans"
+			android:scaleType="centerCrop"
+			android:src="@drawable/home" />
+
+		<HorizontalScrollView
+			android:id="@+id/hsv_text"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:scrollbars="none">
+
+			<LinearLayout
+				android:id="@+id/ll_text"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:layout_gravity="left|center_vertical"
+				android:orientation="horizontal" />
+		</HorizontalScrollView>
+	</LinearLayout>
+
+	<RelativeLayout
+		android:id="@+id/rl_title"
+		android:layout_width="match_parent"
+		android:layout_height="42dp"
+		android:layout_marginTop="@dimen/main_gap"
+		android:background="@color/bar_bg"
+		android:visibility="gone">
+
+		<ImageView
+			android:id="@+id/iv_back"
+			android:layout_width="42dp"
+			android:layout_height="42dp"
+			android:padding="10dp"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:scaleType="centerCrop"
+			android:background="@drawable/btn_trans"
+			android:src="@drawable/arrow_left" />
+
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:textSize="18sp"
+			android:textColor="@color/main_text" />
+
+		<ImageView
+			android:id="@+id/iv_select"
+			android:layout_width="42dp"
+			android:layout_height="42dp"
+			android:padding="10dp"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:scaleType="centerCrop"
+			android:background="@drawable/btn_trans" />
+	</RelativeLayout>
 </LinearLayout>
