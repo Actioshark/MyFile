@@ -3,11 +3,20 @@ package kk.myfile.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
+import kk.myfile.R;
 import kk.myfile.file.FileUtil;
+import kk.myfile.leaf.Audio;
+import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.leaf.Text;
+import kk.myfile.leaf.Video;
+import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.SimpleDialog;
 
 public class IntentUtil {
 	public static boolean view(Context context, Leaf leaf, String type) {
@@ -109,5 +118,51 @@ public class IntentUtil {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public static interface IAsListener {
+		public void onSelect(String type);
+	}
+	
+	public static void showAsDialog(Context context, int msg, final IAsListener listener) {
+		SimpleDialog sd = new SimpleDialog(context);
+		sd.setCanceledOnTouchOutside(true);
+		sd.setMessage(msg);
+		sd.setButtons(R.string.type_text, R.string.type_image,
+			R.string.type_audio, R.string.type_video,
+			R.string.word_any);
+		sd.setClickListener(new IDialogClickListener() {
+			@Override
+			public void onClick(Dialog dialog, int index, ClickType type) {
+				String tp;
+				
+				switch (index) {
+				case 0:
+					tp = Text.TYPE;
+					break;
+
+				case 1:
+					tp = Image.TYPE;
+					break;
+
+				case 2:
+					tp = Audio.TYPE;
+					break;
+
+				case 3:
+					tp = Video.TYPE;
+					break;
+
+				default:
+					tp = "*/*";
+					break;
+				}
+				
+				listener.onSelect(tp);
+
+				dialog.dismiss();
+			}
+		});
+		sd.show();
 	}
 }

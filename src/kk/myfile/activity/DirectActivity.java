@@ -19,17 +19,15 @@ import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
-import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.TempDirect;
-import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Zip;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
-import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
 import kk.myfile.util.IntentUtil;
+import kk.myfile.util.IntentUtil.IAsListener;
 import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
@@ -586,7 +584,7 @@ public class DirectActivity extends BaseActivity {
 			}
 
 			if (hasDirect == false) {
-				list.add(new DataItem(R.drawable.share, R.string.word_share,
+				list.add(new DataItem(R.drawable.share, R.string.word_share_or_as,
 					new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index, ClickType type) {
@@ -597,6 +595,52 @@ public class DirectActivity extends BaseActivity {
 								} else {
 									App.showToast(R.string.err_share_failed);
 								}
+							} else if (type == ClickType.LongClick) {
+								IntentUtil.showAsDialog(DirectActivity.this, R.string.msg_share_as, new IAsListener() {
+									@Override
+									public void onSelect(String type) {
+										IntentUtil.share(DirectActivity.this, selected, type);
+									}
+								});
+							}
+						}
+					}));
+			}
+
+			list.add(new DataItem(R.drawable.detail, R.string.word_detail,
+				new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						Intent intent = new Intent(DirectActivity.this, DetailActivity.class);
+						intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH, DataUtil
+							.leaf2PathCs(selected));
+						intent.putExtra(DetailActivity.KEY_INDEX, 0);
+						startActivity(intent);
+					}
+				}));
+
+			if (selected.size() == 1) {
+				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dl, int index, ClickType type) {
+							first.open(DirectActivity.this, true);
+						}
+					}));
+
+				list.add(new DataItem(R.drawable.edit, R.string.word_rename,
+					new IDialogClickListener() {
+						@Override
+						public void onClick(Dialog dialog, int index, ClickType type) {
+							if (type == ClickType.Click) {
+								Tree.rename(DirectActivity.this, first.getFile(),
+									new IProgressCallback() {
+										@Override
+										public void onProgress(ProgressType type, Object... data) {
+											setMode(Mode.Normal);
+											refreshDirect();
+										}
+									});
 							} else if (type == ClickType.LongClick) {
 								AppUtil.runOnNewThread(new Runnable() {
 									@Override
@@ -649,77 +693,24 @@ public class DirectActivity extends BaseActivity {
 					}));
 			}
 
-			list.add(new DataItem(R.drawable.detail, R.string.word_detail,
-				new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index, ClickType type) {
-						Intent intent = new Intent(DirectActivity.this, DetailActivity.class);
-						intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH, DataUtil
-							.leaf2PathCs(selected));
-						intent.putExtra(DetailActivity.KEY_INDEX, 0);
-						startActivity(intent);
-					}
-				}));
-
-			if (selected.size() == 1) {
-				list.add(new DataItem(R.drawable.arrow_up, R.string.word_open_as,
-					new IDialogClickListener() {
-						@Override
-						public void onClick(Dialog dl, int index, ClickType type) {
-							first.open(DirectActivity.this, true);
-						}
-					}));
-
-				list.add(new DataItem(R.drawable.edit, R.string.word_rename,
-					new IDialogClickListener() {
-						@Override
-						public void onClick(Dialog dialog, int index, ClickType type) {
-							Tree.rename(DirectActivity.this, first.getFile(),
-								new IProgressCallback() {
-									@Override
-									public void onProgress(ProgressType type, Object... data) {
-										setMode(Mode.Normal);
-										refreshDirect();
-									}
-								});
-						}
-					}));
-			}
-
 			if (hasDirect == false && selected.size() == 1) {
-				list.add(new DataItem(R.drawable.edit, R.string.word_edit,
+				list.add(new DataItem(R.drawable.edit, R.string.word_edit_or_as,
 					new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index, ClickType type) {
-							if (IntentUtil.edit(DirectActivity.this, first, null)) {
-								setMode(Mode.Normal);
-							} else {
-								SimpleDialog st = new SimpleDialog(DirectActivity.this);
-								st.setCanceledOnTouchOutside(true);
-								st.setMessage(R.string.msg_edit_as);
-								st.setButtons(R.string.type_text, R.string.type_image,
-									R.string.word_any);
-								st.setClickListener(new IDialogClickListener() {
+							if (type == ClickType.Click) {
+								if (IntentUtil.edit(DirectActivity.this, first, null)) {
+									setMode(Mode.Normal);
+								} else {
+									App.showToast(R.string.err_edit_failed);
+								}
+							} else if (type == ClickType.LongClick) {
+								IntentUtil.showAsDialog(DirectActivity.this, R.string.msg_edit_as, new IAsListener() {
 									@Override
-									public void onClick(Dialog dialog, int index, ClickType type) {
-										switch (index) {
-										case 0:
-											IntentUtil.edit(DirectActivity.this, first, Text.TYPE);
-											break;
-
-										case 1:
-											IntentUtil.edit(DirectActivity.this, first, Image.TYPE);
-											break;
-
-										case 2:
-											IntentUtil.edit(DirectActivity.this, first, "*/*");
-											break;
-										}
-
-										dialog.dismiss();
+									public void onSelect(String type) {
+										IntentUtil.edit(DirectActivity.this, first, type);
 									}
 								});
-								st.show();
 							}
 						}
 					}));

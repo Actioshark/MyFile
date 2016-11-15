@@ -15,6 +15,7 @@
 	<string name="err_create_file_failed">创建文件失败！</string>
 	<string name="err_create_file_success">成功</string>
 	<string name="err_delete_file_failed">%s\n删除失败</string>
+	<string name="err_edit_failed">编辑失败</string>
 	<string name="err_extract_failed">解压失败</string>
 	<string name="err_extract_success">成功</string>
 	<string name="err_file_exist">此文件已经存在</string>
@@ -57,6 +58,7 @@
 	<string name="msg_not_installed">未安装</string>
 	<string name="msg_open_as">打开为</string>
 	<string name="msg_select_operation">请选择一个操作</string>
+	<string name="msg_share_as">分享为</string>
 	<string name="msg_wait">请稍等</string>
 
 	<string name="setting_hidden">是否搜索隐藏文件</string>
@@ -108,6 +110,7 @@
 	<string name="word_detail">详情</string>
 	<string name="word_duration">时长</string>
 	<string name="word_edit">编辑</string>
+	<string name="word_edit_or_as">编辑（为）</string>
 	<string name="word_extract_or_to">解压（到）</string>
 	<string name="word_extract_to">解压到</string>
 	<string name="word_height">高</string>
@@ -130,7 +133,7 @@
 	<string name="word_rename_or_all">重命名\n（所有）</string>
 	<string name="word_rotation">角度</string>
 	<string name="word_setting">设置</string>
-	<string name="word_share">分享</string>
+	<string name="word_share_or_as">分享（为）</string>
 	<string name="word_size">大小</string>
 	<string name="word_skip_or_all">跳过\n（所有）</string>
 	<string name="word_state">状态</string>
