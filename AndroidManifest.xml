@@ -31,7 +31,7 @@
 		<activity android:name="kk.myfile.activity.TypeActivity" />
 		<activity android:name="kk.myfile.activity.DetailActivity" />
 		<activity android:name="kk.myfile.activity.SelectActivity" />
-		<activity android:name="kk.myfile.activity.ZipActivity" />
+		<activity android:name="kk.myfile.activity.ArchiveActivity" />
 		<activity android:name="kk.myfile.activity.SettingActivity" />
 		<activity android:name="kk.myfile.activity.SettingSortActivity" />
 		<activity android:name="kk.myfile.activity.SettingListStyleActivity" />

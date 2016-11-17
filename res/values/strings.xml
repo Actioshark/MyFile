@@ -23,7 +23,7 @@
 	<string name="err_illegal_file_name_char">Illegal characters!</string>
 	<string name="err_name_length_valid">Length must be %1$d ot %2$d!</string>
 	<string name="err_nothing_selected">Noting selected</string>
-	<string name="err_not_zip">This is not a valid zip</string>
+	<string name="err_not_archive">This is not a valid archive</string>
 	<string name="err_path_not_valid">This is not a valid path</string>
 	<string name="err_rename_file_failed">Rename failed!</string>
 	<string name="err_rename_file_success">Success</string>
@@ -84,6 +84,7 @@
 	<string name="sort_Subfix">Subfix</string>
 
 	<string name="type_apk">Apk</string>
+	<string name="type_archive">Archive</string>
 	<string name="type_audio">Audio</string>
 	<string name="type_direct">Directory</string>
 	<string name="type_image">Image</string>
@@ -91,7 +92,6 @@
 	<string name="type_text">Text</string>
 	<string name="type_unknown">Unknown</string>
 	<string name="type_video">Video</string>
-	<string name="type_zip">Zip</string>
 
 	<string name="word_album">Album</string>
 	<string name="word_any">Any</string>

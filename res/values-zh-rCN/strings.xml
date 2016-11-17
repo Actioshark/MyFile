@@ -23,7 +23,7 @@
 	<string name="err_illegal_file_name_char">含有非法字符！</string>
 	<string name="err_name_length_valid">长度必须是 %1$d 到 %2$d！</string>
 	<string name="err_nothing_selected">没有选择任何文件</string>
-	<string name="err_not_zip">这不是合法的压缩包</string>
+	<string name="err_not_archive">这不是合法的压缩包</string>
 	<string name="err_path_not_valid">这是个无效路径</string>
 	<string name="err_rename_file_failed">重命名失败！</string>
 	<string name="err_rename_file_success">成功</string>
@@ -79,6 +79,7 @@
 	<string name="sort_Subfix">类型</string>
 
 	<string name="type_apk">应用</string>
+	<string name="type_archive">归档</string>
 	<string name="type_audio">音频</string>
 	<string name="type_direct">目录</string>
 	<string name="type_image">图片</string>
@@ -86,7 +87,6 @@
 	<string name="type_text">文本</string>
 	<string name="type_unknown">未知</string>
 	<string name="type_video">视频</string>
-	<string name="type_zip">压缩包</string>
 
 	<string name="word_album">专辑</string>
 	<string name="word_any">任意</string>

@@ -8,7 +8,7 @@ import net.lingala.zip4j.model.FileHeader;
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.BaseActivity.Classify;
-import kk.myfile.activity.ZipActivity;
+import kk.myfile.activity.ArchiveActivity;
 import kk.myfile.file.Sorter;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -23,11 +23,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ZipAdapter extends BaseAdapter {
-	private final ZipActivity mActivity;
+public class ArchiveAdapter extends BaseAdapter {
+	private final ArchiveActivity mActivity;
 	private final List<Leaf> mDataList = new ArrayList<Leaf>();
 
-	public ZipAdapter(ZipActivity activity) {
+	public ArchiveAdapter(ArchiveActivity activity) {
 		mActivity = activity;
 	}
 
@@ -80,7 +80,7 @@ public class ZipAdapter extends BaseAdapter {
 		final ViewHolder vh;
 
 		if (view == null) {
-			view = mActivity.getLayoutInflater().inflate(R.layout.grid_zip, null);
+			view = mActivity.getLayoutInflater().inflate(R.layout.grid_archive, null);
 
 			vh = new ViewHolder();
 			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);

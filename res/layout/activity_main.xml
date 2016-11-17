@@ -328,7 +328,7 @@
 				</LinearLayout>
 
 				<LinearLayout
-					android:id="@+id/ll_zip"
+					android:id="@+id/ll_archive"
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
@@ -345,7 +345,7 @@
 						android:layout_width="@dimen/main_bar_height"
 						android:layout_height="@dimen/main_bar_height"
 						android:scaleType="centerInside"
-						android:src="@drawable/file_zip" />
+						android:src="@drawable/file_archive" />
 
 					<View
 						android:layout_width="match_parent"

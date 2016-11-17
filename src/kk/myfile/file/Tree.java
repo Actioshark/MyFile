@@ -869,7 +869,7 @@ public class Tree {
 			final ZipFile zf = new ZipFile(zip);
 
 			if (zf.isValidZipFile() == false) {
-				App.showToast(R.string.err_not_zip);
+				App.showToast(R.string.err_not_archive);
 
 				if (cb != null) {
 					cb.onProgress(ProgressType.Error);

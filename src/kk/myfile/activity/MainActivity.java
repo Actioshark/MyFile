@@ -23,7 +23,7 @@ import kk.myfile.leaf.Leaf;
 import kk.myfile.leaf.Office;
 import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Video;
-import kk.myfile.leaf.Zip;
+import kk.myfile.leaf.Archive;
 import kk.myfile.ui.CakeView;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
@@ -49,7 +49,7 @@ public class MainActivity extends BaseActivity {
 	private View mLlAdd;
 
 	private final Class<?>[] mTypes = new Class<?>[] {
-		Text.class, Image.class, Audio.class, Video.class, Office.class, Zip.class, Apk.class,
+		Text.class, Image.class, Audio.class, Video.class, Office.class, Archive.class, Apk.class,
 	};
 	private final List<TextView> mTvTypes = new ArrayList<TextView>();
 	private Object mTypeMark;
@@ -203,13 +203,13 @@ public class MainActivity extends BaseActivity {
 		});
 		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 
-		parent = root.findViewById(R.id.ll_zip);
+		parent = root.findViewById(R.id.ll_archive);
 		parent.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, TypeActivity.class);
 				intent.putExtra(KEY_CLASSIFY, Classify.Type.name());
-				intent.putExtra(TypeActivity.KEY_TYPE, Zip.class.getName());
+				intent.putExtra(TypeActivity.KEY_TYPE, Archive.class.getName());
 				startActivity(intent);
 			}
 		});

@@ -12,7 +12,7 @@ import net.lingala.zip4j.model.FileHeader;
 
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity.Node;
-import kk.myfile.adapter.ZipAdapter;
+import kk.myfile.adapter.ArchiveAdapter;
 import kk.myfile.file.FileUtil;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -35,7 +35,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 
-public class ZipActivity extends BaseActivity {
+public class ArchiveActivity extends BaseActivity {
 	private ZipFile mZipFile;
 	private final Map<String, Direct> mZipMap = new HashMap<String, Direct>();
 
@@ -46,20 +46,20 @@ public class ZipActivity extends BaseActivity {
 	private ViewGroup mVgPath;
 
 	private ListView mLvList;
-	private ZipAdapter mZipAdapter;
+	private ArchiveAdapter mZipAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_zip);
+		setContentView(R.layout.activity_archive);
 
 		// 路径栏
 		mHsvPath = (HorizontalScrollView) findViewById(R.id.hsv_path);
 		mVgPath = (ViewGroup) mHsvPath.findViewById(R.id.ll_path);
 
 		// 文件列表
-		mZipAdapter = new ZipAdapter(this);
+		mZipAdapter = new ArchiveAdapter(this);
 		mLvList = (ListView) findViewById(R.id.lv_list);
 		mLvList.setAdapter(mZipAdapter);
 		mLvList.setOnScrollListener(new OnScrollListener() {
@@ -99,7 +99,7 @@ public class ZipActivity extends BaseActivity {
 			mZipFile = new ZipFile(path);
 			
 			if (mZipFile.isValidZipFile() == false) {
-				App.showToast(R.string.err_not_zip);
+				App.showToast(R.string.err_not_archive);
 				finish();
 				return;
 			}
@@ -240,7 +240,7 @@ public class ZipActivity extends BaseActivity {
 					AppUtil.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							leaf.open(ZipActivity.this, false);
+							leaf.open(ArchiveActivity.this, false);
 						}
 					});
 				} catch (Exception e) {

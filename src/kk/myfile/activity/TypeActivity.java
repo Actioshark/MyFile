@@ -19,7 +19,7 @@ import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
-import kk.myfile.leaf.Zip;
+import kk.myfile.leaf.Archive;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.util.AppUtil;
@@ -588,7 +588,7 @@ public class TypeActivity extends BaseActivity {
 					}
 				}));
 
-			if (selected.size() == 1 && first instanceof Zip) {
+			if (selected.size() == 1 && first instanceof Archive) {
 				list.add(new DataItem(R.drawable.extract, R.string.word_extract_to,
 					new IDialogClickListener() {
 						@Override
