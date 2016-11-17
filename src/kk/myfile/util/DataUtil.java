@@ -77,9 +77,19 @@ public class DataUtil {
 	}
 	
 	public static String getFileName(String path) {
-		for (int i = path.length() - 2; i > 0; i--) {
+		for (int i = path.length() - 2; i >= 0; i--) {
 			if (path.charAt(i) == '/') {
-				return path.substring(i + 1, path.length());
+				StringBuilder sb = new StringBuilder();
+				
+				int len = path.length();
+				for (int j = i + 1; j < len; j++) {
+					char ch = path.charAt(j);
+					if (ch != '/') {
+						sb.append(ch);
+					}
+				}
+				
+				return sb.toString();
 			}
 		}
 		

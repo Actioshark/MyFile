@@ -2,17 +2,13 @@ package kk.myfile.activity;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.model.FileHeader;
 
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.adapter.ArchiveAdapter;
+import kk.myfile.file.ArchiveHelper;
+import kk.myfile.file.ArchiveHelper.FileHeader;
 import kk.myfile.file.FileUtil;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -36,8 +32,7 @@ import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 
 public class ArchiveActivity extends BaseActivity {
-	private ZipFile mZipFile;
-	private final Map<String, Direct> mZipMap = new HashMap<String, Direct>();
+	private ArchiveHelper mArchiveHelper;
 
 	private Node mNode;
 	private final List<Node> mHistory = new ArrayList<Node>();
@@ -95,50 +90,38 @@ public class ArchiveActivity extends BaseActivity {
 
 		// 数据
 		String path = getIntent().getStringExtra(KEY_PATH);
-		try {
-			mZipFile = new ZipFile(path);
+			mArchiveHelper = new ArchiveHelper();
 			
-			if (mZipFile.isValidZipFile() == false) {
-				App.showToast(R.string.err_not_archive);
-				finish();
-				return;
-			}
-			
-			if (mZipFile.isEncrypted()) {
-				final InputDialog id = new InputDialog(this);
-				id.setMessage(R.string.msg_input_password);
-				id.setClickListener(new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index, ClickType type) {
-						if (index == 1) {
-							String password = id.getInput();
-							
-							try {
-								mZipFile.setPassword(password);
-							} catch (Exception e){
-								Logger.print(null, e);
-								App.showToast(R.string.err_extract_failed);
-								return;
-							}
-							
-							dialog.dismiss();
-							parseAndStart();
-						} else {
-							dialog.dismiss();
-							finish();
-						}
-					}
-				});
-				id.setCanceledOnTouchOutside(false);
-				id.show();
-			} else {
-				parseAndStart();
-			}
-		} catch (Exception e) {
-			Logger.print(null, e);
-			App.showToast(R.string.err_extract_failed);
+		boolean valid = mArchiveHelper.setFile(path);
+		
+		if (valid == false) {
+			App.showToast(R.string.err_not_archive);
 			finish();
 			return;
+		}
+		
+		if (mArchiveHelper.isEncrypted()) {
+			final InputDialog id = new InputDialog(this);
+			id.setMessage(R.string.msg_input_password);
+			id.setClickListener(new IDialogClickListener() {
+				@Override
+				public void onClick(Dialog dialog, int index, ClickType type) {
+					if (index == 1) {
+						String password = id.getInput();
+						mArchiveHelper.setPassword(password);
+						
+						dialog.dismiss();
+						parseAndStart();
+					} else {
+						dialog.dismiss();
+						finish();
+					}
+				}
+			});
+			id.setCanceledOnTouchOutside(false);
+			id.show();
+		} else {
+			parseAndStart();
 		}
 	}
 	
@@ -146,76 +129,14 @@ public class ArchiveActivity extends BaseActivity {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				final AtomicBoolean success = new AtomicBoolean(true);
-				
-				try {
-					for (Object obj : mZipFile.getFileHeaders()) {
-						FileHeader fh = (FileHeader) obj;
-						String path = fh.getFileName();
-						Leaf leaf;
-						
-						if (path.charAt(path.length() - 1) == '/') {
-							Direct direct = mZipMap.get(path);
-							if (direct == null) {
-								direct = new Direct(path);
-								mZipMap.put(path, direct);
-							}
-							
-							leaf = direct;
-						} else {
-							leaf = FileUtil.createTempLeaf(path);
-						}
-						
-						leaf.setTag(fh);
-						
-						while(true) {
-							int ni = -1;
-							for (int i = path.length() - 2; i >= 0; i--) {
-								if (path.charAt(i) == '/') {
-									ni = i;
-									break;
-								}
-							}
-							
-							boolean finish = false;
-							
-							String pp;
-							if (ni == -1) {
-								pp = "";
-								finish = true;
-							} else {
-								pp = path.substring(0, ni + 1);
-							}
-							
-							Direct parent = mZipMap.get(pp);
-							if (parent == null) {
-								parent = new Direct(pp);
-								mZipMap.put(pp, parent);
-							} else {
-								finish = true;
-							}
-							
-							parent.getChildren().add(leaf);
-							
-							if (finish) {
-								break;
-							} else {
-								path = pp;
-								leaf = parent;
-							}
-						}
-					}
-				} catch (Exception e) {
-					Logger.print(null, e);
-					
-					success.set(false);
-				}
+				final boolean success = mArchiveHelper.parseFileHeader();
 				
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if (success.get()) {
-							showDirect(new Node(mZipMap.get("")), false);
+						if (success) {
+							Leaf leaf = mArchiveHelper.getFileHeader("/").getLeaf();
+							showDirect(new Node((Direct) leaf), false);
 						} else {
 							App.showToast(R.string.err_extract_failed);
 							finish();
@@ -233,8 +154,9 @@ public class ArchiveActivity extends BaseActivity {
 				try {
 					String dest = Setting.DEFAULT_PATH + "/temp";
 					
-					mZipFile.setRunInThread(false);
-					mZipFile.extractFile(path, dest);
+					FileHeader fh = mArchiveHelper.getFileHeader(path);
+					
+					mArchiveHelper.extractFile(fh, dest);
 					
 					final Leaf leaf = FileUtil.createLeaf(new File(dest, path));
 					AppUtil.runOnUiThread(new Runnable() {
@@ -272,24 +194,24 @@ public class ArchiveActivity extends BaseActivity {
 		mNode = node;
 
 		String path = node.direct.getPath();
-		final List<String> nodes = new ArrayList<String>();
+		final String[] nodes;
 		String[] temp = path.split("/");
-		
-		nodes.add("/");
-		for (String s : temp) {
-			if (s.length() > 0) {
-				nodes.add(s);
-			}
+		if (temp.length > 0) {
+			nodes = temp;
+		} else {
+			nodes = new String[] {
+				""
+			};
 		}
 		
 		mVgPath.removeAllViews();
 
-		for (int i = 0; i < nodes.size(); i++) {
+		for (int i = 0; i < nodes.length; i++) {
 			final int index = i;
 			View grid = getLayoutInflater().inflate(R.layout.grid_path, null);
 			TextView text = (TextView) grid.findViewById(R.id.tv_text);
-			text.setText(String.format("%s %c", nodes.get(i),
-				i == nodes.size() - 1 ? ' ' : '>'));
+			text.setText(String.format("%s %c", i == 0 ? "/" : nodes[i],
+					i == nodes.length - 1 ? ' ' : '>'));
 
 			grid.setOnClickListener(new OnClickListener() {
 				@Override
@@ -297,10 +219,15 @@ public class ArchiveActivity extends BaseActivity {
 					StringBuilder sb = new StringBuilder();
 
 					for (int i = 1; i <= index; i++) {
-						sb.append(nodes.get(i)).append('/');
+						sb.append('/').append(nodes[i]);
+					}
+					
+					if (sb.length() == 0) {
+						sb.append('/');
 					}
 
-					showDirect(new Node(mZipMap.get(sb.toString())), true);
+					Leaf leaf = mArchiveHelper.getFileHeader(sb.toString()).getLeaf();
+					showDirect(new Node((Direct) leaf), true);
 				}
 			});
 
@@ -334,6 +261,10 @@ public class ArchiveActivity extends BaseActivity {
 		if (position >= 0 && position < mZipAdapter.getCount()) {
 			mLvList.setSelection(position);
 		}
+	}
+	
+	public FileHeader getFileHeader(String path) {
+		return mArchiveHelper.getFileHeader(path);
 	}
 
 	@Override

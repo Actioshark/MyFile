@@ -3,12 +3,11 @@ package kk.myfile.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.lingala.zip4j.model.FileHeader;
-
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.BaseActivity.Classify;
 import kk.myfile.activity.ArchiveActivity;
+import kk.myfile.file.ArchiveHelper.FileHeader;
 import kk.myfile.file.Sorter;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -111,9 +110,9 @@ public class ArchiveAdapter extends BaseAdapter {
 			int cn = ((Direct) leaf).getChildren().size();
 			vh.desc.setText(AppUtil.getString(R.string.msg_children_with_num, cn));
 		} else {
-			FileHeader fh = (FileHeader) leaf.getTag();
-			String cs = MathUtil.insertComma(fh.getCompressedSize());
-			String us = MathUtil.insertComma(fh.getUncompressedSize());
+			FileHeader fh = (FileHeader) mActivity.getFileHeader(leaf.getPath());
+			String cs = MathUtil.insertComma(fh.getCompressSize());
+			String us = MathUtil.insertComma(fh.getExtractSize());
 			vh.desc.setText(String.format("%s/%s B", cs, us));
 		}
 		

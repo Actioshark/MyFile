@@ -134,6 +134,10 @@ public class IntentUtil {
 		sd.setClickListener(new IDialogClickListener() {
 			@Override
 			public void onClick(Dialog dialog, int index, ClickType type) {
+				if (index == -1) {
+					return;
+				}
+				
 				String tp;
 				
 				switch (index) {
