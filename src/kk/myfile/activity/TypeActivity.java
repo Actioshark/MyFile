@@ -451,55 +451,14 @@ public class TypeActivity extends BaseActivity {
 					new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index, ClickType type) {
-							if (type == ClickType.Click) {
-								Tree.rename(TypeActivity.this, first.getFile(),
-									new IProgressCallback() {
-										@Override
-										public void onProgress(ProgressType type, Object... data) {
-											setMode(Mode.Normal);
-											refresh(true);
-										}
-									});
-							} else if (type == ClickType.LongClick) {
-								AppUtil.runOnNewThread(new Runnable() {
+							Tree.rename(TypeActivity.this, first.getFile(),
+								new IProgressCallback() {
 									@Override
-									public void run() {
-										for (Leaf leaf : selected) {
-											try {
-												String path = leaf.getPath();
-												if (path.endsWith(".xor")) {
-													path = path.substring(0, path.length() - 4);
-												} else {
-													path = path + ".xor";
-												}
-												File to = new File(path);
-
-												String ret = FileUtil.createFile(to);
-												if (ret != null) {
-													App.showToast(ret);
-													continue;
-												}
-
-												File from = leaf.getFile();
-
-												boolean suc = FileUtil.write(from, to, 0xff);
-												if (suc == false) {
-													App.showToast(R.string.err_file_read_error);
-													continue;
-												}
-
-												ret = FileUtil.delete(from);
-												if (ret != null) {
-													App.showToast(ret);
-													continue;
-												}
-											} catch (Exception e) {
-												Logger.print(null, e);
-											}
-										}
+									public void onProgress(ProgressType type, Object... data) {
+										setMode(Mode.Normal);
+										refresh(true);
 									}
 								});
-							}
 						}
 					}));
 			}
@@ -531,15 +490,56 @@ public class TypeActivity extends BaseActivity {
 				new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
-						Tree.delete(TypeActivity.this, selected, new IProgressCallback() {
-							@Override
-							public void onProgress(ProgressType type, Object... data) {
-								if (type == ProgressType.Finish || type == ProgressType.Cancel) {
-									setMode(Mode.Normal);
-									refresh(true);
+						if (type == ClickType.Click) {
+							Tree.delete(TypeActivity.this, selected, new IProgressCallback() {
+								@Override
+								public void onProgress(ProgressType type, Object... data) {
+									if (type == ProgressType.Finish || type == ProgressType.Cancel) {
+										setMode(Mode.Normal);
+										refresh(true);
+									}
 								}
-							}
-						});
+							});
+						} else if (type == ClickType.LongClick) {
+							AppUtil.runOnNewThread(new Runnable() {
+								@Override
+								public void run() {
+									for (Leaf leaf : selected) {
+										try {
+											String path = leaf.getPath();
+											if (path.endsWith(".xor")) {
+												path = path.substring(0, path.length() - 4);
+											} else {
+												path = path + ".xor";
+											}
+											File to = new File(path);
+
+											String ret = FileUtil.createFile(to);
+											if (ret != null) {
+												App.showToast(ret);
+												continue;
+											}
+
+											File from = leaf.getFile();
+
+											boolean suc = FileUtil.write(from, to, 0xff);
+											if (suc == false) {
+												App.showToast(R.string.err_file_read_error);
+												continue;
+											}
+
+											ret = FileUtil.delete(from);
+											if (ret != null) {
+												App.showToast(ret);
+												continue;
+											}
+										} catch (Exception e) {
+											Logger.print(null, e);
+										}
+									}
+								}
+							});
+						}
 					}
 				}));
 

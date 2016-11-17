@@ -632,63 +632,14 @@ public class DirectActivity extends BaseActivity {
 					new IDialogClickListener() {
 						@Override
 						public void onClick(Dialog dialog, int index, ClickType type) {
-							if (type == ClickType.Click) {
-								Tree.rename(DirectActivity.this, first.getFile(),
-									new IProgressCallback() {
-										@Override
-										public void onProgress(ProgressType type, Object... data) {
-											setMode(Mode.Normal);
-											refreshDirect();
-										}
-									});
-							} else if (type == ClickType.LongClick) {
-								AppUtil.runOnNewThread(new Runnable() {
+							Tree.rename(DirectActivity.this, first.getFile(),
+								new IProgressCallback() {
 									@Override
-									public void run() {
-										for (Leaf leaf : selected) {
-											try {
-												String path = leaf.getPath();
-												if (path.endsWith(".xor")) {
-													path = path.substring(0, path.length() - 4);
-												} else {
-													path = path + ".xor";
-												}
-												File to = new File(path);
-
-												String ret = FileUtil.createFile(to);
-												if (ret != null) {
-													App.showToast(ret);
-													continue;
-												}
-
-												File from = leaf.getFile();
-
-												boolean suc = FileUtil.write(from, to, 0xff);
-												if (suc == false) {
-													App.showToast(R.string.err_file_read_error);
-													continue;
-												}
-
-												ret = FileUtil.delete(from);
-												if (ret != null) {
-													App.showToast(ret);
-													continue;
-												}
-											} catch (Exception e) {
-												Logger.print(null, e);
-											}
-										}
-
-										AppUtil.runOnUiThread(new Runnable() {
-											@Override
-											public void run() {
-												setMode(Mode.Normal);
-												refreshDirect();
-											}
-										});
+									public void onProgress(ProgressType type, Object... data) {
+										setMode(Mode.Normal);
+										refreshDirect();
 									}
 								});
-							}
 						}
 					}));
 			}
@@ -720,13 +671,62 @@ public class DirectActivity extends BaseActivity {
 				new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
-						Tree.delete(DirectActivity.this, selected, new IProgressCallback() {
-							@Override
-							public void onProgress(ProgressType type, Object... data) {
-								setMode(Mode.Normal);
-								refreshDirect();
-							}
-						});
+						if (type == ClickType.Click) {
+							Tree.delete(DirectActivity.this, selected, new IProgressCallback() {
+								@Override
+								public void onProgress(ProgressType type, Object... data) {
+									setMode(Mode.Normal);
+									refreshDirect();
+								}
+							});
+						} else if (type == ClickType.LongClick) {
+							AppUtil.runOnNewThread(new Runnable() {
+								@Override
+								public void run() {
+									for (Leaf leaf : selected) {
+										try {
+											String path = leaf.getPath();
+											if (path.endsWith(".xor")) {
+												path = path.substring(0, path.length() - 4);
+											} else {
+												path = path + ".xor";
+											}
+											File to = new File(path);
+
+											String ret = FileUtil.createFile(to);
+											if (ret != null) {
+												App.showToast(ret);
+												continue;
+											}
+
+											File from = leaf.getFile();
+
+											boolean suc = FileUtil.write(from, to, 0xff);
+											if (suc == false) {
+												App.showToast(R.string.err_file_read_error);
+												continue;
+											}
+
+											ret = FileUtil.delete(from);
+											if (ret != null) {
+												App.showToast(ret);
+												continue;
+											}
+										} catch (Exception e) {
+											Logger.print(null, e);
+										}
+									}
+
+									AppUtil.runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											setMode(Mode.Normal);
+											refreshDirect();
+										}
+									});
+								}
+							});
+						}
 					}
 				}));
 
