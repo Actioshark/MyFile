@@ -152,13 +152,18 @@ public class ArchiveActivity extends BaseActivity {
 			@Override
 			public void run() {
 				try {
-					String dest = Setting.DEFAULT_PATH + "/temp";
+					String destStr = Setting.DEFAULT_PATH + "/temp";
+					File destFile = new File(destStr);
+					if (destFile.exists()) {
+						FileUtil.delete(destFile, true);
+					} else {
+						FileUtil.createDirect(destFile);
+					}
 					
 					FileHeader fh = mArchiveHelper.getFileHeader(path);
+					mArchiveHelper.extractFile(fh, destStr);
 					
-					mArchiveHelper.extractFile(fh, dest);
-					
-					final Leaf leaf = FileUtil.createLeaf(new File(dest, path));
+					final Leaf leaf = FileUtil.createLeaf(new File(destStr, path));
 					AppUtil.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {

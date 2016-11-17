@@ -193,11 +193,18 @@ public class FileUtil {
 
 		return AppUtil.getString(R.string.err_rename_file_failed);
 	}
-
+	
 	public static String delete(File file) {
+		return delete(file, false);
+	}
+
+	public static String delete(File file, boolean childOnly) {
 		try {
 			List<File> list = new ArrayList<File>();
-			list.add(file);
+			
+			if (childOnly == false) {
+				list.add(file);
+			}
 
 			for (int i = 0; i < list.size(); i++) {
 				File temp = list.get(i);
@@ -229,7 +236,7 @@ public class FileUtil {
 			name = "";
 		}
 
-		return AppUtil.getString(R.string.err_create_file_failed, name);
+		return AppUtil.getString(R.string.err_delete_file_failed, name);
 	}
 
 	public static boolean write(File from, File to) {
