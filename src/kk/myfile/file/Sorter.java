@@ -20,13 +20,11 @@ import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 public class Sorter {
-
 	public static enum SortType {
 		Directory, ModifyTime, Name, Path, Size, Subfix,
 	}
 
 	public static abstract class SortFactor implements Comparator<Leaf>, Cloneable {
-
 		public final SortType type;
 		public final String text;
 		public boolean up;
@@ -121,8 +119,8 @@ public class Sorter {
 
 		@Override
 		public int cmp(Leaf a, Leaf b) {
-			String an = DataUtil.getFileName(a.getPath());
-			String bn = DataUtil.getFileName(b.getPath());
+			String an = DataUtil.getFileName(a.getPath()).toLowerCase(Setting.LOCALE);
+			String bn = DataUtil.getFileName(b.getPath()).toLowerCase(Setting.LOCALE);
 
 			return an.compareTo(bn);
 		}
@@ -135,8 +133,8 @@ public class Sorter {
 
 		@Override
 		public int cmp(Leaf a, Leaf b) {
-			String ap = a.getPath();
-			String bp = b.getPath();
+			String ap = a.getPath().toLowerCase(Setting.LOCALE);
+			String bp = b.getPath().toLowerCase(Setting.LOCALE);
 
 			return ap.compareTo(bp);
 		}
