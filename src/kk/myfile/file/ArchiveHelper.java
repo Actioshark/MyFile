@@ -68,9 +68,8 @@ public class ArchiveHelper {
 				if (archive.isValidZipFile()) {
 					archive.setRunInThread(false);
 					mArchive = archive;
+					return true;
 				}
-				
-				return true;
 			} catch (Exception e) {
 				Logger.print(null, e);
 			}
@@ -78,13 +77,12 @@ public class ArchiveHelper {
 		
 		if (mArchive == null) {
 			try {
-				Archive archive = new Archive(new File(path), null, true);
+				Archive archive = new Archive(new File(path), null, false);
 				
 				if (archive.isPass()) {
 					mArchive = archive;
+					return true;
 				}
-				
-				return true;
 			} catch (Exception e) {
 				Logger.print(null, e);
 			}
@@ -143,12 +141,14 @@ public class ArchiveHelper {
 					header = fh;
 				} else if (mArchive instanceof Archive) {
 					de.innosystec.unrar.rarfile.FileHeader fh = (de.innosystec.unrar.rarfile.FileHeader) obj;
-					path = fh.getFileNameW();
+					path = fh.getFileNameString();
 					isDirect = fh.isDirectory();
 					header = fh;
 				}
 				
-				if (path.charAt(0) != '/') {
+				path = path.replace('\\', '/');
+				
+				if (path.length() < 1 || path.charAt(0) != '/') {
 					path = '/' + path;
 				}
 				
@@ -231,14 +231,18 @@ public class ArchiveHelper {
 		return mMap.get(path);
 	}
 	
-	public void extractFile(FileHeader fh, String dist) {
+	public void extractFile(FileHeader fh, String dir) {
 		try {
 			if (mArchive instanceof ZipFile) {
 				net.lingala.zip4j.model.FileHeader header = (net.lingala.zip4j.model.FileHeader) fh.getHeader();
-				((ZipFile) mArchive).extractFile(header, dist);
+				((ZipFile) mArchive).extractFile(header, dir);
 			} else if (mArchive instanceof Archive) {
 				de.innosystec.unrar.rarfile.FileHeader header = (de.innosystec.unrar.rarfile.FileHeader) fh.getHeader();
-				FileOutputStream fos = new FileOutputStream(dist);
+				
+				File file = new File(dir, "temp");
+				file.createNewFile();
+				FileOutputStream fos = new FileOutputStream(file);
+				
 				((Archive) mArchive).extractFile(header, fos);
 				fos.close();
 			}

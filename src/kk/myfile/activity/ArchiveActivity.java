@@ -90,10 +90,9 @@ public class ArchiveActivity extends BaseActivity {
 
 		// 数据
 		String path = getIntent().getStringExtra(KEY_PATH);
-			mArchiveHelper = new ArchiveHelper();
+		mArchiveHelper = new ArchiveHelper();
 			
 		boolean valid = mArchiveHelper.setFile(path);
-		
 		if (valid == false) {
 			App.showToast(R.string.err_not_archive);
 			finish();
