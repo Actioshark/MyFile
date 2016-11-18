@@ -201,10 +201,7 @@ public class FileUtil {
 	public static String delete(File file, boolean childOnly) {
 		try {
 			List<File> list = new ArrayList<File>();
-			
-			if (childOnly == false) {
-				list.add(file);
-			}
+			list.add(file);
 
 			for (int i = 0; i < list.size(); i++) {
 				File temp = list.get(i);
@@ -214,6 +211,10 @@ public class FileUtil {
 						list.add(child);
 					}
 				}
+			}
+			
+			if (childOnly) {
+				list.remove(0);
 			}
 
 			boolean success = true;
