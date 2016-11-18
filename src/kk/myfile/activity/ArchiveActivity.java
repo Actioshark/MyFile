@@ -160,7 +160,7 @@ public class ArchiveActivity extends BaseActivity {
 					}
 					
 					FileHeader fh = mArchiveHelper.getFileHeader(path);
-					mArchiveHelper.extractFile(fh, destStr);
+					mArchiveHelper.extractFile(fh, destStr, path);
 					
 					final Leaf leaf = FileUtil.createLeaf(new File(destStr, path));
 					AppUtil.runOnUiThread(new Runnable() {

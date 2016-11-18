@@ -231,7 +231,7 @@ public class ArchiveHelper {
 		return mMap.get(path);
 	}
 	
-	public void extractFile(FileHeader fh, String dir) {
+	public void extractFile(FileHeader fh, String dir, String path) {
 		try {
 			if (mArchive instanceof ZipFile) {
 				net.lingala.zip4j.model.FileHeader header = (net.lingala.zip4j.model.FileHeader) fh.getHeader();
@@ -239,8 +239,9 @@ public class ArchiveHelper {
 			} else if (mArchive instanceof Archive) {
 				de.innosystec.unrar.rarfile.FileHeader header = (de.innosystec.unrar.rarfile.FileHeader) fh.getHeader();
 				
-				File file = new File(dir, "temp");
-				file.createNewFile();
+				File file = new File(dir, path);
+				file.getParentFile().mkdirs();
+				FileUtil.createFile(file);
 				FileOutputStream fos = new FileOutputStream(file);
 				
 				((Archive) mArchive).extractFile(header, fos);
