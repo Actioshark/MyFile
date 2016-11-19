@@ -77,12 +77,10 @@ public class ArchiveHelper {
 		
 		if (mArchive == null) {
 			try {
-				Archive archive = new Archive(new File(path), null, false);
-				
-				if (archive.isPass()) {
-					mArchive = archive;
-					return true;
-				}
+				Archive archive = new Archive(new File(path), null, true);
+				archive.isEncrypted();
+				mArchive = archive;
+				return true;
 			} catch (Exception e) {
 				Logger.print(null, e);
 			}

@@ -3,13 +3,13 @@ package kk.myfile.ui;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import kk.myfile.R;
 import kk.myfile.ui.IDialogClickListener.ClickType;
 import kk.myfile.util.AppUtil;
@@ -86,6 +86,10 @@ public class InputDialog extends Dialog {
 
 	public String getInput() {
 		return mEtInput.getText().toString();
+	}
+	
+	public void setInputType(int type) {
+		mEtInput.setInputType(type);
 	}
 
 	public void setSelection(int index) {

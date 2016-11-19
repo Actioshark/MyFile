@@ -17,9 +17,9 @@ import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
-
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -102,15 +102,15 @@ public class ArchiveActivity extends BaseActivity {
 		if (mArchiveHelper.isEncrypted()) {
 			final InputDialog id = new InputDialog(this);
 			id.setMessage(R.string.msg_input_password);
+			id.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 			id.setClickListener(new IDialogClickListener() {
 				@Override
 				public void onClick(Dialog dialog, int index, ClickType type) {
 					if (index == 1) {
 						String password = id.getInput();
-						mArchiveHelper.setPassword(password);
-						
 						dialog.dismiss();
-						parseAndStart();
+						
+						parseAndStart(password);
 					} else {
 						dialog.dismiss();
 						finish();
@@ -120,26 +120,34 @@ public class ArchiveActivity extends BaseActivity {
 			id.setCanceledOnTouchOutside(false);
 			id.show();
 		} else {
-			parseAndStart();
+			parseAndStart(null);
 		}
 	}
 	
-	private void parseAndStart() {
+	private void parseAndStart(final String password) {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
+				if (password != null) {
+					mArchiveHelper.setPassword(password);
+				}
 				final boolean success = mArchiveHelper.parseFileHeader();
 				
 				AppUtil.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if (success) {
-							Leaf leaf = mArchiveHelper.getFileHeader("/").getLeaf();
-							showDirect(new Node((Direct) leaf), false);
-						} else {
-							App.showToast(R.string.err_extract_failed);
-							finish();
+						try {
+							if (success) {
+								Leaf leaf = mArchiveHelper.getFileHeader("/").getLeaf();
+								showDirect(new Node((Direct) leaf), false);
+								return;
+							}
+						} catch (Exception e) {
+							Logger.print(null, e);
 						}
+							
+						App.showToast(R.string.err_extract_failed);
+						finish();
 					}
 				});
 			}
