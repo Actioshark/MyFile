@@ -18,7 +18,9 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
+
 import android.app.Dialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.KeyEvent;
@@ -85,22 +87,71 @@ public class ArchiveActivity extends BaseActivity {
 		menu.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				backDirect();
+				if (backDirect() == false) {
+					finish();
+				}
 			}
 		});
 
 		// 数据
-		String path = getIntent().getStringExtra(KEY_PATH);
-		initArchive(path);
+		Uri uri = getIntent().getData();
+		initArchive(uri);
 	}
 	
-	private void initArchive(final String path) {
+	private void initArchive(final Uri uri) {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				mArchiveHelper = new ArchiveHelper();
-				boolean valid = mArchiveHelper.setFile(path);
-				if (valid == false) {
+				try {
+					mArchiveHelper = new ArchiveHelper();
+					boolean valid = mArchiveHelper.setFile(uri.getPath());
+					if (valid == false) {
+						AppUtil.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								App.showToast(R.string.err_not_support);
+								finish();
+							}
+						});
+						return;
+					}
+					
+					if (mArchiveHelper.isEncrypted()) {
+						AppUtil.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								final InputDialog id = new InputDialog(ArchiveActivity.this);
+								id.setMessage(R.string.msg_input_password);
+								id.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+								id.setClickListener(new IDialogClickListener() {
+									@Override
+									public void onClick(Dialog dialog, int index, ClickType type) {
+										if (index == 1) {
+											final String password = id.getInput();
+											dialog.dismiss();
+											
+											AppUtil.runOnNewThread(new Runnable() {
+												@Override
+												public void run() {
+													parseFileHeader(password);
+												}
+											});
+										} else {
+											dialog.dismiss();
+											finish();
+										}
+									}
+								});
+								id.setCanceledOnTouchOutside(false);
+								id.show();
+							}
+						});
+					} else {
+						parseFileHeader(null);
+					}
+				} catch (Exception e) {
+					Logger.print(null, e);
+					
 					AppUtil.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
@@ -108,41 +159,6 @@ public class ArchiveActivity extends BaseActivity {
 							finish();
 						}
 					});
-					return;
-				}
-				
-				if (mArchiveHelper.isEncrypted()) {
-					AppUtil.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							final InputDialog id = new InputDialog(ArchiveActivity.this);
-							id.setMessage(R.string.msg_input_password);
-							id.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-							id.setClickListener(new IDialogClickListener() {
-								@Override
-								public void onClick(Dialog dialog, int index, ClickType type) {
-									if (index == 1) {
-										final String password = id.getInput();
-										dialog.dismiss();
-										
-										AppUtil.runOnNewThread(new Runnable() {
-											@Override
-											public void run() {
-												parseFileHeader(password);
-											}
-										});
-									} else {
-										dialog.dismiss();
-										finish();
-									}
-								}
-							});
-							id.setCanceledOnTouchOutside(false);
-							id.show();
-						}
-					});
-				} else {
-					parseFileHeader(null);
 				}
 			}
 		});

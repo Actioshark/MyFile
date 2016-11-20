@@ -31,10 +31,18 @@
 		<activity android:name="kk.myfile.activity.TypeActivity" />
 		<activity android:name="kk.myfile.activity.DetailActivity" />
 		<activity android:name="kk.myfile.activity.SelectActivity" />
-		<activity android:name="kk.myfile.activity.ArchiveActivity" />
 		<activity android:name="kk.myfile.activity.SettingActivity" />
 		<activity android:name="kk.myfile.activity.SettingSortActivity" />
 		<activity android:name="kk.myfile.activity.SettingListStyleActivity" />
+
+		<activity android:name="kk.myfile.activity.ArchiveActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="application/zip" />
+				<data android:mimeType="application/x-rar-compressed" />
+			</intent-filter>
+		</activity>
 	</application>
 
 </manifest>
