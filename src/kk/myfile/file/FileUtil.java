@@ -16,11 +16,15 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.StatFs;
-
+import android.webkit.MimeTypeMap;
 import kk.myfile.R;
+import kk.myfile.leaf.Audio;
 import kk.myfile.leaf.Direct;
+import kk.myfile.leaf.Image;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.leaf.Text;
 import kk.myfile.leaf.Unknown;
+import kk.myfile.leaf.Video;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
@@ -30,7 +34,7 @@ public class FileUtil {
 	private static JSONObject sTypeMap;
 
 	private static final char[] ILLEGAL_FILE_NAME_CHAR = {
-		'/', '\0',
+		'/', '\0', '\\',
 	};
 
 	public static void init(Context context) {
@@ -49,14 +53,14 @@ public class FileUtil {
 	}
 
 	public static String getType(Leaf leaf) {
-		try {
-			String subfix = DataUtil.getSubfix(leaf.getPath());
-			JSONObject map = sTypeMap.getJSONObject(subfix);
-			return map.getString("type");
-		} catch (Exception e) {
+		MimeTypeMap mtm = MimeTypeMap.getSingleton();
+		String subfix = DataUtil.getSubfix(leaf.getPath());
+		
+		if (mtm.hasExtension(subfix)) {
+			return mtm.getMimeTypeFromExtension(subfix);
+		} else {
+			return null;
 		}
-
-		return null;
 	}
 
 	public static Leaf createLeaf(File file) {
@@ -71,20 +75,43 @@ public class FileUtil {
 	
 	public static Leaf createTempLeaf(String path) {
 		try {
+			MimeTypeMap mtm = MimeTypeMap.getSingleton();
 			String subfix = DataUtil.getSubfix(path);
-			JSONObject map = sTypeMap.getJSONObject(subfix);
-
-			String cls = map.getString("cls");
-			cls = String.format("%c%s", Character.toUpperCase(cls.charAt(0)), cls.substring(1));
-
-			Class<?> clazz = Class.forName(String.format("kk.myfile.leaf.%s", cls));
-			Constructor<?> ct = clazz.getConstructor(String.class);
-
-			Leaf leaf = (Leaf) ct.newInstance(path);
-			return leaf;
+			
+			if (mtm.hasExtension(subfix)) {
+				String type = mtm.getMimeTypeFromExtension(subfix);
+				
+				if (type.startsWith("text/")) {
+					return new Text(path);
+				}
+				
+				if (type.startsWith("image/")) {
+					return new Image(path);
+				}
+				
+				if (type.startsWith("audio/")) {
+					return new Audio(path);
+				}
+				
+				if (type.startsWith("video/")) {
+					return new Video(path);
+				}
+				
+				if (type.startsWith("application/")) {
+					if (sTypeMap.has(subfix)) {
+						String cls = sTypeMap.getString(subfix);
+						Class<?> clazz = Class.forName(String.format("kk.myfile.leaf.%s", cls));
+						Constructor<?> ct = clazz.getConstructor(String.class);
+	
+						Leaf leaf = (Leaf) ct.newInstance(path);
+						return leaf;
+					}
+				}
+			}
 		} catch (Exception e) {
+			Logger.print(null, e);
 		}
-
+		
 		Leaf leaf = new Unknown(path);
 		return leaf;
 	}
