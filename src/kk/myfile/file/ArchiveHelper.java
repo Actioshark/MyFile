@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.innosystec.unrar.Archive;
+
 import kk.myfile.R;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
@@ -15,6 +16,7 @@ import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
+
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.progress.ProgressMonitor;
 
@@ -267,6 +269,7 @@ public class ArchiveHelper {
 				zf.extractAll(dir);
 				
 				ProgressMonitor pm = zf.getProgressMonitor();
+				
 				Tree.monitorZip(false, pm, cancel, callback);
 				
 				return;
@@ -275,8 +278,9 @@ public class ArchiveHelper {
 			if (mArchive instanceof Archive) {
 				Archive archive = (Archive) mArchive;
 				List<de.innosystec.unrar.rarfile.FileHeader> headers = archive.getFileHeaders();
+				int size = headers.size();
 				
-				for (de.innosystec.unrar.rarfile.FileHeader header : headers) {
+				for (int i = 0; i < size; i++) {
 					if (cancel != null && cancel.get()) {
 						if (callback != null) {
 							callback.onProgress(ProgressType.Cancel);
@@ -288,6 +292,7 @@ public class ArchiveHelper {
 					String path = "";
 					
 					try {
+						de.innosystec.unrar.rarfile.FileHeader header = headers.get(i);
 						path = header.getFileNameString();
 						path = path.replace('\\', '/');
 						File file = new File(dir, path);
@@ -307,7 +312,7 @@ public class ArchiveHelper {
 					
 					if (err == null) {
 						if (callback != null) {
-							callback.onProgress(ProgressType.Progress, path);
+							callback.onProgress(ProgressType.Progress, path, i, size);
 						}
 					} else {
 						if (callback != null) {

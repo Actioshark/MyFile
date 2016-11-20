@@ -743,7 +743,8 @@ public class Tree {
 				if (pm.getState() == ProgressMonitor.STATE_BUSY) {
 					if (cb != null) {
 						String path = pm.getFileName();
-						cb.onProgress(ProgressType.Progress, path);
+						cb.onProgress(ProgressType.Progress, path, pm.getWorkCompleted(),
+							pm.getTotalWork());
 					}
 					
 					if (cancel != null && cancel.get()) {
@@ -934,7 +935,8 @@ public class Tree {
 									@Override
 									public void run() {
 										if (type == ProgressType.Progress) {
-											progress.setMessage(data[0] + "");
+											progress.setMessage(String.format("%d/%d\n\n%s",
+												data[1], data[2], data[0]));
 										} else if(type == ProgressType.Cancel) {
 											
 										} else if(type == ProgressType.Finish) {
