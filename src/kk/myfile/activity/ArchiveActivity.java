@@ -15,6 +15,7 @@ import kk.myfile.leaf.Leaf;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 import android.app.Dialog;
@@ -90,66 +91,84 @@ public class ArchiveActivity extends BaseActivity {
 
 		// 数据
 		String path = getIntent().getStringExtra(KEY_PATH);
-		mArchiveHelper = new ArchiveHelper();
-			
-		boolean valid = mArchiveHelper.setFile(path);
-		if (valid == false) {
-			App.showToast(R.string.err_not_archive);
-			finish();
-			return;
-		}
-		
-		if (mArchiveHelper.isEncrypted()) {
-			final InputDialog id = new InputDialog(this);
-			id.setMessage(R.string.msg_input_password);
-			id.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-			id.setClickListener(new IDialogClickListener() {
-				@Override
-				public void onClick(Dialog dialog, int index, ClickType type) {
-					if (index == 1) {
-						String password = id.getInput();
-						dialog.dismiss();
-						
-						parseAndStart(password);
-					} else {
-						dialog.dismiss();
-						finish();
-					}
-				}
-			});
-			id.setCanceledOnTouchOutside(false);
-			id.show();
-		} else {
-			parseAndStart(null);
-		}
+		initArchive(path);
 	}
 	
-	private void parseAndStart(final String password) {
+	private void initArchive(final String path) {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				if (password != null) {
-					mArchiveHelper.setPassword(password);
-				}
-				final boolean success = mArchiveHelper.parseFileHeader();
-				
-				AppUtil.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (success) {
-								Leaf leaf = mArchiveHelper.getFileHeader("/").getLeaf();
-								showDirect(new Node((Direct) leaf), false);
-								return;
-							}
-						} catch (Exception e) {
-							Logger.print(null, e);
+				mArchiveHelper = new ArchiveHelper();
+				boolean valid = mArchiveHelper.setFile(path);
+				if (valid == false) {
+					AppUtil.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							App.showToast(R.string.err_not_support);
+							finish();
 						}
-							
-						App.showToast(R.string.err_extract_failed);
-						finish();
+					});
+					return;
+				}
+				
+				if (mArchiveHelper.isEncrypted()) {
+					AppUtil.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							final InputDialog id = new InputDialog(ArchiveActivity.this);
+							id.setMessage(R.string.msg_input_password);
+							id.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+							id.setClickListener(new IDialogClickListener() {
+								@Override
+								public void onClick(Dialog dialog, int index, ClickType type) {
+									if (index == 1) {
+										final String password = id.getInput();
+										dialog.dismiss();
+										
+										AppUtil.runOnNewThread(new Runnable() {
+											@Override
+											public void run() {
+												parseFileHeader(password);
+											}
+										});
+									} else {
+										dialog.dismiss();
+										finish();
+									}
+								}
+							});
+							id.setCanceledOnTouchOutside(false);
+							id.show();
+						}
+					});
+				} else {
+					parseFileHeader(null);
+				}
+			}
+		});
+	}
+	
+	private void parseFileHeader(String password) {
+		if (password != null) {
+			mArchiveHelper.setPassword(password);
+		}
+		final boolean success = mArchiveHelper.parseFileHeader();
+		
+		AppUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (success) {
+						Leaf leaf = mArchiveHelper.getFileHeader("/").getLeaf();
+						showDirect(new Node((Direct) leaf), false);
+						return;
 					}
-				});
+				} catch (Exception e) {
+					Logger.print(null, e);
+				}
+					
+				App.showToast(R.string.err_extract_failed);
+				finish();
 			}
 		});
 	}
@@ -168,9 +187,10 @@ public class ArchiveActivity extends BaseActivity {
 					}
 					
 					FileHeader fh = mArchiveHelper.getFileHeader(path);
-					mArchiveHelper.extractFile(fh, destStr, path);
+					mArchiveHelper.extractFile(fh, destStr);
 					
-					final Leaf leaf = FileUtil.createLeaf(new File(destStr, path));
+					String name = DataUtil.getFileName(path);
+					final Leaf leaf = FileUtil.createLeaf(new File(destStr, name));
 					AppUtil.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {

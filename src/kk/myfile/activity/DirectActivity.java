@@ -771,14 +771,14 @@ public class DirectActivity extends BaseActivity {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						if (type == ClickType.Click) {
-							Tree.zip(DirectActivity.this, mNode.direct.getPath(), selected,
+							Tree.compress(DirectActivity.this, mNode.direct.getPath(), selected,
 								new IProgressCallback() {
 									@Override
 									public void onProgress(ProgressType type, Object... data) {
-										refreshDirect();
-
 										if (type == ProgressType.Finish) {
 											setMode(Mode.Normal);
+										} else {
+											refreshDirect();
 										}
 									}
 								});
@@ -795,14 +795,14 @@ public class DirectActivity extends BaseActivity {
 						@Override
 						public void onClick(Dialog dialog, int index, ClickType type) {
 							if (type == ClickType.Click) {
-								Tree.unzip(DirectActivity.this, first.getPath(), mNode.direct
+								Tree.extract(DirectActivity.this, first.getPath(), mNode.direct
 									.getPath(), new IProgressCallback() {
 									@Override
 									public void onProgress(ProgressType type, Object... data) {
-										refreshDirect();
-
 										if (type == ProgressType.Finish) {
 											setMode(Mode.Normal);
+										} else {
+											refreshDirect();
 										}
 									}
 								});
@@ -971,27 +971,27 @@ public class DirectActivity extends BaseActivity {
 		} else if (requestCode == REQ_COMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
-			Tree.zip(this, path, mDirectAdapter.getSelected(), new IProgressCallback() {
+			Tree.compress(this, path, mDirectAdapter.getSelected(), new IProgressCallback() {
 				@Override
 				public void onProgress(ProgressType type, Object... data) {
-					refreshDirect();
-
 					if (type == ProgressType.Finish) {
 						setMode(Mode.Normal);
+					} else {
+						refreshDirect();
 					}
 				}
 			});
 		} else if (requestCode == REQ_EXTRACT_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
-			Tree.unzip(DirectActivity.this, mDirectAdapter.getSelected().get(0).getPath(), path,
+			Tree.extract(DirectActivity.this, mDirectAdapter.getSelected().get(0).getPath(), path,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type, Object... data) {
-						refreshDirect();
-
 						if (type == ProgressType.Finish) {
 							setMode(Mode.Normal);
+						} else {
+							refreshDirect();
 						}
 					}
 				});

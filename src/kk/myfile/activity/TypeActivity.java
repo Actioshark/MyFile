@@ -682,7 +682,7 @@ public class TypeActivity extends BaseActivity {
 		} else if (requestCode == REQ_COMPRESS_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
-			Tree.zip(this, path, mTypeAdapter.getSelected(), new IProgressCallback() {
+			Tree.compress(this, path, mTypeAdapter.getSelected(), new IProgressCallback() {
 				@Override
 				public void onProgress(ProgressType type, Object... data) {
 					if (type == ProgressType.Finish) {
@@ -693,7 +693,7 @@ public class TypeActivity extends BaseActivity {
 		} else if (requestCode == REQ_EXTRACT_TO) {
 			String path = data.getStringExtra(SelectActivity.KEY_PATH);
 
-			Tree.unzip(TypeActivity.this, mTypeAdapter.getSelected().get(0).getPath(), path,
+			Tree.extract(TypeActivity.this, mTypeAdapter.getSelected().get(0).getPath(), path,
 				new IProgressCallback() {
 					@Override
 					public void onProgress(ProgressType type, Object... data) {

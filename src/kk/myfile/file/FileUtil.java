@@ -172,6 +172,13 @@ public class FileUtil {
 
 	public static String createFile(File file) {
 		try {
+			File parent = file.getParentFile();
+			if (parent.exists() == false) {
+				if (parent.mkdirs() == false) {
+					return AppUtil.getString(R.string.err_path_not_valid);
+				}
+			}
+			
 			if (file.createNewFile()) {
 				return null;
 			}

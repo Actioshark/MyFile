@@ -733,37 +733,34 @@ public class Tree {
 		});
 	}
 
-	private static void monitorZip(final boolean cmps, final ProgressMonitor pm,
-		final IProgressCallback cb) {
+	public static void monitorZip(final boolean cmps, final ProgressMonitor pm,
+		final AtomicBoolean cancel, final IProgressCallback cb) {
+		
 		final List<Runnable> mark = new ArrayList<Runnable>();
 
 		Runnable mk = AppUtil.runOnUiThread(new Runnable() {
 			public void run() {
 				if (pm.getState() == ProgressMonitor.STATE_BUSY) {
-					String fileName = pm.getFileName();
-					if (fileName != null) {
-						App.showToast(fileName);
-					}
-
 					if (cb != null) {
-						cb.onProgress(ProgressType.Progress);
+						String path = pm.getFileName();
+						cb.onProgress(ProgressType.Progress, path);
+					}
+					
+					if (cancel != null && cancel.get()) {
+						pm.cancelAllTasks();
 					}
 				} else {
 					AppUtil.removeUiThread(mark.get(0));
 
 					if (pm.getResult() == ProgressMonitor.RESULT_SUCCESS) {
-						App.showToast(cmps ? R.string.err_compress_success
-							: R.string.err_extract_success);
-
 						if (cb != null) {
 							cb.onProgress(ProgressType.Finish);
 						}
 					} else {
-						App.showToast(cmps ? R.string.err_compress_failed
-							: R.string.err_extract_failed);
-
 						if (cb != null) {
-							cb.onProgress(ProgressType.Error);
+							int err = cmps ? R.string.err_compress_failed
+								: R.string.err_extract_failed;
+							cb.onProgress(ProgressType.Error, err);
 						}
 					}
 				}
@@ -773,8 +770,9 @@ public class Tree {
 		mark.add(mk);
 	}
 
-	public static void zip(final Context context, final String dir, final List<Leaf> list,
+	public static void compress(final Context context, final String dir, final List<Leaf> list,
 		final IProgressCallback cb) {
+		
 		final InputDialog id = new InputDialog(context);
 		id.setMessage(R.string.msg_input_file_name);
 		id.setInput(AppUtil.getString(R.string.def_zip_name));
@@ -783,10 +781,6 @@ public class Tree {
 			public void onClick(Dialog dialog, int index, ClickType type) {
 				if (index != 1) {
 					dialog.dismiss();
-
-					if (cb != null) {
-						cb.onProgress(ProgressType.Cancel);
-					}
 					return;
 				}
 
@@ -803,24 +797,61 @@ public class Tree {
 
 				final InputDialog id = new InputDialog(context);
 				id.setMessage(R.string.msg_input_password);
-				id.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+				id.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 				id.setClickListener(new IDialogClickListener() {
 					@Override
 					public void onClick(Dialog dialog, int index, ClickType type) {
 						dialog.dismiss();
 						if (index != 1) {
-							if (cb != null) {
-								cb.onProgress(ProgressType.Cancel);
-							}
 							return;
 						}
+						
+						String password = id.getInput();
+						
+						final AtomicBoolean cancel = new AtomicBoolean(false);
+						
+						final SimpleDialog progress = new SimpleDialog(context);
+						progress.setCanceledOnTouchOutside(false);
+						progress.setButtons(R.string.word_cancel);
+						progress.setClickListener(new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index, ClickType type) {
+								dialog.dismiss();
+								cancel.set(true);
+							}
+						});
+						progress.show();
+						
+						final IProgressCallback callback = new IProgressCallback() {
+							@Override
+							public void onProgress(final ProgressType type, final Object... data) {
+								AppUtil.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										if (type == ProgressType.Progress) {
+											progress.setMessage(data[0] + "");
+										} else if(type == ProgressType.Cancel) {
+											
+										} else if(type == ProgressType.Finish) {
+											progress.setMessage(R.string.err_extract_success);
+											progress.setButtons(R.string.word_confirm);
+										} else if(type == ProgressType.Error) {
+											progress.setMessage(data[0] + "");
+										}
+										
+										if (cb != null) {
+											cb.onProgress(type, data);
+										}
+									}
+								});
+							}
+						};
 
 						try {
 							final ZipParameters zp = new ZipParameters();
 							zp.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
 							zp.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 
-							String password = id.getInput();
 							if (password != null && password.length() > 0) {
 								zp.setEncryptFiles(true);
 								zp.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
@@ -832,6 +863,10 @@ public class Tree {
 							AppUtil.runOnNewThread(new Runnable() {
 								public void run() {
 									for (Leaf leaf : list) {
+										if (cancel.get()) {
+											return;
+										}
+										
 										try {
 											if (leaf instanceof Direct) {
 												zf.addFolder(leaf.getPath(), zp);
@@ -840,20 +875,16 @@ public class Tree {
 											}
 										} catch (Exception e) {
 											Logger.print(null, e);
+											callback.onProgress(ProgressType.Error, e.toString());
 										}
 									}
 								}
 							});
 
-							monitorZip(true, zf.getProgressMonitor(), cb);
+							monitorZip(true, zf.getProgressMonitor(), cancel, callback);
 						} catch (Exception e) {
 							Logger.print(null, e);
-
-							App.showToast(R.string.err_compress_failed);
-
-							if (cb != null) {
-								cb.onProgress(ProgressType.Error);
-							}
+							callback.onProgress(ProgressType.Error, e.toString());
 						}
 					}
 				});
@@ -863,65 +894,98 @@ public class Tree {
 		id.show();
 	}
 
-	public static void unzip(Context context, String zip, final String path,
+	public static void extract(final Context context, final String file, final String dir,
 		final IProgressCallback cb) {
-		try {
-			final ZipFile zf = new ZipFile(zip);
-
-			if (zf.isValidZipFile() == false) {
-				App.showToast(R.string.err_not_archive);
-
-				if (cb != null) {
-					cb.onProgress(ProgressType.Error);
+		
+		AppUtil.runOnNewThread(new Runnable() {
+			@Override
+			public void run() {
+				final ArchiveHelper ah = new ArchiveHelper();
+				boolean success = ah.setFile(file);
+				if (success == false) {
+					AppUtil.runOnUiThread(new Runnable() {
+						public void run() {
+							App.showToast(R.string.err_not_support);
+						}
+					});
+					return;
 				}
-				return;
-			}
-
-			zf.setRunInThread(true);
-
-			if (zf.isEncrypted()) {
-				final InputDialog id = new InputDialog(context);
-				id.setMessage(R.string.msg_input_password);
-				id.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-				id.setClickListener(new IDialogClickListener() {
-					@Override
-					public void onClick(Dialog dialog, int index, ClickType type) {
-						dialog.dismiss();
-						if (index != 1) {
-							if (cb != null) {
-								cb.onProgress(ProgressType.Cancel);
+				
+				AppUtil.runOnUiThread(new Runnable() {
+					public void run() {
+						final AtomicBoolean cancel = new AtomicBoolean(false);
+						
+						final SimpleDialog progress = new SimpleDialog(context);
+						progress.setCanceledOnTouchOutside(false);
+						progress.setButtons(R.string.word_cancel);
+						progress.setClickListener(new IDialogClickListener() {
+							@Override
+							public void onClick(Dialog dialog, int index, ClickType type) {
+								dialog.dismiss();
+								cancel.set(true);
 							}
-							return;
-						}
-
-						try {
-							zf.setPassword(id.getInput());
-							zf.extractAll(path);
-						} catch (Exception e) {
-							Logger.print(null, e);
-
-							if (cb != null) {
-								cb.onProgress(ProgressType.Error);
+						});
+						progress.show();
+						
+						final IProgressCallback callback = new IProgressCallback() {
+							@Override
+							public void onProgress(final ProgressType type, final Object... data) {
+								AppUtil.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										if (type == ProgressType.Progress) {
+											progress.setMessage(data[0] + "");
+										} else if(type == ProgressType.Cancel) {
+											
+										} else if(type == ProgressType.Finish) {
+											progress.setMessage(R.string.err_extract_success);
+											progress.setButtons(R.string.word_confirm);
+										} else if(type == ProgressType.Error) {
+											progress.setMessage(data[0] + "");
+										}
+										
+										if (cb != null) {
+											cb.onProgress(type, data);
+										}
+									}
+								});
 							}
-							return;
+						};
+						
+						if (ah.isEncrypted()) {
+							final InputDialog id = new InputDialog(context);
+							id.setMessage(R.string.msg_input_password);
+							id.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+							id.setClickListener(new IDialogClickListener() {
+								@Override
+								public void onClick(Dialog dialog, int index, ClickType type) {
+									dialog.dismiss();
+									if (index != 1) {
+										return;
+									}
+									
+									final String password = id.getInput();
+									AppUtil.runOnNewThread(new Runnable() {
+										@Override
+										public void run() {
+											ah.setPassword(password);
+											ah.extractFile(dir, cancel, callback);
+										}
+									});
+								}
+							});
+							id.show();
+						} else {
+							AppUtil.runOnNewThread(new Runnable() {
+								@Override
+								public void run() {
+									ah.extractFile(dir, cancel, callback);
+								}
+							});
 						}
-
-						monitorZip(false, zf.getProgressMonitor(), cb);
 					}
 				});
-				id.show();
-			} else {
-				zf.extractAll(path);
-				monitorZip(false, zf.getProgressMonitor(), cb);
 			}
-		} catch (Exception e) {
-			Logger.print(null, e);
-
-			App.showToast(R.string.err_extract_failed);
-
-			if (cb != null) {
-				cb.onProgress(ProgressType.Error);
-			}
-		}
+		});
 	}
 }

@@ -5,14 +5,18 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.innosystec.unrar.Archive;
-
+import kk.myfile.R;
+import kk.myfile.file.Tree.IProgressCallback;
+import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
+import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
-
 import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.progress.ProgressMonitor;
 
 public class ArchiveHelper {
 	private Object mArchive;
@@ -77,9 +81,15 @@ public class ArchiveHelper {
 		
 		if (mArchive == null) {
 			try {
-				Archive archive = new Archive(new File(path), null, true);
-				archive.isEncrypted();
-				mArchive = archive;
+				File file = new File(path);
+				Archive archive = new Archive(file, null, true);
+				if (archive.isEncrypted()) {
+					archive.close();
+					throw new Exception("do not support rar with password");
+				}
+				archive.close();
+				
+				mArchive = new Archive(file, null, false);
 				return true;
 			} catch (Exception e) {
 				Logger.print(null, e);
@@ -108,8 +118,7 @@ public class ArchiveHelper {
 			if (mArchive instanceof ZipFile) {
 				((ZipFile) mArchive).setPassword(password);
 			} else if (mArchive instanceof Archive) {
-				File file = ((Archive) mArchive).getFile();
-				mArchive = new Archive(file, password, false);
+				throw new Exception("do not support rar with password");
 			}
 		} catch (Exception e) {
 			Logger.print(null, e);
@@ -229,7 +238,7 @@ public class ArchiveHelper {
 		return mMap.get(path);
 	}
 	
-	public void extractFile(FileHeader fh, String dir, String path) {
+	public void extractFile(FileHeader fh, String dir) {
 		try {
 			if (mArchive instanceof ZipFile) {
 				net.lingala.zip4j.model.FileHeader header = (net.lingala.zip4j.model.FileHeader) fh.getHeader();
@@ -237,8 +246,8 @@ public class ArchiveHelper {
 			} else if (mArchive instanceof Archive) {
 				de.innosystec.unrar.rarfile.FileHeader header = (de.innosystec.unrar.rarfile.FileHeader) fh.getHeader();
 				
-				File file = new File(dir, path);
-				file.getParentFile().mkdirs();
+				String name = DataUtil.getFileName(header.getFileNameString());
+				File file = new File(dir, name);
 				FileUtil.createFile(file);
 				FileOutputStream fos = new FileOutputStream(file);
 				
@@ -247,6 +256,78 @@ public class ArchiveHelper {
 			}
 		} catch (Exception e) {
 			Logger.print(null, e);
+		}
+	}
+	
+	public void extractFile(String dir, AtomicBoolean cancel, IProgressCallback callback) {
+		try {
+			if (mArchive instanceof ZipFile) {
+				ZipFile zf = (ZipFile) mArchive;
+				zf.setRunInThread(true);
+				zf.extractAll(dir);
+				
+				ProgressMonitor pm = zf.getProgressMonitor();
+				Tree.monitorZip(false, pm, cancel, callback);
+				
+				return;
+			}
+			
+			if (mArchive instanceof Archive) {
+				Archive archive = (Archive) mArchive;
+				List<de.innosystec.unrar.rarfile.FileHeader> headers = archive.getFileHeaders();
+				
+				for (de.innosystec.unrar.rarfile.FileHeader header : headers) {
+					if (cancel != null && cancel.get()) {
+						if (callback != null) {
+							callback.onProgress(ProgressType.Cancel);
+						}
+						return;
+					}
+					
+					String err = null;
+					String path = "";
+					
+					try {
+						path = header.getFileNameString();
+						path = path.replace('\\', '/');
+						File file = new File(dir, path);
+						
+						if (header.isDirectory()) {
+							err = FileUtil.createDirect(file);
+						} else {
+							err = FileUtil.createFile(file);
+							FileOutputStream fos = new FileOutputStream(file);
+							archive.extractFile(header, fos);
+							fos.close();
+						}
+					} catch (Exception e) {
+						Logger.print(null, e);
+						err = e.toString();
+					}
+					
+					if (err == null) {
+						if (callback != null) {
+							callback.onProgress(ProgressType.Progress, path);
+						}
+					} else {
+						if (callback != null) {
+							callback.onProgress(ProgressType.Error, err);
+						}
+					}
+				}
+				
+				if (callback != null) {
+					callback.onProgress(ProgressType.Finish);
+				}
+				
+				return;
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
+		}
+			
+		if (callback != null) {
+			callback.onProgress(ProgressType.Error, R.string.err_extract_failed);
 		}
 	}
 }

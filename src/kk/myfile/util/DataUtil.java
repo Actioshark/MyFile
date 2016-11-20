@@ -77,6 +77,8 @@ public class DataUtil {
 	}
 	
 	public static String getFileName(String path) {
+		path = path.replace('\\', '/');
+		
 		for (int i = path.length() - 2; i >= 0; i--) {
 			if (path.charAt(i) == '/') {
 				StringBuilder sb = new StringBuilder();
