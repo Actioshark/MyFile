@@ -1,6 +1,8 @@
 package kk.myfile.file;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -14,7 +16,7 @@ public class ImageUtil {
 		public Drawable getThum(int width, int height) throws Exception;
 	}
 
-	public static interface IThumListenner {
+	public static interface IThumListener {
 		public void onThumGot(Drawable drawable);
 	}
 
@@ -24,20 +26,7 @@ public class ImageUtil {
 		public int height;
 		public long token;
 		public Drawable drawable;
-		public IThumListenner listenner;
-
-		public DrawableNode clone() {
-			DrawableNode node = new DrawableNode();
-
-			node.leaf = leaf;
-			node.width = width;
-			node.height = height;
-			node.token = token;
-			node.drawable = drawable;
-			node.listenner = listenner;
-
-			return node;
-		}
+		public List<IThumListener> listeners;
 	}
 
 	private static final int THUM_CACHE_SIZE = 60;
@@ -55,7 +44,8 @@ public class ImageUtil {
 	private static boolean sIsRunning = false;
 
 	public static void getThum(final Leaf leaf, final int width, final int height,
-		final IThumListenner listenner) {
+		final IThumListener listener) {
+		
 		if (leaf instanceof IThumable == false) {
 			return;
 		}
@@ -66,12 +56,12 @@ public class ImageUtil {
 					DrawableNode node = THUM_CACHE.get(leaf.getPath());
 
 					if (node != null && node.drawable != null) {
-						if (listenner != null) {
+						if (listener != null) {
 							final Drawable drawable = node.drawable;
 
 							AppUtil.runOnUiThread(new Runnable() {
 								public void run() {
-									listenner.onThumGot(drawable);
+									listener.onThumGot(drawable);
 								}
 							});
 						}
@@ -81,6 +71,7 @@ public class ImageUtil {
 
 					if (node == null) {
 						node = new DrawableNode();
+						node.listeners = new ArrayList<IThumListener>();
 						THUM_CACHE.put(leaf.getPath(), node);
 					}
 
@@ -88,7 +79,10 @@ public class ImageUtil {
 					node.width = (width > 0 && width < 40960) ? width : 256;
 					node.height = (height > 0 && height < 40960) ? height : 256;
 					node.token = SystemClock.elapsedRealtime();
-					node.listenner = listenner;
+					
+					if (listener != null) {
+						node.listeners.add(listener);
+					}
 
 					if (sIsRunning) {
 						return;
@@ -114,32 +108,35 @@ public class ImageUtil {
 							return;
 						}
 
-						final DrawableNode nd;
+						final DrawableNode nd = new DrawableNode();
 						synchronized (THUM_CACHE) {
-							nd = node.clone();
+							nd.leaf = node.leaf;
+							nd.width = node.width;
+							nd.height = node.height;
+							nd.token = node.token;
 						}
 
 						try {
 							nd.drawable = ((IThumable) nd.leaf).getThum(nd.width, nd.height);
-							synchronized (THUM_CACHE) {
-								node.drawable = nd.drawable;
-							}
 						} catch (Exception e) {
 							Logger.print(null, e);
 
 							nd.drawable = AppUtil.getRes().getDrawable(nd.leaf.getIcon());
-							synchronized (THUM_CACHE) {
-								node.drawable = nd.drawable;
-							}
+						}
+						
+						synchronized (THUM_CACHE) {
+							node.drawable = nd.drawable;
+							nd.listeners = node.listeners;
+							node.listeners = null;
 						}
 
-						if (nd.listenner != null) {
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									nd.listenner.onThumGot(nd.drawable);
+						AppUtil.runOnUiThread(new Runnable() {
+							public void run() {
+								for (IThumListener listener : nd.listeners) {
+									listener.onThumGot(nd.drawable);
 								}
-							});
-						}
+							}
+						});
 					}
 				} catch (Exception e) {
 					Logger.print(null, e);

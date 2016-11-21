@@ -10,7 +10,7 @@ import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.activity.SettingListStyleActivity.ListStyle;
 import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
-import kk.myfile.file.ImageUtil.IThumListenner;
+import kk.myfile.file.ImageUtil.IThumListener;
 import kk.myfile.file.Sorter;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
@@ -264,7 +264,7 @@ public class DirectAdapter extends BaseAdapter {
 			vh.icon.setImageResource(leaf.getIcon());
 
 			ImageUtil.getThum(leaf, vh.icon.getWidth(), vh.icon.getHeight(),
-				new IThumListenner() {
+				new IThumListener() {
 					@Override
 					public void onThumGot(Drawable drawable) {
 						if (leaf.equals(vh.leaf)) {
