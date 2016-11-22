@@ -9,7 +9,10 @@ import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.adapter.ArchiveAdapter;
 import kk.myfile.file.ArchiveHelper;
 import kk.myfile.file.ArchiveHelper.FileHeader;
+import kk.myfile.file.Tree.IProgressCallback;
+import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.file.FileUtil;
+import kk.myfile.file.Tree;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.ui.IDialogClickListener;
@@ -20,6 +23,7 @@ import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -45,6 +49,8 @@ public class ArchiveActivity extends BaseActivity {
 
 	private ListView mLvList;
 	private ArchiveAdapter mZipAdapter;
+	
+	private Uri mUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +88,16 @@ public class ArchiveActivity extends BaseActivity {
 				finish();
 			}
 		});
+		
+		// 解压到
+		menu.findViewById(R.id.iv_extract).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(ArchiveActivity.this,
+					SelectActivity.class);
+				startActivityForResult(intent, REQ_EXTRACT_TO);
+			}
+		});
 
 		// 回退按钮
 		menu.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
@@ -94,17 +110,27 @@ public class ArchiveActivity extends BaseActivity {
 		});
 
 		// 数据
-		Uri uri = getIntent().getData();
-		initArchive(uri);
+		mUri = getIntent().getData();
+		initArchive();
 	}
 	
-	private void initArchive(final Uri uri) {
+	private void initArchive() {
+		try {
+			if (mUri == null || mUri.getPath() == null) {
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			Logger.print(null, e);
+			finish();
+			return;
+		}
+		
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					mArchiveHelper = new ArchiveHelper();
-					boolean valid = mArchiveHelper.setFile(uri.getPath());
+					boolean valid = mArchiveHelper.setFile(mUri.getPath());
 					if (valid == false) {
 						AppUtil.runOnUiThread(new Runnable() {
 							@Override
@@ -324,5 +350,25 @@ public class ArchiveActivity extends BaseActivity {
 		}
 
 		return super.onKeyUp(keyCode, event);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode != RESULT_OK || data == null) {
+			return;
+		}
+		
+		if (requestCode == REQ_EXTRACT_TO) {
+			String path = data.getStringExtra(SelectActivity.KEY_PATH);
+
+			Tree.extract(ArchiveActivity.this, mUri.getPath(), path,
+				new IProgressCallback() {
+					@Override
+					public void onProgress(ProgressType type, Object... data) {
+					}
+				});
+		}
 	}
 }
