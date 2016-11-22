@@ -5,7 +5,7 @@
 
 	<string name="def_direct_name">目录_%03d</string>
 	<string name="def_file_name">文件_%03d</string>
-	<string name="def_zip_name">压缩包.zip</string>
+	<string name="def_zip_name">包裹.zip</string>
 	<string name="def_path_name">SD卡</string>
 
 	<string name="err_compress_failed">压缩失败！</string>
@@ -79,7 +79,7 @@
 	<string name="sort_Subfix">类型</string>
 
 	<string name="type_apk">应用</string>
-	<string name="type_archive">归档</string>
+	<string name="type_archive">包裹</string>
 	<string name="type_audio">音频</string>
 	<string name="type_direct">目录</string>
 	<string name="type_image">图片</string>
