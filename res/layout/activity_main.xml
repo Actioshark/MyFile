@@ -483,20 +483,6 @@
 						android:layout_height="0dp"
 						android:layout_weight="1" />
 
-					<TextView
-						android:id="@+id/tv_text"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:gravity="center"
-						android:textSize="@dimen/main_file_text"
-						android:textColor="@color/main_text"
-						android:text="@string/word_big_file" />
-
-					<View
-						android:layout_width="match_parent"
-						android:layout_height="0dp"
-						android:layout_weight="1" />
-
 				</LinearLayout>
 
 				<LinearLayout
@@ -518,20 +504,6 @@
 						android:layout_height="@dimen/main_bar_height"
 						android:scaleType="centerInside"
 						android:src="@drawable/clock" />
-
-					<View
-						android:layout_width="match_parent"
-						android:layout_height="0dp"
-						android:layout_weight="1" />
-
-					<TextView
-						android:id="@+id/tv_text"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:gravity="center"
-						android:textSize="@dimen/main_file_text"
-						android:textColor="@color/main_text"
-						android:text="@string/word_recent_file" />
 
 					<View
 						android:layout_width="match_parent"
