@@ -30,10 +30,10 @@ import java.util.Set;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -44,9 +44,6 @@ public class DirectAdapter extends BaseAdapter {
 	private final DirectActivity mActivity;
 	private final List<Leaf> mDataList = new ArrayList<Leaf>();
 	private final Set<Integer> mSelected = new HashSet<Integer>();
-
-	private long mTouchDownTime;
-	private Runnable mTouchRunnable;
 
 	public DirectAdapter(DirectActivity activity) {
 		mActivity = activity;
@@ -137,6 +134,98 @@ public class DirectAdapter extends BaseAdapter {
 		mActivity.updateInfo();
 		notifyDataSetChanged();
 	}
+	
+	class GestureListener extends SimpleOnGestureListener {
+		private ViewHolder mViewHolder;
+		private ListStyle mListStyle;
+		
+		public void setViewHolder(ViewHolder vh) {
+			mViewHolder = vh;
+		}
+		
+		public void setmListStyle(ListStyle ls) {
+			mListStyle = ls;
+		}
+		
+		@Override
+		public boolean onDown(MotionEvent event) {
+			mViewHolder.root.setPressed(true);
+			
+			if (mListStyle.needDetail) {
+				mActivity.showDetail(mViewHolder.leaf);
+			}
+			
+			return true;
+		}
+		
+		@Override
+		public boolean onSingleTapConfirmed(MotionEvent event) {
+			if (mActivity.getMode() == Mode.Select) {
+				if (mSelected.contains(mViewHolder.position)) {
+					mSelected.remove(mViewHolder.position);
+				} else {
+					mSelected.add(mViewHolder.position);
+				}
+
+				mActivity.updateTitle();
+				mActivity.updateInfo();
+				notifyDataSetChanged();
+			} else if (mViewHolder.leaf instanceof Direct) {
+				mActivity.changeDirect(new Node((Direct) mViewHolder.leaf), true);
+			} else {
+				mViewHolder.leaf.open(mActivity, false);
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public boolean onDoubleTap(MotionEvent event) {
+			if (mActivity.getMode() == Mode.Select) {
+				if (mSelected.contains(mViewHolder.position)) {
+					mSelected.remove(mViewHolder.position);
+				} else {
+					mSelected.add(mViewHolder.position);
+				}
+
+				mActivity.updateTitle();
+				mActivity.updateInfo();
+				notifyDataSetChanged();
+			} else {
+				mSelected.clear();
+				mSelected.add(mViewHolder.position);
+				mActivity.setMode(Mode.Select);
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public void onLongPress(MotionEvent event) {
+			List<Leaf> selected = getSelected();
+			if (selected.size() < 1) {
+				selected = mDataList;
+			}
+
+			int index = 0;
+			for (int i = 0; i < selected.size(); i++) {
+				if (selected.get(i) == mViewHolder.leaf) {
+					index = i;
+					break;
+				}
+			}
+
+			Intent intent = new Intent(mActivity, DetailActivity.class);
+			intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH,
+				DataUtil.leaf2PathCs(selected));
+			intent.putExtra(DetailActivity.KEY_INDEX, index);
+			mActivity.startActivity(intent);
+		}
+		
+		public void onUp() {
+			mViewHolder.root.setPressed(false);
+		}
+	}
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
@@ -148,6 +237,7 @@ public class DirectAdapter extends BaseAdapter {
 			view = mActivity.getLayoutInflater().inflate(ls.layout, null);
 
 			vh = new ViewHolder();
+			vh.root = view;
 			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
 			vh.name = (TextView) view.findViewById(R.id.tv_name);
 			vh.size = (TextView) view.findViewById(R.id.tv_size);
@@ -155,99 +245,19 @@ public class DirectAdapter extends BaseAdapter {
 			vh.sign = (ImageView) view.findViewById(R.id.iv_sign);
 			vh.select = (ImageView) view.findViewById(R.id.iv_select);
 			view.setTag(vh);
-
+			
+			final GestureListener gl = new GestureListener();
+			gl.setViewHolder(vh);
+			gl.setmListStyle(ls);
+			final GestureDetector gd = new GestureDetector(mActivity, gl);
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View view, MotionEvent event) {
-					int action = event.getAction();
-
-					if (action == MotionEvent.ACTION_DOWN) {
-						if (ls.needDetail) {
-							mActivity.showDetail(vh.leaf);
-						}
-
-						mTouchDownTime = SystemClock.elapsedRealtime();
-						mTouchRunnable = new Runnable() {
-							@Override
-							public void run() {
-								mTouchRunnable = null;
-
-								List<Leaf> selected = getSelected();
-								if (selected.size() < 1) {
-									selected = mDataList;
-								}
-
-								int index = 0;
-								for (int i = 0; i < selected.size(); i++) {
-									if (selected.get(i) == vh.leaf) {
-										index = i;
-										break;
-									}
-								}
-
-								Intent intent = new Intent(mActivity, DetailActivity.class);
-								intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH,
-									DataUtil.leaf2PathCs(selected));
-								intent.putExtra(DetailActivity.KEY_INDEX, index);
-								mActivity.startActivity(intent);
-							}
-						};
-						AppUtil.runOnUiThread(mTouchRunnable, 800);
-					} else if (action == MotionEvent.ACTION_UP) {
-						if (mTouchRunnable != null) {
-							AppUtil.removeUiThread(mTouchRunnable);
-							mTouchRunnable = null;
-
-							long delta = SystemClock.elapsedRealtime() - mTouchDownTime;
-
-							if (delta < 300) {
-								if (mActivity.getMode() == Mode.Select) {
-									if (mSelected.contains(vh.position)) {
-										mSelected.remove(vh.position);
-									} else {
-										mSelected.add(vh.position);
-									}
-
-									mActivity.updateTitle();
-									mActivity.updateInfo();
-									notifyDataSetChanged();
-								} else if (vh.leaf instanceof Direct) {
-									mActivity.changeDirect(new Node((Direct) vh.leaf), true);
-								} else {
-									vh.leaf.open(mActivity, false);
-								}
-							} else {
-								if (mActivity.getMode() == Mode.Select) {
-									if (mSelected.contains(vh.position)) {
-										mSelected.remove(vh.position);
-									} else {
-										mSelected.add(vh.position);
-									}
-
-									mActivity.updateTitle();
-									mActivity.updateInfo();
-									notifyDataSetChanged();
-								} else {
-									mSelected.clear();
-									mSelected.add(vh.position);
-									mActivity.setMode(Mode.Select);
-								}
-							}
-						}
-					} else if (action == MotionEvent.ACTION_CANCEL) {
-						if (mTouchRunnable != null) {
-							AppUtil.removeUiThread(mTouchRunnable);
-							mTouchRunnable = null;
-						}
+					if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+						gl.onUp();
 					}
-
-					return view.onTouchEvent(event);
-				}
-			});
-
-			view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
+					
+					return gd.onTouchEvent(event);
 				}
 			});
 		} else {
@@ -314,6 +324,7 @@ public class DirectAdapter extends BaseAdapter {
 		public int position = -1;
 		public boolean hasThum = false;
 
+		public View root;
 		public ImageView icon;
 		public TextView name;
 		public TextView time;
