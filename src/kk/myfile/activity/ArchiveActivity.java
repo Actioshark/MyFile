@@ -18,7 +18,6 @@ import kk.myfile.leaf.Leaf;
 import kk.myfile.ui.IDialogClickListener;
 import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
-import kk.myfile.util.DataUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
@@ -229,10 +228,9 @@ public class ArchiveActivity extends BaseActivity {
 					}
 					
 					FileHeader fh = mArchiveHelper.getFileHeader(path);
-					mArchiveHelper.extractFile(fh, destStr);
+					File file = mArchiveHelper.extractFile(fh, destStr);
 					
-					String name = DataUtil.getFileName(path);
-					final Leaf leaf = FileUtil.createLeaf(new File(destStr, name));
+					final Leaf leaf = FileUtil.createLeaf(file);
 					AppUtil.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {

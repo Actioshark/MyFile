@@ -240,13 +240,17 @@ public class ArchiveHelper {
 		return mMap.get(path);
 	}
 	
-	public void extractFile(FileHeader fh, String dir) {
+	public File extractFile(FileHeader fh, String dir) {
 		try {
 			if (mArchive instanceof ZipFile) {
-				net.lingala.zip4j.model.FileHeader header = (net.lingala.zip4j.model.FileHeader) fh.getHeader();
+				net.lingala.zip4j.model.FileHeader header =
+					(net.lingala.zip4j.model.FileHeader) fh.getHeader();
 				((ZipFile) mArchive).extractFile(header, dir);
+				
+				return new File(dir, header.getFileName());
 			} else if (mArchive instanceof Archive) {
-				de.innosystec.unrar.rarfile.FileHeader header = (de.innosystec.unrar.rarfile.FileHeader) fh.getHeader();
+				de.innosystec.unrar.rarfile.FileHeader header =
+					(de.innosystec.unrar.rarfile.FileHeader) fh.getHeader();
 				
 				String name = DataUtil.getFileName(header.getFileNameString());
 				File file = new File(dir, name);
@@ -255,10 +259,14 @@ public class ArchiveHelper {
 				
 				((Archive) mArchive).extractFile(header, fos);
 				fos.close();
+				
+				return file;
 			}
 		} catch (Exception e) {
 			Logger.print(null, e);
 		}
+		
+		return null;
 	}
 	
 	public void extractFile(String dir, AtomicBoolean cancel, IProgressCallback callback) {
