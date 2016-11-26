@@ -31,7 +31,8 @@
 		android:textSize="18sp"
 		android:textColor="@color/main_text"
 		android:singleLine="true"
-		android:hint="" />
+		android:hint=""
+		android:textColorHint="@color/main_text_pre" />
 
 	<View
 		android:layout_width="match_parent"
