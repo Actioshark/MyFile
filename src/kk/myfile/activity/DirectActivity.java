@@ -344,7 +344,7 @@ public class DirectActivity extends BaseActivity {
 		// 合法性
 		try {
 			File file = node.direct.getFile();
-			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
+			if (file.list() == null) {
 				throw new Exception();
 			}
 		} catch (Exception e) {
@@ -401,6 +401,10 @@ public class DirectActivity extends BaseActivity {
 
 					for (int i = 1; i <= index; i++) {
 						sb.append('/').append(nodes[i]);
+					}
+					
+					if (sb.length() == 0) {
+						sb.append('/');
 					}
 
 					changeDirect(new Node(new Direct(sb.toString())), true);
@@ -464,7 +468,7 @@ public class DirectActivity extends BaseActivity {
 		// 合法性
 		try {
 			File file = mNode.direct.getFile();
-			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
+			if (file.list() == null) {
 				throw new Exception();
 			}
 		} catch (Exception e) {
