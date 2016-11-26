@@ -8,9 +8,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.text.InputType;
+
 import kk.myfile.R;
 import kk.myfile.activity.App;
+import kk.myfile.leaf.Apk;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.ui.IDialogClickListener;
@@ -19,6 +22,7 @@ import kk.myfile.ui.SimpleDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
+
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.progress.ProgressMonitor;
@@ -94,10 +98,30 @@ public class Tree {
 		});
 	}
 
+	@SuppressWarnings("deprecation")
 	public static List<Leaf> loadType(List<Leaf> direct, Class<?> cls) {
 		List<Leaf> ret = new ArrayList<Leaf>();
+		
+		if (Apk.class.equals(cls)) {
+			List<PackageInfo> pis = AppUtil.getContext().getPackageManager().getInstalledPackages(0);
+			
+			for (PackageInfo pi : pis) {
+				for (int index = 1; index <= 2; index++) {
+					try {
+						String path = String.format(Setting.LOCALE, "/data/app/%s-%d.apk",
+							pi.packageName, index);
+						File file = new File(path);
+						if (file.exists()) {
+							Leaf leaf = new Apk(path);
+							ret.add(leaf);
+						}
+					} catch (Exception e) {
+					}
+				}
+			}
+		}
+		
 		int size = direct.size();
-
 		for (int i = 0; i < size; i++) {
 			Leaf leaf = direct.get(i);
 			if (cls.isInstance(leaf)) {
