@@ -34,7 +34,7 @@ public class ImageUtil {
 	public static final int DEF_HEIGHT = 256;
 	public static final int MAX_HEIGHT = 40960;
 
-	public static final int THUM_CACHE_SIZE = 1024 * 1024 * 16;
+	public static final int THUM_CACHE_SIZE = 1024 * 1024 * 32;
 	private static final MyCache<String, DrawableNode> THUM_CACHE =
 		new MyCache<String, DrawableNode>();
 
