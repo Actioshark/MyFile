@@ -1,7 +1,6 @@
 package kk.myfile.file;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import android.graphics.drawable.Drawable;
@@ -28,20 +27,22 @@ public class ImageUtil {
 		public Drawable drawable;
 		public List<IThumListener> listeners;
 	}
+	
+	public static final int DEF_WIDTH = 256;
+	public static final int MAX_WIDTH = 40960;
+	
+	public static final int DEF_HEIGHT = 256;
+	public static final int MAX_HEIGHT = 40960;
 
-	private static final int THUM_CACHE_SIZE = 60;
-	private static final LinkedHashMap<String, DrawableNode> THUM_CACHE = new LinkedHashMap<String, DrawableNode>(
-		THUM_CACHE_SIZE, 0.75f, true) {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected boolean removeEldestEntry(Entry<String, DrawableNode> eldest) {
-			return size() > THUM_CACHE_SIZE;
-		}
-	};
+	public static final int THUM_CACHE_SIZE = 1024 * 1024 * 16;
+	private static final MyCache<String, DrawableNode> THUM_CACHE =
+		new MyCache<String, DrawableNode>();
 
 	private static boolean sIsRunning = false;
+	
+	static {
+		THUM_CACHE.setMaxSize(THUM_CACHE_SIZE);
+	}
 
 	public static void getThum(final Leaf leaf, final int width, final int height,
 		final IThumListener listener) {
@@ -72,12 +73,12 @@ public class ImageUtil {
 					if (node == null) {
 						node = new DrawableNode();
 						node.listeners = new ArrayList<IThumListener>();
-						THUM_CACHE.put(leaf.getPath(), node);
+						THUM_CACHE.put(leaf.getPath(), node, 0);
 					}
 
 					node.leaf = leaf;
-					node.width = (width > 0 && width < 40960) ? width : 256;
-					node.height = (height > 0 && height < 40960) ? height : 256;
+					node.width = (width > 0 && width < MAX_WIDTH) ? width : DEF_WIDTH;
+					node.height = (height > 0 && height < MAX_HEIGHT) ? height : DEF_HEIGHT;
 					node.token = SystemClock.elapsedRealtime();
 					
 					if (listener != null) {
@@ -126,8 +127,13 @@ public class ImageUtil {
 						
 						synchronized (THUM_CACHE) {
 							node.drawable = nd.drawable;
+							
 							nd.listeners = node.listeners;
 							node.listeners = null;
+							
+							int size = node.drawable.getIntrinsicWidth() *
+								node.drawable.getIntrinsicHeight() * 4;
+							THUM_CACHE.put(node.leaf.getPath(), node, size);
 						}
 
 						AppUtil.runOnUiThread(new Runnable() {
