@@ -97,7 +97,9 @@ public class DirectActivity extends BaseActivity {
 
 		@Override
 		public void afterTextChanged(Editable editable) {
-			final String key = editable.toString();
+			String KEY = editable.toString();
+			final boolean rec = KEY.charAt(0) == '/';
+			final String key = rec ? KEY.substring(1) : KEY;
 
 			if (key.length() > 0) {
 				mIvDelete.setVisibility(View.VISIBLE);
@@ -105,8 +107,17 @@ public class DirectActivity extends BaseActivity {
 				synchronized (mEtSearch) {
 					mSearchRun = new Runnable() {
 						public void run() {
-							AtomicBoolean finish = new AtomicBoolean(false);
-							List<Leaf> direct = Tree.getDirect(mNode.direct.getPath(), finish);
+							AtomicBoolean finish;
+							List<Leaf> direct;
+							
+							if (rec) {
+								finish = new AtomicBoolean(false);
+								direct = Tree.getDirect(mNode.direct.getPath(), finish);
+							} else {
+								finish = new AtomicBoolean(true);
+								direct = mNode.direct.getChildren();
+							}
+							
 							final Runnable mark = this;
 
 							while (true) {
