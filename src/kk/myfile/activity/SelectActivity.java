@@ -7,10 +7,12 @@ import java.util.List;
 import kk.myfile.R;
 import kk.myfile.activity.DirectActivity.Node;
 import kk.myfile.adapter.SelectAdapter;
+import kk.myfile.file.Tree;
+import kk.myfile.file.Tree.IProgressCallback;
+import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -76,6 +78,20 @@ public class SelectActivity extends BaseActivity {
 			public void onClick(View view) {
 				setResult(RESULT_CANCELED);
 				finish();
+			}
+		});
+		
+		// 新建目录
+		menu.findViewById(R.id.iv_new).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Tree.createDirect(SelectActivity.this, mNode.direct.getPath(), null,
+					new IProgressCallback() {
+						@Override
+						public void onProgress(ProgressType type, Object... data) {
+							refreshDirect();
+						}
+					});
 			}
 		});
 

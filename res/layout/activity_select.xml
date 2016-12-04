@@ -47,6 +47,18 @@
 			android:src="@drawable/arrow_left" />
 
 		<ImageView
+			android:id="@+id/iv_new"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:padding="@dimen/main_padding"
+			android:layout_marginLeft="@dimen/main_gap"
+			android:gravity="center"
+			android:scaleType="centerInside"
+			android:background="@drawable/btn_bar"
+			android:src="@drawable/add" />
+
+		<ImageView
 			android:id="@+id/iv_confirm"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
