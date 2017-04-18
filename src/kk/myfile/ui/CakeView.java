@@ -72,6 +72,10 @@ public class CakeView extends View {
 
 		float start = -90f;
 		for (Arc arc : mArcs) {
+			if (arc.ratio <= 0) {
+				continue;
+			}
+			
 			float sweep = 360f * arc.ratio;
 
 			mPaint.setColor(arc.color);
