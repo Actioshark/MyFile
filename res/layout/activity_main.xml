@@ -111,7 +111,6 @@
 				android:layout_height="@dimen/main_bar_large_height"
 				android:layout_marginTop="@dimen/main_margin"
 				android:gravity="center"
-				android:background="@color/bar_bg"
 				android:orientation="horizontal"
 				android:baselineAligned="false">
 
@@ -122,7 +121,7 @@
 					android:layout_weight="1"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -160,9 +159,10 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/main_gap"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -200,9 +200,10 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/main_gap"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -240,9 +241,10 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/main_gap"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -283,7 +285,6 @@
 				android:layout_height="@dimen/main_bar_large_height"
 				android:layout_marginTop="@dimen/main_gap"
 				android:gravity="center"
-				android:background="@color/bar_bg"
 				android:orientation="horizontal"
 				android:baselineAligned="false">
 
@@ -294,7 +295,7 @@
 					android:layout_weight="1"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -332,9 +333,10 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/main_gap"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -372,9 +374,10 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/main_gap"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -412,9 +415,10 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/main_gap"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -454,7 +458,6 @@
 				android:layout_height="@dimen/main_bar_large_height"
 				android:layout_marginTop="@dimen/main_margin"
 				android:gravity="center"
-				android:background="@color/bar_bg"
 				android:orientation="horizontal"
 				android:baselineAligned="false">
 
@@ -465,7 +468,7 @@
 					android:layout_weight="1"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
@@ -490,9 +493,10 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
+					android:layout_marginLeft="@dimen/main_gap"
 					android:gravity="center"
 					android:orientation="vertical"
-					android:background="@drawable/btn_trans">
+					android:background="@drawable/btn_bar">
 
 					<View
 						android:layout_width="match_parent"
