@@ -12,8 +12,6 @@ public class AppUtil {
 	private static Context sContext;
 	private static Resources sRes;
 
-	private static String sPackageName;
-
 	private static Handler sHandler;
 
 	private static float sDensity;
@@ -23,7 +21,7 @@ public class AppUtil {
 	public static int sStatusBarHeight = 0;
 
 	public static void init(Context context) {
-		if (sRes != null) {
+		if (sContext != null) {
 			return;
 		}
 
@@ -31,8 +29,6 @@ public class AppUtil {
 		sRes = context.getResources();
 
 		sHandler = new Handler(context.getMainLooper());
-
-		sPackageName = context.getPackageName();
 
 		WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -58,12 +54,8 @@ public class AppUtil {
 		return sRes;
 	}
 
-	public static String getPackageName() {
-		return sPackageName;
-	}
-
 	public static int getId(String type, String name) {
-		return sRes.getIdentifier(name, type, sPackageName);
+		return sRes.getIdentifier(name, type, sContext.getPackageName());
 	}
 
 	public static String getString(int id, Object... args) {

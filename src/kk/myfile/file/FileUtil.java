@@ -45,7 +45,7 @@ public class FileUtil {
 		AssetManager sm = context.getAssets();
 		try {
 			InputStream is = sm.open("file_type.json");
-			String string = FileUtil.readString(is, 1024 * 1024);
+			String string = FileUtil.readString(is);
 			sTypeMap = new JSONObject(string);
 		} catch (Exception e) {
 			Logger.print(null, e);
@@ -156,15 +156,16 @@ public class FileUtil {
 		}
 	}
 
-	public static String readString(InputStream is, int length) throws Exception {
-		byte[] buf = new byte[length];
-		int len, off = 0;
+	public static String readString(InputStream is) throws Exception {
+		byte[] buf = new byte[1024 * 1024];
+		int len;
+		StringBuilder sb = new StringBuilder();
 
-		while ((len = is.read(buf, off, buf.length - off)) != -1) {
-			off += len;
+		while ((len = is.read(buf)) > 0) {
+			sb.append(new String(buf, 0, len));
 		}
 
-		return new String(buf, 0, off);
+		return sb.toString();
 	}
 
 	public static String checkNewName(String parent, String name) {
