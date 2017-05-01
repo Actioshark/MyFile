@@ -23,6 +23,8 @@ public class App extends Application {
 		AppUtil.init(this);
 		Setting.init(this);
 		FileUtil.init(this);
+		
+		AppUtil.requestRoot();
 	}
 
 	public static void showToast(int resId, Object... args) {
