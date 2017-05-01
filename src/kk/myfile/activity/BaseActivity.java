@@ -44,7 +44,7 @@ public abstract class BaseActivity extends Activity {
 				.getStatusBarHeight());
 			params.gravity = Gravity.TOP;
 			mStatusBar.setLayoutParams(params);
-			mStatusBar.setBackgroundColor(AppUtil.getColor(R.color.main_bg));
+			mStatusBar.setBackgroundColor(AppUtil.getColor(R.color.title_bg));
 
 			ViewGroup decor = (ViewGroup) getWindow().getDecorView();
 			decor.addView(mStatusBar);

@@ -3,6 +3,7 @@
 
 	<color name="main_bg">#eaeaea</color>
 	<color name="main_bg_pre">#888888</color>
+	<color name="title_bg">#666666</color>
 	<color name="bar_bg">#ffffff</color>
 	<color name="bar_bg_pre">#aaaaaa</color>
 
