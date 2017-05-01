@@ -24,6 +24,7 @@ import kk.myfile.leaf.TempDirect;
 import kk.myfile.leaf.Archive;
 import kk.myfile.ui.DownList;
 import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
 import kk.myfile.util.IntentUtil;
@@ -209,6 +210,36 @@ public class DirectActivity extends BaseActivity {
 			@Override
 			public void onClick(View view) {
 				finish();
+			}
+		});
+		ivHome.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				final InputDialog id = new InputDialog(DirectActivity.this);
+				id.setMessage(R.string.msg_input_path_name);
+				id.setClickListener(new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						if (index == 1) {
+							String path = id.getInput();
+							
+							if (path.startsWith("/") == false) {
+								String dir = mNode.direct.getPath();
+								if (dir.endsWith("/")) {
+									path = dir + path;
+								} else {
+									path = dir + "/" + path;
+								}
+							}
+							
+							changeDirect(new Node(new Direct(path)), true);
+						}
+						
+						dialog.dismiss();
+					}
+				});
+				id.show();
+				return true;
 			}
 		});
 		mHsvPath = (HorizontalScrollView) mLlPath.findViewById(R.id.hsv_text);

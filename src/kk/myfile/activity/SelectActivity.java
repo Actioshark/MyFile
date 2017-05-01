@@ -11,13 +11,17 @@ import kk.myfile.file.Tree;
 import kk.myfile.file.Tree.IProgressCallback;
 import kk.myfile.file.Tree.ProgressType;
 import kk.myfile.leaf.Direct;
+import kk.myfile.ui.IDialogClickListener;
+import kk.myfile.ui.InputDialog;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.Setting;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.HorizontalScrollView;
@@ -78,6 +82,36 @@ public class SelectActivity extends BaseActivity {
 			public void onClick(View view) {
 				setResult(RESULT_CANCELED);
 				finish();
+			}
+		});
+		menu.findViewById(R.id.iv_cancel).setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				final InputDialog id = new InputDialog(SelectActivity.this);
+				id.setMessage(R.string.msg_input_path_name);
+				id.setClickListener(new IDialogClickListener() {
+					@Override
+					public void onClick(Dialog dialog, int index, ClickType type) {
+						if (index == 1) {
+							String path = id.getInput();
+							
+							if (path.startsWith("/") == false) {
+								String dir = mNode.direct.getPath();
+								if (dir.endsWith("/")) {
+									path = dir + path;
+								} else {
+									path = dir + "/" + path;
+								}
+							}
+							
+							showDirect(new Node(new Direct(path.toString())), true);
+						}
+						
+						dialog.dismiss();
+					}
+				});
+				id.show();
+				return true;
 			}
 		});
 		
@@ -184,8 +218,12 @@ public class SelectActivity extends BaseActivity {
 				public void onClick(View view) {
 					StringBuilder sb = new StringBuilder();
 
-					for (int i = 1; i <= index; i++) {
-						sb.append('/').append(nodes[i]);
+					if (index > 0) {
+						for (int i = 1; i <= index; i++) {
+							sb.append('/').append(nodes[i]);
+						}
+					} else {
+						sb.append('/');
 					}
 
 					showDirect(new Node(new Direct(sb.toString())), true);
