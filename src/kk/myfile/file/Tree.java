@@ -400,6 +400,7 @@ public class Tree {
 						public void run() {
 							final AtomicInteger success = new AtomicInteger(0);
 							final AtomicInteger failed = new AtomicInteger(0);
+							final AtomicInteger sign = new AtomicInteger(0);
 
 							for (Leaf leaf : list) {
 								String err = FileUtil.delete(leaf.getFile());
@@ -412,11 +413,13 @@ public class Tree {
 								if (sd.isShowing() == false) {
 									return;
 								}
+								
+								final int sg = sign.addAndGet(1);
 
 								AppUtil.runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
-										if (sd.isShowing()) {
+										if (sg == sign.get() && sd.isShowing()) {
 											int s = success.get();
 											int f = failed.get();
 											int t = list.size();
