@@ -242,8 +242,9 @@ public class DirectAdapter extends BaseAdapter {
 			vh.name = (TextView) view.findViewById(R.id.tv_name);
 			vh.size = (TextView) view.findViewById(R.id.tv_size);
 			vh.time = (TextView) view.findViewById(R.id.tv_time);
-			vh.sign = (ImageView) view.findViewById(R.id.iv_sign);
-			vh.select = (ImageView) view.findViewById(R.id.iv_select);
+			vh.sign = (ImageView) view.findViewById(R.id.iv_left);
+			vh.sign.setBackgroundColor(0x00000000);
+			vh.select = (ImageView) view.findViewById(R.id.iv_right);
 			view.setTag(vh);
 			
 			final GestureListener gl = new GestureListener();
@@ -300,7 +301,12 @@ public class DirectAdapter extends BaseAdapter {
 			}
 		}
 
-		vh.sign.setVisibility(FileUtil.isLink(file) ? View.VISIBLE : View.GONE);
+		if (FileUtil.isLink(file)) {
+			vh.sign.setImageResource(R.drawable.link);
+			vh.sign.setVisibility(View.VISIBLE);
+		} else {
+			vh.sign.setVisibility(View.GONE);
+		}
 
 		if (mActivity.getMode() == Mode.Select) {
 			if (mSelected.contains(position)) {

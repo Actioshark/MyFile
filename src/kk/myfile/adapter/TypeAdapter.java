@@ -11,6 +11,7 @@ import kk.myfile.file.FileUtil;
 import kk.myfile.file.ImageUtil;
 import kk.myfile.file.ImageUtil.IThumListener;
 import kk.myfile.file.Sorter;
+import kk.myfile.leaf.Apk;
 import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
@@ -132,30 +133,30 @@ public class TypeAdapter extends BaseAdapter {
 		mActivity.updateInfo();
 		notifyDataSetChanged();
 	}
-	
+
 	class GestureListener extends SimpleOnGestureListener {
 		private ViewHolder mViewHolder;
 		private ListStyle mListStyle;
-		
+
 		public void setViewHolder(ViewHolder vh) {
 			mViewHolder = vh;
 		}
-		
+
 		public void setmListStyle(ListStyle ls) {
 			mListStyle = ls;
 		}
-		
+
 		@Override
 		public boolean onDown(MotionEvent event) {
 			mViewHolder.root.setPressed(true);
-			
+
 			if (mListStyle.needDetail) {
 				mActivity.showDetail(mViewHolder.leaf);
 			}
-			
+
 			return true;
 		}
-		
+
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent event) {
 			if (mActivity.getMode() == Mode.Select) {
@@ -171,10 +172,10 @@ public class TypeAdapter extends BaseAdapter {
 			} else {
 				mViewHolder.leaf.open(mActivity, false);
 			}
-			
+
 			return false;
 		}
-		
+
 		@Override
 		public boolean onDoubleTap(MotionEvent event) {
 			if (mActivity.getMode() == Mode.Select) {
@@ -192,10 +193,10 @@ public class TypeAdapter extends BaseAdapter {
 				mSelected.add(mViewHolder.position);
 				mActivity.setMode(Mode.Select);
 			}
-			
+
 			return false;
 		}
-		
+
 		@Override
 		public void onLongPress(MotionEvent event) {
 			List<Leaf> selected = getSelected();
@@ -212,12 +213,12 @@ public class TypeAdapter extends BaseAdapter {
 			}
 
 			Intent intent = new Intent(mActivity, DetailActivity.class);
-			intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH,
-				DataUtil.leaf2PathCs(selected));
+			intent.putCharSequenceArrayListExtra(DetailActivity.KEY_PATH, DataUtil
+				.leaf2PathCs(selected));
 			intent.putExtra(DetailActivity.KEY_INDEX, index);
 			mActivity.startActivity(intent);
 		}
-		
+
 		public void onUp() {
 			mViewHolder.root.setPressed(false);
 		}
@@ -238,10 +239,11 @@ public class TypeAdapter extends BaseAdapter {
 			vh.name = (TextView) view.findViewById(R.id.tv_name);
 			vh.size = (TextView) view.findViewById(R.id.tv_size);
 			vh.time = (TextView) view.findViewById(R.id.tv_time);
-			vh.sign = (ImageView) view.findViewById(R.id.iv_sign);
-			vh.select = (ImageView) view.findViewById(R.id.iv_select);
+			vh.sign = (ImageView) view.findViewById(R.id.iv_left);
+			vh.sign.setBackgroundColor(0x00000000);
+			vh.select = (ImageView) view.findViewById(R.id.iv_right);
 			view.setTag(vh);
-			
+
 			final GestureListener gl = new GestureListener();
 			gl.setViewHolder(vh);
 			gl.setmListStyle(ls);
@@ -249,10 +251,11 @@ public class TypeAdapter extends BaseAdapter {
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View view, MotionEvent event) {
-					if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+					if (event.getAction() == MotionEvent.ACTION_UP
+						|| event.getAction() == MotionEvent.ACTION_CANCEL) {
 						gl.onUp();
 					}
-					
+
 					return gd.onTouchEvent(event);
 				}
 			});
@@ -269,16 +272,15 @@ public class TypeAdapter extends BaseAdapter {
 			vh.hasThum = false;
 			vh.icon.setImageResource(leaf.getIcon());
 
-			ImageUtil.getThum(leaf, vh.icon.getWidth(), vh.icon.getHeight(),
-				new IThumListener() {
-					@Override
-					public void onThumGot(Drawable drawable) {
-						if (leaf.equals(vh.leaf)) {
-							vh.hasThum = true;
-							vh.icon.setImageDrawable(drawable);
-						}
+			ImageUtil.getThum(leaf, vh.icon.getWidth(), vh.icon.getHeight(), new IThumListener() {
+				@Override
+				public void onThumGot(Drawable drawable) {
+					if (leaf.equals(vh.leaf)) {
+						vh.hasThum = true;
+						vh.icon.setImageDrawable(drawable);
 					}
-				});
+				}
+			});
 		}
 
 		if (vh.time != null) {
@@ -296,7 +298,15 @@ public class TypeAdapter extends BaseAdapter {
 			}
 		}
 
-		vh.sign.setVisibility(FileUtil.isLink(file) ? View.VISIBLE : View.GONE);
+		if (leaf instanceof Apk && ((Apk) leaf).isInstalled(false)) {
+			vh.sign.setImageResource(R.drawable.tick);
+			vh.sign.setVisibility(View.VISIBLE);
+		} else  if (FileUtil.isLink(file)) {
+			vh.sign.setImageResource(R.drawable.link);
+			vh.sign.setVisibility(View.VISIBLE);
+		} else {
+			vh.sign.setVisibility(View.GONE);
+		}
 
 		if (mActivity.getMode() == Mode.Select) {
 			if (mSelected.contains(position)) {

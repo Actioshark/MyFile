@@ -110,7 +110,8 @@ public class Tree {
 					String path = pi.applicationInfo.sourceDir;
 					File file = new File(path);
 					if (file.exists()) {
-						Leaf leaf = new Apk(path);
+						Apk leaf = new Apk(path);
+						leaf.setInstalled(true);
 						ret.add(leaf);
 					}
 				} catch (Exception e) {

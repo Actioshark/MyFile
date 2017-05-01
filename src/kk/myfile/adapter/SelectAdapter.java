@@ -88,7 +88,7 @@ public class SelectAdapter extends BaseAdapter {
 			vh = new ViewHolder();
 			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
 			vh.name = (TextView) view.findViewById(R.id.tv_name);
-			vh.select = (ImageView) view.findViewById(R.id.iv_select);
+			vh.select = (ImageView) view.findViewById(R.id.iv_right);
 			view.setTag(vh);
 
 			view.setOnClickListener(new OnClickListener() {

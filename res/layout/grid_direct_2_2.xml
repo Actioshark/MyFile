@@ -91,19 +91,20 @@
 	</LinearLayout>
 
 	<ImageView
-		android:id="@+id/iv_sign"
+		android:id="@+id/iv_left"
 		android:layout_width="@dimen/direct_select_width"
 		android:layout_height="@dimen/direct_select_height"
 		android:layout_gravity="left|top"
 		android:scaleType="centerCrop"
-		android:src="@drawable/link" />
+		android:background="@drawable/btn_bar"
+		android:visibility="gone" />
 
 	<ImageView
-		android:id="@+id/iv_select"
+		android:id="@+id/iv_right"
 		android:layout_width="@dimen/direct_select_width"
 		android:layout_height="@dimen/direct_select_height"
 		android:layout_gravity="right|top"
 		android:scaleType="centerCrop"
 		android:background="@drawable/btn_bar"
-		android:src="@drawable/multi_select_pre" />
+		android:visibility="gone" />
 </FrameLayout>
