@@ -106,17 +106,14 @@ public class Tree {
 			List<PackageInfo> pis = AppUtil.getContext().getPackageManager().getInstalledPackages(0);
 			
 			for (PackageInfo pi : pis) {
-				for (int index = 1; index <= 2; index++) {
-					try {
-						String path = String.format(Setting.LOCALE, "/data/app/%s-%d.apk",
-							pi.packageName, index);
-						File file = new File(path);
-						if (file.exists()) {
-							Leaf leaf = new Apk(path);
-							ret.add(leaf);
-						}
-					} catch (Exception e) {
+				try {
+					String path = pi.applicationInfo.sourceDir;
+					File file = new File(path);
+					if (file.exists()) {
+						Leaf leaf = new Apk(path);
+						ret.add(leaf);
 					}
+				} catch (Exception e) {
 				}
 			}
 		}
