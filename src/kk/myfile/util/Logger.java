@@ -12,7 +12,20 @@ public class Logger {
 			.append(':').append(element.getMethodName()).append("()\n");
 	}
 
-	public static void prints(String tag, Throwable throwable, int trackIndex, Object... args) {
+	public static void print(String tag, Object... args) {
+		if (args != null && args.length > 0 && args[0] instanceof Throwable) {
+			Object[] temp = new Object[args.length - 1];
+			for (int i = 0; i < temp.length; i++) {
+				temp[i] = args[i + 1];
+			}
+			
+			prints(tag, (Throwable) args[0], 2, temp);
+		} else {
+			prints(tag, null, 2, args);
+		}
+	}
+
+	private static void prints(String tag, Throwable throwable, int trackIndex, Object... args) {
 		if (!DEBUG_ENABLE) {
 			return;
 		}
@@ -43,9 +56,5 @@ public class Logger {
 		if (throwable != null) {
 			Log.d(tag, "", throwable);
 		}
-	}
-
-	public static void print(String tag, Object... args) {
-		prints(tag, null, 2, args);
 	}
 }
