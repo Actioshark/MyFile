@@ -1,7 +1,5 @@
 package kk.myfile.util;
 
-import java.io.DataOutputStream;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
@@ -160,30 +158,6 @@ public class AppUtil {
 			}).start();
 		} else {
 			new Thread(runnable).start();
-		}
-	}
-
-	public static void requestRoot() {
-		Process process = null;
-		DataOutputStream os = null;
-		
-		try {
-			process = Runtime.getRuntime().exec("su");
-			os = new DataOutputStream(process.getOutputStream());
-			os.writeBytes("chmod 777 " + sContext.getPackageCodePath() + "\n");
-			os.writeBytes("exit\n");
-			os.flush();
-			process.waitFor();
-		} catch (Exception e) {
-			Logger.print(null, e);
-		} finally {
-			try {
-				if (os != null) {
-					os.close();
-				}
-				process.destroy();
-			} catch (Exception e) {
-			}
 		}
 	}
 }

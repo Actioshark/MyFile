@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
 	<style name="activity_theme">
 		<item name="android:windowNoTitle">true</item>
 		<item name="android:fitsSystemWindows">true</item>
@@ -14,4 +15,5 @@
 		<item name="android:windowNoTitle">true</item>
 		<item name="android:backgroundDimEnabled">false</item>
 	</style>
+
 </resources>
