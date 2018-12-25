@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.MediaStore;
 
 import kk.myfile.R;
 import kk.myfile.file.FileUtil;

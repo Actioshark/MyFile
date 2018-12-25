@@ -26,7 +26,6 @@ public class UriUtil {
             }
         }
 
-
         if (Build.VERSION.SDK_INT >= 24) {
             return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
         } else {
