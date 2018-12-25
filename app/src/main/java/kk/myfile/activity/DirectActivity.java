@@ -461,7 +461,7 @@ public class DirectActivity extends BaseActivity {
 						sb.append('/').append(nodes[i]);
 					}
 
-					ClipBoard.put(DirectActivity.this, "path", sb.toString());
+					ClipBoard.put(DirectActivity.this, sb.toString());
 
 					App.showToast(R.string.msg_already_copied_to_clipboard);
 					return true;
