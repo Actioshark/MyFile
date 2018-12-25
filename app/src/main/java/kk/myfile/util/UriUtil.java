@@ -10,8 +10,23 @@ import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
+import kk.myfile.file.FileUtil;
+import kk.myfile.leaf.Leaf;
+
 public class UriUtil {
     public static Uri getUri(Context context, File file) {
+        Leaf leaf = FileUtil.createLeaf(file);
+        String type = FileUtil.getType(leaf);
+        if (type != null && type.startsWith("image/")) {
+            try {
+                String url = MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getPath(), "", "");
+                return Uri.parse(url);
+            } catch (Exception e) {
+                Logger.print(null, e);
+            }
+        }
+
+
         if (Build.VERSION.SDK_INT >= 24) {
             return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
         } else {
@@ -19,7 +34,9 @@ public class UriUtil {
         }
     }
 
-    public static File getFile(Context context, Uri uri) {String scheme = uri.getScheme();
+    public static File getFile(Context context, Uri uri) {
+        String scheme = uri.getScheme();
+
         if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
             try {
                 String[] filePathColumn = {MediaStore.MediaColumns.DATA};

@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 
 import kk.myfile.R;
 import kk.myfile.file.FileUtil;
@@ -32,7 +33,9 @@ public class IntentUtil {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-			intent.setDataAndType(UriUtil.getUri(context, leaf.getFile()), type);
+
+			Uri uri =  UriUtil.getUri(context, leaf.getFile());
+			intent.setDataAndType(uri, type);
 
 			context.startActivity(intent);
 			return true;
@@ -88,15 +91,17 @@ public class IntentUtil {
 			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 			intent.setType(type);
 
-			ArrayList<Uri> uris = new ArrayList<Uri>();
+			ArrayList<Uri> uris = new ArrayList<>();
 			for (Leaf leaf : list) {
-				uris.add(UriUtil.getUri(context, leaf.getFile()));
+				Uri uri = UriUtil.getUri(context, leaf.getFile());
+				uris.add(uri);
 			}
 			intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
 
 			context.startActivity(intent);
 			return true;
 		} catch (Exception e) {
+			Logger.print(null, e);
 			return false;
 		}
 	}
@@ -114,6 +119,7 @@ public class IntentUtil {
 			Intent intent = new Intent(Intent.ACTION_EDIT);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 			intent.setDataAndType(UriUtil.getUri(context, leaf.getFile()), type);
 
 			context.startActivity(intent);
