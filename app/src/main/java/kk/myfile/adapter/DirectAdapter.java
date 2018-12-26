@@ -16,7 +16,6 @@ import kk.myfile.leaf.Direct;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
-import kk.myfile.util.Logger;
 import kk.myfile.util.MathUtil;
 import kk.myfile.util.Setting;
 
@@ -31,7 +30,6 @@ import java.util.Set;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -44,8 +42,8 @@ import android.widget.TextView;
 
 public class DirectAdapter extends BaseAdapter {
 	private final DirectActivity mActivity;
-	private final List<Leaf> mDataList = new ArrayList<Leaf>();
-	private final Set<Integer> mSelected = new HashSet<Integer>();
+	private final List<Leaf> mDataList = new ArrayList<>();
+	private final Set<Integer> mSelected = new HashSet<>();
 
 	public DirectAdapter(DirectActivity activity) {
 		mActivity = activity;
@@ -104,7 +102,7 @@ public class DirectAdapter extends BaseAdapter {
 	}
 
 	public List<Leaf> getSelected() {
-		List<Leaf> list = new ArrayList<Leaf>();
+		List<Leaf> list = new ArrayList<>();
 		int size = mDataList.size();
 
 		for (int i = 0; i < size; i++) {
@@ -136,6 +134,11 @@ public class DirectAdapter extends BaseAdapter {
 		mActivity.updateInfo();
 		notifyDataSetChanged();
 	}
+
+	@Override
+	public boolean isEnabled(int position) {
+		return false;
+	}
 	
 	class GestureListener extends SimpleOnGestureListener {
 		private ViewHolder mViewHolder;
@@ -145,7 +148,7 @@ public class DirectAdapter extends BaseAdapter {
 			mViewHolder = vh;
 		}
 		
-		public void setmListStyle(ListStyle ls) {
+		public void setListStyle(ListStyle ls) {
 			mListStyle = ls;
 		}
 		
@@ -178,7 +181,7 @@ public class DirectAdapter extends BaseAdapter {
 				mViewHolder.leaf.open(mActivity, false);
 			}
 			
-			return false;
+			return true;
 		}
 		
 		@Override
@@ -202,7 +205,7 @@ public class DirectAdapter extends BaseAdapter {
 			intent.putExtra(DetailActivity.KEY_INDEX, index);
 			mActivity.startActivity(intent);
 			
-			return false;
+			return true;
 		}
 		
 		@Override
@@ -251,16 +254,18 @@ public class DirectAdapter extends BaseAdapter {
 			
 			final GestureListener gl = new GestureListener();
 			gl.setViewHolder(vh);
-			gl.setmListStyle(ls);
+			gl.setListStyle(ls);
 			final GestureDetector gd = new GestureDetector(mActivity, gl);
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View view, MotionEvent event) {
+					gd.onTouchEvent(event);
+					
 					if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
 						gl.onUp();
 					}
 					
-					return gd.onTouchEvent(event);
+					return true;
 				}
 			});
 		} else {
