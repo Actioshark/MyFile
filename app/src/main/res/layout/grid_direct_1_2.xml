@@ -1,0 +1,50 @@
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myfile="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="3dp"
+	android:background="@drawable/btn_trans">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<kk.myfile.ui.GridImageView
+			android:id="@+id/iv_icon"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:scaleType="centerCrop"
+			myfile:size_type="fitWidth" />
+
+		<TextView
+			android:id="@+id/tv_name"
+			android:layout_width="match_parent"
+			android:layout_height="32dp"
+			android:gravity="center"
+			android:maxLines="2"
+			android:ellipsize="middle"
+			android:textSize="13dp"
+			android:textColor="@color/main_text_color" />
+	</LinearLayout>
+
+	<ImageView
+		android:id="@+id/iv_left"
+		android:layout_width="@dimen/direct_select_width"
+		android:layout_height="@dimen/direct_select_height"
+		android:layout_gravity="left|top"
+		android:scaleType="centerCrop"
+		android:background="@drawable/btn_bar"
+		android:visibility="gone" />
+
+	<ImageView
+		android:id="@+id/iv_right"
+		android:layout_width="@dimen/direct_select_width"
+		android:layout_height="@dimen/direct_select_height"
+		android:layout_gravity="right|top"
+		android:scaleType="centerCrop"
+		android:background="@drawable/btn_bar"
+		android:visibility="gone" />
+</FrameLayout>

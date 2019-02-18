@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyFile</string>
+
+    <string name="def_direct_name">Directory_%03d</string>
+    <string name="def_file_name">File_%03d</string>
+    <string name="def_zip_name">Compress.zip</string>
+    <string name="def_path_name">SD Card</string>
+
+    <string name="err_compress_failed">Compress failed!</string>
+    <string name="err_compress_success">Success</string>
+    <string name="err_create_direct_failed">Create directory failed!</string>
+    <string name="err_create_direct_success">Success</string>
+    <string name="err_create_file_failed">Create File Failed!</string>
+    <string name="err_create_file_success">Success</string>
+    <string name="err_delete_file_failed">%s\nDelete failed!</string>
+    <string name="err_edit_failed">Edit failed!</string>
+    <string name="err_extract_failed">Extract failed!</string>
+    <string name="err_extract_success">Success</string>
+    <string name="err_file_exist">The name already exist!</string>
+    <string name="err_file_read_error">File reading error</string>
+    <string name="err_illegal_file_name_char">Illegal characters!</string>
+    <string name="err_name_length_valid">Length must be %1$d ot %2$d!</string>
+    <string name="err_nothing_selected">Noting selected</string>
+    <string name="err_not_support">Do not support</string>
+    <string name="err_path_not_valid">This is not a valid path</string>
+    <string name="err_rename_file_failed">Rename failed!</string>
+    <string name="err_rename_file_success">Success</string>
+    <string name="err_share_failed">Share failed!</string>
+
+    <string name="list_style_1_1">Grid Small</string>
+    <string name="list_style_1_2">Grid Middle</string>
+    <string name="list_style_1_3">Grid Big</string>
+    <string name="list_style_2_1">List Small</string>
+    <string name="list_style_2_2">List Middle</string>
+    <string name="list_style_2_3">List Big</string>
+
+    <string name="msg_already_copied_to_clipboard">Already copied to the clipboard</string>
+    <string name="msg_already_installed">Already Installed</string>
+    <string name="msg_children_select_with_num">%1$d/%2$d children</string>
+    <string name="msg_children_with_num">%d children</string>
+    <string name="msg_click_to_calc">Click To Calculate</string>
+    <string name="msg_confirm_save_modify">Save Modify?</string>
+    <string name="msg_copy_file_progress">Copying %1$d/%2$d files\n\n%3$d success\n%4$d
+		failed
+	</string>
+    <string name="msg_cut_file_progress">Cuting %1$d/%2$d files\n\n%3$d success\n%4$d failed
+	</string>
+    <string name="msg_delete_file_confirm">Delete these %d files?</string>
+    <string name="msg_delete_file_progress">Deleting %1$d/%2$d files\n\n%3$d success\n%4$d
+		failed
+	</string>
+    <string name="msg_edit_as">Edit As</string>
+    <string name="msg_enter_target_direct_and_paste">Enter target directory and PASTE</string>
+    <string name="msg_file_exist">The following file already exists:\n\n%s</string>
+    <string name="msg_input_direct_name">Input directory name</string>
+    <string name="msg_input_file_name">Input file name</string>
+    <string name="msg_input_password">Input Password</string>
+    <string name="msg_input_path_name">Input name for path</string>
+    <string name="msg_input_to_search">Input to search</string>
+    <string name="msg_multi_select_mode">Multi Select Mode</string>
+    <string name="msg_not_installed">Not Installed</string>
+    <string name="msg_open_as">Open As</string>
+    <string name="msg_select_operation">Please select an operation</string>
+    <string name="msg_share_as">Share As</string>
+    <string name="msg_wait">Wait a monent</string>
+
+    <string name="setting_hidden">Show Hidden Files When Searching</string>
+    <string name="setting_list_style_big">List Style For Big Files</string>
+    <string name="setting_list_style_direct">List Style For Files Of Directory</string>
+    <string name="setting_list_style_recent">List Style For Recent Files</string>
+    <string name="setting_list_style_type">List Style For Files Of Type</string>
+    <string name="setting_num_limit_big">Number Of Big Files</string>
+    <string name="setting_num_limit_recent">Number Of Recent Files</string>
+    <string name="setting_sort_direct">Sorting For Files Of Directory</string>
+    <string name="setting_sort_type">Sorting For Files Of Type</string>
+
+    <string name="sort_Directory">Directory or File</string>
+    <string name="sort_ModifyTime">Modify Time</string>
+    <string name="sort_Name">Name</string>
+    <string name="sort_Path">Path</string>
+    <string name="sort_Size">Size</string>
+    <string name="sort_Subfix">Subfix</string>
+
+    <string name="type_apk">Apk</string>
+    <string name="type_archive">Archive</string>
+    <string name="type_audio">Audio</string>
+    <string name="type_direct">Directory</string>
+    <string name="type_image">Image</string>
+    <string name="type_office">Office</string>
+    <string name="type_text">Text</string>
+    <string name="type_unknown">Unknown</string>
+    <string name="type_video">Video</string>
+
+    <string name="word_album">Album</string>
+    <string name="word_any">Any</string>
+    <string name="word_app_name">App Name</string>
+    <string name="word_artist">Artist</string>
+    <string name="word_author">Author</string>
+    <string name="word_big_file">Big File</string>
+    <string name="word_bitrate">Bitrate</string>
+    <string name="word_cancel">Cancel</string>
+    <string name="word_children_num">Children Num</string>
+    <string name="word_compilation">Compilation</string>
+    <string name="word_composer">Composer</string>
+    <string name="word_compress_or_to">Compress (To)</string>
+    <string name="word_compress_to">Compress To</string>
+    <string name="word_confirm">Confirm</string>
+    <string name="word_copy_or_to">Copy (To)</string>
+    <string name="word_cover_or_all">Cover\n(All)</string>
+    <string name="word_cut_or_to">Cut (To)</string>
+    <string name="word_date">Date</string>
+    <string name="word_delete">Delete</string>
+    <string name="word_detail">Detail</string>
+    <string name="word_duration">Duration</string>
+    <string name="word_edit">Edit</string>
+    <string name="word_edit_or_as">Edit (As)</string>
+    <string name="word_extract_or_to">Extract (To)</string>
+    <string name="word_extract_to">Extract To</string>
+    <string name="word_height">Height</string>
+    <string name="word_md5">MD5</string>
+    <string name="word_minetype">MineType</string>
+    <string name="word_modify_time">Modify Time</string>
+    <string name="word_multi_select">Multi Select</string>
+    <string name="word_name">Name</string>
+    <string name="word_new_direct">New Directory</string>
+    <string name="word_new_file">New File</string>
+    <string name="word_no">No</string>
+    <string name="word_open_as">Open As</string>
+    <string name="word_package_name">Package Name</string>
+    <string name="word_parent">Parent</string>
+    <string name="word_paste">Paste</string>
+    <string name="word_real_path">Real Path</string>
+    <string name="word_recent_file">Recent File</string>
+    <string name="word_refresh">Refresh</string>
+    <string name="word_rename">Rename</string>
+    <string name="word_rename_or_all">Rename\n(All)</string>
+    <string name="word_rotation">Rotation</string>
+    <string name="word_setting">Setting</string>
+    <string name="word_share_or_as">Share (As)</string>
+    <string name="word_size">Size</string>
+    <string name="word_skip_or_all">Skip\n(All)</string>
+    <string name="word_state">State</string>
+    <string name="word_title">Title</string>
+    <string name="word_type">Type</string>
+    <string name="word_version_code">Version Code</string>
+    <string name="word_version_name">Version Name</string>
+    <string name="word_width">Width</string>
+    <string name="word_year">Year</string>
+    <string name="word_yes">Yes</string>
+
+</resources>
