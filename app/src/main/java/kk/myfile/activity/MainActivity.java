@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity {
 			if (id == 0) {
 				break;
 			}
-			TextView tv = (TextView) findViewById(id);
+			TextView tv = findViewById(id);
 			mTvDirects.add(tv);
 
 			final int index = i;
@@ -228,8 +228,8 @@ public class MainActivity extends BaseActivity {
 		mTvTypes.add((TextView) parent.findViewById(R.id.tv_text));
 
 		parent = root.findViewById(R.id.ll_stat);
-		mCvStat = (CakeView) parent.findViewById(R.id.cv_view);
-		mTvStat = (TextView) parent.findViewById(R.id.tv_text);
+		mCvStat = parent.findViewById(R.id.cv_view);
+		mTvStat = parent.findViewById(R.id.tv_text);
 		parent.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View view) {

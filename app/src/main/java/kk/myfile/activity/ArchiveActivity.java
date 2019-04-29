@@ -58,12 +58,12 @@ public class ArchiveActivity extends BaseActivity {
 		setContentView(R.layout.activity_archive);
 
 		// 路径栏
-		mHsvPath = (HorizontalScrollView) findViewById(R.id.hsv_path);
-		mVgPath = (ViewGroup) mHsvPath.findViewById(R.id.ll_path);
+		mHsvPath = findViewById(R.id.hsv_path);
+		mVgPath = mHsvPath.findViewById(R.id.ll_path);
 
 		// 文件列表
 		mZipAdapter = new ArchiveAdapter(this);
-		mLvList = (ListView) findViewById(R.id.lv_list);
+		mLvList = findViewById(R.id.lv_list);
 		mLvList.setAdapter(mZipAdapter);
 		mLvList.setOnScrollListener(new OnScrollListener() {
 			@Override

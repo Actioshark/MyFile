@@ -109,10 +109,10 @@ public class SettingSortActivity extends BaseActivity {
 			vh.index = i;
 			vh.sf = mFactor.get(i).clone();
 
-			vh.text = (TextView) grid.findViewById(R.id.tv_text);
+			vh.text = grid.findViewById(R.id.tv_text);
 			vh.text.setText(vh.sf.text);
 
-			vh.direct = (ImageView) grid.findViewById(R.id.iv_direct);
+			vh.direct = grid.findViewById(R.id.iv_direct);
 			vh.direct.setImageResource(vh.sf.up ? R.drawable.arrow_up : R.drawable.arrow_down);
 			vh.direct.setOnClickListener(new OnClickListener() {
 				@Override

@@ -110,7 +110,7 @@ public class ArchiveAdapter extends BaseAdapter {
 			int cn = ((Direct) leaf).getChildren().size();
 			vh.desc.setText(AppUtil.getString(R.string.msg_children_with_num, cn));
 		} else {
-			FileHeader fh = (FileHeader) mActivity.getFileHeader(leaf.getPath());
+			FileHeader fh = mActivity.getFileHeader(leaf.getPath());
 			String cs = MathUtil.insertComma(fh.getCompressSize());
 			String us = MathUtil.insertComma(fh.getExtractSize());
 			vh.desc.setText(String.format("%s/%s B", cs, us));
