@@ -22,7 +22,7 @@ public class UriUtil {
                 String url = MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getPath(), "", "");
                 return Uri.parse(url);
             } catch (Exception e) {
-                Logger.print(null, e);
+                Logger.print(e);
             }
         }
 
@@ -51,7 +51,7 @@ public class UriUtil {
 
                 return new File(filePath);
             } catch (Exception e) {
-                Logger.print(null, e);
+                Logger.print(e);
             }
         } else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
             try {
@@ -60,7 +60,7 @@ public class UriUtil {
 
                 return file;
             } catch (Exception e) {
-                Logger.print(null, e);
+                Logger.print(e);
             }
         }
 

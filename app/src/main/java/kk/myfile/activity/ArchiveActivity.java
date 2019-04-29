@@ -119,7 +119,7 @@ public class ArchiveActivity extends BaseActivity {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 			finish();
 			return;
 		}
@@ -175,7 +175,7 @@ public class ArchiveActivity extends BaseActivity {
 						parseFileHeader(null);
 					}
 				} catch (Exception e) {
-					Logger.print(null, e);
+					Logger.print(e);
 					
 					AppUtil.runOnUiThread(new Runnable() {
 						@Override
@@ -205,7 +205,7 @@ public class ArchiveActivity extends BaseActivity {
 						return;
 					}
 				} catch (Exception e) {
-					Logger.print(null, e);
+					Logger.print(e);
 				}
 					
 				App.showToast(R.string.err_extract_failed);
@@ -238,7 +238,7 @@ public class ArchiveActivity extends BaseActivity {
 						}
 					});
 				} catch (Exception e) {
-					Logger.print(null, e);
+					Logger.print(e);
 				}
 			}
 		});

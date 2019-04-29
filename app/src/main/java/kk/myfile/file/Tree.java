@@ -370,7 +370,7 @@ public class Tree {
 			});
 			id.show();
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 	}
 
@@ -661,7 +661,7 @@ public class Tree {
 					}
 				});
 			} catch (Exception e) {
-				Logger.print(null, e);
+				Logger.print(e);
 			}
 		}
 
@@ -681,7 +681,7 @@ public class Tree {
 						}
 					}
 				} catch (Exception e) {
-					Logger.print(null, e);
+					Logger.print(e);
 				}
 			}
 		}
@@ -752,7 +752,7 @@ public class Tree {
 					carry(fps, 0, stop, new AtomicInteger(-1), pg, new AtomicInteger(0),
 						new AtomicInteger(0), cb, delete);
 				} catch (Exception e) {
-					Logger.print(null, e);
+					Logger.print(e);
 				}
 			}
 		});
@@ -900,7 +900,7 @@ public class Tree {
 												zf.addFile(leaf.getFile(), zp);
 											}
 										} catch (Exception e) {
-											Logger.print(null, e);
+											Logger.print(e);
 											callback.onProgress(ProgressType.Error, e.toString());
 										}
 									}
@@ -909,7 +909,7 @@ public class Tree {
 
 							monitorZip(true, zf.getProgressMonitor(), cancel, callback);
 						} catch (Exception e) {
-							Logger.print(null, e);
+							Logger.print(e);
 							callback.onProgress(ProgressType.Error, e.toString());
 						}
 					}

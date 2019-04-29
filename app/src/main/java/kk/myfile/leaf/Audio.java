@@ -82,7 +82,7 @@ public class Audio extends Leaf implements IThumable {
 			int hour = dur /= 60;
 			putDetail(list, 2, R.string.word_duration, "%02d:%02d:%02d", hour, minute, second);
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return list;

@@ -89,7 +89,7 @@ public class Video extends Leaf implements IThumable {
 					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return list;

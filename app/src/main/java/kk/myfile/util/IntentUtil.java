@@ -39,7 +39,7 @@ public class IntentUtil {
 			context.startActivity(intent);
 			return true;
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 			return false;
 		}
 	}
@@ -100,7 +100,7 @@ public class IntentUtil {
 			context.startActivity(intent);
 			return true;
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 			return false;
 		}
 	}

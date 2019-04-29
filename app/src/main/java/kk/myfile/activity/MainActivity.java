@@ -337,7 +337,7 @@ public class MainActivity extends BaseActivity {
 									break;
 								}
 							} catch (Exception e) {
-								Logger.print(null, e);
+								Logger.print(e);
 							}
 						}
 					}
@@ -364,7 +364,7 @@ public class MainActivity extends BaseActivity {
 						arc.color = 0xffcccccc;
 						arcs.add(arc);
 					} catch (Exception e) {
-						Logger.print(null, e);
+						Logger.print(e);
 					}
 
 					final float TOTAL = total / (1024 * 1024 * 1024);

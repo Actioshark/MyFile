@@ -13,7 +13,7 @@ public class DataUtil {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			return md.digest(src);
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return null;
@@ -32,7 +32,7 @@ public class DataUtil {
 
 			return md.digest();
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return null;

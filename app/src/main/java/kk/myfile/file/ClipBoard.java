@@ -44,7 +44,7 @@ public class ClipBoard {
 
 			return true;
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 			return false;
 		}
 	}
@@ -87,7 +87,7 @@ public class ClipBoard {
 
 			return put(context, label, texts);
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 			return false;
 		}
 	}
@@ -125,7 +125,7 @@ public class ClipBoard {
 				}
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return list;
@@ -143,7 +143,7 @@ public class ClipBoard {
 				return label.clipType;
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return null;

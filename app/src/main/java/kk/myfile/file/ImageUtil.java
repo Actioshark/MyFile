@@ -120,7 +120,7 @@ public class ImageUtil {
 						try {
 							nd.drawable = ((IThumable) nd.leaf).getThum(nd.width, nd.height);
 						} catch (Exception e) {
-							Logger.print(null, e);
+							Logger.print(e);
 
 							nd.drawable = AppUtil.getRes().getDrawable(nd.leaf.getIcon());
 						}
@@ -145,7 +145,7 @@ public class ImageUtil {
 						});
 					}
 				} catch (Exception e) {
-					Logger.print(null, e);
+					Logger.print(e);
 				} finally {
 					synchronized (THUM_CACHE) {
 						sIsRunning = false;

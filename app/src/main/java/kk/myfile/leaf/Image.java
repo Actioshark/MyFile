@@ -39,7 +39,7 @@ public class Image extends Leaf implements IThumable {
 			putDetail(list, 2, R.string.word_width, op.outWidth);
 			putDetail(list, 2, R.string.word_height, op.outHeight);
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return list;

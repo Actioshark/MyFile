@@ -126,12 +126,12 @@ public abstract class Leaf {
 						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						AppUtil.getContext().startActivity(intent);
 					} catch (Exception e) {
-						Logger.print(null, e);
+						Logger.print(e);
 					}
 				}
 			};
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 		
 		String clsName = getClass().getSimpleName();
@@ -143,7 +143,7 @@ public abstract class Leaf {
 		try {
 			putDetail(list, 1, R.string.word_size, "%s B", MathUtil.insertComma(file.length()));
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		try {
@@ -151,7 +151,7 @@ public abstract class Leaf {
 			DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Setting.LOCALE);
 			putDetail(list, 1, R.string.word_modify_time, df.format(date));
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		if (!(this instanceof Direct)) {
@@ -177,7 +177,7 @@ public abstract class Leaf {
 										}
 									});
 								} catch (Exception e) {
-									Logger.print(null, e);
+									Logger.print(e);
 								}
 							}
 						});

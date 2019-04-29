@@ -190,7 +190,7 @@ public class Sorter {
 			factor = (SortFactor) Class.forName("kk.myfile.file.Sorter$SortFactor" + type)
 				.newInstance();
 		} catch (Exception e) {
-			Logger.print(null, e, type);
+			Logger.print(e, type);
 		}
 
 		return factor;
@@ -227,7 +227,7 @@ public class Sorter {
 
 			Setting.setSortFactor(classify, ja.toString());
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 	}
 
@@ -274,7 +274,7 @@ public class Sorter {
 					}
 				}
 			} catch (Exception e) {
-				Logger.print(null, e);
+				Logger.print(e);
 			}
 
 			for (int j = 0; j < array.length; j++) {

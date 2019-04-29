@@ -77,7 +77,7 @@ public class ArchiveHelper {
 					return true;
 				}
 			} catch (Exception e) {
-				Logger.print(null, e);
+				Logger.print(e);
 			}
 		}
 		
@@ -94,7 +94,7 @@ public class ArchiveHelper {
 				mArchive = new Archive(file, null, false);
 				return true;
 			} catch (Exception e) {
-				Logger.print(null, e);
+				Logger.print(e);
 			}
 		}
 		
@@ -109,7 +109,7 @@ public class ArchiveHelper {
 				return ((Archive) mArchive).isEncrypted();
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 		
 		return false;
@@ -123,7 +123,7 @@ public class ArchiveHelper {
 				throw new Exception("do not support rar with password");
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 	}
 	
@@ -230,7 +230,7 @@ public class ArchiveHelper {
 			
 			return true;
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 		
 		return false;
@@ -263,7 +263,7 @@ public class ArchiveHelper {
 				return file;
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 		
 		return null;
@@ -314,7 +314,7 @@ public class ArchiveHelper {
 							fos.close();
 						}
 					} catch (Exception e) {
-						Logger.print(null, e);
+						Logger.print(e);
 						err = e.toString();
 					}
 					
@@ -336,7 +336,7 @@ public class ArchiveHelper {
 				return;
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 			
 		if (callback != null) {

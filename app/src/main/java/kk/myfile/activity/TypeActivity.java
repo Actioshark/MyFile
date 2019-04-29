@@ -534,7 +534,7 @@ public class TypeActivity extends BaseActivity {
 												continue;
 											}
 										} catch (Exception e) {
-											Logger.print(null, e);
+											Logger.print(e);
 										}
 									}
 								}

@@ -48,7 +48,7 @@ public class FileUtil {
 			String string = FileUtil.readString(is);
 			sTypeMap = new JSONObject(string);
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 	}
 
@@ -109,7 +109,7 @@ public class FileUtil {
 				}
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 		
 		Leaf leaf = new Unknown(path);
@@ -192,7 +192,7 @@ public class FileUtil {
 				return null;
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return AppUtil.getString(R.string.err_create_direct_failed);
@@ -211,7 +211,7 @@ public class FileUtil {
 				return null;
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return AppUtil.getString(R.string.err_create_file_failed);
@@ -223,7 +223,7 @@ public class FileUtil {
 				return null;
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return AppUtil.getString(R.string.err_rename_file_failed);
@@ -262,7 +262,7 @@ public class FileUtil {
 				return null;
 			}
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		String name;
@@ -291,7 +291,7 @@ public class FileUtil {
 
 			return true;
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return false;
@@ -317,7 +317,7 @@ public class FileUtil {
 
 			return true;
 		} catch (Exception e) {
-			Logger.print(null, e);
+			Logger.print(e);
 		}
 
 		return false;
