@@ -554,7 +554,7 @@ public class Tree {
 						String subfix = pi == -1 ? "" : path.substring(pi);
 
 						for (int j = 1;; j++) {
-							fp.to = new File(String.format("%s_%d%s", prefix, j, subfix));
+							fp.to = new File(String.format(Setting.LOCALE, "%s_%d%s", prefix, j, subfix));
 							if (!fp.to.exists()) {
 								break;
 							}
@@ -967,7 +967,7 @@ public class Tree {
 									@Override
 									public void run() {
 										if (type == ProgressType.Progress) {
-											progress.setMessage(String.format("%d/%d\n\n%s",
+											progress.setMessage(String.format(Setting.LOCALE, "%d/%d\n\n%s",
 												data[1], data[2], data[0]));
 										} else if(type == ProgressType.Cancel) {
 											

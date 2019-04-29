@@ -112,7 +112,7 @@ public class SettingActivity extends BaseActivity {
 		// 大文件数量限制
 		View llBigLimit = findViewById(R.id.ll_num_limit_big);
 		final TextView tvBigLimitNum = llBigLimit.findViewById(R.id.tv_num);
-		tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+		tvBigLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting.getNumLimit(Classify.Big)));
 		llBigLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -123,13 +123,13 @@ public class SettingActivity extends BaseActivity {
 			public boolean onTouch(View view, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
-					tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+					tvBigLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting.getNumLimit(Classify.Big)));
 
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							Setting
 								.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) + 1);
-							tvBigLimitNum.setText(String.format("%d", Setting
+							tvBigLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting
 								.getNumLimit(Classify.Big)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
@@ -153,13 +153,13 @@ public class SettingActivity extends BaseActivity {
 			public boolean onTouch(View view, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
-					tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
+					tvBigLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting.getNumLimit(Classify.Big)));
 
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							Setting
 								.setNumLimit(Classify.Big, Setting.getNumLimit(Classify.Big) - 1);
-							tvBigLimitNum.setText(String.format("%d", Setting
+							tvBigLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting
 								.getNumLimit(Classify.Big)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
@@ -177,7 +177,7 @@ public class SettingActivity extends BaseActivity {
 		// 最近文件数量限制
 		View llRecentLimit = findViewById(R.id.ll_num_limit_recent);
 		final TextView tvRecentLimitNum = llRecentLimit.findViewById(R.id.tv_num);
-		tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
+		tvRecentLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting.getNumLimit(Classify.Recent)));
 		llRecentLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -188,14 +188,14 @@ public class SettingActivity extends BaseActivity {
 			public boolean onTouch(View view, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) + 1);
-					tvRecentLimitNum.setText(String.format("%d", Setting
+					tvRecentLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting
 						.getNumLimit(Classify.Recent)));
 
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							Setting.setNumLimit(Classify.Recent, Setting
 								.getNumLimit(Classify.Recent) + 1);
-							tvRecentLimitNum.setText(String.format("%d", Setting
+							tvRecentLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting
 								.getNumLimit(Classify.Recent)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);
@@ -219,14 +219,14 @@ public class SettingActivity extends BaseActivity {
 			public boolean onTouch(View view, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					Setting.setNumLimit(Classify.Recent, Setting.getNumLimit(Classify.Recent) - 1);
-					tvRecentLimitNum.setText(String.format("%d", Setting
+					tvRecentLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting
 						.getNumLimit(Classify.Recent)));
 
 					mNumLimitToken = AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							Setting.setNumLimit(Classify.Recent, Setting
 								.getNumLimit(Classify.Recent) - 1);
-							tvRecentLimitNum.setText(String.format("%d", Setting
+							tvRecentLimitNum.setText(String.format(Setting.LOCALE, "%d", Setting
 								.getNumLimit(Classify.Recent)));
 						}
 					}, NUM_LIMIT_DELAY, NUM_LIMIT_REPEAT);

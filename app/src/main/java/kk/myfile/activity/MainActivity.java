@@ -374,13 +374,13 @@ public class MainActivity extends BaseActivity {
 							synchronized (mTvTypes) {
 								if (mTypeMark == mark) {
 									for (int i = 0; i < mTvTypes.size(); i++) {
-										mTvTypes.get(i).setText(String.format("%d", counts[i]));
+										mTvTypes.get(i).setText(String.format(Setting.LOCALE, "%d", counts[i]));
 									}
 
 									mCvStat.setArcs(arcs);
 									mCvStat.invalidate();
 									mTvStat.setText(String
-										.format("%.2f/%.2f", TOTAL - AVAIL, TOTAL));
+										.format(Setting.LOCALE, "%.2f/%.2f", TOTAL - AVAIL, TOTAL));
 								}
 							}
 						}
