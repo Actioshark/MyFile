@@ -21,11 +21,11 @@ public abstract class BaseActivity extends Activity {
 	public static final String KEY_PATH = "base_path";
 	public static final String KEY_CLASSIFY = "base_classify";
 
-	public static enum Classify {
+	public enum Classify {
 		Direct, Type, Big, Recent,
 	}
 
-	public static enum Mode {
+	public enum Mode {
 		Normal, Select,
 	}
 

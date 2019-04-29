@@ -11,12 +11,12 @@ import kk.myfile.util.AppUtil;
 import kk.myfile.util.Logger;
 
 public class ImageUtil {
-	public static interface IThumable {
-		public Drawable getThum(int width, int height) throws Exception;
+	public interface IThumable {
+		Drawable getThum(int width, int height) throws Exception;
 	}
 
-	public static interface IThumListener {
-		public void onThumGot(Drawable drawable);
+	public interface IThumListener {
+		void onThumGot(Drawable drawable);
 	}
 
 	private static class DrawableNode {

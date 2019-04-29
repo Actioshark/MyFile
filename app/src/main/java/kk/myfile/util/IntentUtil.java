@@ -128,8 +128,8 @@ public class IntentUtil {
 		}
 	}
 	
-	public static interface IAsListener {
-		public void onSelect(String type);
+	public interface IAsListener {
+		void onSelect(String type);
 	}
 	
 	public static void showAsDialog(Context context, int msg, final IAsListener listener) {

@@ -20,7 +20,7 @@ import kk.myfile.util.Logger;
 import kk.myfile.util.Setting;
 
 public class Sorter {
-	public static enum SortType {
+	public enum SortType {
 		Directory, ModifyTime, Name, Path, Size, Subfix,
 	}
 

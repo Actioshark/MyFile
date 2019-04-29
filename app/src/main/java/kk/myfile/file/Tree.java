@@ -31,12 +31,12 @@ import net.lingala.zip4j.util.Zip4jConstants;
 public class Tree {
 	public static final String HIDDEN_FILE = ".nomedia";
 
-	public static enum ProgressType {
+	public enum ProgressType {
 		Confirm, Cancel, Progress, Finish, Error,
 	}
 
-	public static interface IProgressCallback {
-		public void onProgress(ProgressType type, Object... data);
+	public interface IProgressCallback {
+		void onProgress(ProgressType type, Object... data);
 	}
 
 	public static List<Leaf> getDirect(String path, final AtomicBoolean finish) {

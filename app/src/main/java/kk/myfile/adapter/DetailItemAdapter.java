@@ -26,8 +26,8 @@ public class DetailItemAdapter extends BaseAdapter {
 		public IClickListener clickListener;
 	}
 
-	public static interface IClickListener {
-		public void onClick(Data data, ViewHolder vh);
+	public interface IClickListener {
+		void onClick(Data data, ViewHolder vh);
 	}
 
 	public static class ViewHolder {

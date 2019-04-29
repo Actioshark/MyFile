@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Broadcast {
-	public static interface IListener {
-		public void onReceive(String name, Object data);
+	public interface IListener {
+		void onReceive(String name, Object data);
 	}
 
 	private static class Node {
