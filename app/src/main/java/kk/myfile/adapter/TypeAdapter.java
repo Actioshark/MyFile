@@ -142,7 +142,7 @@ public class TypeAdapter extends BaseAdapter {
 			mViewHolder = vh;
 		}
 
-		public void setmListStyle(ListStyle ls) {
+		public void setListStyle(ListStyle ls) {
 			mListStyle = ls;
 		}
 
@@ -246,7 +246,7 @@ public class TypeAdapter extends BaseAdapter {
 
 			final GestureListener gl = new GestureListener();
 			gl.setViewHolder(vh);
-			gl.setmListStyle(ls);
+			gl.setListStyle(ls);
 			final GestureDetector gd = new GestureDetector(mActivity, gl);
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
