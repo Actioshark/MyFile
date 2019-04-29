@@ -40,8 +40,8 @@ public class DetailAdapter extends PagerAdapter {
 			View root = LayoutInflater.from(context).inflate(R.layout.grid_detail, null);
 			ViewHolder holder = new ViewHolder();
 
-			holder.thum = (ImageView) root.findViewById(R.id.iv_thum);
-			holder.list = (ListView) root.findViewById(R.id.lv_list);
+			holder.thum = root.findViewById(R.id.iv_thum);
+			holder.list = root.findViewById(R.id.lv_list);
 
 			root.setTag(holder);
 			mViewList.add(root);

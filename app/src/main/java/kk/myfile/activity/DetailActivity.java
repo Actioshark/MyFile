@@ -22,7 +22,7 @@ public class DetailActivity extends BaseActivity {
 
 		setContentView(R.layout.activity_detail);
 
-		ViewPager vp = (ViewPager) findViewById(R.id.vp_list);
+		ViewPager vp = findViewById(R.id.vp_list);
 		DetailAdapter adapter = new DetailAdapter(this);
 		adapter.setDataList(paths);
 		vp.setAdapter(adapter);

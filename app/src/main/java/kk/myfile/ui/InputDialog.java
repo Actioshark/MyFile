@@ -36,9 +36,9 @@ public class InputDialog extends Dialog {
 			AppUtil.getScreenHeight() * 8 / 10);
 		window.setAttributes(lp);
 
-		mTvMessage = (TextView) findViewById(R.id.tv_message);
+		mTvMessage = findViewById(R.id.tv_message);
 
-		mEtInput = (EditText) findViewById(R.id.et_input);
+		mEtInput = findViewById(R.id.et_input);
 
 		findViewById(R.id.iv_cancel).setOnClickListener(new View.OnClickListener() {
 			@Override

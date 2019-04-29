@@ -242,19 +242,19 @@ public class DirectActivity extends BaseActivity {
 				return true;
 			}
 		});
-		mHsvPath = (HorizontalScrollView) mLlPath.findViewById(R.id.hsv_text);
-		mVgPath = (ViewGroup) mHsvPath.findViewById(R.id.ll_text);
+		mHsvPath = mLlPath.findViewById(R.id.hsv_text);
+		mVgPath = mHsvPath.findViewById(R.id.ll_text);
 
 		// 标题
 		mRlTitle = findViewById(R.id.rl_title);
-		mTvTitle = (TextView) mRlTitle.findViewById(R.id.tv_title);
+		mTvTitle = mRlTitle.findViewById(R.id.tv_title);
 		mRlTitle.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				setMode(Mode.Normal);
 			}
 		});
-		mIvSelect = (ImageView) mRlTitle.findViewById(R.id.iv_select);
+		mIvSelect = mRlTitle.findViewById(R.id.iv_select);
 		mIvSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -265,7 +265,7 @@ public class DirectActivity extends BaseActivity {
 
 		// 搜索栏
 		View llSearch = findViewById(R.id.ll_search);
-		mEtSearch = (EditText) llSearch.findViewById(R.id.et_input);
+		mEtSearch = llSearch.findViewById(R.id.et_input);
 		mEtSearch.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
@@ -284,7 +284,7 @@ public class DirectActivity extends BaseActivity {
 			}
 		});
 
-		mIvDelete = (ImageView) llSearch.findViewById(R.id.iv_delete);
+		mIvDelete = llSearch.findViewById(R.id.iv_delete);
 		mIvDelete.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -295,7 +295,7 @@ public class DirectActivity extends BaseActivity {
 
 		// 文件列表
 		mDirectAdapter = new DirectAdapter(this);
-		mGvList = (GridView) findViewById(R.id.gv_list);
+		mGvList = findViewById(R.id.gv_list);
 		mGvList.setAdapter(mDirectAdapter);
 		mGvList.setOnScrollListener(new OnScrollListener() {
 			@Override
@@ -312,14 +312,14 @@ public class DirectActivity extends BaseActivity {
 
 		// 详情
 		mLlDetail = findViewById(R.id.ll_detail);
-		mIvDetailIcon = (ImageView) mLlDetail.findViewById(R.id.iv_icon);
-		mTvDetailName = (TextView) mLlDetail.findViewById(R.id.tv_name);
-		mTvDetailTime = (TextView) mLlDetail.findViewById(R.id.tv_time);
-		mTvDetailSize = (TextView) mLlDetail.findViewById(R.id.tv_size);
+		mIvDetailIcon = mLlDetail.findViewById(R.id.iv_icon);
+		mTvDetailName = mLlDetail.findViewById(R.id.tv_name);
+		mTvDetailTime = mLlDetail.findViewById(R.id.tv_time);
+		mTvDetailSize = mLlDetail.findViewById(R.id.tv_size);
 
 		// 信息
 		mLlInfo = findViewById(R.id.ll_info);
-		mTvInfoCount = (TextView) mLlInfo.findViewById(R.id.tv_count);
+		mTvInfoCount = mLlInfo.findViewById(R.id.tv_count);
 		mLlInfo.findViewById(R.id.iv_menu).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -432,7 +432,7 @@ public class DirectActivity extends BaseActivity {
 		for (int i = 0; i < nodes.length; i++) {
 			final int index = i;
 			View grid = getLayoutInflater().inflate(R.layout.grid_path, null);
-			TextView text = (TextView) grid.findViewById(R.id.tv_text);
+			TextView text = grid.findViewById(R.id.tv_text);
 			text.setText(String.format("%s %c", i == 0 ? "/" : nodes[i],
 				i == nodes.length - 1 ? ' ' : '>'));
 

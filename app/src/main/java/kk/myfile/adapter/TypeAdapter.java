@@ -235,13 +235,13 @@ public class TypeAdapter extends BaseAdapter {
 
 			vh = new ViewHolder();
 			vh.root = view;
-			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
-			vh.name = (TextView) view.findViewById(R.id.tv_name);
-			vh.size = (TextView) view.findViewById(R.id.tv_size);
-			vh.time = (TextView) view.findViewById(R.id.tv_time);
-			vh.sign = (ImageView) view.findViewById(R.id.iv_left);
+			vh.icon = view.findViewById(R.id.iv_icon);
+			vh.name = view.findViewById(R.id.tv_name);
+			vh.size = view.findViewById(R.id.tv_size);
+			vh.time = view.findViewById(R.id.tv_time);
+			vh.sign = view.findViewById(R.id.iv_left);
 			vh.sign.setBackgroundColor(0x00000000);
-			vh.select = (ImageView) view.findViewById(R.id.iv_right);
+			vh.select = view.findViewById(R.id.iv_right);
 			view.setTag(vh);
 
 			final GestureListener gl = new GestureListener();

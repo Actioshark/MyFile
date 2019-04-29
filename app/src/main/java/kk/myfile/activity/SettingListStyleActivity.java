@@ -99,7 +99,7 @@ public class SettingListStyleActivity extends BaseActivity {
 					"ll_%d_%d", i, j)));
 
 				final ViewHolder vh = new ViewHolder();
-				vh.select = (ImageView) root.findViewById(R.id.iv_select);
+				vh.select = root.findViewById(R.id.iv_select);
 				vh.key = getKey(i, j);
 
 				root.setTag(vh);

@@ -69,8 +69,8 @@ public class DownListAdapter extends BaseAdapter {
 			view = LayoutInflater.from(mContext).inflate(R.layout.grid_list_down, null);
 
 			vh = new ViewHolder();
-			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
-			vh.text = (TextView) view.findViewById(R.id.tv_text);
+			vh.icon = view.findViewById(R.id.iv_icon);
+			vh.text = view.findViewById(R.id.tv_text);
 
 			view.setOnClickListener(new OnClickListener() {
 				@Override

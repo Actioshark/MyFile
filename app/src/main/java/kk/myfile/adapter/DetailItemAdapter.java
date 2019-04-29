@@ -71,8 +71,8 @@ public class DetailItemAdapter extends BaseAdapter {
 		if (view == null) {
 			view = LayoutInflater.from(mContext).inflate(R.layout.grid_detail_item, null);
 			vh = new ViewHolder();
-			vh.key = (TextView) view.findViewById(R.id.tv_key);
-			vh.value = (TextView) view.findViewById(R.id.tv_value);
+			vh.key = view.findViewById(R.id.tv_key);
+			vh.value = view.findViewById(R.id.tv_value);
 			view.setTag(vh);
 
 			view.setOnClickListener(new OnClickListener() {

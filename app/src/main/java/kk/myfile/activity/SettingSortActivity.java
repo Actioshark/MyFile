@@ -48,7 +48,7 @@ public class SettingSortActivity extends BaseActivity {
 		setContentView(R.layout.activity_setting_sort);
 
 		// 格子
-		mAlLayout = (AbsoluteLayout) findViewById(R.id.al_layout);
+		mAlLayout = findViewById(R.id.al_layout);
 		mViewGrids = new View[mFactor.size()];
 		mGridHeight = AppUtil.getDimenInt(R.dimen.sort_grid_height);
 

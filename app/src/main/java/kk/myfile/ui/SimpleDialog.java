@@ -33,11 +33,11 @@ public class SimpleDialog extends Dialog {
 			AppUtil.getScreenHeight() * 8 / 10);
 		window.setAttributes(lp);
 
-		mTvMessage = (TextView) findViewById(R.id.tv_message);
+		mTvMessage = findViewById(R.id.tv_message);
 
 		for (int i = 0; i < mTvButtons.length; i++) {
 			int id = AppUtil.getId("id", "tv_btn_" + i);
-			mTvButtons[i] = (TextView) findViewById(id);
+			mTvButtons[i] = findViewById(id);
 
 			final int index = i;
 			mTvButtons[i].setOnClickListener(new View.OnClickListener() {

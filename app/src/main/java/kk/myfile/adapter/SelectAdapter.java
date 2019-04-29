@@ -86,9 +86,9 @@ public class SelectAdapter extends BaseAdapter {
 			view = mActivity.getLayoutInflater().inflate(R.layout.grid_select, null);
 
 			vh = new ViewHolder();
-			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
-			vh.name = (TextView) view.findViewById(R.id.tv_name);
-			vh.select = (ImageView) view.findViewById(R.id.iv_select);
+			vh.icon = view.findViewById(R.id.iv_icon);
+			vh.name = view.findViewById(R.id.tv_name);
+			vh.select = view.findViewById(R.id.iv_select);
 			view.setTag(vh);
 
 			view.setOnClickListener(new OnClickListener() {

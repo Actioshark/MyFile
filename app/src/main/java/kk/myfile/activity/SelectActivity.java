@@ -54,12 +54,12 @@ public class SelectActivity extends BaseActivity {
 		setContentView(R.layout.activity_select);
 
 		// 路径栏
-		mHsvPath = (HorizontalScrollView) findViewById(R.id.hsv_path);
-		mVgPath = (ViewGroup) mHsvPath.findViewById(R.id.ll_path);
+		mHsvPath = findViewById(R.id.hsv_path);
+		mVgPath = mHsvPath.findViewById(R.id.ll_path);
 
 		// 文件列表
 		mSelectAdapter = new SelectAdapter(this);
-		mLvList = (ListView) findViewById(R.id.lv_list);
+		mLvList = findViewById(R.id.lv_list);
 		mLvList.setAdapter(mSelectAdapter);
 		mLvList.setOnScrollListener(new OnScrollListener() {
 			@Override

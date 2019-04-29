@@ -96,7 +96,7 @@ public class SettingActivity extends BaseActivity {
 
 		// 隐藏文件
 		View llHidden = findViewById(R.id.ll_hidden);
-		final ImageView ivHiddenSelect = (ImageView) llHidden.findViewById(R.id.iv_select);
+		final ImageView ivHiddenSelect = llHidden.findViewById(R.id.iv_select);
 		ivHiddenSelect.setImageResource(Setting.getShowHidden() ? R.drawable.single_select_pre
 			: R.drawable.single_select_nor);
 		llHidden.setOnClickListener(new OnClickListener() {
@@ -111,7 +111,7 @@ public class SettingActivity extends BaseActivity {
 
 		// 大文件数量限制
 		View llBigLimit = findViewById(R.id.ll_num_limit_big);
-		final TextView tvBigLimitNum = (TextView) llBigLimit.findViewById(R.id.tv_num);
+		final TextView tvBigLimitNum = llBigLimit.findViewById(R.id.tv_num);
 		tvBigLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Big)));
 		llBigLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override
@@ -176,7 +176,7 @@ public class SettingActivity extends BaseActivity {
 
 		// 最近文件数量限制
 		View llRecentLimit = findViewById(R.id.ll_num_limit_recent);
-		final TextView tvRecentLimitNum = (TextView) llRecentLimit.findViewById(R.id.tv_num);
+		final TextView tvRecentLimitNum = llRecentLimit.findViewById(R.id.tv_num);
 		tvRecentLimitNum.setText(String.format("%d", Setting.getNumLimit(Classify.Recent)));
 		llRecentLimit.findViewById(R.id.iv_up).setOnClickListener(new OnClickListener() {
 			@Override

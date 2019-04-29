@@ -121,7 +121,7 @@ public class TypeActivity extends BaseActivity {
 
 		// 标题
 		View rlTitle = findViewById(R.id.rl_title);
-		mTvTitle = (TextView) rlTitle.findViewById(R.id.tv_title);
+		mTvTitle = rlTitle.findViewById(R.id.tv_title);
 		rlTitle.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -132,7 +132,7 @@ public class TypeActivity extends BaseActivity {
 				}
 			}
 		});
-		mIvSelect = (ImageView) rlTitle.findViewById(R.id.iv_select);
+		mIvSelect = rlTitle.findViewById(R.id.iv_select);
 		mIvSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -142,7 +142,7 @@ public class TypeActivity extends BaseActivity {
 
 		// 搜索栏
 		View llSearch = findViewById(R.id.ll_search);
-		mEtSearch = (EditText) llSearch.findViewById(R.id.et_input);
+		mEtSearch = llSearch.findViewById(R.id.et_input);
 		mEtSearch.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
@@ -219,19 +219,19 @@ public class TypeActivity extends BaseActivity {
 		// 文件列表
 
 		mTypeAdapter = new TypeAdapter(this, mClassify);
-		mGvList = (GridView) findViewById(R.id.gv_list);
+		mGvList = findViewById(R.id.gv_list);
 		mGvList.setAdapter(mTypeAdapter);
 
 		// 详情
 		mLlDetail = findViewById(R.id.ll_detail);
-		mIvDetailIcon = (ImageView) mLlDetail.findViewById(R.id.iv_icon);
-		mTvDetailName = (TextView) mLlDetail.findViewById(R.id.tv_name);
-		mTvDetailTime = (TextView) mLlDetail.findViewById(R.id.tv_time);
-		mTvDetailSize = (TextView) mLlDetail.findViewById(R.id.tv_size);
+		mIvDetailIcon = mLlDetail.findViewById(R.id.iv_icon);
+		mTvDetailName = mLlDetail.findViewById(R.id.tv_name);
+		mTvDetailTime = mLlDetail.findViewById(R.id.tv_time);
+		mTvDetailSize = mLlDetail.findViewById(R.id.tv_size);
 
 		// 信息
 		mLlInfo = findViewById(R.id.ll_info);
-		mTvInfoCount = (TextView) mLlInfo.findViewById(R.id.tv_count);
+		mTvInfoCount = mLlInfo.findViewById(R.id.tv_count);
 		mLlInfo.findViewById(R.id.iv_menu).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {

@@ -82,9 +82,9 @@ public class ArchiveAdapter extends BaseAdapter {
 			view = mActivity.getLayoutInflater().inflate(R.layout.grid_archive, null);
 
 			vh = new ViewHolder();
-			vh.icon = (ImageView) view.findViewById(R.id.iv_icon);
-			vh.name = (TextView) view.findViewById(R.id.tv_name);
-			vh.desc = (TextView) view.findViewById(R.id.tv_desc);
+			vh.icon = view.findViewById(R.id.iv_icon);
+			vh.name = view.findViewById(R.id.tv_name);
+			vh.desc = view.findViewById(R.id.tv_desc);
 			view.setTag(vh);
 
 			view.setOnClickListener(new OnClickListener() {

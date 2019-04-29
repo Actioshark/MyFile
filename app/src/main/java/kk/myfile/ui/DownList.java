@@ -27,7 +27,7 @@ public class DownList extends Dialog {
 	protected void init() {
 		setContentView(R.layout.list_down);
 
-		mLvList = (ListView) findViewById(R.id.lv_list);
+		mLvList = findViewById(R.id.lv_list);
 		mAdapter = new DownListAdapter(getContext(), this);
 		mLvList.setAdapter(mAdapter);
 
