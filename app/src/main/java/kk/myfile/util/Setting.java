@@ -93,7 +93,7 @@ public class Setting {
 
 		Editor editor = sPrefer.edit();
 		editor.putString(KEY_DEF_PATH, ja.toString());
-		editor.commit();
+		editor.apply();
 	}
 
 	public static String getSortFactor(Classify classify) {
@@ -103,7 +103,7 @@ public class Setting {
 	public static void setSortFactor(Classify classify, String str) {
 		Editor editor = sPrefer.edit();
 		editor.putString(String.format(KEY_SORT_FACTOR, classify.name()), str);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static String getListStyle(Classify classify) {
@@ -113,7 +113,7 @@ public class Setting {
 	public static void setListStyle(Classify classify, String value) {
 		Editor editor = sPrefer.edit();
 		editor.putString(String.format(KEY_LIST_STYLE, classify.name()), value);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static boolean getShowHidden() {
@@ -123,7 +123,7 @@ public class Setting {
 	public static void setShowHidden(boolean visible) {
 		Editor editor = sPrefer.edit();
 		editor.putBoolean(KEY_SHOW_HIDDEN, visible);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static int getNumLimit(Classify classify) {
@@ -148,7 +148,7 @@ public class Setting {
 
 		Editor editor = sPrefer.edit();
 		editor.putInt(String.format(KEY_NUM_LIMIT, classify.name()), num);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static String getLastSelectPath() {
@@ -158,6 +158,6 @@ public class Setting {
 	public static void setLastSelectPath(String path) {
 		Editor editor = sPrefer.edit();
 		editor.putString(KEY_LAST_SELECT_PATH, path);
-		editor.commit();
+		editor.apply();
 	}
 }
