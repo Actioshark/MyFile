@@ -551,7 +551,7 @@ public class Tree {
 						String path = fp.to.getPath();
 						int pi = path.lastIndexOf('.');
 						String prefix = pi == -1 ? path : path.substring(0, pi);
-						String subfix = pi == -1 ? "" : path.substring(pi, path.length());
+						String subfix = pi == -1 ? "" : path.substring(pi);
 
 						for (int j = 1;; j++) {
 							fp.to = new File(String.format("%s_%d%s", prefix, j, subfix));
