@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="kk.myfile"
     android:versionCode="1"
     android:versionName="1.0">
@@ -32,7 +34,7 @@
         <activity android:name=".activity.SettingListStyleActivity" />
 
         <activity android:name=".activity.ArchiveActivity">
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
 
