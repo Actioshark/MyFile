@@ -35,8 +35,7 @@ public class ImageUtil {
 	public static final int MAX_HEIGHT = 40960;
 
 	public static final int THUM_CACHE_SIZE = 1024 * 1024 * 32;
-	private static final MyCache<String, DrawableNode> THUM_CACHE =
-		new MyCache<String, DrawableNode>();
+	private static final MyCache<String, DrawableNode> THUM_CACHE = new MyCache<>();
 
 	private static boolean sIsRunning = false;
 	
@@ -72,7 +71,7 @@ public class ImageUtil {
 
 					if (node == null) {
 						node = new DrawableNode();
-						node.listeners = new ArrayList<IThumListener>();
+						node.listeners = new ArrayList<>();
 						THUM_CACHE.put(leaf.getPath(), node, 0);
 					}
 

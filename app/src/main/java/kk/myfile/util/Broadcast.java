@@ -18,14 +18,14 @@ public class Broadcast {
 		}
 	}
 
-	private static final Map<String, Map<IListener, Node>> sMap = new HashMap<String, Map<IListener, Node>>();
+	private static final Map<String, Map<IListener, Node>> sMap = new HashMap<>();
 
 	public static synchronized void addListener(IListener listener, String name, boolean onUiThread) {
 
 		Map<IListener, Node> map = sMap.get(name);
 
 		if (map == null) {
-			map = new HashMap<IListener, Node>();
+			map = new HashMap<>();
 			sMap.put(name, map);
 		}
 

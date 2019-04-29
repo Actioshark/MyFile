@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 public class ArchiveAdapter extends BaseAdapter {
 	private final ArchiveActivity mActivity;
-	private final List<Leaf> mDataList = new ArrayList<Leaf>();
+	private final List<Leaf> mDataList = new ArrayList<>();
 
 	public ArchiveAdapter(ArchiveActivity activity) {
 		mActivity = activity;

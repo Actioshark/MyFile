@@ -41,7 +41,7 @@ public class Tree {
 
 	public static List<Leaf> getDirect(String path, final AtomicBoolean finish) {
 		final Direct direct = new Direct(path);
-		final List<Leaf> list = new ArrayList<Leaf>();
+		final List<Leaf> list = new ArrayList<>();
 
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
@@ -55,7 +55,7 @@ public class Tree {
 		return list;
 	}
 
-	private static List<Leaf> sTypeDirect = new ArrayList<Leaf>();
+	private static List<Leaf> sTypeDirect = new ArrayList<>();
 	private static Boolean sIsTypeDirectRefreshing = false;
 	private static boolean sIsTypeDirectNeedRefresh = false;
 
@@ -82,7 +82,7 @@ public class Tree {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				sTypeDirect = new ArrayList<Leaf>();
+				sTypeDirect = new ArrayList<>();
 				new Direct(Setting.DEFAULT_PATH).loadChildren(sTypeDirect,
 					!Setting.getShowHidden(), true);
 
@@ -100,7 +100,7 @@ public class Tree {
 
 	@SuppressWarnings("deprecation")
 	public static List<Leaf> loadType(List<Leaf> direct, Class<?> cls) {
-		List<Leaf> ret = new ArrayList<Leaf>();
+		List<Leaf> ret = new ArrayList<>();
 		
 		if (Apk.class.equals(cls)) {
 			List<PackageInfo> pis = AppUtil.getContext().getPackageManager().getInstalledPackages(0);
@@ -132,7 +132,7 @@ public class Tree {
 	}
 
 	public static List<Leaf> loadBig(List<Leaf> direct, int limit) {
-		List<Leaf> ret = new ArrayList<Leaf>();
+		List<Leaf> ret = new ArrayList<>();
 		int size = direct.size();
 
 		for (int i = 0; i < size; i++) {
@@ -169,7 +169,7 @@ public class Tree {
 	}
 
 	public static List<Leaf> loadRecent(List<Leaf> direct, int limit) {
-		List<Leaf> ret = new ArrayList<Leaf>();
+		List<Leaf> ret = new ArrayList<>();
 		int size = direct.size();
 
 		for (int i = 0; i < size; i++) {
@@ -206,7 +206,7 @@ public class Tree {
 	}
 
 	public static List<Leaf> search(List<Leaf> list, String key) {
-		List<Leaf> ret = new ArrayList<Leaf>();
+		List<Leaf> ret = new ArrayList<>();
 		int size = list.size();
 		key = key.toLowerCase(Setting.LOCALE);
 
@@ -722,7 +722,7 @@ public class Tree {
 			@Override
 			public void run() {
 				try {
-					List<FilePair> fps = new ArrayList<FilePair>();
+					List<FilePair> fps = new ArrayList<>();
 					for (String path : list) {
 						if (stop.get()) {
 							return;
@@ -763,7 +763,7 @@ public class Tree {
 	public static void monitorZip(final boolean cmps, final ProgressMonitor pm,
 		final AtomicBoolean cancel, final IProgressCallback cb) {
 		
-		final List<Runnable> mark = new ArrayList<Runnable>();
+		final List<Runnable> mark = new ArrayList<>();
 
 		Runnable mk = AppUtil.runOnUiThread(new Runnable() {
 			public void run() {

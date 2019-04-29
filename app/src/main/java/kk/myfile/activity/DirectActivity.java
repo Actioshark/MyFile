@@ -72,7 +72,7 @@ public class DirectActivity extends BaseActivity {
 	private String mCurChild;
 
 	private Node mNode;
-	private final List<Node> mHistory = new ArrayList<Node>();
+	private final List<Node> mHistory = new ArrayList<>();
 
 	private Mode mMode = Mode.Normal;
 
@@ -609,7 +609,7 @@ public class DirectActivity extends BaseActivity {
 
 	public void showMenu() {
 		DownList dl = new DownList(this);
-		List<DataItem> list = new ArrayList<DataItem>();
+		List<DataItem> list = new ArrayList<>();
 		dl.getAdapter().setDataList(list);
 
 		if (mMode == Mode.Select) {

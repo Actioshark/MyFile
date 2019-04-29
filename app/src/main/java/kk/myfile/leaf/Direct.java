@@ -13,7 +13,7 @@ import kk.myfile.file.Tree;
 import kk.myfile.util.Logger;
 
 public class Direct extends Leaf {
-	protected final List<Leaf> mChildren = new ArrayList<Leaf>();
+	protected final List<Leaf> mChildren = new ArrayList<>();
 
 	public Direct(String path) {
 		super(path);
@@ -56,7 +56,7 @@ public class Direct extends Leaf {
 	}
 
 	public void loadChildren(List<Leaf> list, boolean visible, boolean canon) {
-		Queue<Direct> queue = new LinkedList<Direct>();
+		Queue<Direct> queue = new LinkedList<>();
 		queue.add(this);
 
 		loop: for (Direct dir = queue.poll(); dir != null; dir = queue.poll()) {
@@ -67,7 +67,7 @@ public class Direct extends Leaf {
 					continue;
 				}
 
-				List<Leaf> children = new ArrayList<Leaf>();
+				List<Leaf> children = new ArrayList<>();
 
 				for (File file : parent.listFiles()) {
 					if (visible && Tree.HIDDEN_FILE.equals(file.getName())) {

@@ -45,7 +45,7 @@ public class Setting {
 
 	public static List<DefPath> getDefPath() {
 		String value = sPrefer.getString(KEY_DEF_PATH, null);
-		List<DefPath> result = new ArrayList<DefPath>();
+		List<DefPath> result = new ArrayList<>();
 
 		try {
 			JSONArray ja = new JSONArray(value);

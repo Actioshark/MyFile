@@ -194,7 +194,7 @@ public class SettingSortActivity extends BaseActivity {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				List<SortFactor> list = new ArrayList<SortFactor>();
+				List<SortFactor> list = new ArrayList<>();
 				for (View grid : mViewGrids) {
 					ViewHolder vh = (ViewHolder) grid.getTag();
 

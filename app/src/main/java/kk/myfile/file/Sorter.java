@@ -181,7 +181,7 @@ public class Sorter {
 		}
 	}
 
-	private static final Map<Classify, List<SortFactor>> sFactors = new HashMap<Classify, List<SortFactor>>();
+	private static final Map<Classify, List<SortFactor>> sFactors = new HashMap<>();
 
 	private static SortFactor createFactor(String type) {
 		SortFactor factor = null;
@@ -197,7 +197,7 @@ public class Sorter {
 	}
 
 	private static List<SortFactor> cloneFactors(List<SortFactor> factors) {
-		List<SortFactor> list = new ArrayList<SortFactor>(factors.size());
+		List<SortFactor> list = new ArrayList<>(factors.size());
 
 		for (SortFactor factor : factors) {
 			SortFactor temp = factor.clone();
@@ -235,7 +235,7 @@ public class Sorter {
 		List<SortFactor> list = sFactors.get(classify);
 
 		if (list == null) {
-			list = new ArrayList<SortFactor>();
+			list = new ArrayList<>();
 
 			SortFactor[] array;
 			if (classify == Classify.Type) {

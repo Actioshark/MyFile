@@ -29,7 +29,7 @@ public class SettingListStyleActivity extends BaseActivity {
 		}
 	}
 
-	private static final Map<String, ListStyle> sListMap = new LinkedHashMap<String, ListStyle>();
+	private static final Map<String, ListStyle> sListMap = new LinkedHashMap<>();
 
 	static {
 		sListMap.put(getKey(1, 1), new ListStyle(R.layout.grid_direct_1_1, 7, 0, true));
@@ -76,7 +76,7 @@ public class SettingListStyleActivity extends BaseActivity {
 		public String key;
 	}
 
-	private final List<ViewHolder> mList = new ArrayList<ViewHolder>();
+	private final List<ViewHolder> mList = new ArrayList<>();
 
 	private Classify mClassify;
 

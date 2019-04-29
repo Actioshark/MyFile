@@ -32,7 +32,7 @@ import android.widget.AbsListView.OnScrollListener;
 
 public class SelectActivity extends BaseActivity {
 	private Node mNode;
-	private final List<Node> mHistory = new ArrayList<Node>();
+	private final List<Node> mHistory = new ArrayList<>();
 
 	private HorizontalScrollView mHsvPath;
 	private ViewGroup mVgPath;

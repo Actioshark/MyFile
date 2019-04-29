@@ -382,7 +382,7 @@ public class TypeActivity extends BaseActivity {
 
 	public void showMenu() {
 		DownList dl = new DownList(this);
-		List<DataItem> list = new ArrayList<DataItem>();
+		List<DataItem> list = new ArrayList<>();
 		dl.getAdapter().setDataList(list);
 
 		if (mMode == Mode.Select) {

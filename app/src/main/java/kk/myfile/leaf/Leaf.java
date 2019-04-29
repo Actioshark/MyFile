@@ -93,7 +93,7 @@ public abstract class Leaf {
 	}
 
 	public List<Data> getDetail() {
-		List<Data> list = new ArrayList<Data>();
+		List<Data> list = new ArrayList<>();
 
 		int idx = mPath.lastIndexOf('/');
 		final String parent = mPath.substring(0, idx);

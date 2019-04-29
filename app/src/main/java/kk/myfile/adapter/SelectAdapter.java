@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 public class SelectAdapter extends BaseAdapter {
 	private final SelectActivity mActivity;
-	private final List<Direct> mDataList = new ArrayList<Direct>();
+	private final List<Direct> mDataList = new ArrayList<>();
 	private Direct mSelected;
 
 	public SelectAdapter(SelectActivity activity) {

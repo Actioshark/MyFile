@@ -20,7 +20,7 @@ public class MyCache<K, V> {
 	private int mMaxSize = 1024 * 1024 * 16;
 	
 	public MyCache() {
-		mHeader = new Entry<K, V>();
+		mHeader = new Entry<>();
 		mHeader.prev = mHeader.next = mHeader;
 	}
 	
@@ -85,7 +85,7 @@ public class MyCache<K, V> {
 			}
 		}
 		
-		Entry<K, V> node = new Entry<K, V>();
+		Entry<K, V> node = new Entry<>();
 		node.key = key;
 		node.value = value;
 		node.size = size;
@@ -130,7 +130,7 @@ public class MyCache<K, V> {
 	}
 	
 	public Set<Entry<K, V>> entrys() {
-		Set<Entry<K, V>> set = new HashSet<Entry<K, V>>();
+		Set<Entry<K, V>> set = new HashSet<>();
 		
 		for (Entry<K, V> node = mHeader.next; node != mHeader; node = node.next) {
 			set.add(node);
@@ -140,7 +140,7 @@ public class MyCache<K, V> {
 	}
 	
 	public Set<K> keys() {
-		Set<K> set = new HashSet<K>();
+		Set<K> set = new HashSet<>();
 		
 		for (Entry<K, V> node = mHeader.next; node != mHeader; node = node.next) {
 			set.add(node.key);
@@ -150,7 +150,7 @@ public class MyCache<K, V> {
 	}
 	
 	public Set<V> values() {
-		Set<V> set = new HashSet<V>();
+		Set<V> set = new HashSet<>();
 		
 		for (Entry<K, V> node = mHeader.next; node != mHeader; node = node.next) {
 			set.add(node.value);

@@ -45,13 +45,13 @@ public class MainActivity extends BaseActivity {
 
 	private List<DefPath> mPaths;
 
-	private final List<TextView> mTvDirects = new ArrayList<TextView>();
+	private final List<TextView> mTvDirects = new ArrayList<>();
 	private View mLlAdd;
 
 	private final Class<?>[] mTypes = new Class<?>[] {
 		Text.class, Image.class, Audio.class, Video.class, Office.class, Archive.class, Apk.class,
 	};
-	private final List<TextView> mTvTypes = new ArrayList<TextView>();
+	private final List<TextView> mTvTypes = new ArrayList<>();
 	private Object mTypeMark;
 
 	private CakeView mCvStat;
@@ -342,7 +342,7 @@ public class MainActivity extends BaseActivity {
 						}
 					}
 
-					final List<CakeView.Arc> arcs = new ArrayList<CakeView.Arc>();
+					final List<CakeView.Arc> arcs = new ArrayList<>();
 					float total = 0l;
 					float avail = 0l;
 					try {

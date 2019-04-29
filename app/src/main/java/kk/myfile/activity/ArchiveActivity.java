@@ -41,7 +41,7 @@ public class ArchiveActivity extends BaseActivity {
 	private ArchiveHelper mArchiveHelper;
 
 	private Node mNode;
-	private final List<Node> mHistory = new ArrayList<Node>();
+	private final List<Node> mHistory = new ArrayList<>();
 
 	private HorizontalScrollView mHsvPath;
 	private ViewGroup mVgPath;

@@ -33,7 +33,7 @@ public class DetailAdapter extends PagerAdapter {
 
 	private final Context mContext;
 	private List<String> mDataList;
-	private final List<View> mViewList = new ArrayList<View>();
+	private final List<View> mViewList = new ArrayList<>();
 
 	public DetailAdapter(Context context) {
 		mContext = context;

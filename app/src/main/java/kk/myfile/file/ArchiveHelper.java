@@ -59,7 +59,7 @@ public class ArchiveHelper {
 		}
 	}
 	
-	private final Map<String, FileHeader> mMap = new HashMap<String, FileHeader>();
+	private final Map<String, FileHeader> mMap = new HashMap<>();
 	
 	public ArchiveHelper() {
 	}

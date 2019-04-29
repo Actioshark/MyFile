@@ -57,7 +57,7 @@ public class DataUtil {
 	}
 
 	public static ArrayList<CharSequence> leaf2PathCs(List<Leaf> leafs) {
-		ArrayList<CharSequence> paths = new ArrayList<CharSequence>();
+		ArrayList<CharSequence> paths = new ArrayList<>();
 
 		for (Leaf leaf : leafs) {
 			paths.add(leaf.getPath());
@@ -67,7 +67,7 @@ public class DataUtil {
 	}
 
 	public static List<String> leaf2PathString(List<Leaf> leafs) {
-		List<String> paths = new ArrayList<String>();
+		List<String> paths = new ArrayList<>();
 
 		for (Leaf leaf : leafs) {
 			paths.add(leaf.getPath());

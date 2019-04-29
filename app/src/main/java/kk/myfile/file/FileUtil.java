@@ -233,7 +233,7 @@ public class FileUtil {
 
 	public static String delete(File file, boolean childOnly) {
 		try {
-			List<File> list = new ArrayList<File>();
+			List<File> list = new ArrayList<>();
 			list.add(file);
 
 			for (int i = 0; i < list.size(); i++) {

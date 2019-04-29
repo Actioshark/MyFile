@@ -44,8 +44,8 @@ public class TypeAdapter extends BaseAdapter {
 	private final TypeActivity mActivity;
 	private final Classify mClassify;
 
-	private final List<Leaf> mDataList = new ArrayList<Leaf>();
-	private final Set<Integer> mSelected = new HashSet<Integer>();
+	private final List<Leaf> mDataList = new ArrayList<>();
+	private final Set<Integer> mSelected = new HashSet<>();
 
 	public TypeAdapter(TypeActivity activity, Classify classify) {
 		mActivity = activity;
@@ -101,7 +101,7 @@ public class TypeAdapter extends BaseAdapter {
 	}
 
 	public List<Leaf> getSelected() {
-		List<Leaf> list = new ArrayList<Leaf>();
+		List<Leaf> list = new ArrayList<>();
 		int size = mDataList.size();
 
 		for (int i = 0; i < size; i++) {

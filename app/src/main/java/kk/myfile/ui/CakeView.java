@@ -21,7 +21,7 @@ public class CakeView extends View {
 
 	private final Paint mPaint = new Paint();
 	private final RectF mRect = new RectF();
-	private final List<Arc> mArcs = new ArrayList<Arc>();
+	private final List<Arc> mArcs = new ArrayList<>();
 
 	public CakeView(Context context) {
 		super(context);
