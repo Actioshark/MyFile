@@ -2,13 +2,13 @@ package kk.myfile.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import kk.myfile.R;
 
-public class GridImageView extends ImageView {
-	public static enum SizeType {
+public class GridImageView extends AppCompatImageView {
+	public enum SizeType {
 		Default, FitWidth, FitHeight,
 	}
 
