@@ -29,15 +29,15 @@ public class CakeView extends View {
 
 	public CakeView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init(attrs);
+		init();
 	}
 
 	public CakeView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init(attrs);
+		init();
 	}
 
-	private void init(AttributeSet attrs) {
+	private void init() {
 		mPaint.setAntiAlias(true);
 	}
 
