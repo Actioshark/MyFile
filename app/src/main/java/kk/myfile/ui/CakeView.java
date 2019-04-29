@@ -52,10 +52,10 @@ public class CakeView extends View {
 		int height = getHeight();
 		int len = Math.min(width, height);
 
-		mRect.left = (width - len + STROKE_WIDTH) / 2;
-		mRect.right = (width + len - STROKE_WIDTH) / 2;
-		mRect.top = (height - len + STROKE_WIDTH) / 2;
-		mRect.bottom = (height + len - STROKE_WIDTH) / 2;
+		mRect.left = (width - len + STROKE_WIDTH) / 2f;
+		mRect.right = (width + len - STROKE_WIDTH) / 2f;
+		mRect.top = (height - len + STROKE_WIDTH) / 2f;
+		mRect.bottom = (height + len - STROKE_WIDTH) / 2f;
 
 		mPaint.setColor(0xff000000);
 		mPaint.setStyle(Style.STROKE);
@@ -63,10 +63,10 @@ public class CakeView extends View {
 
 		canvas.drawArc(mRect, -90, 360, false, mPaint);
 
-		mRect.left = (width - len) / 2 + STROKE_WIDTH;
-		mRect.right = (width + len) / 2 - STROKE_WIDTH;
-		mRect.top = (height - len) / 2 + STROKE_WIDTH;
-		mRect.bottom = (height + len) / 2 - STROKE_WIDTH;
+		mRect.left = (width - len) / 2f + STROKE_WIDTH;
+		mRect.right = (width + len) / 2f - STROKE_WIDTH;
+		mRect.top = (height - len) / 2f + STROKE_WIDTH;
+		mRect.bottom = (height + len) / 2f - STROKE_WIDTH;
 
 		mPaint.setStyle(Style.FILL);
 
