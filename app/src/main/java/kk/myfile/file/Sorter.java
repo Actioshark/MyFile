@@ -102,13 +102,7 @@ public class Sorter {
 			long at = a.getFile().lastModified();
 			long bt = b.getFile().lastModified();
 
-			if (at < bt) {
-				return -1;
-			} else if (at > bt) {
-				return 1;
-			} else {
-				return 0;
-			}
+			return Long.compare(at, bt);
 		}
 	}
 
@@ -150,13 +144,7 @@ public class Sorter {
 			long al = a.getFile().length();
 			long bl = b.getFile().length();
 
-			if (al < bl) {
-				return -1;
-			} else if (al > bl) {
-				return 1;
-			} else {
-				return 0;
-			}
+			return Long.compare(al, bl);
 		}
 	}
 
@@ -277,9 +265,9 @@ public class Sorter {
 				Logger.print(e);
 			}
 
-			for (int j = 0; j < array.length; j++) {
-				if (array[j] != null) {
-					list.add(array[j]);
+			for (SortFactor sf : array) {
+				if (sf != null) {
+					list.add(sf);
 				}
 			}
 
