@@ -61,7 +61,7 @@ public class ArchiveAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return mDataList == null ? 0 : mDataList.size();
+		return mDataList.size();
 	}
 
 	@Override

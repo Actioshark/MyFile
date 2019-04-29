@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.WindowManager;
 
 public class AppUtil {
@@ -28,9 +29,12 @@ public class AppUtil {
 
 		sHandler = new Handler(context.getMainLooper());
 
-		WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics metrics = new DisplayMetrics();
-		manager.getDefaultDisplay().getMetrics(metrics);
+		WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		if (manager != null) {
+			Display display = manager.getDefaultDisplay();
+			display.getMetrics(metrics);
+		}
 
 		sDensity = metrics.density;
 

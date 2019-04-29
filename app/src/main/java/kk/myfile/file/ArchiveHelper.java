@@ -66,19 +66,17 @@ public class ArchiveHelper {
 	
 	public boolean setFile(String path) {
 		mArchive = null;
-		
-		if (mArchive == null) {
-			try {
-				ZipFile archive = new ZipFile(path);
-				
-				if (archive.isValidZipFile()) {
-					archive.setRunInThread(false);
-					mArchive = archive;
-					return true;
-				}
-			} catch (Exception e) {
-				Logger.print(e);
+
+		try {
+			ZipFile archive = new ZipFile(path);
+
+			if (archive.isValidZipFile()) {
+				archive.setRunInThread(false);
+				mArchive = archive;
+				return true;
 			}
+		} catch (Exception e) {
+			Logger.print(e);
 		}
 		
 		if (mArchive == null) {
@@ -134,6 +132,8 @@ public class ArchiveHelper {
 				headers = ((ZipFile) mArchive).getFileHeaders();
 			} else if (mArchive instanceof Archive) {
 				headers = ((Archive) mArchive).getFileHeaders();
+			} else {
+				return false;
 			}
 			
 			mMap.clear();
@@ -153,6 +153,8 @@ public class ArchiveHelper {
 					path = fh.getFileNameString();
 					isDirect = fh.isDirectory();
 					header = fh;
+				} else {
+					return false;
 				}
 				
 				path = path.replace('\\', '/');

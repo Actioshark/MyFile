@@ -29,6 +29,10 @@ public class InputDialog extends Dialog {
 		setContentView(R.layout.dialog_input);
 
 		Window window = getWindow();
+		if (window == null) {
+			return;
+		}
+
 		LayoutParams lp = window.getAttributes();
 		lp.width = Math.min(AppUtil.getDimenInt(R.dimen.dialog_width),
 			AppUtil.getScreenWidth() * 9 / 10);

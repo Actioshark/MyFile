@@ -49,11 +49,7 @@ public class MyCache<K, V> {
 	
 	private boolean keyEquals(K a, K b) {
 		if (a == null) {
-			if (b == null) {
-				return true;
-			} else {
-				return b.equals(a);
-			}
+			return b == null;
 		} else {
 			return a.equals(b);
 		}

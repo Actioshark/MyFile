@@ -63,14 +63,14 @@ public abstract class Leaf {
 		}
 
 		String v = String.valueOf(value);
-		if (v == null || v.length() < 1) {
+		if (v.length() < 1) {
 			return data;
 		}
 
 		if (args != null && args.length > 0) {
 			v = String.format(v, args);
 
-			if (v == null || v.length() < 1) {
+			if (v.length() < 1) {
 				return data;
 			}
 		}

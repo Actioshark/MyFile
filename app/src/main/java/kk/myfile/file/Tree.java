@@ -239,6 +239,11 @@ public class Tree {
 				}
 			}
 		}
+
+		if (name == null) {
+			return;
+		}
+
 		id.setInput(name);
 		id.setSelection(name.length());
 

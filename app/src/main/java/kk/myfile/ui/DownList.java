@@ -40,6 +40,10 @@ public class DownList extends Dialog {
 
 	public void show(int horPos, int verPos, int horPadding, int verPadding) {
 		Window window = getWindow();
+		if (window == null) {
+			return;
+		}
+
 		LayoutParams lp = window.getAttributes();
 
 		int screenWidth = AppUtil.getScreenWidth() - horPadding - AppUtil.getPixcel(5);
