@@ -31,7 +31,7 @@ public class Video extends Leaf implements IThumable {
 	}
 
 	@Override
-	public Drawable getThum(int width, int height) throws Exception {
+	public Drawable getThum(int width, int height) {
 		MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 		mmr.setDataSource(mPath);
 		Bitmap bmp = mmr.getFrameAtTime();

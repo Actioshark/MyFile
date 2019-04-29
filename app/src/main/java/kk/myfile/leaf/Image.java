@@ -76,7 +76,7 @@ public class Image extends Leaf implements IThumable {
 		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
 
-	public Options getOptions() throws Exception {
+	public Options getOptions() {
 		Options size = new Options();
 		size.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(mPath, size);
