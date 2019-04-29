@@ -40,7 +40,6 @@ public class Audio extends Leaf implements IThumable {
 		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
 
-	@SuppressLint("InlinedApi")
 	public List<Data> getDetail() {
 		List<Data> list = super.getDetail();
 
@@ -69,11 +68,9 @@ public class Audio extends Leaf implements IThumable {
 			putDetail(list, 2, R.string.word_minetype, mmr
 				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE));
 
-			if (Build.VERSION.SDK_INT >= 14) {
-				String bitrate = MathUtil.insertComma(mmr
-					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
-				putDetail(list, 2, R.string.word_bitrate, "%s b/s", bitrate);
-			}
+			String bitrate = MathUtil.insertComma(mmr
+				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
+			putDetail(list, 2, R.string.word_bitrate, "%s b/s", bitrate);
 
 			int dur = Integer.valueOf(mmr
 				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
