@@ -56,9 +56,7 @@ public class UriUtil {
         } else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
             try {
                 String filePath = uri.getPath();
-                File file = new File(filePath);
-
-                return file;
+                return new File(filePath);
             } catch (Exception e) {
                 Logger.print(e);
             }

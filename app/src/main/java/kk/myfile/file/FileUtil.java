@@ -103,8 +103,7 @@ public class FileUtil {
 						Class<?> clazz = Class.forName(String.format("kk.myfile.leaf.%s", cls));
 						Constructor<?> ct = clazz.getConstructor(String.class);
 	
-						Leaf leaf = (Leaf) ct.newInstance(path);
-						return leaf;
+						return (Leaf) ct.newInstance(path);
 					}
 				}
 			}
@@ -112,8 +111,7 @@ public class FileUtil {
 			Logger.print(e);
 		}
 		
-		Leaf leaf = new Unknown(path);
-		return leaf;
+		return new Unknown(path);
 	}
 
 	@SuppressWarnings("deprecation")
