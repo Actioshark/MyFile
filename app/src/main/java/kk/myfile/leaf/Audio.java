@@ -2,13 +2,11 @@ package kk.myfile.leaf;
 
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 
 import kk.myfile.R;
 import kk.myfile.adapter.DetailItemAdapter.Data;
