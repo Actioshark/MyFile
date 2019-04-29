@@ -281,7 +281,7 @@ public class ArchiveActivity extends BaseActivity {
 		for (int i = 0; i < nodes.length; i++) {
 			final int index = i;
 			View grid = getLayoutInflater().inflate(R.layout.grid_path, null);
-			TextView text = (TextView) grid.findViewById(R.id.tv_text);
+			TextView text = grid.findViewById(R.id.tv_text);
 			text.setText(String.format("%s %c", i == 0 ? "/" : nodes[i],
 					i == nodes.length - 1 ? ' ' : '>'));
 
