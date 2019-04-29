@@ -12,8 +12,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.ClipData.Item;
 
-import org.json.JSONArray;
-
 public class ClipBoard {
 	public enum ClipType {
 		Copy, Cut,
