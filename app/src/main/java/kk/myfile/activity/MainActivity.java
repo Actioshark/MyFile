@@ -343,8 +343,8 @@ public class MainActivity extends BaseActivity {
 					}
 
 					final List<CakeView.Arc> arcs = new ArrayList<>();
-					float total = 0l;
-					float avail = 0l;
+					float total = 0f;
+					float avail = 0f;
 					try {
 						total = FileUtil.getTotalSize();
 						avail = FileUtil.getAvailSize();
