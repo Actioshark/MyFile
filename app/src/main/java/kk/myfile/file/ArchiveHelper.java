@@ -174,7 +174,7 @@ public class ArchiveHelper {
 						fh = new FileHeader();
 						mMap.put(path, fh);
 						
-						fh.mLeaf =  new Direct(path);;
+						fh.mLeaf =  new Direct(path);
 					} else {
 						fh.mHeader = header;
 						continue;
