@@ -44,7 +44,7 @@ public class Direct extends Leaf {
 						return;
 					}
 
-					if (visible == false || file.isHidden() == false) {
+					if (!visible || !file.isHidden()) {
 						mChildren.add(FileUtil.createLeaf(file));
 					}
 				}
@@ -72,7 +72,7 @@ public class Direct extends Leaf {
 						continue loop;
 					}
 
-					if (visible == false || file.isHidden() == false) {
+					if (!visible || !file.isHidden()) {
 						children.add(FileUtil.createLeaf(file));
 					}
 				}

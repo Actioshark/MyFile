@@ -95,7 +95,7 @@ public class SelectActivity extends BaseActivity {
 						if (index == 1) {
 							String path = id.getInput();
 							
-							if (path.startsWith("/") == false) {
+							if (!path.startsWith("/")) {
 								String dir = mNode.direct.getPath();
 								if (dir.endsWith("/")) {
 									path = dir + path;
@@ -161,7 +161,7 @@ public class SelectActivity extends BaseActivity {
 		// 合法性
 		try {
 			File file = node.direct.getFile();
-			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
+			if (!file.exists() || !file.isDirectory() || file.list() == null) {
 				throw new Exception();
 			}
 		} catch (Exception e) {
@@ -183,7 +183,7 @@ public class SelectActivity extends BaseActivity {
 			int size = mHistory.size();
 			if (size > 0) {
 				Node n = mHistory.get(size - 1);
-				if (mNode.direct.getPath().equals(n.direct.getPath()) == false) {
+				if (!mNode.direct.getPath().equals(n.direct.getPath())) {
 					mHistory.add(mNode);
 				}
 			} else {
@@ -251,7 +251,7 @@ public class SelectActivity extends BaseActivity {
 		// 合法性
 		try {
 			File file = mNode.direct.getFile();
-			if (file.exists() == false || file.isDirectory() == false || file.list() == null) {
+			if (!file.exists() || !file.isDirectory() || file.list() == null) {
 				throw new Exception();
 			}
 		} catch (Exception e) {

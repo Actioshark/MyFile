@@ -102,7 +102,7 @@ public class ArchiveActivity extends BaseActivity {
 		menu.findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (backDirect() == false) {
+				if (!backDirect()) {
 					finish();
 				}
 			}
@@ -130,7 +130,7 @@ public class ArchiveActivity extends BaseActivity {
 				try {
 					mArchiveHelper = new ArchiveHelper();
 					boolean valid = mArchiveHelper.setFile(mUri.getPath());
-					if (valid == false) {
+					if (!valid) {
 						AppUtil.runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
@@ -254,7 +254,7 @@ public class ArchiveActivity extends BaseActivity {
 			int size = mHistory.size();
 			if (size > 0) {
 				Node n = mHistory.get(size - 1);
-				if (mNode.direct.getPath().equals(n.direct.getPath()) == false) {
+				if (!mNode.direct.getPath().equals(n.direct.getPath())) {
 					mHistory.add(mNode);
 				}
 			} else {

@@ -47,7 +47,7 @@ public class ImageUtil {
 	public static void getThum(final Leaf leaf, final int width, final int height,
 		final IThumListener listener) {
 		
-		if (leaf instanceof IThumable == false) {
+		if (!(leaf instanceof IThumable)) {
 			return;
 		}
 

@@ -277,7 +277,7 @@ public class DirectAdapter extends BaseAdapter {
 
 		vh.name.setText(file.getName());
 
-		if (leaf.equals(vh.leaf) == false || vh.hasThum == false) {
+		if (!leaf.equals(vh.leaf) || !vh.hasThum) {
 			vh.hasThum = false;
 			vh.icon.setImageResource(leaf.getIcon());
 

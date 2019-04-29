@@ -291,8 +291,8 @@ public class TypeActivity extends BaseActivity {
 		AppUtil.runOnNewThread(new Runnable() {
 			@Override
 			public void run() {
-				while (isFinishing() == false) {
-					boolean finished = Tree.isTypeDirectRefreshing() == false;
+				while (!isFinishing()) {
+					boolean finished = !Tree.isTypeDirectRefreshing();
 
 					List<Leaf> list;
 					if (mClassify == Classify.Big) {
@@ -402,7 +402,7 @@ public class TypeActivity extends BaseActivity {
 				}
 			}
 
-			if (hasDirect == false) {
+			if (!hasDirect) {
 				list.add(new DataItem(R.drawable.share, R.string.word_share_or_as,
 					new IDialogClickListener() {
 						@Override
@@ -463,7 +463,7 @@ public class TypeActivity extends BaseActivity {
 					}));
 			}
 
-			if (hasDirect == false && selected.size() == 1) {
+			if (!hasDirect && selected.size() == 1) {
 				list.add(new DataItem(R.drawable.edit, R.string.word_edit_or_as,
 					new IDialogClickListener() {
 						@Override
@@ -523,7 +523,7 @@ public class TypeActivity extends BaseActivity {
 											File from = leaf.getFile();
 
 											boolean suc = FileUtil.write(from, to, 0xff);
-											if (suc == false) {
+											if (!suc) {
 												App.showToast(R.string.err_file_read_error);
 												continue;
 											}

@@ -154,7 +154,7 @@ public abstract class Leaf {
 			Logger.print(null, e);
 		}
 
-		if (this instanceof Direct == false) {
+		if (!(this instanceof Direct)) {
 			putDetail(list, 3, R.string.word_md5, AppUtil.getString(R.string.msg_click_to_calc)).clickListener = new IClickListener() {
 				@Override
 				public void onClick(final Data data, final ViewHolder vh) {
@@ -190,7 +190,7 @@ public abstract class Leaf {
 	}
 	
 	public void open(final Context context, boolean forceSelect) {
-		if (forceSelect == false && IntentUtil.view(context, this, null)) {
+		if (!forceSelect && IntentUtil.view(context, this, null)) {
 			return;
 		}
 			
@@ -204,7 +204,7 @@ public abstract class Leaf {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Leaf == false) {
+		if (!(obj instanceof Leaf)) {
 			return false;
 		}
 

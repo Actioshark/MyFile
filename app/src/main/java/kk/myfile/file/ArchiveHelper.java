@@ -188,7 +188,7 @@ public class ArchiveHelper {
 				
 				fh.mHeader = header;
 				
-				for(Leaf leaf = fh.getLeaf(); "/".equals(path) == false;) {
+				for(Leaf leaf = fh.getLeaf(); !"/".equals(path);) {
 					int ni = -1;
 					for (int i = path.length() - 2; i > 0; i--) {
 						if (path.charAt(i) == '/') {

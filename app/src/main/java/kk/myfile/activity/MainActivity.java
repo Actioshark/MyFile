@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity {
 					DefPath dp = mPaths.get(index);
 					try {
 						File file = new File(dp.path);
-						if (file.exists() == false || file.isDirectory() == false) {
+						if (!file.exists() || !file.isDirectory()) {
 							throw new Exception();
 						}
 					} catch (Exception e) {
@@ -314,13 +314,13 @@ public class MainActivity extends BaseActivity {
 					mTypeMark = mark;
 				}
 
-				while (isFinishing() == false) {
+				while (!isFinishing()) {
 					synchronized (mTypeMark) {
 						if (mTypeMark != mark) {
 							return;
 						}
 					}
-					boolean finished = Tree.isTypeDirectRefreshing() == false;
+					boolean finished = !Tree.isTypeDirectRefreshing();
 
 					final long[] counts = new long[mTypes.length];
 					final long[] sizes = new long[mTypes.length];
@@ -409,7 +409,7 @@ public class MainActivity extends BaseActivity {
 			File file;
 			try {
 				file = new File(path);
-				if (file.exists() == false || file.isDirectory() == false) {
+				if (!file.exists() || !file.isDirectory()) {
 					throw new Exception();
 				}
 			} catch (Exception e) {

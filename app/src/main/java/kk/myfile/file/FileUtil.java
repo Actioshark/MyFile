@@ -150,7 +150,7 @@ public class FileUtil {
 				canon = new File(par.getCanonicalFile(), file.getName());
 			}
 
-			return canon.getCanonicalFile().equals(canon.getAbsoluteFile()) == false;
+			return !canon.getCanonicalFile().equals(canon.getAbsoluteFile());
 		} catch (Exception e) {
 			return false;
 		}
@@ -201,8 +201,8 @@ public class FileUtil {
 	public static String createFile(File file) {
 		try {
 			File parent = file.getParentFile();
-			if (parent.exists() == false) {
-				if (parent.mkdirs() == false) {
+			if (!parent.exists()) {
+				if (!parent.mkdirs()) {
 					return AppUtil.getString(R.string.err_path_not_valid);
 				}
 			}

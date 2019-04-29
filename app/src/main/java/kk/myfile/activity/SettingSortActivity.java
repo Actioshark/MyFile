@@ -182,7 +182,7 @@ public class SettingSortActivity extends BaseActivity {
 			View grid = mViewGrids[i];
 			ViewHolder vh = (ViewHolder) grid.getTag();
 
-			if (vh.sf.equals(mFactor.get(i)) == false) {
+			if (!vh.sf.equals(mFactor.get(i))) {
 				return true;
 			}
 		}

@@ -102,7 +102,7 @@ public class DirectActivity extends BaseActivity {
 			final boolean rec = KEY.length() > 0 ? KEY.charAt(0) == '/' : false;
 			final String key = rec ? KEY.substring(1) : KEY;
 
-			if (key.length() > 0 && (key.equals("/") == false)) {
+			if (key.length() > 0 && !key.equals("/")) {
 				mIvDelete.setVisibility(View.VISIBLE);
 
 				synchronized (mEtSearch) {
@@ -223,7 +223,7 @@ public class DirectActivity extends BaseActivity {
 						if (index == 1) {
 							String path = id.getInput();
 							
-							if (path.startsWith("/") == false) {
+							if (!path.startsWith("/")) {
 								String dir = mNode.direct.getPath();
 								if (dir.endsWith("/")) {
 									path = dir + path;
@@ -375,7 +375,7 @@ public class DirectActivity extends BaseActivity {
 	public void changeDirect(Node node, boolean lastToHistory) {
 		updateStyle();
 
-		if (node.direct instanceof TempDirect == false && mNode != null
+		if (!(node.direct instanceof TempDirect) && mNode != null
 			&& node.direct.getPath().equals(mNode.direct.getPath())) {
 
 			mNode = node;
@@ -402,11 +402,11 @@ public class DirectActivity extends BaseActivity {
 		}
 
 		// 加入历史
-		if (lastToHistory && mNode != null && mNode.direct instanceof TempDirect == false) {
+		if (lastToHistory && mNode != null && !(mNode.direct instanceof TempDirect)) {
 			int size = mHistory.size();
 			if (size > 0) {
 				Node n = mHistory.get(size - 1);
-				if (mNode.direct.getPath().equals(n.direct.getPath()) == false) {
+				if (!mNode.direct.getPath().equals(n.direct.getPath())) {
 					mHistory.add(mNode);
 				}
 			} else {
@@ -486,7 +486,7 @@ public class DirectActivity extends BaseActivity {
 		mRlTitle.setVisibility(View.GONE);
 
 		// 关闭搜索
-		if (node.direct instanceof TempDirect == false) {
+		if (!(node.direct instanceof TempDirect)) {
 			synchronized (mEtSearch) {
 				mSearchRun = null;
 			}
@@ -629,7 +629,7 @@ public class DirectActivity extends BaseActivity {
 				}
 			}
 
-			if (hasDirect == false) {
+			if (!hasDirect) {
 				list.add(new DataItem(R.drawable.share, R.string.word_share_or_as,
 					new IDialogClickListener() {
 						@Override
@@ -690,7 +690,7 @@ public class DirectActivity extends BaseActivity {
 					}));
 			}
 
-			if (hasDirect == false && selected.size() == 1) {
+			if (!hasDirect && selected.size() == 1) {
 				list.add(new DataItem(R.drawable.edit, R.string.word_edit_or_as,
 					new IDialogClickListener() {
 						@Override
@@ -748,7 +748,7 @@ public class DirectActivity extends BaseActivity {
 											File from = leaf.getFile();
 
 											boolean suc = FileUtil.write(from, to, 0xff);
-											if (suc == false) {
+											if (!suc) {
 												App.showToast(R.string.err_file_read_error);
 												continue;
 											}

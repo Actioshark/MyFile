@@ -410,7 +410,7 @@ public class Tree {
 									failed.addAndGet(1);
 								}
 
-								if (sd.isShowing() == false) {
+								if (!sd.isShowing()) {
 									return;
 								}
 								
@@ -548,7 +548,7 @@ public class Tree {
 
 						for (int j = 1;; j++) {
 							fp.to = new File(String.format("%s_%d%s", prefix, j, subfix));
-							if (fp.to.exists() == false) {
+							if (!fp.to.exists()) {
 								break;
 							}
 						}
@@ -928,7 +928,7 @@ public class Tree {
 			public void run() {
 				final ArchiveHelper ah = new ArchiveHelper();
 				boolean success = ah.setFile(file);
-				if (success == false) {
+				if (!success) {
 					AppUtil.runOnUiThread(new Runnable() {
 						public void run() {
 							App.showToast(R.string.err_not_support);
