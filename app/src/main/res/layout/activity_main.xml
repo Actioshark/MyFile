@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg"
@@ -20,9 +19,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/main_bar_height"
                 android:background="@drawable/btn_bar"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="@dimen/main_padding"
-                android:paddingRight="@dimen/main_padding"
+                android:gravity="start|center_vertical"
+                android:paddingStart="@dimen/main_padding"
+                android:paddingEnd="@dimen/main_padding"
                 android:textColor="@color/main_text"
                 android:textSize="@dimen/main_direct_text" />
 
@@ -32,9 +31,9 @@
                 android:layout_height="@dimen/main_bar_height"
                 android:layout_marginTop="@dimen/main_gap"
                 android:background="@drawable/btn_bar"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="@dimen/main_padding"
-                android:paddingRight="@dimen/main_padding"
+                android:gravity="start|center_vertical"
+                android:paddingStart="@dimen/main_padding"
+                android:paddingEnd="@dimen/main_padding"
                 android:textColor="@color/main_text"
                 android:textSize="@dimen/main_direct_text" />
 
@@ -44,9 +43,9 @@
                 android:layout_height="@dimen/main_bar_height"
                 android:layout_marginTop="@dimen/main_gap"
                 android:background="@drawable/btn_bar"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="@dimen/main_padding"
-                android:paddingRight="@dimen/main_padding"
+                android:gravity="start|center_vertical"
+                android:paddingStart="@dimen/main_padding"
+                android:paddingEnd="@dimen/main_padding"
                 android:textColor="@color/main_text"
                 android:textSize="@dimen/main_direct_text" />
 
@@ -56,9 +55,9 @@
                 android:layout_height="@dimen/main_bar_height"
                 android:layout_marginTop="@dimen/main_gap"
                 android:background="@drawable/btn_bar"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="@dimen/main_padding"
-                android:paddingRight="@dimen/main_padding"
+                android:gravity="start|center_vertical"
+                android:paddingStart="@dimen/main_padding"
+                android:paddingEnd="@dimen/main_padding"
                 android:textColor="@color/main_text"
                 android:textSize="@dimen/main_direct_text" />
 
@@ -68,9 +67,9 @@
                 android:layout_height="@dimen/main_bar_height"
                 android:layout_marginTop="@dimen/main_gap"
                 android:background="@drawable/btn_bar"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="@dimen/main_padding"
-                android:paddingRight="@dimen/main_padding"
+                android:gravity="start|center_vertical"
+                android:paddingStart="@dimen/main_padding"
+                android:paddingEnd="@dimen/main_padding"
                 android:textColor="@color/main_text"
                 android:textSize="@dimen/main_direct_text" />
 
@@ -80,9 +79,9 @@
                 android:layout_height="@dimen/main_bar_height"
                 android:layout_marginTop="@dimen/main_gap"
                 android:background="@drawable/btn_bar"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="@dimen/main_padding"
-                android:paddingRight="@dimen/main_padding"
+                android:gravity="start|center_vertical"
+                android:paddingStart="@dimen/main_padding"
+                android:paddingEnd="@dimen/main_padding"
                 android:textColor="@color/main_text"
                 android:textSize="@dimen/main_direct_text" />
 
@@ -99,6 +98,7 @@
                     android:layout_width="@dimen/main_bar_height"
                     android:layout_height="@dimen/main_bar_height"
                     android:padding="@dimen/main_padding"
+                    android:contentDescription="@string/app_name"
                     android:scaleType="centerInside"
                     android:src="@drawable/add" />
 
@@ -130,6 +130,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/file_text" />
 
@@ -157,7 +158,7 @@
                     android:id="@+id/ll_image"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/main_gap"
+                    android:layout_marginStart="@dimen/main_gap"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bar"
                     android:gravity="center"
@@ -171,6 +172,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/file_image" />
 
@@ -198,7 +200,7 @@
                     android:id="@+id/ll_audio"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/main_gap"
+                    android:layout_marginStart="@dimen/main_gap"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bar"
                     android:gravity="center"
@@ -212,6 +214,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/file_audio" />
 
@@ -239,7 +242,7 @@
                     android:id="@+id/ll_video"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/main_gap"
+                    android:layout_marginStart="@dimen/main_gap"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bar"
                     android:gravity="center"
@@ -253,6 +256,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/file_video" />
 
@@ -304,6 +308,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/file_office" />
 
@@ -331,7 +336,7 @@
                     android:id="@+id/ll_archive"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/main_gap"
+                    android:layout_marginStart="@dimen/main_gap"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bar"
                     android:gravity="center"
@@ -345,6 +350,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/file_archive" />
 
@@ -372,7 +378,7 @@
                     android:id="@+id/ll_apk"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/main_gap"
+                    android:layout_marginStart="@dimen/main_gap"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bar"
                     android:gravity="center"
@@ -386,6 +392,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/file_apk" />
 
@@ -413,7 +420,7 @@
                     android:id="@+id/ll_stat"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/main_gap"
+                    android:layout_marginStart="@dimen/main_gap"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bar"
                     android:gravity="center"
@@ -477,6 +484,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/big_data" />
 
@@ -491,7 +499,7 @@
                     android:id="@+id/ll_recent"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/main_gap"
+                    android:layout_marginStart="@dimen/main_gap"
                     android:layout_weight="1"
                     android:background="@drawable/btn_bar"
                     android:gravity="center"
@@ -505,6 +513,7 @@
                     <ImageView
                         android:layout_width="@dimen/main_bar_height"
                         android:layout_height="@dimen/main_bar_height"
+                        android:contentDescription="@string/app_name"
                         android:scaleType="centerInside"
                         android:src="@drawable/clock" />
 
@@ -533,6 +542,7 @@
             android:layout_weight="1"
             android:background="@drawable/btn_bar"
             android:padding="@dimen/main_padding"
+            android:contentDescription="@string/app_name"
             android:scaleType="centerInside"
             android:src="@drawable/arrow_left" />
 
@@ -540,10 +550,11 @@
             android:id="@+id/iv_setting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/main_gap"
+            android:layout_marginStart="@dimen/main_gap"
             android:layout_weight="1"
             android:background="@drawable/btn_bar"
             android:padding="@dimen/main_padding"
+            android:contentDescription="@string/app_name"
             android:scaleType="centerInside"
             android:src="@drawable/setting" />
 

@@ -1,6 +1,5 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/main_bg"
@@ -28,14 +27,15 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/main_padding"
-					android:paddingRight="@dimen/main_padding"
-					android:gravity="left|center_vertical"
+					android:paddingStart="@dimen/main_padding"
+					android:paddingEnd="@dimen/main_padding"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_1_1" />
@@ -55,14 +55,15 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/main_padding"
-					android:paddingRight="@dimen/main_padding"
-					android:gravity="left|center_vertical"
+					android:paddingStart="@dimen/main_padding"
+					android:paddingEnd="@dimen/main_padding"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_1_2" />
@@ -82,14 +83,15 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/main_padding"
-					android:paddingRight="@dimen/main_padding"
-					android:gravity="left|center_vertical"
+					android:paddingStart="@dimen/main_padding"
+					android:paddingEnd="@dimen/main_padding"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_1_3" />
@@ -109,14 +111,15 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/main_padding"
-					android:paddingRight="@dimen/main_padding"
-					android:gravity="left|center_vertical"
+					android:paddingStart="@dimen/main_padding"
+					android:paddingEnd="@dimen/main_padding"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_2_1" />
@@ -136,14 +139,15 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/main_padding"
-					android:paddingRight="@dimen/main_padding"
-					android:gravity="left|center_vertical"
+					android:paddingStart="@dimen/main_padding"
+					android:paddingEnd="@dimen/main_padding"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_2_2" />
@@ -163,14 +167,15 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/main_padding"
-					android:paddingRight="@dimen/main_padding"
-					android:gravity="left|center_vertical"
+					android:paddingStart="@dimen/main_padding"
+					android:paddingEnd="@dimen/main_padding"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/list_style_2_3" />
@@ -194,6 +199,7 @@
 			android:layout_weight="1"
 			android:padding="@dimen/main_padding"
 			android:gravity="center"
+			android:contentDescription="@string/app_name"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
 			android:src="@drawable/arrow_left" />

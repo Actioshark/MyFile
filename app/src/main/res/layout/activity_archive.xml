@@ -1,6 +1,5 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/main_bg"
@@ -23,7 +22,7 @@
 			android:id="@+id/ll_path"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:layout_gravity="left|center_vertical"
+			android:layout_gravity="start|center_vertical"
 			android:orientation="horizontal" />
 
 	</HorizontalScrollView>
@@ -42,6 +41,7 @@
 			android:layout_weight="1"
 			android:padding="@dimen/main_padding"
 			android:gravity="center"
+			android:contentDescription="@string/app_name"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
 			android:src="@drawable/home" />
@@ -52,8 +52,9 @@
 			android:layout_height="match_parent"
 			android:layout_weight="1"
 			android:padding="@dimen/main_padding"
-			android:layout_marginLeft="@dimen/main_gap"
+			android:layout_marginStart="@dimen/main_gap"
 			android:gravity="center"
+			android:contentDescription="@string/app_name"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
 			android:src="@drawable/extract" />
@@ -64,8 +65,9 @@
 			android:layout_height="match_parent"
 			android:layout_weight="1"
 			android:padding="@dimen/main_padding"
-			android:layout_marginLeft="@dimen/main_gap"
+			android:layout_marginStart="@dimen/main_gap"
 			android:gravity="center"
+			android:contentDescription="@string/app_name"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
 			android:src="@drawable/arrow_left" />

@@ -1,6 +1,5 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/main_bg"
@@ -27,13 +26,14 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/sort" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_sort_direct" />
@@ -52,13 +52,14 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/sort" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_sort_type" />
@@ -77,13 +78,14 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/grid" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_list_style_direct" />
@@ -102,13 +104,14 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/grid" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_list_style_type" />
@@ -127,13 +130,14 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/grid" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_list_style_big" />
@@ -152,13 +156,14 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/grid" />
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_list_style_recent" />
@@ -177,6 +182,7 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/show" />
 
@@ -184,7 +190,7 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_hidden" />
@@ -194,6 +200,7 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/single_select_nor" />
 
@@ -211,6 +218,7 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/number" />
 
@@ -218,7 +226,7 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_num_limit_big" />
@@ -227,15 +235,15 @@
 					android:id="@+id/tv_num"
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color" />
 
 				<LinearLayout
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/setting_icon_padding"
-					android:paddingRight="@dimen/setting_icon_padding"
+					android:paddingStart="@dimen/setting_icon_padding"
+					android:paddingEnd="@dimen/setting_icon_padding"
 					android:orientation="vertical">
 
 					<ImageView
@@ -243,8 +251,9 @@
 						android:layout_width="match_parent"
 						android:layout_height="0dp"
 						android:layout_weight="1"
-						android:background="@drawable/btn_bar"
+						android:contentDescription="@string/app_name"
 						android:scaleType="centerInside"
+						android:background="@drawable/btn_bar"
 						android:src="@drawable/arrow_up" />
 
 					<ImageView
@@ -253,6 +262,7 @@
 						android:layout_height="0dp"
 						android:layout_weight="1"
 						android:background="@drawable/btn_bar"
+						android:contentDescription="@string/app_name"
 						android:scaleType="centerInside"
 						android:src="@drawable/arrow_down" />
 				</LinearLayout>
@@ -271,6 +281,7 @@
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="@dimen/main_bar_height"
 					android:padding="@dimen/setting_icon_padding"
+					android:contentDescription="@string/app_name"
 					android:scaleType="centerInside"
 					android:src="@drawable/number" />
 
@@ -278,7 +289,7 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="1"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color"
 					android:text="@string/setting_num_limit_recent" />
@@ -287,15 +298,15 @@
 					android:id="@+id/tv_num"
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
-					android:gravity="left|center_vertical"
+					android:gravity="start|center_vertical"
 					android:textSize="@dimen/main_direct_text"
 					android:textColor="@color/main_text_color" />
 
 				<LinearLayout
 					android:layout_width="@dimen/main_bar_height"
 					android:layout_height="match_parent"
-					android:paddingLeft="@dimen/setting_icon_padding"
-					android:paddingRight="@dimen/setting_icon_padding"
+					android:paddingStart="@dimen/setting_icon_padding"
+					android:paddingEnd="@dimen/setting_icon_padding"
 					android:orientation="vertical">
 
 					<ImageView
@@ -304,6 +315,7 @@
 						android:layout_height="0dp"
 						android:layout_weight="1"
 						android:background="@drawable/btn_bar"
+						android:contentDescription="@string/app_name"
 						android:scaleType="centerInside"
 						android:src="@drawable/arrow_up" />
 
@@ -312,8 +324,9 @@
 						android:layout_width="match_parent"
 						android:layout_height="0dp"
 						android:layout_weight="1"
-						android:background="@drawable/btn_bar"
+						android:contentDescription="@string/app_name"
 						android:scaleType="centerInside"
+						android:background="@drawable/btn_bar"
 						android:src="@drawable/arrow_down" />
 				</LinearLayout>
 
@@ -336,6 +349,7 @@
 			android:layout_weight="1"
 			android:padding="@dimen/main_padding"
 			android:gravity="center"
+			android:contentDescription="@string/app_name"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
 			android:src="@drawable/arrow_left" />

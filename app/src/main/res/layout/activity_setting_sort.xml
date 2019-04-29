@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/main_bg"
@@ -33,6 +31,7 @@
 			android:layout_weight="1"
 			android:padding="@dimen/main_padding"
 			android:gravity="center"
+			android:contentDescription="@string/app_name"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
 			android:src="@drawable/arrow_left" />
@@ -43,8 +42,9 @@
 			android:layout_height="match_parent"
 			android:layout_weight="1"
 			android:padding="@dimen/main_padding"
-			android:layout_marginLeft="@dimen/main_gap"
+			android:layout_marginStart="@dimen/main_gap"
 			android:gravity="center"
+			android:contentDescription="@string/app_name"
 			android:scaleType="centerInside"
 			android:background="@drawable/btn_bar"
 			android:src="@drawable/tick" />
