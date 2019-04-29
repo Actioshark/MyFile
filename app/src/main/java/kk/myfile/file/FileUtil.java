@@ -7,14 +7,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.Build;
 import android.os.StatFs;
 import android.webkit.MimeTypeMap;
 import kk.myfile.R;
@@ -114,28 +113,14 @@ public class FileUtil {
 		return new Unknown(path);
 	}
 
-	@SuppressWarnings("deprecation")
-	@SuppressLint("NewApi")
 	public static long getTotalSize() {
 		StatFs sf = new StatFs(Setting.DEFAULT_PATH);
-
-		if (Build.VERSION.SDK_INT < 18) {
-			return sf.getBlockSize() * sf.getBlockCount();
-		} else {
-			return sf.getTotalBytes();
-		}
+		return sf.getTotalBytes();
 	}
 
-	@SuppressWarnings("deprecation")
-	@SuppressLint("NewApi")
 	public static long getAvailSize() {
 		StatFs sf = new StatFs(Setting.DEFAULT_PATH);
-
-		if (Build.VERSION.SDK_INT < 18) {
-			return sf.getBlockSize() * sf.getAvailableBlocks();
-		} else {
-			return sf.getAvailableBytes();
-		}
+		return sf.getAvailableBytes();
 	}
 
 	public static boolean isLink(File file) {
@@ -240,9 +225,7 @@ public class FileUtil {
 				File temp = list.get(i);
 
 				if (temp.isDirectory()) {
-					for (File child : temp.listFiles()) {
-						list.add(child);
-					}
+					Collections.addAll(list, temp.listFiles());
 				}
 			}
 			
