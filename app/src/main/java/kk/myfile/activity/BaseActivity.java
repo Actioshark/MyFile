@@ -36,18 +36,16 @@ public abstract class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-			mStatusBar = new View(this);
-			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, AppUtil
-				.getStatusBarHeight());
-			params.gravity = Gravity.TOP;
-			mStatusBar.setLayoutParams(params);
-			mStatusBar.setBackgroundColor(AppUtil.getColor(R.color.title_bg));
+		mStatusBar = new View(this);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, AppUtil
+			.getStatusBarHeight());
+		params.gravity = Gravity.TOP;
+		mStatusBar.setLayoutParams(params);
+		mStatusBar.setBackgroundColor(AppUtil.getColor(R.color.title_bg));
 
-			ViewGroup decor = (ViewGroup) getWindow().getDecorView();
-			decor.addView(mStatusBar);
-		}
+		ViewGroup decor = (ViewGroup) getWindow().getDecorView();
+		decor.addView(mStatusBar);
 	}
 }
