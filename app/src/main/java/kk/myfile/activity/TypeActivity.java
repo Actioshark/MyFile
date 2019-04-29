@@ -531,7 +531,7 @@ public class TypeActivity extends BaseActivity {
 											ret = FileUtil.delete(from);
 											if (ret != null) {
 												App.showToast(ret);
-												continue;
+												// continue;
 											}
 										} catch (Exception e) {
 											Logger.print(e);
