@@ -6,6 +6,7 @@ import kk.myfile.util.AppUtil;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
@@ -80,7 +81,7 @@ public class DownList extends Dialog {
 	}
 
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
+	public boolean onKeyUp(int keyCode, @NonNull KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			dismiss();
 			return true;
