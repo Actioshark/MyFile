@@ -10,6 +10,7 @@ import kk.myfile.R;
 import kk.myfile.adapter.DetailItemAdapter.Data;
 import kk.myfile.file.FileUtil;
 import kk.myfile.file.Tree;
+import kk.myfile.util.Logger;
 
 public class Direct extends Leaf {
 	protected final List<Leaf> mChildren = new ArrayList<Leaf>();
@@ -50,6 +51,7 @@ public class Direct extends Leaf {
 				}
 			}
 		} catch (Exception e) {
+			Logger.print(e);
 		}
 	}
 
@@ -85,6 +87,7 @@ public class Direct extends Leaf {
 					}
 				}
 			} catch (Exception e) {
+				Logger.print(e);
 			}
 		}
 	}

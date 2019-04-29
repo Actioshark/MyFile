@@ -12,6 +12,8 @@ import kk.myfile.file.ImageUtil.IThumable;
 import kk.myfile.leaf.Leaf;
 import kk.myfile.util.AppUtil;
 import kk.myfile.util.DataUtil;
+import kk.myfile.util.Logger;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
@@ -95,6 +97,7 @@ public class DetailAdapter extends PagerAdapter {
 								}
 							});
 						} catch (Exception e) {
+							Logger.print(e);
 						}
 					}
 				});

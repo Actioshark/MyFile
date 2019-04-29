@@ -61,6 +61,7 @@ public class Setting {
 				result.add(dp);
 			}
 		} catch (Exception e) {
+			Logger.print(e);
 		}
 
 		if (result.size() < 1) {
@@ -86,6 +87,7 @@ public class Setting {
 
 				ja.put(i, jo);
 			} catch (Exception e) {
+				Logger.print(e);
 			}
 		}
 

@@ -151,6 +151,7 @@ public class AppUtil {
 					try {
 						Thread.sleep(delay);
 					} catch (Exception e) {
+						Logger.print(e);
 					}
 
 					runnable.run();

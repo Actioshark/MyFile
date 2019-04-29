@@ -72,6 +72,7 @@ public class Apk extends Leaf implements IThumable {
 				pm.getPackageInfo(pi.packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
 				return true;
 			} catch (Exception e) {
+				Logger.print(e);
 			}
 			
 			return false;

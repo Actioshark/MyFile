@@ -115,6 +115,7 @@ public class Tree {
 						ret.add(leaf);
 					}
 				} catch (Exception e) {
+					Logger.print(e);
 				}
 			}
 		}
@@ -216,6 +217,7 @@ public class Tree {
 					ret.add(leaf);
 				}
 			} catch (Exception e) {
+				Logger.print(e);
 			}
 		}
 

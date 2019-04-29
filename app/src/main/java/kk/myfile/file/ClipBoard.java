@@ -62,6 +62,7 @@ public class ClipBoard {
 			ret.clipType = ClipType.valueOf(ls[0]);
 			ret.dataType = DataType.valueOf(ls[1]);
 		} catch (Exception e) {
+			Logger.print(e);
 		}
 
 		return ret;
@@ -121,6 +122,7 @@ public class ClipBoard {
 							list.add(path);
 						}
 					} catch (Exception e) {
+						Logger.print(e);
 					}
 				}
 			}
