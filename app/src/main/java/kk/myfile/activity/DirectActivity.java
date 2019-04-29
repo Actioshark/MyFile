@@ -99,7 +99,7 @@ public class DirectActivity extends BaseActivity {
 		@Override
 		public void afterTextChanged(Editable editable) {
 			String KEY = editable.toString();
-			final boolean rec = KEY.length() > 0 ? KEY.charAt(0) == '/' : false;
+			final boolean rec = KEY.length() > 0 && KEY.charAt(0) == '/';
 			final String key = rec ? KEY.substring(1) : KEY;
 
 			if (key.length() > 0 && !key.equals("/")) {
