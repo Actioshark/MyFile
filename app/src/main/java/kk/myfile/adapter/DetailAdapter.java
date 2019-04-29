@@ -70,7 +70,7 @@ public class DetailAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public Object instantiateItem(@NonNull ViewGroup container, final int position) {
+	@NonNull public Object instantiateItem(@NonNull ViewGroup container, final int position) {
 		View root = mViewList.get(getViewPosition(position));
 		final ViewHolder vh = (ViewHolder) root.getTag();
 
