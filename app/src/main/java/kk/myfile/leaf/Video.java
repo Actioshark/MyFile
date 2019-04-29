@@ -2,12 +2,10 @@ package kk.myfile.leaf;
 
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 
 import kk.myfile.R;
 import kk.myfile.adapter.DetailItemAdapter.Data;
@@ -38,7 +36,6 @@ public class Video extends Leaf implements IThumable {
 		return new BitmapDrawable(AppUtil.getRes(), bmp);
 	}
 
-	@SuppressLint("InlinedApi")
 	public List<Data> getDetail() {
 		List<Data> list = super.getDetail();
 
@@ -67,11 +64,9 @@ public class Video extends Leaf implements IThumable {
 			putDetail(list, 2, R.string.word_minetype, mmr
 				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE));
 
-			if (Build.VERSION.SDK_INT >= 14) {
-				String bitrate = MathUtil.insertComma(mmr
-					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
-				putDetail(list, 2, R.string.word_bitrate, "%s b/s", bitrate);
-			}
+			String bitrate = MathUtil.insertComma(mmr
+				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
+			putDetail(list, 2, R.string.word_bitrate, "%s b/s", bitrate);
 
 			int dur = Integer.valueOf(mmr
 				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
@@ -80,14 +75,12 @@ public class Video extends Leaf implements IThumable {
 			int hour = dur /= 60;
 			putDetail(list, 2, R.string.word_duration, "%02d:%02d:%02d", hour, minute, second);
 
-			if (Build.VERSION.SDK_INT >= 14) {
-				putDetail(list, 2, R.string.word_width, mmr
-					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-				putDetail(list, 2, R.string.word_height, mmr
-					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-				putDetail(list, 2, R.string.word_rotation, mmr
-					.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
-			}
+			putDetail(list, 2, R.string.word_width, mmr
+				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+			putDetail(list, 2, R.string.word_height, mmr
+				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+			putDetail(list, 2, R.string.word_rotation, mmr
+				.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
 		} catch (Exception e) {
 			Logger.print(e);
 		}
