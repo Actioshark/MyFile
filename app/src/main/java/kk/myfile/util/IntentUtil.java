@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 
 import kk.myfile.R;
 import kk.myfile.file.FileUtil;
@@ -31,7 +32,10 @@ public class IntentUtil {
 
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			}
 
 			Uri uri =  UriUtil.getUri(context, leaf.getFile());
 			intent.setDataAndType(uri, type);
