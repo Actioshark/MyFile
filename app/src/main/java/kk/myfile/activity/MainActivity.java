@@ -292,7 +292,6 @@ public class MainActivity extends BaseActivity {
 		// 检查权限
 		checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
 		checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-		checkPermission(Manifest.permission.INSTALL_PACKAGES);
 	}
 
 	private void refreshPath() {
