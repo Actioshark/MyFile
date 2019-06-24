@@ -4,14 +4,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kk.myfile.R;
 import kk.myfile.file.FileUtil;
@@ -34,6 +40,7 @@ import kk.myfile.util.Setting;
 
 public class MainActivity extends BaseActivity {
 	public static final int REQ_SELECT_PATH = 1;
+	public static final int REQ_PERMISSION = 2;
 
 	public static final String KEY_INDEX = "main_index";
 	public static final String KEY_NAME = "main_name";
@@ -281,6 +288,11 @@ public class MainActivity extends BaseActivity {
 		refreshPath();
 
 		Tree.refreshTypeDirect();
+
+		// 检查权限
+		checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+		checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		checkPermission(Manifest.permission.INSTALL_PACKAGES);
 	}
 
 	private void refreshPath() {
@@ -300,6 +312,14 @@ public class MainActivity extends BaseActivity {
 		} else {
 			mLlAdd.setVisibility(View.GONE);
 		}
+	}
+
+	private void checkPermission(String name) {
+		if (ContextCompat.checkSelfPermission(this, name) == PackageManager.PERMISSION_GRANTED) {
+			return;
+		}
+
+		ActivityCompat.requestPermissions(this, new String[] {name}, REQ_PERMISSION);
 	}
 
 	@Override
@@ -454,6 +474,22 @@ public class MainActivity extends BaseActivity {
 				}
 			});
 			id.show();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+		if (requestCode == REQ_PERMISSION) {
+			for (int i = 0; i < permissions.length; i++) {
+				String name = permissions[i];
+				int result = grantResults[i];
+
+				if (result != PackageManager.PERMISSION_GRANTED) {
+					Toast.makeText(this, "请开启权限：\n " + name, Toast.LENGTH_SHORT).show();
+				}
+			}
 		}
 	}
 }
